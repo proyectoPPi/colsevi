@@ -9,7 +9,7 @@ public class HelloController {
 
 	@RequestMapping("bienvenido")
 	public ModelAndView hola(){
-		ModelAndView model = new ModelAndView("index");
+		ModelAndView model = new ModelAndView("login");
 		model.addObject("prueba","holaaaa");
 		return model;
 	}
