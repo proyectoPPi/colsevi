@@ -7,10 +7,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HelloController {
 
-	@RequestMapping("bienvenido")
-	public ModelAndView hola(){
+	@RequestMapping("login")
+	public ModelAndView login(){
 		ModelAndView model = new ModelAndView("login");
-		model.addObject("prueba","holaaaa");
+		return model;
+	}
+	
+	@RequestMapping("administrador")
+	public ModelAndView administrador(){
+		ModelAndView model = new ModelAndView("Administrador");
 		return model;
 	}
 	
