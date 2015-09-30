@@ -1,8 +1,9 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="ISO-8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Brayan">
@@ -38,11 +39,11 @@
         <h2 class="form-signin-heading">Col Sevi</h2>
         <div class="login-wrap">
             <input type="text" class="form-control" placeholder="Usuario" autofocus>
-            <input type="password" class="form-control" placeholder="ContraseÃ±a">
+            <input type="password" class="form-control" placeholder="Contraseña">
             <label class="checkbox">
                 
                 <span class="pull-right">
-                    <a data-toggle="modal" href="#myModal"> Olvidaste tu contraseÃ±a?</a>
+                    <a data-toggle="modal" href="#myModal"> Olvidaste tu contraseña</a>
                 </span>
                 <br/>
             </label>
@@ -50,7 +51,7 @@
             <button class="btn btn-lg btn-login btn-block" type="submit">Ingresar</button>
           
             <div class="registration">
-                    Â¿No tienes cuenta todavÃ­a?
+                    ¿No tienes cuenta todavía?
                 <a class="" href="registration.html">
                     Crear cuenta
                 </a>
