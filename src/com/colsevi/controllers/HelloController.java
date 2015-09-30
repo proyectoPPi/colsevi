@@ -19,4 +19,11 @@ public class HelloController {
 		return model;
 	}
 	
+	@RequestMapping("profile")
+	public ModelAndView profile(){
+		ModelAndView model = new ModelAndView("Profile");
+		return model;
+	}
+
+	
 }
