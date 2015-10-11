@@ -9,7 +9,8 @@
   	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="resources/css/bootstrap-reset.css" rel="stylesheet">
-      <link href="resources/css/slidebars.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="resources/assets/gritter/css/jquery.gritter.css" />
+    <link href="resources/css/slidebars.css" rel="stylesheet">
     <link href="resources/css/style.css" rel="stylesheet">
     <link href="resources/css/style-responsive.css" rel="stylesheet" />
 
