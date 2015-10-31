@@ -28,30 +28,6 @@
 
 						<div id="tabla"></div>
 						
-						<br/><br/><br/><br/><br/>
-
-						<table class="display table table-bordered table-striped dataTable">
-							<thead>
-								<tr>
-									<th>Pedido</th>
-									<th>Valor Total</th>
-									<th>Usuario</th>
-									<th>Estado</th>
-									<th>Acciones</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td><a href="#">103455</a></td>
-									<td class="hidden-phone">$ 100.000</td>
-									<td>camilo</td>
-									<td><span class="label label-success label-mini">Nuevo</span></td>
-									<td><button class="btn btn-danger btn-xs">
-											<i class="fa fa-trash-o "></i>
-										</button></td>
-								</tr>
-							</tbody>
-						</table>
 						<ul class="pagination pagination-sm pull-right">
 							<li><a href="#">«</a></li>
 							<li><a href="#">1</a></li>
@@ -107,10 +83,27 @@
 	</section>
 	<script type="text/javascript">
 	titulos = new Array();
+	titulos["ID"] = "ID";
 	titulos["pedido"] = "hola";
 	titulos["nombre"] = "hola";
 	titulos["cliente"] = "hola";
-	Tabla("tabla.html", "#tabla",titulos);
+	
+	Tabla({
+		url: "tabla.html",
+		Id: "#tabla",
+		titulos: titulos
+	});
+	
+// 	<tr>
+// 	<td><a href="#">103455</a></td>
+// 	<td class="hidden-phone">$ 100.000</td>
+// 	<td>camilo</td>
+// 	<td><span class="label label-success label-mini">Nuevo</span></td>
+// 	<td><button class="btn btn-danger btn-xs">
+// 			<i class="fa fa-trash-o "></i>
+// 		</button></td>
+// </tr>
+	
 	</script>
 </body>
 </html>

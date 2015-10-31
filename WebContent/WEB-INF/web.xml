@@ -7,22 +7,37 @@
 				org.springframework.web.servlet.DispatcherServlet
 			</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>spring-dispatcher</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<description>Servlet para montar datos en session y application scope de configuracion</description>
+		<display-name>IniciarDatos</display-name>
+		<servlet-name>IniciarDatos</servlet-name>
+		<servlet-class>com.colsevi.application.IniciarDatos</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>IniciarDatos</servlet-name>
+		<url-pattern>/IniciarDatos</url-pattern>
+	</servlet-mapping>
 	
 	<servlet-mapping>
-  <servlet-name>default</servlet-name>
-  <url-pattern>*.css</url-pattern>
-</servlet-mapping>
-<servlet-mapping>
-  <servlet-name>default</servlet-name>
-  <url-pattern>*.js</url-pattern>
-</servlet-mapping>
-<servlet-mapping>
-  <servlet-name>default</servlet-name>
-  <url-pattern>*.jpg</url-pattern>
-</servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.css</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.js</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.jpg</url-pattern>
+	</servlet-mapping>
 </web-app>
