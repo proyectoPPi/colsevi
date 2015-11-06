@@ -3,8 +3,16 @@
 <html lang="en">
 <head>
 <title>Administrador</title>
-<c:import url="estilos_genericos.jsp"></c:import>
-<c:import url="javascript_genericos.jsp"></c:import>
+	<c:import url="estilos_genericos.jsp"></c:import>
+	<c:import url="javascript_genericos.jsp"></c:import>
+	<style type="text/css">
+		#footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+	</style>
 </head>
 <body>
 
@@ -77,7 +85,7 @@
 			</section>
 		</section>
 
-		<footer class="site-footer">
+		<footer class="site-footer" id="footer">
 			<div class="text-center">2015 &copy; Desarrollo.</div>
 		</footer>
 	</section>
