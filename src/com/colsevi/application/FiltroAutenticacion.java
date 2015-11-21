@@ -68,68 +68,6 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			return false;
 		}
 	}
-
-
-	@SuppressWarnings("unused")
-//	private DsUserSession loadUser(String contextPath, DsUser user,int joomlaid) throws S4DSBusinessException{
-//		DsApplicationSetupManager setupManager = DsApplicationSetupManager.getInstance();
-//		DsSecurityPersistence securityPersistence = DsSecurityPersistence.getInstance();
-//		DsUserSession userSession = new DsUserSession();
-//		
-//		if(user.getPersonid() != null){
-//			UmPersons persons = S4dsDAOHelper.getInstance().getUmPersonsDAO().selectByPrimaryKey(user.getPersonid());
-//			if(persons != null && persons.getLanguages_id() != null){
-//				GnLanguages language = S4dsDAOHelper.getInstance().getGnLanguagesMapper().selectByPrimaryKey(persons.getLanguages_id());
-//				userSession.setSelectedLanguage(language.getLanguage_code());
-//			}
-//		}
-//		if(userSession.getSelectedLanguage()==null || userSession.getSelectedLanguage().trim().equals("")){
-//			userSession.setSelectedLanguage(DsApplicationSetupManager.getInstance().getPropertyOrDefault(ApplicationSetupVariable.DEFAULT_LANGUAGE, "en"));
-//		}
-//		
-//		
-//		DsUserNavigation dsUserNavigation = securityPersistence.getUserNavigation(contextPath, user, Messages.getInstance(userSession.getSelectedLanguage()));
-//		String joomlaPath = setupManager.getProperty(ApplicationSetupVariable.JOOMLA_PATH);
-//		String avatarPath = null;
-//		if(joomlaid != 0)
-//			avatarPath = CommunityUserManager.getAvatarImagePath(joomlaid);
-//		if(avatarPath != null){
-//			userSession.setAvatarImage(joomlaPath + avatarPath);
-//		} else {
-//			//userSession.setAvatarImage(setupManager.getProperty( ApplicationSetupVariable.DEFAULT_AVATAR ));
-//			userSession.setAvatarImage("defaultAvatar.png");
-//		}
-//		loggerS4ds.info("DsUserSession joomla "+joomlaid);
-//		loggerS4ds.info("userSession.getAvatarImage "+userSession.getAvatarImage());
-//		
-//		securityPersistence.setActionsForUser(user);
-//		if(userSession == null)
-//			userSession = new DsUserSession();
-//		//seteo los objetos
-//		userSession.setUser(user);
-//		userSession.setDsUserNavigation(dsUserNavigation);
-//
-//		return userSession;
-//	}
-	
-//	private boolean validatePagePermissions(String uri, String url, DsUserSession user) {
-//		if(uri.equals("/") || uri.equals(HOME)){
-//			return true;
-//		}
-//		if(user.getDsUserNavigation()==null){
-//			return false;
-//		}
-//		DsPage destPage  = user.getDsUserNavigation().getPageByUrlBinding(uri);
-//		if (destPage != null)
-//			return true;
-//		// Let's try with the full URL We use this because user navigation may contain URLs including parameters, which are discarded by the URI
-//		destPage  = user.getDsUserNavigation().getPageByUrlBinding(url);
-//		if (destPage != null)
-//			return true;
-//		
-//		return false;
-//	}
-	
 	public void init(FilterConfig arg0) throws ServletException {
 	}
 
