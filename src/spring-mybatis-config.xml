@@ -20,8 +20,12 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="GeneralLocalMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="generalLocalMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property value="com.colsevi.dao.general.map.GeneralLocalMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="generalPaginaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.general.map.GeneralPaginaMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 </beans>

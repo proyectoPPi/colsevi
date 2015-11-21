@@ -10,7 +10,7 @@
     <meta name="keyword" content="sevillana, Colonial, Pedidos, Domicilios">
     <link rel="shortcut icon" href="img/favicon.html">
 
-    <title>Login</title>
+    <title>Ingresar</title>
 
     <!-- Bootstrap core CSS -->
     <link href="resources/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet"/>
@@ -32,7 +32,7 @@
 
     <div class="container">
 
-      <form class="form-signin" action="#">
+      <form class="form-signin" action="login/Ingresar.html" method="post">
         <h2 class="form-signin-heading">ColSevi</h2>
         <div class="login-wrap">
             <input type="text" class="form-control" placeholder="Usuario" autofocus>

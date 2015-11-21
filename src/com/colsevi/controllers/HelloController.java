@@ -20,12 +20,6 @@ import com.colsevi.dao.general.model.GeneralLocalExample;
 @Controller
 public class HelloController {
 
-	@RequestMapping("login")
-	public ModelAndView login(){
-		ModelAndView model = new ModelAndView("login");
-		return model;
-	}
-	
 	@RequestMapping("administrador")
 	public ModelAndView administrador(){
 		ModelAndView model = new ModelAndView("Administrador");
@@ -56,8 +50,6 @@ public class HelloController {
 			}
 			
 		}
-		
 		resultado.writeJSONString(response.getWriter());
 	}
-	
 }
