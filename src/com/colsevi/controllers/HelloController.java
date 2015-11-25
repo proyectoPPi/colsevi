@@ -20,11 +20,7 @@ import com.colsevi.dao.general.model.GeneralLocalExample;
 @Controller
 public class HelloController {
 
-	@RequestMapping("administrador")
-	public ModelAndView administrador(){
-		ModelAndView model = new ModelAndView("Administrador");
-		return model;
-	}
+	
 	
 	@RequestMapping("profile")
 	public ModelAndView profile(){
@@ -32,24 +28,5 @@ public class HelloController {
 		return model;
 	}
 
-	@SuppressWarnings("unchecked")
-	@RequestMapping("tabla")
-	public void tabla(HttpServletRequest reqyest, HttpServletResponse response) throws IOException{
-		
-		JSONArray resultado = new JSONArray();
-		JSONObject opciones = new JSONObject();
-		
-		List<GeneralLocal> listgeneral = ColseviDao.getInstance().getGeneralLocalMapper().selectByExample(new GeneralLocalExample());
-		if(listgeneral != null && listgeneral.size() >0){
-			for (GeneralLocal bean : listgeneral) {
-				opciones = new JSONObject();
-				opciones.put("pedido", bean.getDescripcion());
-				opciones.put("nombre", bean.getNombre());
-				opciones.put("cliente", "<span class=\"label label-success label-mini\">Nuevo</span>");
-				resultado.add(opciones);
-			}
-			
-		}
-		resultado.writeJSONString(response.getWriter());
-	}
+
 }

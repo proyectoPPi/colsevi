@@ -65,10 +65,12 @@ public class FiltroAutenticacion implements Filter, Serializable{
 	private boolean isExcluirVerficacion(String path) {
 
 		if (path.endsWith("jpg")  || path.endsWith("png")  || path.endsWith("gif") ||
-			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") ||
+			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") ||  path.endsWith("map") ||
 			
 			path.equalsIgnoreCase("/indexMobile.jsp") ||
-			path.startsWith(LOGIN)
+			path.startsWith(LOGIN) ||
+			path.startsWith("/local") 
+			
 			){
 			return true;
 		}else{		
