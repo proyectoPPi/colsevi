@@ -6,11 +6,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.colsevi.dao.general.map.GeneralLocalMapper;
 import com.colsevi.dao.general.map.GeneralPaginaMapper;
+import com.colsevi.dao.usuario.map.UsuarioMapper;
 
 public class ColseviDao {
 	
 	private GeneralLocalMapper generalLocalMapper;
 	private GeneralPaginaMapper generalPaginaMapper;
+	private UsuarioMapper usuarioMapper; 
 	
 	private static ColseviDao current = null;
 
@@ -39,6 +41,7 @@ public class ColseviDao {
 	public void inicializarMappers(BeanFactory beanFactoryMyBatis) {
 		generalLocalMapper = (GeneralLocalMapper) beanFactoryMyBatis.getBean("generalLocalMapper");
 		generalPaginaMapper = (GeneralPaginaMapper) beanFactoryMyBatis.getBean("generalPaginaMapper");
+		usuarioMapper = (UsuarioMapper) beanFactoryMyBatis.getBean("usuarioMapper");
 	}
 
 	public GeneralLocalMapper getGeneralLocalMapper() {
@@ -57,4 +60,11 @@ public class ColseviDao {
 		this.generalPaginaMapper = generalPaginaMapper;
 	}
 
+	public UsuarioMapper getUsuarioMapper() {
+		return usuarioMapper;
+	}
+
+	public void setUsuarioMapper(UsuarioMapper usuarioMapper) {
+		this.usuarioMapper = usuarioMapper;
+	}
 }

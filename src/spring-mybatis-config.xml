@@ -28,4 +28,8 @@
 		<property value="com.colsevi.dao.general.map.GeneralPaginaMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	<bean id="usuarioMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.usuario.map.UsuarioMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 </beans>
