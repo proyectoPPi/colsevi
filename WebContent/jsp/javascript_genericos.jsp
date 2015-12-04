@@ -10,8 +10,8 @@
     <script type="text/javascript" src="resources/js/jquery.pulsate.min.js"></script>
     <script type="text/javascript" src="resources/js/common-scripts.js"></script>
     <script type="text/javascript" src="resources/js/gritter.js"></script>
-    <script type="text/javascript" src="resources/js/pulstate.js"></script>
-    <script type="text/javascript" src="resources/js/herramientas.js"></script>
     <script type="text/javascript" src="resources/js/jquery.ajaxQueue.js"></script>
 	<script type="text/javascript" src="resources/js/jquery.ajaxQueue.min.js"></script>
 	<script type="text/javascript" src="resources/js/jquery.ajaxQueue.min.map"></script>
+    <script type="text/javascript" src="resources/js/pulstate.js"></script>
+    <script type="text/javascript" src="resources/js/herramientas.js"></script>

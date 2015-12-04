@@ -1,37 +1,131 @@
+var dataMap = {};
+var registrosPagina = 2;
 /*
  * Método para pintar la tabla
  */
-function Tabla(opciones){
+function HTabla(opciones){
 	var titulos = opciones.titulos;
 	var Id = opciones.Id;
+	var id = null;
+	dataMap['url'] = opciones.url;
+	
+	Setlimite(opciones.pagina);
 	
 	jQuery.ajaxQueue({
-		  url: opciones.url,
+		  url: dataMap['url'],
 		}).done(function(result) {
-			var data = jQuery.parseJSON( result );
+			data = jQuery.parseJSON( result );
 			var html = ""; 
-			if(data == ""){
-				 jQuery(Id).html("No hay datos");
+			if(data == "" || data['datos'][0] == undefined ){
+				 jQuery(Id).html("<br/>No hay datos");
 				 return;
 			 }
+			dataMap["datos"] = data["datos"];
+			dataMap["titulos"] = titulos;
+			dataMap["total"] = data["total"];
+			
 			html='<table class="display table table-bordered table-striped dataTable"><thead><tr>';
 			for(k in titulos){
-				 html += "<th>"+opciones.titulos[k]+"</th>";
+				if(titulos[k] != "ID"){
+					html += "<th>"+opciones.titulos[k]+"</th>";
+				}else{
+					dataMap['id'] = k;
+				}
 			 }
 			html += "</tr></thead><tbody>";
-			 for(i in data){
-				 html += "<tr>";
-				 for(k in titulos){
-					 if(k=="ID"){
-						 html += '<td><span><a onclick="prueba('+data[i][k]+');" data-toggle="modal" href="#myModal4">'+data[i][k]+'</a></span></td>';
+		 for(i in data["datos"]){
+			 html += "<tr>";
+			 for(k in titulos){
+				 if(titulos[k]=="ID"){
+					 id = data["datos"][i][k];
+					 
+				 }else{
+					 if(id != null){
+						 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
+						 id = null;
 					 }else{
-						 html += "<td>"+data[i][k]+"</td>";
+						 html += "<td>"+data["datos"][i][k]+"</td>";
 					 }
 				 }
-				 html += "</tr>";
 			 }
-			 html += "<tbody></table>";
-			 jQuery(Id).html(html);
-		});
+			 html += "</tr>";
+		 }
+		 html += "<tbody></table>";
+		 
+		 jQuery(Id).html(html);
+		 
+		 if(opciones.pagina == undefined){
+			 opciones.pagina = 1;
+		 }
+		 organizarPaginacion(opciones.pagina);
+	});
 }
 
+function BuscarRegistro(Id){
+	if(dataMap["datos"] != undefined){
+		var data = dataMap["datos"];
+		var ID = dataMap['id'];
+		for(i in data){
+			if(data[i][ID] != undefined && data[i][ID] == Id){
+				return data[i];
+			}
+		}
+	}
+	return null;
+}
+
+function CargarFormulario(Id){
+	var Fila = BuscarRegistro(Id);
+	if(Fila != null){
+		for(titulos in dataMap["titulos"]){
+			if(dataMap["titulos"][titulos] != undefined){
+				jQuery("#" + titulos).val(Fila[titulos]);
+			}
+		}
+	}
+}
+
+function Setlimite(pagina){
+	if(pagina==undefined) pagina = 1;
+	
+	dataMap['Inicio'] = (pagina-1)*registrosPagina;
+	dataMap['Final'] = registrosPagina;
+	
+	dataMap['url'] += "&Inicio=" + dataMap['Inicio'];
+	dataMap['url'] += "&Final=" + dataMap['Final'];
+
+}
+
+function organizarPaginacion(pagina){
+		jQuery("#paginacion").html('');
+		var n = dataMap["total"];
+		var NPaginas = Math.ceil(n/registrosPagina);
+		if(NPaginas == 0){
+			NPaginas = 1;
+		}
+		
+		var Inicio = (pagina-4) <= 0 ? 1 : pagina - 4;
+		var Final = (pagina+4) >= NPaginas ? NPaginas : pagina + 4;
+		
+		var html = '';
+		if(pagina>1){
+			html += '<li><a href="javascript:void(Tabla(1));">&laquo;</a></li>';
+			html += '<li><a href="javascript:void(Tabla('+parseInt(pagina-1)+'));">&lsaquo;</a></li>';
+		}
+		for(var i=Inicio; i<=Final; i++){
+			html += i==pagina ? '<li class="active"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>':'<li class="hidden-xs"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>';
+		}
+		if(pagina<NPaginas){
+			html += '<li><a href="javascript:void(Tabla('+parseInt(pagina+1)+'));">&rsaquo;</a></li>';
+			html += '<li><a href="javascript:void(Tabla('+NPaginas+'));">&raquo;</a></li>';
+		}
+		jQuery("#paginacion").append('<ul class="dataTables_paginate paging_bootstrap pagination">'+html+'</ul>');
+}
+
+function HLimpliar(){
+	for(titulos in dataMap["titulos"]){
+		if(dataMap["titulos"][titulos] != undefined){
+			jQuery("#" + titulos).val('');
+		}
+	}
+}
