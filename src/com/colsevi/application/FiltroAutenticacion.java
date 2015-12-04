@@ -1,27 +1,24 @@
 package com.colsevi.application;
  
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.colorchooser.ColorSelectionModel;
-
-import com.colsevi.dao.general.map.GeneralPaginaMapper;
-import com.colsevi.dao.general.model.GeneralPagina;
-import com.colsevi.dao.general.model.GeneralPaginaExample;
-import com.colsevi.dao.usuario.model.Usuario;
 
 public class FiltroAutenticacion implements Filter, Serializable{
 
 	private static final long serialVersionUID = -130687285287276931L;
 	public static final String LOGIN = "/login";
+	
+
 
 	public void destroy() { }
 
@@ -33,6 +30,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			if (httpServletRequest.getQueryString() != null){
 				url += "?"+httpServletRequest.getQueryString();
 			}
+			
 			
 			boolean ExcluirVerficacion= isExcluirVerficacion(uri);
 			if(ExcluirVerficacion){
@@ -69,7 +67,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			
 			path.equalsIgnoreCase("/indexMobile.jsp") ||
 			path.startsWith(LOGIN) ||
-			path.startsWith("/local") 
+			path.startsWith("/General/Establecimiento") 
 			
 			){
 			return true;
@@ -82,11 +80,11 @@ public class FiltroAutenticacion implements Filter, Serializable{
 		if(uri.equals("/")){
 			return true;
 		}
-		GeneralPaginaExample PaginaExample = new GeneralPaginaExample();
-		PaginaExample.createCriteria().andUrlLike(url);
-		List<GeneralPagina> ListaPaginas = ColseviDao.getInstance().getGeneralPaginaMapper().selectByExample(PaginaExample);
-		if (ListaPaginas != null && ListaPaginas.size() > 0)
-			return true;
+//		GeneralPaginaExample PaginaExample = new GeneralPaginaExample();
+//		PaginaExample.createCriteria().andUrlLike(url);
+//		List<GeneralPagina> ListaPaginas = ColseviDao.getInstance().getGeneralPaginaMapper().selectByExample(PaginaExample);
+//		if (ListaPaginas != null && ListaPaginas.size() > 0)
+//			return true;
 		
 		return false;
 	}

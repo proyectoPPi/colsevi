@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.jni.Local;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -14,43 +15,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
-import com.colsevi.dao.general.model.GeneralLocal;
-import com.colsevi.dao.general.model.GeneralLocalExample;
+import com.colsevi.dao.usuario.model.Establecimiento;
+import com.colsevi.dao.usuario.model.EstablecimientoExample;
 
 @Controller
-public class LocalController {
+public class EstablecimientoController {
 	
-	@RequestMapping("/local")
+	@RequestMapping("/General/Establecimiento")
 	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
-		return new ModelAndView("Local");
+		return new ModelAndView("Establecimiento");
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/local/tabla")
+	@RequestMapping("/General/Establecimiento/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
 		String Inicio = request.getParameter("Inicio");
 		String Final = request.getParameter("Final");
-		GeneralLocalExample LocalExample = new GeneralLocalExample();
-		LocalExample.setLimit(Inicio + ", " + Final);
+		EstablecimientoExample EstablecimientoExample = new EstablecimientoExample();
+		EstablecimientoExample.setLimit(Inicio + ", " + Final);
 		
-		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getGeneralLocalMapper().selectByExample(LocalExample)));
-		opciones.put("total", ColseviDao.getInstance().getGeneralLocalMapper().countByExample(new GeneralLocalExample()));
+		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(EstablecimientoExample)));
+		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().countByExample(new EstablecimientoExample()));
 
 		opciones.writeJSONString(response.getWriter());
 	}
 
 	@SuppressWarnings("unchecked")
-	public JSONArray ConstruirJson(List<GeneralLocal> listgeneral){
+	public JSONArray ConstruirJson(List<Establecimiento> listgeneral){
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
 		
 		if(listgeneral != null && listgeneral.size() >0){
-			for (GeneralLocal bean : listgeneral) {
+			for (Establecimiento bean : listgeneral) {
 				opciones = new JSONObject();
-				opciones.put("id_local", bean.getId_local());
+				opciones.put("id_establecimiento", bean.getId_establecimiento());
 				opciones.put("nombre", bean.getNombre());
 				opciones.put("descripcion", bean.getDescripcion());								
 				resultado.add(opciones);
@@ -60,13 +61,13 @@ public class LocalController {
 		return resultado;
 	}
 	
-	@RequestMapping("/local/GuardarLocal")
-	public ModelAndView GuardarLocal(HttpServletRequest request, ModelMap modelo, GeneralLocal bean){
+	@RequestMapping("/General/Establecimiento/GuardarLocal")
+	public ModelAndView GuardarLocal(HttpServletRequest request, ModelMap modelo, Establecimiento bean){
 		
-		if(bean.getId_local() != null){
-			ColseviDao.getInstance().getGeneralLocalMapper().updateByPrimaryKey(bean);
+		if(bean.getId_establecimiento() != null){
+			ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKey(bean);
 		}else{
-			ColseviDao.getInstance().getGeneralLocalMapper().insert(bean);
+			ColseviDao.getInstance().getEstablecimientoMapper().insert(bean);
 			modelo.addAttribute("correcto", "OK");
 		}
 		

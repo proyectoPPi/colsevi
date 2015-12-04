@@ -37,7 +37,7 @@
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-sm">
 							<div class="modal-content-wrap">
-								<form method="post" action="/local/GuardarLocal.html?">
+								<form method="post" action="${pageContext.request.contextPath}/General/Establecimiento/GuardarLocal.html?">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -71,13 +71,14 @@
 			<div class="text-center">2015 &copy; Desarrollo.</div>
 		</footer>
 	</section>
-	<script type="text/javascript" src="JavaScript/Local.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/Local.js"></script>
 	<script type="text/javascript">
 	titulos = new Array();
-	titulos["id_local"] = "ID";
+	titulos["id_establecimiento"] = "ID";
 	titulos["nombre"] = "Nombre";
 	titulos["descripcion"] = "Descripcion";
 	
+	var datas = "${pageContext.request.contextPath}";
 	
 
 	

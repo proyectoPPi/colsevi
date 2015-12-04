@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
-import com.colsevi.dao.general.model.GeneralLocal;
-import com.colsevi.dao.general.model.GeneralLocalExample;
 
 @Controller
 public class HelloController {

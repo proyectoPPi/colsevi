@@ -4,7 +4,7 @@ jQuery(document).ready(function(){
 
 function Tabla(pagina){
 	HTabla({
-		url: "local/tabla.html?",
+		url: datas + "/General/Establecimiento/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
 		pagina:pagina
