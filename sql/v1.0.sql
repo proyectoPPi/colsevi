@@ -60,3 +60,11 @@ CREATE TABLE COLSEVI.usuario_x_rol(
     CONSTRAINT fk_UxPersona FOREIGN KEY (id_usuario)
 	REFERENCES COLSEVI.usuario(id_usuario)
 );
+
+CREATE TABLE COLSEVI.establecimiento(
+	id_establecimiento INT AUTO_INCREMENT,
+    nombre VARCHAR (30) NOT NULL,
+    descripcion VARCHAR (30) NOT NULL,
+    PRIMARY KEY(id_establecimiento)
+);
+

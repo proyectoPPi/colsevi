@@ -44,7 +44,7 @@
 											<h4 class="modal-title">Administrar...</h4>
 										</div>
 										<div class="modal-body">
-											<input type="hidden" id="id_local" name="id_local"/>
+											<input type="hidden" id="id_establecimiento" name="id_establecimiento"/>
 											<div class="form-group">
 												<label>nombre</label>
 												<input type="text" class="form-control" id="nombre" name="nombre"/>
