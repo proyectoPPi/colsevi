@@ -1,5 +1,5 @@
 var dataMap = {};
-var registrosPagina = 10;
+var registrosPagina = 2;
 /*
  * Método para pintar la tabla
  */
@@ -77,9 +77,9 @@ function BuscarRegistro(Id){
 function CargarFormulario(Id){
 	var Fila = BuscarRegistro(Id);
 	if(Fila != null){
-		for(titulos in dataMap["titulos"]){
-			if(dataMap["titulos"][titulos] != undefined){
-				jQuery("#" + titulos).val(Fila[titulos]);
+		for(tituloForm in dataMap["titulos"]){
+			if(dataMap["titulos"][tituloForm] != undefined){
+				jQuery("#" + tituloForm).val(Fila[tituloForm]);
 			}
 		}
 	}
@@ -128,4 +128,8 @@ function HLimpliar(){
 			jQuery("#" + titulos).val('');
 		}
 	}
+}
+function HEliminar(div, url){
+	jQuery('#' + div).attr('action', url);
+	jQuery('#' + div).submit();
 }

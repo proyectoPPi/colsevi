@@ -35,9 +35,10 @@ public class EstablecimientoController {
 		String Final = request.getParameter("Final");
 		EstablecimientoExample EstablecimientoExample = new EstablecimientoExample();
 		EstablecimientoExample.setLimit(Inicio + ", " + Final);
+		EstablecimientoExample.createCriteria().andEstadovisibleEqualTo("T");
 		
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(EstablecimientoExample)));
-		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().countByExample(new EstablecimientoExample()));
+		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().countByExample(EstablecimientoExample));
 
 		opciones.writeJSONString(response.getWriter());
 	}
@@ -64,11 +65,44 @@ public class EstablecimientoController {
 	@RequestMapping("/General/Establecimiento/GuardarLocal")
 	public ModelAndView GuardarLocal(HttpServletRequest request, ModelMap modelo, Establecimiento bean){
 		
+		String error = validarGuardado(bean);
+		if(!error.isEmpty()){
+			modelo.addAttribute("error", error);
+			return administrador(request, modelo);
+		}
+		
+		bean.setEstadovisible("T");
 		if(bean.getId_establecimiento() != null){
 			ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKey(bean);
 		}else{
 			ColseviDao.getInstance().getEstablecimientoMapper().insert(bean);
 			modelo.addAttribute("correcto", "OK");
+		}
+		
+		return administrador(request, modelo);
+	}
+	
+	public String validarGuardado(Establecimiento bean){
+		String error = "";
+		if(bean.getNombre() == null || bean.getNombre().trim().isEmpty()){
+			error = "Ingresar el Nombre<br/>";
+		}
+		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
+			error = "Ingresar la descripción<br/>";
+		}
+		
+		return error;
+	}
+	@RequestMapping("/General/Establecimiento/EliminarEstablecimiento")
+	public ModelAndView EliminarEstablecimiento(HttpServletRequest request, ModelMap modelo){
+		
+		String id = request.getParameter("id_establecimiento");
+		if(id != null){
+			
+			Establecimiento establecimiento = new Establecimiento();
+			establecimiento.setEstadovisible("F");
+			establecimiento.setId_establecimiento(Integer.parseInt(id));
+			ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKeySelective(establecimiento);
 		}
 		
 		return administrador(request, modelo);
