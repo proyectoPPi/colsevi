@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <meta charset="utf-8">
+   <meta charset="ISO-8859-1"/>
 	<title>Administrar Locales</title>
 	<c:import url="estilos_genericos.jsp"></c:import>
 	<c:import url="javascript_genericos.jsp"></c:import>
