@@ -3,6 +3,8 @@ package com.colsevi.application;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,6 +14,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+
+import com.colsevi.dao.usuario.model.Pagina;
 
 public class FiltroAutenticacion implements Filter, Serializable{
 
@@ -45,7 +49,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 					chain.doFilter(servletRequest, servletResponse);
 					return;
 				}else{
-					httpServletRequest.getRequestDispatcher("/administrador.html").forward(servletRequest, servletResponse);
+					httpServletRequest.getRequestDispatcher("/login.html").forward(servletRequest, servletResponse);
 				}
 			}else{
 				httpServletRequest.getRequestDispatcher(LOGIN).forward(servletRequest, servletResponse);
@@ -66,8 +70,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") ||  path.endsWith("map") ||
 			
 			path.equalsIgnoreCase("/indexMobile.jsp") ||
-			path.startsWith(LOGIN) ||
-			path.startsWith("/General/Establecimiento") 
+			path.startsWith(LOGIN)
 			
 			){
 			return true;
@@ -80,11 +83,17 @@ public class FiltroAutenticacion implements Filter, Serializable{
 		if(uri.equals("/")){
 			return true;
 		}
-//		GeneralPaginaExample PaginaExample = new GeneralPaginaExample();
-//		PaginaExample.createCriteria().andUrlLike(url);
-//		List<GeneralPagina> ListaPaginas = ColseviDao.getInstance().getGeneralPaginaMapper().selectByExample(PaginaExample);
-//		if (ListaPaginas != null && ListaPaginas.size() > 0)
-//			return true;
+		
+		NavegacionUsuario iniciar = new NavegacionUsuario();
+		List<Pagina> ListaPaginas = iniciar.getPaginasRol(1);
+		for (Pagina bean : ListaPaginas) {
+			if(bean.getUrl().endsWith(".html")){
+				String[] urlSplit = bean.getUrl().split(".html");
+				if(url.replace(".html", "").startsWith(urlSplit[0])){
+					return true;
+				}
+			}
+		}
 		
 		return false;
 	}
