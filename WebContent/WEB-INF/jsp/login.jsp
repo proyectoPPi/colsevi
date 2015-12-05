@@ -35,8 +35,8 @@
       <form class="form-signin" action="login/Ingresar.html" method="post">
         <h2 class="form-signin-heading">ColSevi</h2>
         <div class="login-wrap">
-            <input type="text" class="form-control" placeholder="Usuario" autofocus>
-            <input type="password" class="form-control" placeholder="Contraseña">
+            <input type="text" class="form-control" placeholder="Usuario" autofocus id="usuario" name="usuario">
+            <input type="password" class="form-control" placeholder="Contraseña" id="clave" name="clave">
             <label class="checkbox">
                 <span class="pull-right">
                     <a data-toggle="modal" href="#myModal"> Olvidaste tu contraseña</a>

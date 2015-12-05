@@ -20,12 +20,33 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="generalLocalMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property value="com.colsevi.dao.general.map.GeneralLocalMapper" name="mapperInterface" />
+	<bean id="tipoDocumentoMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.usuario.map.TipoDocumentoMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	<bean id="generalPaginaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property value="com.colsevi.dao.general.map.GeneralPaginaMapper" name="mapperInterface" />
+	<bean id="personaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.usuario.map.PersonaMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	<bean id="paginaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.usuario.map.PaginaMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="rolMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.usuario.map.RolMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="usuarioMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.usuario.map.UsuarioMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="usuarioXRolMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.usuario.map.UsuarioXRolMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="establecimientoMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.usuario.map.EstablecimientoMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
 </beans>

@@ -11,11 +11,12 @@ public class IniciarDatos extends HttpServlet {
         super();
     }
    
-    public void init() throws ServletException {
+    @SuppressWarnings("static-access")
+	public void init() throws ServletException {
     	try{
 	    	super.init();
 	    	ColseviDao dao = new ColseviDao();
-	    	dao.getInstance().getGeneralLocalMapper();
+	    	dao.getInstance().getEstablecimientoMapper();
 	    	
 			System.out.println("Iniciar");
     	}catch(Exception e){
