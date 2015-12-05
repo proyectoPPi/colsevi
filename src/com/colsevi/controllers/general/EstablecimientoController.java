@@ -1,4 +1,4 @@
-package com.colsevi.controllers;
+package com.colsevi.controllers.general;
 
 import java.io.IOException;
 import java.util.List;
