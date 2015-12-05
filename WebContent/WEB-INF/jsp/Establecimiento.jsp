@@ -52,7 +52,7 @@
 												<input type="text" class="form-control" id="nombre" name="nombre" required  maxlength="15"/>
 											</div>
 											<div class="form-group">
-												<label>*Descripción</label>
+												<label>*Descripci&#243;n</label>
 												<input type="text" class="form-control" id="descripcion" name="descripcion" required maxlength="30"/>
 											</div>
 										</div>
@@ -80,7 +80,7 @@
 	titulos = new Array();
 	titulos["id_establecimiento"] = "ID";
 	titulos["nombre"] = "Nombre";
-	titulos["descripcion"] = "Descripcion";
+	titulos["descripcion"] = "Descripci&#243;n";
 	
 	var contextPath = "${pageContext.request.contextPath}";
 	
