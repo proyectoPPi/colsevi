@@ -13,6 +13,7 @@ function HTabla(opciones){
 	
 	jQuery.ajaxQueue({
 		  url: dataMap['url'],
+		  contentType: "application/json; charset=utf-8",
 		}).done(function(result) {
 			data = jQuery.parseJSON( result );
 			var html = ""; 
