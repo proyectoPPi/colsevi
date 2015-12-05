@@ -5,7 +5,6 @@
    <meta charset="ISO-8859-1"/>
 	<title>Administrar Locales</title>
 	<c:import url="estilos_genericos.jsp"></c:import>
-	<c:import url="javascript_genericos.jsp"></c:import>
 
 </head>
 <body>
@@ -40,7 +39,7 @@
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-sm">
 							<div class="modal-content-wrap">
-								<form method="post" action="${pageContext.request.contextPath}/General/Establecimiento/GuardarLocal.html?">
+								<form method="post" action="${pageContext.request.contextPath}/General/Establecimiento/GuardarLocal.html?" id="formulario">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -59,8 +58,8 @@
 										</div>
 										<div class="modal-footer">
 											<button class="btn btn-warning" type="submit">Guardar</button>
-											
 											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
+											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Eliminar();">Eliminar</button>
 										</div>
 									</div>
 								</form>
@@ -75,6 +74,7 @@
 			<div class="text-center">2015 &copy; Desarrollo.</div>
 		</footer>
 	</section>
+	<c:import url="javascript_genericos.jsp"></c:import>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/Local.js"></script>
 	<script type="text/javascript">
 	titulos = new Array();
@@ -82,7 +82,7 @@
 	titulos["nombre"] = "Nombre";
 	titulos["descripcion"] = "Descripci&#243;n";
 	
-	var datas = "${pageContext.request.contextPath}";
+	var contextPath = "${pageContext.request.contextPath}";
 	
 
 	
