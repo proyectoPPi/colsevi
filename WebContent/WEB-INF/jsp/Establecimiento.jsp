@@ -23,19 +23,18 @@
 				<c:import url="alertas.jsp"></c:import>
 					<section class="panel">
 						<header class="panel-heading">Locales 
+						
 							<span class="tools pull-right">
-								<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle fa-8"></i></a>
-                            </span>
+								<button class="btn btn-default" type="submit" onclick="printDiv('tabla')" style="margin-bottom: 2px;">Imprimir</button>
+								<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle fa-3x"></a></i>
+							</span>
 						</header>
 						
-
 						<div id="tabla"></div>
-						<div id="paginacion"></div>
-						
-						<button class="btn btn btn-default" type="submit" onclick="printDiv('tabla')" >Imprimir</button>
 						
 					</section>
-
+					<div id="paginacion" class="col-md-12"></div>
+					
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-sm">
 							<div class="modal-content-wrap">
