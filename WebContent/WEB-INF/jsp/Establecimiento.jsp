@@ -1,9 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-   <meta charset="ISO-8859-1" />
+   <meta charset="UTF-8" />
 	<title>Administrar Locales</title>
 	<c:import url="estilos_genericos.jsp"></c:import>
 
@@ -18,10 +17,10 @@
 			<a href="index.html" class="logo">COL<span>SEVI</span></a>
 		</header>
 		<c:import url="menu.jsp"></c:import>
-		<c:import url="alertas.jsp"></c:import>
 		<section id="main-content">
 			<section class="wrapper">
 				<div class="row">
+				<c:import url="alertas.jsp"></c:import>
 					<section class="panel">
 						<header class="panel-heading">Locales 
 							<span class="tools pull-right">

@@ -74,9 +74,10 @@ public class EstablecimientoController {
 		bean.setEstadovisible("T");
 		if(bean.getId_establecimiento() != null){
 			ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKey(bean);
+			modelo.addAttribute("correcto", "Establecimiento Actualizado");
 		}else{
 			ColseviDao.getInstance().getEstablecimientoMapper().insert(bean);
-			modelo.addAttribute("correcto", "OK");
+			modelo.addAttribute("correcto", "Establecimiento insertado");
 		}
 		
 		return administrador(request, modelo);

@@ -45,7 +45,6 @@ public class NavegacionUsuario implements java.io.Serializable {
 	    	if(params == null || params.isEmpty()){
 	    		cargarPermisos();
 	    	}
-	    	System.out.println(params.size());
 	    	List<Pagina> ListaPaginas = (List<Pagina>) params.get(rol);
 	    	
 	    	return ListaPaginas;

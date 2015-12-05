@@ -17,7 +17,6 @@ public class IniciarDatos extends HttpServlet {
 	    	NavegacionUsuario usuario = new NavegacionUsuario();
 	    	usuario.cargarPermisos();
 	    	
-			System.out.println("Iniciar");
     	}catch(Exception e){
     	}
     }
