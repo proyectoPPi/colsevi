@@ -70,16 +70,18 @@ public class EstablecimientoController {
 			modelo.addAttribute("error", error);
 			return administrador(request, modelo);
 		}
-		
-		bean.setEstadovisible("T");
-		if(bean.getId_establecimiento() != null){
-			ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKey(bean);
-			modelo.addAttribute("correcto", "Establecimiento Actualizado");
-		}else{
-			ColseviDao.getInstance().getEstablecimientoMapper().insert(bean);
-			modelo.addAttribute("correcto", "Establecimiento insertado");
+		try{
+			bean.setEstadovisible("T");
+			if(bean.getId_establecimiento() != null){
+				ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKey(bean);
+				modelo.addAttribute("correcto", "Establecimiento Actualizado");
+			}else{
+				ColseviDao.getInstance().getEstablecimientoMapper().insert(bean);
+				modelo.addAttribute("correcto", "Establecimiento insertado");
+			}
+		}catch (Exception e) {
+			modelo.addAttribute("error", "Contactar al administrador");
 		}
-		
 		return administrador(request, modelo);
 	}
 	
@@ -104,6 +106,7 @@ public class EstablecimientoController {
 			establecimiento.setEstadovisible("F");
 			establecimiento.setId_establecimiento(Integer.parseInt(id));
 			ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKeySelective(establecimiento);
+			modelo.addAttribute("correcto", "Establecimiento Eliminado");
 		}
 		
 		return administrador(request, modelo);
