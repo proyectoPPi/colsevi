@@ -49,7 +49,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 					chain.doFilter(servletRequest, servletResponse);
 					return;
 				}else{
-					httpServletRequest.getRequestDispatcher("/administrador.html").forward(servletRequest, servletResponse);
+					httpServletRequest.getRequestDispatcher("/login.html").forward(servletRequest, servletResponse);
 				}
 			}else{
 				httpServletRequest.getRequestDispatcher(LOGIN).forward(servletRequest, servletResponse);
