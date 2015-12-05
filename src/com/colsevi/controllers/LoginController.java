@@ -22,7 +22,7 @@ public class LoginController {
 
 	@RequestMapping("login")
 	public ModelAndView login(HttpServletRequest request, ModelMap model){
-		return new ModelAndView("login", model);
+		return new ModelAndView("login");
 	}
 	
 	@RequestMapping("login/Ingresar")
@@ -40,6 +40,8 @@ public class LoginController {
 		if(U != null){
 			HttpSession sesion = request.getSession(true);
 			sesion.setAttribute("sesion", U);
+		}else{
+			return login(request, model);
 		}
 		
 		return new ModelAndView("redirect:/General/Establecimiento.html");
