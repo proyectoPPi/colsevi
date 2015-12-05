@@ -28,9 +28,12 @@
 								<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle fa-8"></i></a>
                             </span>
 						</header>
+						
 
 						<div id="tabla"></div>
 						<div id="paginacion"></div>
+						
+						<button class="btn btn btn-default" type="submit" onclick="printDiv('tabla')" >Imprimir</button>
 						
 					</section>
 
@@ -46,16 +49,17 @@
 										<div class="modal-body">
 											<input type="hidden" id="id_establecimiento" name="id_establecimiento"/>
 											<div class="form-group">
-												<label>nombre</label>
-												<input type="text" class="form-control" id="nombre" name="nombre"/>
+												<label>*Nombre</label>
+												<input type="text" class="form-control" id="nombre" name="nombre" required  maxlength="15"/>
 											</div>
 											<div class="form-group">
-												<label>descripcion</label>
-												<input type="text" class="form-control" id="descripcion" name="descripcion"/>
+												<label>*Descripción</label>
+												<input type="text" class="form-control" id="descripcion" name="descripcion" required maxlength="30"/>
 											</div>
 										</div>
 										<div class="modal-footer">
 											<button class="btn btn-warning" type="submit">Guardar</button>
+											
 											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
 										</div>
 									</div>
