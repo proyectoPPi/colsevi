@@ -8,18 +8,15 @@
     <meta name="description" content="">
     <meta name="author" content="Brayan">
     <meta name="keyword" content="sevillana, Colonial, Pedidos, Domicilios">
-    <link rel="shortcut icon" href="img/favicon.html">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/favicon.html">
 
     <title>Ingresar</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="resources/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet"/>
-    <link href="resources/css/bootstrap-reset.css" type="text/css" media="screen" rel="stylesheet"/>
-    <!--external css-->
-    <link href="resources/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <!-- Custom styles for this template -->
-    <link href="resources/css/style.css" rel="stylesheet"/>
-    <link href="resources/css/style-responsive.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap-reset.css" type="text/css" media="screen" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/resources/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/resources/css/style-responsive.css" rel="stylesheet" />
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
     <!--[if lt IE 9]>
@@ -31,8 +28,9 @@
   <body class="login-body">
 
     <div class="container">
+    <c:import url="alertas.jsp"></c:import>
 
-      <form class="form-signin" action="login/Ingresar.html" method="post">
+      <form class="form-signin" action="${pageContext.request.contextPath}/login/Ingresar.html" method="post">
         <h2 class="form-signin-heading">ColSevi</h2>
         <div class="login-wrap">
             <input type="text" class="form-control" placeholder="Usuario" autofocus id="usuario" name="usuario">
@@ -75,10 +73,11 @@
 
     </div>
 
-    <!-- js placed at the end of the document so the pages load faster -->
-    <script src="resources/js/jquery.js"></script>
-    <script src="resources/js/bootstrap.min.js"></script>
+    <c:import url="javascript_genericos.jsp"></c:import>
+    <script type="text/javascript">
     
+    var error = "${error}";
+    </script>
   </body>
 
 </html>

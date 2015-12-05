@@ -15,3 +15,17 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.min.map"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pulstate.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
+    
+    <script type="text/javascript">
+    	jQuery("#error, #correcto, #peligro, #info").hide();
+    	if("${error}"  != undefined && "${error}" != ""){
+    		jQuery("#error").show();
+    	}else if("${correcto}"  != undefined && "${correcto}" != ""){
+    		jQuery("#correcto").show();
+    	}else if("${peligro}"  != undefined && "${peligro}" != ""){
+    		jQuery("#peligro").show();
+    	}else if("${info}"  != undefined && "${info}" != ""){
+    		jQuery("#info").show();
+    	}
+    
+    </script>
