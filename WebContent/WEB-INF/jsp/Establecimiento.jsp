@@ -24,7 +24,7 @@
 					<section class="panel">
 						<header class="panel-heading">Locales 
 							<span class="tools pull-right">
-								<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle fa-8"></i></a>
+								<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle fa-3x"></a></i>
                             </span>
 						</header>
 						
