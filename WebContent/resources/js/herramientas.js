@@ -1,5 +1,5 @@
 var dataMap = {};
-var registrosPagina = 2;
+var registrosPagina = 10;
 /*
  * Método para pintar la tabla
  */

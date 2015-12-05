@@ -11,17 +11,14 @@ public class IniciarDatos extends HttpServlet {
         super();
     }
    
-    @SuppressWarnings("static-access")
-	public void init() throws ServletException {
+    public void init() throws ServletException {
     	try{
 	    	super.init();
-	    	ColseviDao dao = new ColseviDao();
-	    	dao.getInstance().getEstablecimientoMapper();
+	    	NavegacionUsuario usuario = new NavegacionUsuario();
+	    	usuario.cargarPermisos();
 	    	
 			System.out.println("Iniciar");
     	}catch(Exception e){
     	}
     }
-   	
-	
 }
