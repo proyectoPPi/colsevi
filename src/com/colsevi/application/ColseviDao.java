@@ -6,6 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.colsevi.dao.usuario.map.EstablecimientoMapper;
 import com.colsevi.dao.usuario.map.PaginaMapper;
+import com.colsevi.dao.usuario.map.PaginaXRolMapper;
 import com.colsevi.dao.usuario.map.PersonaMapper;
 import com.colsevi.dao.usuario.map.RolMapper;
 import com.colsevi.dao.usuario.map.TipoDocumentoMapper;
@@ -21,6 +22,7 @@ public class ColseviDao {
 	private UsuarioMapper usuarioMapper; 
 	private UsuarioXRolMapper usuarioXRolMapper; 
 	private EstablecimientoMapper establecimientoMapper;
+	private PaginaXRolMapper paginaXRolMapper; 
 	
 	private static ColseviDao current = null;
 
@@ -54,6 +56,7 @@ public class ColseviDao {
 		usuarioMapper = (UsuarioMapper) beanFactoryMyBatis.getBean("usuarioMapper");
 		usuarioXRolMapper = (UsuarioXRolMapper) beanFactoryMyBatis.getBean("usuarioXRolMapper");
 		establecimientoMapper = (EstablecimientoMapper) beanFactoryMyBatis.getBean("establecimientoMapper");
+		paginaXRolMapper = (PaginaXRolMapper) beanFactoryMyBatis.getBean("paginaXRolMapper");
 	}
 
 	public TipoDocumentoMapper getTipoDocumentoMapper() {
@@ -110,5 +113,13 @@ public class ColseviDao {
 
 	public void setEstablecimientoMapper(EstablecimientoMapper establecimientoMapper) {
 		this.establecimientoMapper = establecimientoMapper;
+	}
+
+	public PaginaXRolMapper getPaginaXRolMapper() {
+		return paginaXRolMapper;
+	}
+
+	public void setPaginaXRolMapper(PaginaXRolMapper paginaXRolMapper) {
+		this.paginaXRolMapper = paginaXRolMapper;
 	}
 }

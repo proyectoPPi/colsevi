@@ -51,6 +51,17 @@ CREATE TABLE COLSEVI.rol(
 	REFERENCES COLSEVI.pagina(id_pagina)
 );
 
+
+CREATE TABLE COLSEVI.pagina_x_rol(
+	id_rol INT NOT NULL,
+    id_pagina INT NOT NULL,
+	PRIMARY KEY(id_rol, id_pagina),
+    CONSTRAINT fk_idrolpagina FOREIGN KEY (id_rol)
+	REFERENCES COLSEVI.rol(id_rol),
+    CONSTRAINT fk_paginaId FOREIGN KEY (id_pagina)
+	REFERENCES COLSEVI.pagina(id_pagina)
+);
+
 CREATE TABLE COLSEVI.usuario_x_rol(
 	id_rol INT NOT NULL,
     id_usuario INT NOT NULL,

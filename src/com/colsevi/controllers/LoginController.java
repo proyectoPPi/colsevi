@@ -42,7 +42,7 @@ public class LoginController {
 			sesion.setAttribute("sesion", U);
 		}
 		
-		return new ModelAndView("redirect:/administrador.html");
+		return new ModelAndView("redirect:/General/Establecimiento.html");
 	}
 	
 	public String validar(String usuario, String clave){
