@@ -17,6 +17,10 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
     
     <script type="text/javascript">
+    	
+    	var contexto = "${pageContext.request.contextPath}";
+	
+    
     	jQuery("#error, #correcto, #peligro, #info").hide();
     	if("${error}"  != undefined && "${error}" != ""){
     		jQuery("#error").show();

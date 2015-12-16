@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.tomcat.jni.Local;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -23,7 +22,7 @@ public class EstablecimientoController {
 	
 	@RequestMapping("/General/Establecimiento")
 	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
-		return new ModelAndView("Establecimiento");
+		return new ModelAndView("general/Establecimiento");
 	}
 	
 	@SuppressWarnings("unchecked")

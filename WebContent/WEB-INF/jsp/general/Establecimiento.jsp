@@ -3,26 +3,21 @@
 <html>
 <head>
    <meta charset="UTF-8" />
-	<title>Administrar Locales</title>
-	<c:import url="estilos_genericos.jsp"></c:import>
+	<title>Establecimientos</title>
+	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 
 </head>
 <body>
 
+	<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
 	<section id="container" class="">
-		<header class="header white-bg">
-			<div class="sidebar-toggle-box">
-				<div data-original-title="Toggle Navigation" data-placement="right" class="fa fa-bars tooltips"></div>
-			</div>
-			<a href="index.html" class="logo">COL<span>SEVI</span></a>
-		</header>
-		<c:import url="menu.jsp"></c:import>
+		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
 		<section id="main-content">
 			<section class="wrapper">
 				<div class="row">
-				<c:import url="alertas.jsp"></c:import>
+				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
 					<section class="panel">
-						<header class="panel-heading">Locales 
+						<header class="panel-heading">Establecimiento 
 						
 							<span class="tools pull-right">
 								<button class="btn btn-default" type="submit" onclick="printDiv('tabla')" style="margin-bottom: 2px;">Imprimir</button>
@@ -69,32 +64,15 @@
 			</section>
 		</section>
 
-		<footer class="site-footer" id="footer">
-			<div class="text-center">2015 &copy; Desarrollo.</div>
-		</footer>
+		<c:import url="/WEB-INF/jsp/plantilla/pie_pagina.jsp"></c:import>
 	</section>
-	<c:import url="javascript_genericos.jsp"></c:import>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/Local.js"></script>
+	<c:import url="/WEB-INF/jsp/plantilla/javascript_genericos.jsp"></c:import>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/general/Establecimiento.js"></script>
 	<script type="text/javascript">
-	titulos = new Array();
-	titulos["id_establecimiento"] = "ID";
-	titulos["nombre"] = "Nombre";
-	titulos["descripcion"] = "Descripci&#243;n";
-	
-	var contextPath = "${pageContext.request.contextPath}";
-	
-
-	
-// 	<tr>
-// 	<td><a href="#">103455</a></td>
-// 	<td class="hidden-phone">$ 100.000</td>
-// 	<td>camilo</td>
-// 	<td><span class="label label-success label-mini">Nuevo</span></td>
-// 	<td><button class="btn btn-danger btn-xs">
-// 			<i class="fa fa-trash-o "></i>
-// 		</button></td>
-// </tr>
-	
+		titulos = new Array();
+		titulos["id_establecimiento"] = "ID";
+		titulos["nombre"] = "Nombre";
+		titulos["descripcion"] = "Descripci&#243;n";
 	</script>
 </body>
 </html>

@@ -4,7 +4,7 @@ jQuery(document).ready(function(){
 
 function Tabla(pagina){
 	HTabla({
-		url: contextPath + "/General/Establecimiento/tabla.html?",
+		url: contexto + "/General/Establecimiento/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
 		pagina:pagina
@@ -16,7 +16,7 @@ function Limpiar(){
 }
 
 function Eliminar(){
-	HEliminar("formulario", contextPath + "/General/Establecimiento/EliminarEstablecimiento.html?");
+	HEliminar("formulario", contexto + "/General/Establecimiento/EliminarEstablecimiento.html?");
 }
 
 function printDiv(tabla) {

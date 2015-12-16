@@ -28,7 +28,7 @@
   <body class="login-body">
 
     <div class="container">
-    <c:import url="alertas.jsp"></c:import>
+    <c:import url="plantilla/alertas.jsp"></c:import>
 
       <form class="form-signin" action="${pageContext.request.contextPath}/login/Ingresar.html" method="post">
         <h2 class="form-signin-heading">ColSevi</h2>
@@ -73,11 +73,6 @@
 
     </div>
 
-    <c:import url="javascript_genericos.jsp"></c:import>
-    <script type="text/javascript">
-    
-    var error = "${error}";
-    </script>
+    <c:import url="plantilla/javascript_genericos.jsp"></c:import>
   </body>
-
 </html>
