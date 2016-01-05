@@ -61,7 +61,7 @@ public class TipoDocumentoController {
 		return resultado;
 	}
 	
-	@RequestMapping("/Usuario/TipoDocumento/GuardarLocal")
+	@RequestMapping("/Usuario/TipoDocumento/GuardarTipo")
 	public ModelAndView GuardarLocal(HttpServletRequest request, ModelMap modelo, TipoDocumento bean){
 		
 		String error = validarGuardado(bean);
@@ -95,7 +95,7 @@ public class TipoDocumentoController {
 		
 		return error;
 	}
-	@RequestMapping("/Usuario/TipoDocumento/EliminarEstablecimiento")
+	@RequestMapping("/Usuario/TipoDocumento/EliminarTipoDocumento")
 	public ModelAndView EliminarEstablecimiento(HttpServletRequest request, ModelMap modelo){
 		
 		String id = request.getParameter("id_tipo_documento");

@@ -32,7 +32,7 @@
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-sm">
 							<div class="modal-content-wrap">
-								<form method="post" action="${pageContext.request.contextPath}/General/Establecimiento/GuardarLocal.html?" id="formulario">
+								<form method="post" action="${pageContext.request.contextPath}/Usuario/TipoDocumento/GuardarTipo.html?" id="formulario">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -66,7 +66,7 @@
 		<c:import url="/WEB-INF/jsp/plantilla/pie_pagina.jsp"></c:import>
 	</section>
 	<c:import url="/WEB-INF/jsp/plantilla/javascript_genericos.jsp"></c:import>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/Local.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/usuario/TipoDocumento.js"></script>
 	<script type="text/javascript">
 	titulos = new Array();
 	titulos["id_tipo_documento"] = "ID";
