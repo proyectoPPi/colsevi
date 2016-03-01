@@ -4,6 +4,9 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.colsevi.dao.general.map.CorreoMapper;
+import com.colsevi.dao.general.map.DireccionMapper;
+import com.colsevi.dao.general.map.TelefonoMapper;
 import com.colsevi.dao.usuario.map.EstablecimientoMapper;
 import com.colsevi.dao.usuario.map.PaginaMapper;
 import com.colsevi.dao.usuario.map.PaginaXRolMapper;
@@ -23,6 +26,9 @@ public class ColseviDao {
 	private UsuarioXRolMapper usuarioXRolMapper; 
 	private EstablecimientoMapper establecimientoMapper;
 	private PaginaXRolMapper paginaXRolMapper; 
+	private TelefonoMapper telefonoMapper;
+	private DireccionMapper direccionMapper;
+	private CorreoMapper correoMapper;
 	
 	private static ColseviDao current = null;
 
@@ -57,6 +63,9 @@ public class ColseviDao {
 		usuarioXRolMapper = (UsuarioXRolMapper) beanFactoryMyBatis.getBean("usuarioXRolMapper");
 		establecimientoMapper = (EstablecimientoMapper) beanFactoryMyBatis.getBean("establecimientoMapper");
 		paginaXRolMapper = (PaginaXRolMapper) beanFactoryMyBatis.getBean("paginaXRolMapper");
+		telefonoMapper = (TelefonoMapper) beanFactoryMyBatis.getBean("telefonoMapper");
+		direccionMapper = (DireccionMapper) beanFactoryMyBatis.getBean("direccionMapper");
+		correoMapper = (CorreoMapper) beanFactoryMyBatis.getBean("correoMapper");
 	}
 
 	public TipoDocumentoMapper getTipoDocumentoMapper() {
@@ -121,5 +130,29 @@ public class ColseviDao {
 
 	public void setPaginaXRolMapper(PaginaXRolMapper paginaXRolMapper) {
 		this.paginaXRolMapper = paginaXRolMapper;
+	}
+
+	public TelefonoMapper getTelefonoMapper() {
+		return telefonoMapper;
+	}
+
+	public void setTelefonoMapper(TelefonoMapper telefonoMapper) {
+		this.telefonoMapper = telefonoMapper;
+	}
+
+	public DireccionMapper getDireccionMapper() {
+		return direccionMapper;
+	}
+
+	public void setDireccionMapper(DireccionMapper direccionMapper) {
+		this.direccionMapper = direccionMapper;
+	}
+
+	public CorreoMapper getCorreoMapper() {
+		return correoMapper;
+	}
+
+	public void setCorreoMapper(CorreoMapper correoMapper) {
+		this.correoMapper = correoMapper;
 	}
 }
