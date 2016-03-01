@@ -70,6 +70,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") ||  path.endsWith("map") ||
 			
 			path.startsWith("/Usuario/TipoDocumento") ||
+			path.startsWith("/General/Establecimiento") ||
 			path.startsWith(LOGIN)
 			
 			){
