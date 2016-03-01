@@ -14,12 +14,23 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.min.map"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pulstate.js"></script>
+      <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/fuelux/js/spinner.min.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/moment.min.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/js/jquery.multi-select.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/js/jquery.quicksearch.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
     
     <script type="text/javascript">
     	
     	var contexto = "${pageContext.request.contextPath}";
-	
     
     	jQuery("#error, #correcto, #peligro, #info").hide();
     	if("${error}"  != undefined && "${error}" != ""){

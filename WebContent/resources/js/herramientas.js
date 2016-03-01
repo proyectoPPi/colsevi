@@ -134,3 +134,7 @@ function HEliminar(div, url){
 	jQuery('#' + div).attr('action', url);
 	jQuery('#' + div).submit();
 }
+
+function HDatetime(Id){
+	jQuery('#'+ Id).timepicker();
+}

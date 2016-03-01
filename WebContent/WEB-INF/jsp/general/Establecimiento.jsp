@@ -60,8 +60,8 @@
 											</div>
 											<div class="form-group">
 				                                 <label>*Hora de cierre</label>
-		                                          <div class="input-group bootstrap-timepicker">
-		                                              <input type="text" class="form-control timepicker-default">
+		                                          <div class="input-group">
+		                                              <input type="text" id="pruebabasicA" class="form-control timepicker-default">
 		                                                <span class="input-group-btn">
 		                                                <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
 		                                                </span>
