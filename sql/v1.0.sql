@@ -43,14 +43,13 @@ CREATE TABLE COLSEVI.pagina(
 
 CREATE TABLE COLSEVI.rol(
 	id_rol INT AUTO_INCREMENT,
-    nombre_rol INT NOT NULL,
+    nombre_rol VARCHAR(40) NOT NULL,
     codigo_rol VARCHAR(80) NOT NULL,
     pagina_defecto INT NOT NULL,
 	PRIMARY KEY(id_rol),
     CONSTRAINT fk_paginadefecto FOREIGN KEY (pagina_defecto)
 	REFERENCES COLSEVI.pagina(id_pagina)
 );
-
 
 CREATE TABLE COLSEVI.pagina_x_rol(
 	id_rol INT NOT NULL,
@@ -88,14 +87,11 @@ INSERT INTO COLSEVI.pagina_x_rol VALUES(1,1);
 INSERT INTO COLSEVI.usuario_x_rol VALUES(1,1);
 
 ALTER TABLE COLSEVI.establecimiento ADD COLUMN estadovisible VARCHAR(1)  DEFAULT 'T';
-
-
 ALTER TABLE COLSEVI.establecimiento ADD COLUMN hora_inicio VARCHAR(7);
 ALTER TABLE COLSEVI.establecimiento ADD COLUMN hora_fin VARCHAR(7);
-ALTER TABLE COLSEVI.establecimiento ADD COLUMN id_direccion INT ;
-ALTER TABLE COLSEVI.establecimiento ADD COLUMN id_telefono INT ;
-ALTER TABLE COLSEVI.establecimiento ADD COLUMN id_correo INT ; 
-
+ALTER TABLE COLSEVI.establecimiento ADD COLUMN id_direccion INT;
+ALTER TABLE COLSEVI.establecimiento ADD COLUMN id_telefono INT;
+ALTER TABLE COLSEVI.establecimiento ADD COLUMN id_correo INT; 
 
 CREATE TABLE COLSEVI.tipo_telefono(
 	id_tipo_telefono INT AUTO_INCREMENT,
@@ -142,10 +138,3 @@ ALTER TABLE COLSEVI.establecimiento ADD CONSTRAINT fk_id_telefono FOREIGN KEY (i
 REFERENCES COLSEVI.telefono(id_telefono);
 ALTER TABLE COLSEVI.establecimiento ADD CONSTRAINT fk_id_correo FOREIGN KEY (id_correo)
 REFERENCES COLSEVI.correo(id_correo);
-
-
-
-
-
-
-
