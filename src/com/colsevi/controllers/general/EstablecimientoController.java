@@ -53,7 +53,11 @@ public class EstablecimientoController {
 				opciones = new JSONObject();
 				opciones.put("id_establecimiento", bean.getId_establecimiento());
 				opciones.put("nombre", bean.getNombre());
-				opciones.put("descripcion", bean.getDescripcion());								
+				opciones.put("descripcion", bean.getDescripcion());
+				opciones.put("telefono", bean.getId_telefono());
+				opciones.put("correo", bean.getId_correo());
+				opciones.put("hora_inicio", bean.getHora_inicio());
+				opciones.put("hora_fin", bean.getHora_fin());
 				resultado.add(opciones);
 			}
 			
@@ -91,6 +95,18 @@ public class EstablecimientoController {
 		}
 		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
 			error = "Ingresar la descripción<br/>";
+		}
+		if(bean.getId_telefono() == null || bean.getId_telefono().equals("")){
+			error = "Ingresar la número de teléfono<br/>";
+		}
+		if(bean.getId_correo() == null || bean.getId_correo().equals("")){
+			error = "Ingresar correo<br/>";
+		}
+		if(bean.getHora_inicio() == null || bean.getHora_inicio().trim().isEmpty()){
+			error = "Ingresar la hora de inicio<br/>";
+		}
+		if(bean.getHora_fin() == null || bean.getHora_fin().trim().isEmpty()){
+			error = "Ingresar la hora de cierre<br/>";
 		}
 		
 		return error;
