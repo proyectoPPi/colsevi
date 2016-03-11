@@ -123,7 +123,7 @@ public class ColseviDao {
 		tipoPesoMapper = (TipoPesoMapper) beanFactoryMyBatis.getBean("tipoPesoMapper");
 		ingredienteMapper = (IngredienteMapper) beanFactoryMyBatis.getBean("ingredienteMapper");
 		compraXIngredienteMapper = (CompraXIngredienteMapper) beanFactoryMyBatis.getBean("compraXIngredienteMapper");
-		tipoProductoMapper = (TipoProductoMapper) beanFactoryMyBatis.getBean("TipoProductoMapper");
+		tipoProductoMapper = (TipoProductoMapper) beanFactoryMyBatis.getBean("tipoProductoMapper");
 		productoMapper = (ProductoMapper) beanFactoryMyBatis.getBean("productoMapper");
 		ingredienteXProductoMapper = (IngredienteXProductoMapper) beanFactoryMyBatis.getBean("ingredienteXProductoMapper");
 		recetaMapper = (RecetaMapper) beanFactoryMyBatis.getBean("recetaMapper");
