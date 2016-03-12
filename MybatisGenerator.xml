@@ -13,13 +13,9 @@
         password="root">
     </jdbcConnection>
 
-    <javaModelGenerator targetPackage="com.colsevi.dao.pago.model" targetProject="colsevi/src" />
-    <sqlMapGenerator targetPackage="com.colsevi.dao.pago.map" targetProject="colsevi/src" />
-    <javaClientGenerator targetPackage="com.colsevi.dao.pago.map" targetProject="colsevi/src" type="XMLMAPPER" />
-    <table schema="colsevi" tableName="pago"><property name="useActualColumnNames" value="true"/></table>
-    <table schema="colsevi" tableName="detalle_pago"><property name="useActualColumnNames" value="true"/></table>
-    <table schema="colsevi" tableName="deuda"><property name="useActualColumnNames" value="true"/></table>
-    <table schema="colsevi" tableName="cobro_categoria"><property name="useActualColumnNames" value="true"/></table>
-    <table schema="colsevi" tableName="cobro"><property name="useActualColumnNames" value="true"/></table>
+    <javaModelGenerator targetPackage="com.colsevi.dao.usuario.model" targetProject="colsevi/src" />
+    <sqlMapGenerator targetPackage="com.colsevi.dao.usuario.map" targetProject="colsevi/src" />
+    <javaClientGenerator targetPackage="com.colsevi.dao.usuario.map" targetProject="colsevi/src" type="XMLMAPPER" />
+    <table schema="colsevi" tableName="persona"><property name="useActualColumnNames" value="true"/></table>
   </context>
 </generatorConfiguration>
