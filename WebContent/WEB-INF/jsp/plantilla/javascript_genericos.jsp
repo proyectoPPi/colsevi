@@ -26,6 +26,9 @@
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/js/jquery.multi-select.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/js/jquery.quicksearch.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap-switch.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.tagsinput.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ga.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
     
     <script type="text/javascript">
