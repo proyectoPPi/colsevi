@@ -1,5 +1,6 @@
 jQuery(document).ready(function(){
 	Tabla();
+	HDatetime('pruebabasicA');
 });
 
 function Tabla(pagina){

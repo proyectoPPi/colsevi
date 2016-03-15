@@ -11,9 +11,10 @@ function HTabla(opciones){
 	
 	Setlimite(opciones.pagina);
 	
+	SetFiltros();
+	
 	jQuery.ajaxQueue({
 		  url: dataMap['url'],
-		  contentType: "application/json; charset=utf-8",
 		}).done(function(result) {
 			data = jQuery.parseJSON( result );
 			var html = ""; 
@@ -94,7 +95,14 @@ function Setlimite(pagina){
 	
 	dataMap['url'] += "&Inicio=" + dataMap['Inicio'];
 	dataMap['url'] += "&Final=" + dataMap['Final'];
+}
 
+function SetFiltros(){
+	var filtro = "&";
+	jQuery("[name*='filtro']").each(function() {
+		filtro += $(this).attr("id") +"="+ $(this).val() + "&";
+	});
+	dataMap['url'] += filtro;
 }
 
 function organizarPaginacion(pagina){
@@ -133,4 +141,8 @@ function HLimpliar(){
 function HEliminar(div, url){
 	jQuery('#' + div).attr('action', url);
 	jQuery('#' + div).submit();
+}
+
+function HDatetime(Id){
+	jQuery('#'+ Id).timepicker();
 }

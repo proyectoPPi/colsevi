@@ -31,7 +31,7 @@
 					<div id="paginacion" class="col-md-12"></div>
 					
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-sm">
+						<div class="modal-dialog">
 							<div class="modal-content-wrap">
 								<form method="post" action="${pageContext.request.contextPath}/General/Establecimiento/GuardarLocal.html?" id="formulario">
 									<div class="modal-content">
@@ -49,6 +49,37 @@
 												<label>*Descripci&#243;n</label>
 												<input type="text" class="form-control" id="descripcion" name="descripcion" required maxlength="30"/>
 											</div>
+											<div class="form-group">
+				                                 <label>*Hora de inicio</label>
+		                                          <div class="input-group bootstrap-timepicker">
+		                                              <input type="text" class="form-control timepicker-default">
+		                                                <span class="input-group-btn">
+		                                                <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
+		                                                </span>
+		                                          </div>
+											</div>
+											<div class="form-group">
+				                                 <label>*Hora de cierre</label>
+		                                          <div class="input-group">
+		                                              <input type="text" id="pruebabasicA" class="form-control timepicker-default">
+		                                                <span class="input-group-btn">
+		                                                <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
+		                                                </span>
+		                                          </div>
+											</div>
+											<div class="form-group">
+												<label>*Correo</label>
+												<input type="text" class="form-control" id="descripcion" name="descripcion" required maxlength="20"/>
+											</div>
+											<div class="form-group">
+												<label>*Direcci&#243;n</label>
+												<input type="text" class="form-control" id="descripcion" name="descripcion" required maxlength="20"/>
+											</div>
+											<div class="form-group">
+												<label>*Tel&eacute;fono</label>
+												<input type="text" class="form-control" id="descripcion" name="descripcion" required maxlength="20"/>
+											</div>
+											
 										</div>
 										<div class="modal-footer">
 											<button class="btn btn-warning" type="submit">Guardar</button>
@@ -73,6 +104,11 @@
 		titulos["id_establecimiento"] = "ID";
 		titulos["nombre"] = "Nombre";
 		titulos["descripcion"] = "Descripci&#243;n";
+		titulos["telefono"] = "Tel&eacute;fono";
+		titulos["correo"] = "correo";
+		titulos["hora_inicio"] = "Hora de inicio";
+		titulos["hora_fin"] = "Hora de cierre";
+		
 	</script>
 </body>
 </html>
