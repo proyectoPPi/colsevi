@@ -1,7 +1,9 @@
 package com.colsevi.controllers.pedido;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,15 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
-import com.colsevi.dao.usuario.model.Establecimiento;
-import com.colsevi.dao.usuario.model.EstablecimientoExample;
+import com.colsevi.application.UtilidadManager;
+import com.colsevi.dao.pedido.model.EstadoPedido;
+import com.colsevi.dao.pedido.model.EstadoPedidoExample;
 
 @Controller
 public class PedidoController {
 	
 	@RequestMapping("/Pedido/Visualizar")
 	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
+		model.addAttribute("listaEstado", listaEstadoP());
 		return new ModelAndView("pedido/visualizadorPedido");
+	}
+	
+	public static List<EstadoPedido> listaEstadoP(){
+		return ColseviDao.getInstance().getEstadoPedidoMapper().selectByExample(new EstadoPedidoExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -30,35 +38,52 @@ public class PedidoController {
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		
 		String Inicio = request.getParameter("Inicio");
 		String Final = request.getParameter("Final");
-		EstablecimientoExample EstablecimientoExample = new EstablecimientoExample();
-		EstablecimientoExample.setLimit(Inicio + ", " + Final);
-		EstablecimientoExample.createCriteria().andEstadovisibleEqualTo("T");
+		String documentoF = request.getParameter("documentoF");
+		String estadoF = request.getParameter("estadoF");
+		String clienteF = request.getParameter("clienteF");
+
+		mapa.put("limit",Inicio + ", " + Final);
 		
-		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(EstablecimientoExample)));
-		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().countByExample(EstablecimientoExample));
+		if(documentoF != null && !documentoF.trim().isEmpty()){
+			mapa.put("documento", "%" + documentoF + "%");
+		}
+		if(estadoF != null && !estadoF.trim().isEmpty()){
+			mapa.put("estado", estadoF);
+		}
+		if(clienteF != null && !clienteF.trim().isEmpty()){
+			mapa.put("cliente",  "%" + clienteF + "%");
+		}
+		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getPedidoMapper().SelectDataView(mapa)));
+		opciones.put("total", 0);
 
 		opciones.writeJSONString(response.getWriter());
 	}
 
 	@SuppressWarnings("unchecked")
-	public JSONArray ConstruirJson(List<Establecimiento> listgeneral){
+	public JSONArray ConstruirJson(List<Map<String, Object>> listPedido){
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
 		
-		if(listgeneral != null && listgeneral.size() >0){
-			for (Establecimiento bean : listgeneral) {
+		if(listPedido != null && listPedido.size() >0){
+			for (Map<String, Object> map : listPedido) {
 				opciones = new JSONObject();
-				opciones.put("id_establecimiento", bean.getId_establecimiento());
-				opciones.put("nombre", bean.getNombre());
-				opciones.put("descripcion", bean.getDescripcion());								
+
+				opciones.put("id_pedido", map.get("id_pedido").toString());
+				opciones.put("documento", map.get("documento"));
+				opciones.put("nombreCompleto", map.get("nombre").toString() + " " + map.get("apellido"));
+				opciones.put("estado", map.get("estado"));
+				opciones.put("fecha_pedido", UtilidadManager.FormatDateComplete(map.get("fecha_pedido").toString()));
+				opciones.put("total", map.get("total"));
+				opciones.put("pagado", Boolean.parseBoolean(map.get("pagado").toString()) ? "SI" : "NO");
+				
 				resultado.add(opciones);
 			}
-			
 		}
 		return resultado;
 	}
-	
 }
