@@ -371,3 +371,7 @@ CREATE TABLE movimiento_inventario(
     CONSTRAINT fk_movimientoCategoria FOREIGN KEY (id_categoria_modulo) REFERENCES categoria_modulo(id_categoria_modulo),
     CONSTRAINT fk_motivoMovimiento FOREIGN KEY (id_motivo) REFERENCES motivo(id_motivo)
 );
+
+
+ALTER TABLE persona ADD COLUMN nombre VARCHAR(60);
+ALTER TABLE persona ADD COLUMN apellido VARCHAR(60);

@@ -108,6 +108,9 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      limit ${limit}
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
@@ -300,4 +303,23 @@
       pagado = #{pagado,jdbcType=BIT}
     where id_pedido = #{id_pedido,jdbcType=INTEGER}
   </update>
+
+	<select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
+		SELECT ped.id_pedido,per.documento,per.nombre, per.apellido,estado.nombre as estado,fecha_pedido,pagado, ped.total
+		
+		FROM pedido ped
+		LEFT JOIN persona per ON per.id_persona = ped.id_persona
+		LEFT JOIN estado_pedido estado ON estado.id_estado_pedido = ped.id_estado_pedido
+		WHERE 1 = 1
+		 <if test="documento != null">
+			AND per.documento LIKE #{documento}
+		 </if>
+		 <if test="estado != null">
+			AND estado.id_estado_pedido = #{estado}
+		 </if>
+		 <if test="cliente != null">
+			OR (per.nombre LIKE #{cliente} AND per.apellido LIKE #{cliente})
+		 </if>
+		ORDER BY fecha_pedido DESC;
+	</select>
 </mapper>
