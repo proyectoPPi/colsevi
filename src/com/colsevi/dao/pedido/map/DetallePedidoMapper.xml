@@ -283,4 +283,11 @@
       sub_total = #{sub_total,jdbcType=DECIMAL}
     where id_detalle_pedido = #{id_detalle_pedido,jdbcType=INTEGER}
   </update>
+  	<select id="SelectDataView" parameterType="java.util.HashMap" resultType="java.util.Map">
+	    SELECT prod.id_producto,prod.referencia, prod.nombre, prod.descripcion, prod.venta, prod.imagen 
+		FROM catalogo cata
+		LEFT JOIN catalogo_x_producto cxp ON cxp.id_catalogo = cata.id_catalogo
+		LEFT JOIN producto prod ON prod.id_producto = cxp.id_producto
+		WHERE prod.id_tipo_producto = #{tipo} AND cata.vigente = false;
+	</select>
 </mapper>

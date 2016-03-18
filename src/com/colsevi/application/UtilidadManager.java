@@ -2,6 +2,10 @@ package com.colsevi.application;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+
+import com.colsevi.dao.producto.model.TipoProducto;
+import com.colsevi.dao.producto.model.TipoProductoExample;
 
 public class UtilidadManager {
 
@@ -15,5 +19,17 @@ public class UtilidadManager {
 			ex.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static List<TipoProducto> getTipoProductoPadre(){
+		TipoProductoExample tipoExample = new TipoProductoExample();
+		tipoExample.createCriteria().andPadreIsNull();
+		return ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tipoExample);
+	}
+	
+	public static List<TipoProducto> getTipoProductoHijo(Integer padre){
+		TipoProductoExample tipoExample = new TipoProductoExample();
+		tipoExample.createCriteria().andPadreEqualTo(padre);
+		return ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tipoExample);
 	}
 }

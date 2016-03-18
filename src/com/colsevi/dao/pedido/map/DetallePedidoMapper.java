@@ -3,6 +3,8 @@ package com.colsevi.dao.pedido.map;
 import com.colsevi.dao.pedido.model.DetallePedido;
 import com.colsevi.dao.pedido.model.DetallePedidoExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface DetallePedidoMapper {
@@ -72,4 +74,6 @@ public interface DetallePedidoMapper {
 	 * @mbggenerated  Thu Mar 10 16:40:36 COT 2016
 	 */
 	int updateByPrimaryKey(DetallePedido record);
+	
+	List<Map<String, Object>> SelectDataView(Map<String, Object> map);
 }

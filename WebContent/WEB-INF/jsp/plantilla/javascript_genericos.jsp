@@ -1,20 +1,20 @@
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.dcjqaccordion.2.7.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.scrollTo.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.nicescroll.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/respond.min.js" ></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/slidebars.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common-scripts.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/gritter/js/jquery.gritter.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.pulsate.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common-scripts.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/gritter.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.dcjqaccordion.2.7.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.scrollTo.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.nicescroll.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/respond.min.js" ></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/slidebars.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common-scripts.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/gritter/js/jquery.gritter.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.pulsate.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common-scripts.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/gritter.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.min.map"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pulstate.js"></script>
-      <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/fuelux/js/spinner.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pulstate.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/fuelux/js/spinner.min.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
@@ -29,7 +29,12 @@
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap-switch.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.tagsinput.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ga.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.bootstrap.wizard.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/wizard.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/jquery-ui/jquery-ui-1.10.1.custom.min.js"></script>
+  <script src="//www.fuelcdn.com/fuelux/3.13.0/js/fuelux.min.js"></script>  
+  
     
     <script type="text/javascript">
     	

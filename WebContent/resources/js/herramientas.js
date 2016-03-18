@@ -131,6 +131,72 @@ function organizarPaginacion(pagina){
 		jQuery("#paginacion").append('<ul class="dataTables_paginate paging_bootstrap pagination">'+html+'</ul>');
 }
 
+function HiniciarAutocompletar(url,input, update){
+
+	var value = "valor="+jQuery("#"+input).val();
+	dataMap['AutocompletarUrl'] = url;
+	
+	jQuery.ajaxQueue({
+		url: dataMap['AutocompletarUrl'] + value,
+	}).done(function(result) {
+		var data;
+		try{
+			data = jQuery.parseJSON(result);
+		} catch(err){
+			console.log("Error ejecutando HiniciarAutocompletar" + err);
+        	return;
+		}
+		dataMap['autocompletar'] = data['labels'];
+		
+		AuxiliarAutocompletar(input);
+		
+		if(update==true){
+			jQuery("#"+input).keyup(function(e) {
+				if((e.which<37 || e.which>40) && e.which!=13){
+					ActualizarAutocompletar(input);
+				}
+			});
+		}
+	});
+}
+
+function AuxiliarAutocompletar(input){
+
+	jQuery( "#"+input ).autocomplete({
+		source: dataMap['autocompletar'],
+		minLength: 0,
+		open: function( event, ui ) {
+			//jQuery("#"+input).width(jQuery(".ui-autocomplete.ui-menu").width());
+		}
+	});
+
+	jQuery("#"+input).focus(function() {
+		jQuery("#"+input).autocomplete("search");
+	});
+}
+
+function ActualizarAutocompletar(input){
+
+	jQuery.ajaxQueue({
+	  	url: dataMap['AutocompletarUrl'],
+	  	data: {valor: jQuery("#"+input).val()},
+	  	success: function(o) {
+			var data;
+			try{
+				data = jQuery.parseJSON(o);
+			} catch(err){
+				console.log("Error ejecutando ajaxQueue en ActualizarAutocompletar " + err);
+	        	return;
+			}
+			if(data.labels==undefined) data.labels = [];
+			jQuery("#"+input).autocomplete( "option", "source", data.labels );
+			jQuery("#"+input).autocomplete("search", "");
+	  	}
+	});
+}
+
+
+
 function HLimpliar(){
 	for(titulos in dataMap["titulos"]){
 		if(dataMap["titulos"][titulos] != undefined){

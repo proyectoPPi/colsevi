@@ -50,6 +50,16 @@ a, a:hover, a:focus {
     height: 100%;
 }
 
+.fieldsOrder{
+    color: peru;
+    font-weight: bold;
+}
+
+.rowProducts{
+    border: solid 1px;
+    border-color: rgba(153, 153, 153, 0.2);
+}
+
 /*login page*/
 
 .login-body {
@@ -4088,7 +4098,7 @@ span.customSelect.changed {
 .rating {
     unicode-bidi: bidi-override;
     direction: rtl;
-    font-size: 30px;
+    font-size: 20px;
 }
 .rating span.star,
 .rating span.star {

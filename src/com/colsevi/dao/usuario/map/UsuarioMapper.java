@@ -3,6 +3,8 @@ package com.colsevi.dao.usuario.map;
 import com.colsevi.dao.usuario.model.Usuario;
 import com.colsevi.dao.usuario.model.UsuarioExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface UsuarioMapper {
@@ -72,4 +74,6 @@ public interface UsuarioMapper {
 	 * @mbggenerated  Thu Dec 03 21:54:07 COT 2015
 	 */
 	int updateByPrimaryKey(Usuario record);
+	
+	List<Map<String, Object>> SelectAutocomplete(Map<String, Object> map);
 }

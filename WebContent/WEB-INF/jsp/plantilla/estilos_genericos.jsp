@@ -6,10 +6,10 @@
     <meta name="keyword" content="sevillana, Colonial, Pedidos, Domicilios">
     <link rel="shortcut icon" href="${pageContext.request.contextPath}resources/img/favicon.html">
 
-  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap-reset.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/gritter/css/jquery.gritter.css" />
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="${pageContext.request.contextPath}/resources/css/slidebars.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/css/style-responsive.css" rel="stylesheet" />
@@ -21,7 +21,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker-bs3.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/css/datetimepicker.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/css/multi-select.css" />
-    
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/jquery-ui/jquery-ui-1.10.1.custom.min.css" />
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
     <!--[if lt IE 9]>
