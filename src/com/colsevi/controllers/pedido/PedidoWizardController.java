@@ -108,6 +108,8 @@ public class PedidoWizardController extends InicialController {
 		
 		JSONObject result = new JSONObject();
 		Pedido ped = new Pedido();
+		
+		System.out.println(request.getSession().getId());
 
 		try{
 			Integer persona = Integer.parseInt(request.getParameter("persona"));
@@ -129,12 +131,38 @@ public class PedidoWizardController extends InicialController {
 			result.put("error", "");
 		}
 			
-			
-			
-			result.writeJSONString(response.getWriter());
-		
+		result.writeJSONString(response.getWriter());
 	}
 	
+	@RequestMapping("/Pedido/Flujo/Adicionar")
+	public void Adicionar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		
+		JSONObject result = new JSONObject();
+		Pedido ped = new Pedido();
+
+		try{
+			Integer persona = Integer.parseInt(request.getParameter("persona"));
+			
+			ped.setFecha_pedido(new Date());
+			ped.setId_persona(persona);
+			ped.setTotal(new BigDecimal(0));
+			ped.setPagado(false);
+			ped.setId_estado_pedido(5);
+			
+		}catch(Exception e){
+			result.put("error", "");
+		}
+		
+		try{
+			ColseviDao.getInstance().getPedidoMapper().insertSelective(ped);
+			result.put("correcto", "OK");
+		}catch(Exception e){
+			result.put("error", "");
+		}
+			
+		result.writeJSONString(response.getWriter());
+	}
+
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/Pedido/Flujo/autocompletar")

@@ -35,6 +35,18 @@ $(document).ready(function(){
             } //etc. 
               
         },
+        onPrevious: function(tab, navigation, index){
+        	 if(index == 0){
+        		 alert('devolucion 0');
+                 return validateFirstStep();
+             } else if(index == 1){
+            	 alert('devolucion 1');
+                 return validateSecondStep();
+             } else if(index == 2){
+            	 alert('devolucion 2');
+                 return validateThirdStep();
+             } //etc. 
+        },
         onTabClick : function(tab, navigation, index){
             // Disable the posibility to click on tabs
             return false;
