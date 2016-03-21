@@ -375,3 +375,10 @@ CREATE TABLE movimiento_inventario(
 ALTER TABLE catalogo ADD COLUMN vigente BOOLEAN DEFAULT false;
 ALTER TABLE persona ADD COLUMN nombre VARCHAR(60);
 ALTER TABLE persona ADD COLUMN apellido VARCHAR(60);
+
+CREATE TABLE clasificar_ingrediente(
+	clasificar_ingrediente INT AUTO_INCREMENT,
+    nombre VARCHAR(40),
+    descripcion VARCHAR(80),
+    PRIMARY KEY(clasificar_ingrediente)
+);
