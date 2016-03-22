@@ -18,8 +18,6 @@ import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
 import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
 import com.colsevi.dao.ingrediente.model.Ingrediente;
 import com.colsevi.dao.ingrediente.model.IngredienteExample;
-import com.colsevi.dao.usuario.model.Establecimiento;
-import com.colsevi.dao.usuario.model.EstablecimientoExample;
 
 @Controller
 public class ClasificarIngredienteController {

@@ -1,7 +1,10 @@
 package com.colsevi.application;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class UtilidadManager {
 
@@ -15,5 +18,11 @@ public class UtilidadManager {
 			ex.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static String Currency(BigDecimal valor){
+		Locale locale = new Locale("es","AR"); // elegimos Argentina
+		NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+		return "$" + nf.format(valor);
 	}
 }
