@@ -180,12 +180,20 @@ CREATE TABLE tipo_peso(
     PRIMARY KEY(id_tipo_peso)
 );
 
+CREATE TABLE clasificar_ingrediente(
+	id_clasificar_ingrediente INT AUTO_INCREMENT,
+    nombre VARCHAR(40),
+    descripcion VARCHAR(150),
+    PRIMARY KEY(id_clasificar_ingrediente)
+);
 
 CREATE TABLE ingrediente(
     id_ingrediente INT AUTO_INCREMENT,
+    id_clasificar_ingrediente INT,
 	nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
-    PRIMARY KEY(id_ingrediente)
+    PRIMARY KEY(id_ingrediente),
+    CONSTRAINT fk_IngClasificar FOREIGN KEY (id_clasificar_ingrediente) REFERENCES clasificar_ingrediente(id_clasificar_ingrediente)
 );
 
 CREATE TABLE compra_x_ingrediente(
@@ -290,12 +298,12 @@ CREATE TABLE detalle_pedido(
 
 CREATE TABLE inventario(
     id_inventario INT AUTO_INCREMENT,
-	id_catalogo INT,
+	id_establecimiento INT,
     id_producto INT,
     disponible INT,
     comprometido INT,
     PRIMARY KEY(id_inventario),
-    CONSTRAINT fk_catalogoInventario FOREIGN KEY (id_catalogo) REFERENCES catalogo(id_catalogo),
+    CONSTRAINT fk_EstablecimientoInventario FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento),
     CONSTRAINT fk_productoInventario FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
 );
 
