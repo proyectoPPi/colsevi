@@ -114,7 +114,7 @@ public class ClasificarIngredienteController {
 		if(id != null){
 			
 			IngredienteExample ingExample = new IngredienteExample();
-//			ingExample.createCriteria().andid_ClasificarIngredienteEqualTo(id);
+			ingExample.createCriteria().andId_clasificar_ingredienteEqualTo(id);
 			List<Ingrediente> listaIng = ColseviDao.getInstance().getIngredienteMapper().selectByExample(ingExample);
 
 			if(listaIng != null && listaIng.size() > 0){
