@@ -10,6 +10,7 @@ import com.colsevi.dao.general.map.CorreoMapper;
 import com.colsevi.dao.general.map.DireccionMapper;
 import com.colsevi.dao.general.map.TelefonoMapper;
 import com.colsevi.dao.general.map.TipoTelefonoMapper;
+import com.colsevi.dao.ingrediente.map.ClasificarIngredienteMapper;
 import com.colsevi.dao.ingrediente.map.CompraXIngredienteMapper;
 import com.colsevi.dao.ingrediente.map.IngredienteMapper;
 import com.colsevi.dao.ingrediente.map.TipoPesoMapper;
@@ -79,6 +80,7 @@ public class ColseviDao {
 	private CobroMapper cobroMapper;
 	private MotivoMapper motivoMapper;
 	private MovimientoInventarioMapper movimientoInventarioMapper;
+	private ClasificarIngredienteMapper clasificarIngredienteMapper;
 	
 	private static ColseviDao current = null;
 
@@ -141,6 +143,7 @@ public class ColseviDao {
 		cobroMapper = (CobroMapper) beanFactoryMyBatis.getBean("cobroMapper");
 		motivoMapper = (MotivoMapper) beanFactoryMyBatis.getBean("motivoMapper");
 		movimientoInventarioMapper = (MovimientoInventarioMapper) beanFactoryMyBatis.getBean("movimientoInventarioMapper");
+		clasificarIngredienteMapper = (ClasificarIngredienteMapper) beanFactoryMyBatis.getBean("clasificarIngredienteMapper");
 	}
 
 	public TipoDocumentoMapper getTipoDocumentoMapper() {
@@ -429,5 +432,13 @@ public class ColseviDao {
 
 	public void setMovimientoInventarioMapper(MovimientoInventarioMapper movimientoInventarioMapper) {
 		this.movimientoInventarioMapper = movimientoInventarioMapper;
+	}
+
+	public ClasificarIngredienteMapper getClasificarIngredienteMapper() {
+		return clasificarIngredienteMapper;
+	}
+
+	public void setClasificarIngredienteMapper(ClasificarIngredienteMapper clasificarIngredienteMapper) {
+		this.clasificarIngredienteMapper = clasificarIngredienteMapper;
 	}
 }
