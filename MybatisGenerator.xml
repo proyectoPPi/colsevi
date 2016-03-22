@@ -13,9 +13,9 @@
         password="root">
     </jdbcConnection>
 
-    <javaModelGenerator targetPackage="com.colsevi.dao.inventario.model" targetProject="colsevi/src" />
-    <sqlMapGenerator targetPackage="com.colsevi.dao.inventario.map" targetProject="colsevi/src" />
-    <javaClientGenerator targetPackage="com.colsevi.dao.inventario.map" targetProject="colsevi/src" type="XMLMAPPER" />
-    <table schema="colsevi" tableName="inventario"><property name="useActualColumnNames" value="true"/></table>
+    <javaModelGenerator targetPackage="com.colsevi.dao.ingrediente.model" targetProject="colsevi/src" />
+    <sqlMapGenerator targetPackage="com.colsevi.dao.ingrediente.map" targetProject="colsevi/src" />
+    <javaClientGenerator targetPackage="com.colsevi.dao.ingrediente.map" targetProject="colsevi/src" type="XMLMAPPER" />
+    <table schema="colsevi" tableName="clasificar_ingrediente"><property name="useActualColumnNames" value="true"/></table>
   </context>
 </generatorConfiguration>
