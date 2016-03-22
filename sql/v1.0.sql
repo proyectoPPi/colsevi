@@ -375,6 +375,11 @@ CREATE TABLE movimiento_inventario(
 ALTER TABLE catalogo ADD COLUMN vigente BOOLEAN DEFAULT false;
 );
 
+ALTER TABLE inventario ADD COLUMN id_establecimiento INT;
+
+ALTER TABLE COLSEVI.inventario ADD CONSTRAINT fk_id_establecimiento FOREIGN KEY (id_establecimiento)
+REFERENCES COLSEVI.establecimiento(id_establecimiento);
+
 
 ALTER TABLE persona ADD COLUMN nombre VARCHAR(60);
 ALTER TABLE persona ADD COLUMN apellido VARCHAR(60);
