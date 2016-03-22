@@ -42,7 +42,7 @@
 					</section>
 					<div class="col-md-12">
 						<div id="tabla"></div>
-					<div id="paginacion" class="col-md-12"></div>
+						<div id="paginacion" class="col-md-12"></div>
 					</div>
 				</div>
 			</section>
