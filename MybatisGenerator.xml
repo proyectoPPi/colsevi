@@ -16,6 +16,6 @@
     <javaModelGenerator targetPackage="com.colsevi.dao.ingrediente.model" targetProject="colsevi/src" />
     <sqlMapGenerator targetPackage="com.colsevi.dao.ingrediente.map" targetProject="colsevi/src" />
     <javaClientGenerator targetPackage="com.colsevi.dao.ingrediente.map" targetProject="colsevi/src" type="XMLMAPPER" />
-    <table schema="colsevi" tableName="clasificar_ingrediente"><property name="useActualColumnNames" value="true"/></table>
+    <table schema="colsevi" tableName="ingrediente"><property name="useActualColumnNames" value="true"/></table>
   </context>
 </generatorConfiguration>
