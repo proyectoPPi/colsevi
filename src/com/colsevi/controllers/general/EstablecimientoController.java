@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.dao.catalogo.model.Catalogo;
+import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.usuario.model.Establecimiento;
 import com.colsevi.dao.usuario.model.EstablecimientoExample;
 
@@ -34,7 +36,6 @@ public class EstablecimientoController {
 		String Final = request.getParameter("Final");
 		EstablecimientoExample EstablecimientoExample = new EstablecimientoExample();
 		EstablecimientoExample.setLimit(Inicio + ", " + Final);
-		EstablecimientoExample.createCriteria().andEstadovisibleEqualTo("T");
 		
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(EstablecimientoExample)));
 		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().countByExample(EstablecimientoExample));
@@ -53,11 +54,7 @@ public class EstablecimientoController {
 				opciones = new JSONObject();
 				opciones.put("id_establecimiento", bean.getId_establecimiento());
 				opciones.put("nombre", bean.getNombre());
-				opciones.put("descripcion", bean.getDescripcion());
-				opciones.put("telefono", bean.getId_telefono());
-				opciones.put("correo", bean.getId_correo());
-				opciones.put("hora_inicio", bean.getHora_inicio());
-				opciones.put("hora_fin", bean.getHora_fin());
+				opciones.put("descripcion", bean.getDescripcion());								
 				resultado.add(opciones);
 			}
 			
@@ -74,7 +71,6 @@ public class EstablecimientoController {
 			return administrador(request, modelo);
 		}
 		try{
-			bean.setEstadovisible("T");
 			if(bean.getId_establecimiento() != null){
 				ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKey(bean);
 				modelo.addAttribute("correcto", "Establecimiento Actualizado");
@@ -96,18 +92,6 @@ public class EstablecimientoController {
 		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
 			error = "Ingresar la descripción<br/>";
 		}
-		if(bean.getId_telefono() == null || bean.getId_telefono().equals("")){
-			error = "Ingresar la número de teléfono<br/>";
-		}
-		if(bean.getId_correo() == null || bean.getId_correo().equals("")){
-			error = "Ingresar correo<br/>";
-		}
-		if(bean.getHora_inicio() == null || bean.getHora_inicio().trim().isEmpty()){
-			error = "Ingresar la hora de inicio<br/>";
-		}
-		if(bean.getHora_fin() == null || bean.getHora_fin().trim().isEmpty()){
-			error = "Ingresar la hora de cierre<br/>";
-		}
 		
 		return error;
 	}
@@ -117,11 +101,27 @@ public class EstablecimientoController {
 		String id = request.getParameter("id_establecimiento");
 		if(id != null){
 			
-			Establecimiento establecimiento = new Establecimiento();
-			establecimiento.setEstadovisible("F");
-			establecimiento.setId_establecimiento(Integer.parseInt(id));
-			ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKeySelective(establecimiento);
-			modelo.addAttribute("correcto", "Establecimiento Eliminado");
+			try {
+				
+				CatalogoExample example = new CatalogoExample();
+				example.createCriteria().andId_establecimientoEqualTo(Integer.parseInt(id));
+				List<Catalogo> ListaCatalogo = ColseviDao.getInstance().getCatalogoMapper().selectByExample(example);
+				
+				if(ListaCatalogo == null && ListaCatalogo.size() == 0)
+				{
+					ColseviDao.getInstance().getEstablecimientoMapper().deleteByPrimaryKey(Integer.parseInt(id));
+					modelo.addAttribute("correcto", "Establecimiento Eliminado");
+				}else{
+					modelo.addAttribute("error", "El establecimiento no se pudo eliminar porqué tiene un catálogo asociado");
+				}
+				
+				
+			} catch (Exception e) {
+				modelo.addAttribute("error", "Ocurrió un error, contacte al administrador");
+			}
+			
+			
+			
 		}
 		
 		return administrador(request, modelo);

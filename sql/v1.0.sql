@@ -86,7 +86,7 @@ INSERT INTO COLSEVI.rol VALUES(null,1,'ADMIN',1);
 INSERT INTO COLSEVI.pagina_x_rol VALUES(1,1);
 INSERT INTO COLSEVI.usuario_x_rol VALUES(1,1);
 
-ALTER TABLE COLSEVI.establecimiento ADD COLUMN estadovisible VARCHAR(1)  DEFAULT 'T';
+
 ALTER TABLE COLSEVI.establecimiento ADD COLUMN hora_inicio VARCHAR(7);
 ALTER TABLE COLSEVI.establecimiento ADD COLUMN hora_fin VARCHAR(7);
 ALTER TABLE COLSEVI.establecimiento ADD COLUMN id_direccion INT;
