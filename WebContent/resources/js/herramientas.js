@@ -37,16 +37,20 @@ function HTabla(opciones){
 			html += "</tr></thead><tbody>";
 		 for(i in data["datos"]){
 			 html += "<tr>";
+			 var sw = true;
 			 for(k in titulos){
 				 if(titulos[k]=="ID"){
 					 id = data["datos"][i][k];
-					 
 				 }else{
-					 if(id != null){
+					 if(sw){
 						 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
-						 id = null;
+						 sw = false;
 					 }else{
-						 html += "<td>"+data["datos"][i][k]+"</td>";
+						 if(data["datos"][i][k]['label'] != undefined){
+							 html += "<td>"+data["datos"][i][k]['label']+"</td>";
+						 }else{
+							 html += "<td>"+data["datos"][i][k]+"</td>";
+						 }
 					 }
 				 }
 			 }
@@ -81,7 +85,11 @@ function CargarFormulario(Id){
 	if(Fila != null){
 		for(tituloForm in dataMap["titulos"]){
 			if(dataMap["titulos"][tituloForm] != undefined){
-				jQuery("#" + tituloForm).val(Fila[tituloForm]);
+				if(Fila[tituloForm]['value'] != undefined){
+					jQuery("#" + tituloForm).val(Fila[tituloForm]['value']);
+				}else{
+					jQuery("#" + tituloForm).val(Fila[tituloForm]);
+				}
 			}
 		}
 	}
