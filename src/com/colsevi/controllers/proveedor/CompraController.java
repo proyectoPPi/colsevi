@@ -75,15 +75,20 @@ public class CompraController {
 	public JSONArray ConstruirJson(List<Compra> listaCompra){
 
 		JSONArray resultado = new JSONArray();
-		JSONObject opciones = new JSONObject();
+		JSONObject opciones = new JSONObject(), labels = new JSONObject();
 		
 		if(listaCompra != null && listaCompra.size() >0){
 			for (Compra bean : listaCompra) {
 				opciones = new JSONObject();
-				opciones.put("id_compra", bean.getId_compra());
+				labels = new JSONObject();
+				opciones.put("id_compra", bean.getId_compra().toString());
 				opciones.put("valor", UtilidadManager.Currency(bean.getValor()));
-				opciones.put("fecha_compra", UtilidadManager.FormatDateComplete(bean.getFecha_compra().toString()));
-				opciones.put("id_proveedor", bean.getId_proveedor());
+				opciones.put("fecha_compra", UtilidadManager.FormatDateDB(bean.getFecha_compra()));
+				if(bean.getId_proveedor() != null){
+					labels.put("label",ColseviDao.getInstance().getProveedorMapper().selectByPrimaryKey(bean.getId_proveedor()).getNombre());
+					labels.put("value", bean.getId_proveedor());
+					opciones.put("proveedor", labels);
+				}
 				resultado.add(opciones);
 			}
 		}

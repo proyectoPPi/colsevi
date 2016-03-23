@@ -16,10 +16,7 @@
 			<section class="wrapper">
 				<div class="row">
 				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
-				
-					<h2>Compras
-						<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></a></i>
-					</h2>
+					<h2>Compras<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a></h2>
 					<section class="panel">
 						<div class="panel-body">
 							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -30,6 +27,10 @@
 								<label>Descripción</label>
 								<input type="text" class="form-control" id="descripcionF" name="filtro"/>
 							</div>
+							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                  <label>Fech</label>
+                                  <input type="text" class="form-control" id="FechaF" data-field="datetime" data-format="yyyy-MM-dd hh:mm:ss AA"/>
+                              </div>
 							<div class="col-xs-12 col-md-12 col-lg-12"><br/>
 								<button class="btn btn-button" onclick="Tabla(1);">Filtrar</button>
 							</div>	
@@ -40,6 +41,7 @@
 						<div id="tabla"></div>
 						<div id="paginacion" class="col-md-12"></div>
 					</div>
+					<div id="dtBox"></div>
 					
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
@@ -55,7 +57,7 @@
 											<input type="hidden" id="id_compra" name="id_compra"/>
 												<div class="col-xs-12 col-sm-6 col-md-6">
 													<label>Proveedor</label>
-													<select class="form-control" id="estadoF" name="filtro">
+													<select class="form-control" id="proveedor" name="proveedor">
 														<option value="">Seleccione</option>
 														<c:forEach items="${listaProveedores}" var="proveedor">
 															<option value="${proveedor.id_proveedor}">${proveedor.nombre}</option>
@@ -64,7 +66,11 @@
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6">
 													<label>Fecha Compra</label>
-													<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
+													<input type="text" class="form-control" id="fecha_compra" name="fecha_compra" data-field="datetime" data-format="yyyy-MM-dd hh:mm:ss AA"/>
+												</div>
+												<div class="col-xs-12 col-sm-6 col-md-6">
+													<label>Valor</label>
+													<input type="text" class="form-control" id="valor" name="valor"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6">
 													<label>Clasificación Ingrediente</label>
@@ -74,6 +80,31 @@
 															<option value="${ing.id_clasificar_ingrediente}">${ing.nombre}</option>
 														</c:forEach>
 													</select>
+												</div>
+												<div class="col-xs-12 col-sm-12 col-md-12" id="dynamic">
+													<div class="col-xs-12 col-sm-6 col-md-6">
+														<div id="Ing"></div>	
+													</div>
+													<div class="col-xs-6 col-sm-3 col-md-3">
+														<label>cantidad</label>
+														<input type="number" class="form-control" id="cantidad" name="cantidad"/>
+													</div>
+													<div class="col-xs-6 col-sm-3 col-md-3"><br/>
+														<button type="button" class="btn btn-primary" onclick="Adicionar();"> Adicionar</button>
+													</div>
+												</div>
+												<div id="IngDynamic" class="col-xs-12 col-sm-12 col-md-12">
+												<br/>
+													<table class="display table table-bordered table-striped dataTable">
+														<thead>
+															<tr>
+																<th>Ingrediente</th>
+																<th>Cantidad</th>
+																<th>Acción</th>
+															</tr>
+														</thead>
+														<tbody></tbody>
+													</table>
 												</div>
 											</div>
 										</div>
@@ -97,8 +128,9 @@
 		
 		titulos = new Array();
 		titulos["id_compra"] = "ID";
+		titulos["fecha_compra"] = "Fecha compra";
 		titulos["valor"] = "valor";
-		titulos["descripcion"] = "Descripci&#243;n";
+		titulos["proveedor"] = "Proveedor";
 		
 	</script>
 </body>

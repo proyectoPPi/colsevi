@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class UtilidadManager {
@@ -20,9 +21,20 @@ public class UtilidadManager {
 		return null;
 	}
 	
+	public static String FormatDateDB(Date date){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		
+		try {
+			return sdf.format(date); 
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static String Currency(BigDecimal valor){
-		Locale locale = new Locale("es","AR"); // elegimos Argentina
+		Locale locale = new Locale("es","CO"); // elegimos Argentina
 		NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
-		return "$" + nf.format(valor);
+		return nf.format(valor);
 	}
 }

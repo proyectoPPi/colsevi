@@ -46,7 +46,7 @@ function HTabla(opciones){
 						 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
 						 sw = false;
 					 }else{
-						 if(data["datos"][i][k]['label'] != undefined){
+						 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
 							 html += "<td>"+data["datos"][i][k]['label']+"</td>";
 						 }else{
 							 html += "<td>"+data["datos"][i][k]+"</td>";
@@ -151,6 +151,17 @@ function HEliminar(div, url){
 	jQuery('#' + div).submit();
 }
 
-function HDatetime(Id){
-	jQuery('#'+ Id).timepicker();
+/*
+ @Id id del campo de texto que servirá para desplegar el selector
+ @Popup Si es true se muestra en un popup, de lo contrario se mostrará como un Dropdown
+ */
+function HDatetimePicker(Id, Popup){
+	if(Popup == undefined){
+		Popup = true;
+	}
+	
+	jQuery('#'+ Id).DateTimePicker({
+		language: "es",
+		isPopup: Popup
+	});
 }
