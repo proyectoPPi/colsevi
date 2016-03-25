@@ -164,4 +164,8 @@
 		<property value="com.colsevi.dao.inventario.map.MovimientoInventarioMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	<bean id="clasificarIngredienteMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.ingrediente.map.ClasificarIngredienteMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 </beans>

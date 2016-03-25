@@ -1,6 +1,8 @@
+DROP DATABASE IF EXISTS COLSEVI;
+
 CREATE DATABASE COLSEVI;
 
-CREATE TABLE COLSEVI.tipo_documento(
+CREATE TABLE tipo_documento(
 	id_tipo_documento INT AUTO_INCREMENT,
     nombre VARCHAR (30) NOT NULL,
     descripcion VARCHAR (30) NOT NULL,
@@ -373,8 +375,5 @@ CREATE TABLE movimiento_inventario(
 );
 
 ALTER TABLE catalogo ADD COLUMN vigente BOOLEAN DEFAULT false;
-);
-
-
 ALTER TABLE persona ADD COLUMN nombre VARCHAR(60);
 ALTER TABLE persona ADD COLUMN apellido VARCHAR(60);
