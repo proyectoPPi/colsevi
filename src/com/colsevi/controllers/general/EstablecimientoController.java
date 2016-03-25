@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.dao.catalogo.model.Catalogo;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
+import com.colsevi.dao.ingrediente.model.IngredienteExample;
 import com.colsevi.dao.usuario.model.Establecimiento;
 import com.colsevi.dao.usuario.model.EstablecimientoExample;
 
@@ -34,8 +35,26 @@ public class EstablecimientoController {
 		JSONObject opciones = new JSONObject();
 		String Inicio = request.getParameter("Inicio");
 		String Final = request.getParameter("Final");
+		String nombre = request.getParameter("nombreF");
+		String descripcion = request.getParameter("descripcionF");
+		String direccion = request.getParameter("direccionF");
+		
 		EstablecimientoExample EstablecimientoExample = new EstablecimientoExample();
+		EstablecimientoExample.Criteria criteria = (EstablecimientoExample.Criteria) EstablecimientoExample.createCriteria();
 		EstablecimientoExample.setLimit(Inicio + ", " + Final);
+		
+		
+		
+		if(nombre != null && !nombre.trim().isEmpty()){
+			criteria.andNombreLike("%" + nombre + "%");   
+		}
+		if(descripcion != null && !descripcion.trim().isEmpty()){
+			criteria.andDescripcionLike("%" + descripcion + "%");   
+		}
+		if(direccion != null && !direccion.trim().isEmpty()){
+			criteria.andDescripcionLike("%" + descripcion + "%");   
+		}
+		
 		
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(EstablecimientoExample)));
 		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().countByExample(EstablecimientoExample));

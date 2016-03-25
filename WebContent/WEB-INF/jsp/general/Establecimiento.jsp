@@ -16,23 +16,34 @@
 			<section class="wrapper">
 				<div class="row">
 				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
-					<section class="panel">
-						<header class="panel-heading">Establecimiento 
-						
-							<span class="tools pull-right">
-							
-								<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle fa-3x"></a></i>
-							</span>
-						</header>
-						
-						<div id="tabla"></div>
-						
-					</section>
-					<div id="paginacion" class="col-md-12"></div>
+					<h2>Establecimiento 
+						<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
+					</h2>
 					
-					<div id="paginacion" class="col-sm-4">
-						<input type="text" class="form-control" id="Buscar" name="Buscar" required  maxlength="15"/>
-						
+					<section class="panel">
+						<div class="panel-body">
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<label>Nombre</label>
+								<input type="text" class="form-control" id="nombreF" name="filtro"/>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<label>Descripción</label>
+								<input type="text" class="form-control" id="descripcionF" name="filtro"/>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<label>Dirección</label>
+								<input type="text" class="form-control" id="direccionF" name="filtro"/>
+							</div>
+							<div class="col-xs-12 col-md-12 col-lg-12"><br/>
+								<button class="btn btn-button" onclick="Tabla(1);">Filtrar</button>
+							</div>	
+						</div>	
+					</section>
+					<!-- <div id="paginacion" class="col-md-12"></div> -->
+					
+					<div class=" col-xs-12 col-md-12 col-lg-12">
+						<div id="tabla"></div>
+						<div id="paginacion" class="col-md-12"></div>
 					</div>
 					<button type="button" id="btnBuscar" class="btn btn-default">Buscar</button>
 										
