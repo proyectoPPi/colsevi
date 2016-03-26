@@ -75,7 +75,7 @@ public class ClasificarIngredienteController {
 	}
 	
 	@RequestMapping("/Ingrediente/Clasificar/Guardar")
-	public ModelAndView GuardarLocal(HttpServletRequest request, ModelMap modelo, ClasificarIngrediente bean){
+	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, ClasificarIngrediente bean){
 		
 		String error = validarGuardado(bean);
 		if(!error.isEmpty()){

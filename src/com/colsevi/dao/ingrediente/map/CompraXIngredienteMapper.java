@@ -4,6 +4,8 @@ import com.colsevi.dao.ingrediente.model.CompraXIngrediente;
 import com.colsevi.dao.ingrediente.model.CompraXIngredienteExample;
 import com.colsevi.dao.ingrediente.model.CompraXIngredienteKey;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface CompraXIngredienteMapper {
@@ -75,4 +77,6 @@ public interface CompraXIngredienteMapper {
 	 * @mbggenerated  Wed Mar 23 10:08:45 COT 2016
 	 */
 	int updateByPrimaryKey(CompraXIngrediente record);
+	
+	List<Map<String, Object>> SelectDataView(Map<String, Object> map);
 }

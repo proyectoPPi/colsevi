@@ -44,7 +44,7 @@
 					<div id="dtBox"></div>
 					
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
+						<div class="modal-dialog modal-lg">
 							<div class="modal-content-wrap">
 								<form method="post" action="${pageContext.request.contextPath}/Proveedor/Compra/Guardar.html?" id="formulario">
 									<div class="modal-content modal-lg">
@@ -66,11 +66,11 @@
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6">
 													<label>Fecha Compra</label>
-													<input type="text" class="form-control" id="fecha_compra" name="fecha_compra" data-field="datetime" data-format="yyyy-MM-dd hh:mm:ss AA"/>
+													<input type="text" class="form-control" id="fecha_compra" name="fecha_compra" data-field="datetime" data-format="yyyy-MM-dd HH:mm:ss"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6">
 													<label>Valor</label>
-													<input type="text" class="form-control" id="valor" name="valor"/>
+													<input type="text" class="form-control" id="valorsin" name="valorsin"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6">
 													<label>Clasificación Ingrediente</label>
@@ -81,13 +81,23 @@
 														</c:forEach>
 													</select>
 												</div>
+												<input type="hidden" value="0" id="count" name="count"/>
 												<div class="col-xs-12 col-sm-12 col-md-12" id="dynamic">
-													<div class="col-xs-12 col-sm-6 col-md-6">
+													<div class="col-xs-12 col-sm-3 col-md-3">
 														<div id="Ing"></div>	
 													</div>
 													<div class="col-xs-6 col-sm-3 col-md-3">
 														<label>cantidad</label>
 														<input type="number" class="form-control" id="cantidad" name="cantidad"/>
+													</div>
+													<div class="col-xs-12 col-sm-3 col-md-3">
+														<label>Tipo peso</label>
+														<select class="form-control" id="tipopeso">
+															<option value="">Seleccione</option>
+															<c:forEach items="${listaTipoPeso}" var="tipo">
+																<option value="${tipo.id_tipo_peso}">${tipo.nombre}</option>
+															</c:forEach>
+														</select>
 													</div>
 													<div class="col-xs-6 col-sm-3 col-md-3"><br/>
 														<button type="button" class="btn btn-primary" onclick="Adicionar();"> Adicionar</button>
@@ -100,6 +110,8 @@
 															<tr>
 																<th>Ingrediente</th>
 																<th>Cantidad</th>
+																<th>TipoPeso</th>
+																<th>Fecha</th>
 																<th>Acción</th>
 															</tr>
 														</thead>
@@ -110,7 +122,7 @@
 										</div>
 										<div class="modal-footer">
 											<button class="btn btn-warning" type="submit">Guardar</button>
-											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
+											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();" data-dismiss="modal">Cerrar</button>
 										</div>
 									</div>
 								</form>

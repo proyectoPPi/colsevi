@@ -97,7 +97,7 @@ public class IngredienteController {
 	}
 	
 	@RequestMapping("/Ingrediente/Ing/Guardar")
-	public ModelAndView GuardarLocal(HttpServletRequest request, ModelMap modelo, Ingrediente bean){
+	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, Ingrediente bean){
 		
 		try{
 			bean.setId_clasificar_ingrediente(Integer.parseInt(request.getParameter("clasificar")));

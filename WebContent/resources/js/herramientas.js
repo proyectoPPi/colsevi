@@ -1,5 +1,5 @@
 var dataMap = {};
-var registrosPagina = 9;
+var registrosPagina = 10;
 /*
  * Método para pintar la tabla
  */
@@ -80,7 +80,7 @@ function BuscarRegistro(Id){
 	return null;
 }
 
-function CargarFormulario(Id){
+function HCargarFormulario(Id){
 	var Fila = BuscarRegistro(Id);
 	if(Fila != null){
 		for(tituloForm in dataMap["titulos"]){

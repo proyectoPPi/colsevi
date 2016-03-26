@@ -1,7 +1,10 @@
 package com.colsevi.controllers.proveedor;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +20,12 @@ import com.colsevi.application.ColseviDao;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
 import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
+import com.colsevi.dao.ingrediente.model.CompraXIngrediente;
+import com.colsevi.dao.ingrediente.model.CompraXIngredienteExample;
 import com.colsevi.dao.ingrediente.model.Ingrediente;
 import com.colsevi.dao.ingrediente.model.IngredienteExample;
+import com.colsevi.dao.ingrediente.model.TipoPeso;
+import com.colsevi.dao.ingrediente.model.TipoPesoExample;
 import com.colsevi.dao.proveedor.model.Compra;
 import com.colsevi.dao.proveedor.model.CompraExample;
 import com.colsevi.dao.proveedor.model.Proveedor;
@@ -31,6 +38,7 @@ public class CompraController {
 	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaProveedores", getProveedores());
 		model.addAttribute("listaClasificar", getClasificar());
+		model.addAttribute("listaTipoPeso", getTipoPeso());
 		
 		return new ModelAndView("proveedor/Compra");
 	}
@@ -41,6 +49,10 @@ public class CompraController {
 	
 	public static List<ClasificarIngrediente> getClasificar(){
 		return ColseviDao.getInstance().getClasificarIngredienteMapper().selectByExample(new ClasificarIngredienteExample());
+	}
+	
+	public static List<TipoPeso> getTipoPeso(){
+		return ColseviDao.getInstance().getTipoPesoMapper().selectByExample(new TipoPesoExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -83,6 +95,7 @@ public class CompraController {
 				labels = new JSONObject();
 				opciones.put("id_compra", bean.getId_compra().toString());
 				opciones.put("valor", UtilidadManager.Currency(bean.getValor()));
+				opciones.put("valorsin", bean.getValor().toString());
 				opciones.put("fecha_compra", UtilidadManager.FormatDateDB(bean.getFecha_compra()));
 				if(bean.getId_proveedor() != null){
 					labels.put("label",ColseviDao.getInstance().getProveedorMapper().selectByPrimaryKey(bean.getId_proveedor()).getNombre());
@@ -131,36 +144,127 @@ public class CompraController {
 	}
 	
 	@RequestMapping("/Proveedor/Compra/Guardar")
-	public ModelAndView GuardarLocal(HttpServletRequest request, ModelMap modelo, Compra bean){
+	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
 		
-		String error = validarGuardado(bean);
+		List<CompraXIngrediente> listaCXI = new ArrayList<CompraXIngrediente>();
+		Compra bean = new Compra();
+		String error = "";
+		
+		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty())
+			bean.setId_proveedor(Integer.parseInt(request.getParameter("id_compra")));
+		
+		if(request.getParameter("proveedor") == null || request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").equals("0"))
+			error += "Seleccionar el proveedor<br/>";
+		else
+			bean.setId_proveedor(Integer.parseInt(request.getParameter("proveedor")));
+		
+		if(request.getParameter("valorsin") == null || request.getParameter("valorsin").trim().isEmpty())
+			error += "Ingresar el valor de la compra<br/>";
+		else
+			bean.setValor(UtilidadManager.FormatStringBigDecimal(request.getParameter("valorsin")));
+		
+		if(request.getParameter("fecha_compra") == null || request.getParameter("fecha_compra").trim().isEmpty())
+			error += "Ingresar la fecha de la compra<br/>";
+		else
+			bean.setFecha_compra(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")));
+		
 		if(!error.isEmpty()){
 			modelo.addAttribute("error", error);
 			return administrador(request, modelo);
 		}
+
+		Integer count = Integer.parseInt(request.getParameter("count"));
+		if(count != null && count > 0){
+			for(int i = 0; i < count; i++){
+				if(request.getParameter("idIng" + (i +1)) != null && !request.getParameter("idIng" + (i +1)).trim().isEmpty()){
+					CompraXIngrediente cxi = new CompraXIngrediente();
+					cxi.setId_ingrediente(Integer.parseInt(request.getParameter("idIng" + (i +1))));
+					cxi.setCantidad(Integer.parseInt(request.getParameter("cant" + (i +1))));
+					cxi.setId_tipo_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
+
+					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
+						cxi.setFecha_vencimiento(UtilidadManager.FormatDateFormDB2(request.getParameter("fecha" + (i +1))));
+					}
+					listaCXI.add(cxi);
+				}
+			}
+		}else{
+			modelo.addAttribute("error", "No hay detalle seleccionado");
+			return administrador(request, modelo);
+		}
+		
+		if(listaCXI == null || listaCXI.size() < 1){
+			modelo.addAttribute("error", "No hay detalle seleccionado");
+			return administrador(request, modelo);
+		}
+		
 		try{
 			if(bean.getId_compra() != null){
 				ColseviDao.getInstance().getCompraMapper().updateByPrimaryKey(bean);
 				modelo.addAttribute("correcto", "Compra Actualizada");
+				
+				CompraXIngredienteExample cxiE = new CompraXIngredienteExample();
+				cxiE.createCriteria().andId_compraEqualTo(bean.getId_compra());
+				ColseviDao.getInstance().getCompraXIngredienteMapper().deleteByExample(cxiE);
+				
 			}else{
 				ColseviDao.getInstance().getCompraMapper().insert(bean);
+				
+				CompraExample exampleC = new CompraExample();
+				exampleC.setLimit("1");
+				exampleC.setOrderByClause("id_compra DESC");
+				bean.setId_compra(ColseviDao.getInstance().getCompraMapper().selectByExample(exampleC).get(0).getId_compra());
 				modelo.addAttribute("correcto", "Compra insertada");
 			}
+			
+			for(CompraXIngrediente cxi: listaCXI){
+				cxi.setId_compra(bean.getId_compra());
+				ColseviDao.getInstance().getCompraXIngredienteMapper().insertSelective(cxi);
+			}
+			
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
 		return administrador(request, modelo);
 	}
 	
-	public String validarGuardado(Compra bean){
-		String error = "";
-		if(bean.getId_proveedor() == null){
-			error = "Ingresar el Nombre<br/>";
-		}
-		if(bean.getValor() == null){
-			error = "Ingresar la descripción<br/>";
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Proveedor/Compra/cargarIng")
+	public void caregarIng(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		
+		JSONObject result = new JSONObject();
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		
+		try{
+			mapa.put("compra", request.getParameter("compra"));
+			subIng(ColseviDao.getInstance().getCompraXIngredienteMapper().SelectDataView(mapa));
+		}catch(Exception e){
+			result.put("error", "Contactar al administrador");
 		}
 		
-		return error;
+		result.writeJSONString(response.getWriter());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONArray subIng(List<Map<String, Object>> listaCXI){
+		
+		JSONArray resultado = new JSONArray();
+		JSONObject opciones = new JSONObject();
+		
+		for(Map<String, Object> map: listaCXI){
+			try{
+				opciones = new JSONObject();
+				opciones.put("", map.get(""));
+				opciones.put("", map.get(""));
+				opciones.put("", map.get(""));
+				opciones.put("", map.get(""));
+				
+				resultado.add(opciones);
+				
+			}catch(Exception e){
+				continue;
+			}
+		}
+		return resultado;
 	}
 }
