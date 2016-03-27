@@ -377,3 +377,35 @@ CREATE TABLE movimiento_inventario(
 ALTER TABLE catalogo ADD COLUMN vigente BOOLEAN DEFAULT false;
 ALTER TABLE persona ADD COLUMN nombre VARCHAR(60);
 ALTER TABLE persona ADD COLUMN apellido VARCHAR(60);
+
+ALTER TABLE compra_x_ingrediente ADD COLUMN cantidad INT;
+
+ DROP TABLE ingrediente_x_producto;
+
+ DROP TABLE compra_x_ingrediente;
+ 
+ select * from ingrediente_x_producto;
+ 
+ CREATE TABLE compra_x_ingrediente(
+	id_compra INT,
+    id_ingrediente INT,
+    id_tipo_peso INT NOT NULL,
+    lote INT AUTO_INCREMENT,
+    fecha_vencimiento DATETIME,
+    cantidad INT,
+    PRIMARY KEY(lote,id_compra,id_ingrediente),
+	CONSTRAINT fk_comprasXIngrediente FOREIGN KEY (id_compra) REFERENCES compra(id_compra),
+    CONSTRAINT fk_comprasXIngrediente2 FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
+    CONSTRAINT fk_comprasXIngrediente3 FOREIGN KEY (id_tipo_peso) REFERENCES tipo_peso(id_tipo_peso)
+);
+
+CREATE TABLE ingrediente_x_producto(
+    id_ingrediente INT,
+	id_producto INT,
+	cantidad INT,
+	id_tipo_peso INT,
+    PRIMARY KEY(id_ingrediente,id_producto),
+    CONSTRAINT fk_producto_ingrediente FOREIGN KEY (id_producto) REFERENCES tipo_producto(id_tipo_producto),
+    CONSTRAINT fk_ingredienteProducto FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
+    CONSTRAINT fk_ingredienteProdTipe FOREIGN KEY (id_tipo_peso) REFERENCES tipo_peso(id_tipo_peso)
+);
