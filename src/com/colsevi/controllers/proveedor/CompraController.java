@@ -95,8 +95,9 @@ public class CompraController {
 				labels = new JSONObject();
 				opciones.put("id_compra", bean.getId_compra().toString());
 				opciones.put("valor", UtilidadManager.Currency(bean.getValor()));
-				opciones.put("valorsin", bean.getValor().toString());
+				opciones.put("valorsin", bean.getValor().intValue());
 				opciones.put("fecha_compra", UtilidadManager.FormatDateDB(bean.getFecha_compra()));
+				opciones.put("pagado", bean.getPagado() != null && bean.getPagado().equals(true) ? "SI" : "NO");
 				if(bean.getId_proveedor() != null){
 					labels.put("label",ColseviDao.getInstance().getProveedorMapper().selectByPrimaryKey(bean.getId_proveedor()).getNombre());
 					labels.put("value", bean.getId_proveedor());
@@ -151,7 +152,7 @@ public class CompraController {
 		String error = "";
 		
 		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty())
-			bean.setId_proveedor(Integer.parseInt(request.getParameter("id_compra")));
+			bean.setId_compra(Integer.parseInt(request.getParameter("id_compra")));
 		
 		if(request.getParameter("proveedor") == null || request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").equals("0"))
 			error += "Seleccionar el proveedor<br/>";
@@ -167,6 +168,9 @@ public class CompraController {
 			error += "Ingresar la fecha de la compra<br/>";
 		else
 			bean.setFecha_compra(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")));
+		
+		if(request.getParameter("pagado") != null)
+			bean.setPagado(Boolean.valueOf(request.getParameter("pagado").equals("on") ? "true": "false"));
 		
 		if(!error.isEmpty()){
 			modelo.addAttribute("error", error);
@@ -185,6 +189,10 @@ public class CompraController {
 					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
 						cxi.setFecha_vencimiento(UtilidadManager.FormatDateFormDB2(request.getParameter("fecha" + (i +1))));
 					}
+					if(request.getParameter("lote" + (i +1)) != null && !request.getParameter("lote" + (i +1)).trim().isEmpty()){
+						cxi.setLote(Integer.parseInt(request.getParameter("lote" + (i +1))));
+					}
+					
 					listaCXI.add(cxi);
 				}
 			}
@@ -237,7 +245,7 @@ public class CompraController {
 		
 		try{
 			mapa.put("compra", request.getParameter("compra"));
-			subIng(ColseviDao.getInstance().getCompraXIngredienteMapper().SelectDataView(mapa));
+			result.put("dato", subIng(ColseviDao.getInstance().getCompraXIngredienteMapper().SelectDataView(mapa)));
 		}catch(Exception e){
 			result.put("error", "Contactar al administrador");
 		}
@@ -254,10 +262,13 @@ public class CompraController {
 		for(Map<String, Object> map: listaCXI){
 			try{
 				opciones = new JSONObject();
-				opciones.put("", map.get(""));
-				opciones.put("", map.get(""));
-				opciones.put("", map.get(""));
-				opciones.put("", map.get(""));
+				opciones.put("id_ingrediente", map.get("id_ingrediente"));
+				opciones.put("id_tipo_peso", map.get("id_tipo_peso"));
+				opciones.put("nombreIng", map.get("nombreIng"));
+				opciones.put("nombreTp", map.get("nombreTp"));
+				opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatDateComplete(map.get("fecha_vencimiento").toString()) : "");
+				opciones.put("cantidad", map.get("cantidad"));
+				opciones.put("lote", map.get("lote"));
 				
 				resultado.add(opciones);
 				

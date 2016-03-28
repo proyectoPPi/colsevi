@@ -303,7 +303,7 @@
   
   
 	<select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
-		SELECT cxi.id_ingrediente, cxi.id_tipo_peso, ing.nombre AS nombreIng, tp.nombre AS nombreTp, cxi.fecha_vencimiento, cxi.lote
+		SELECT cxi.id_ingrediente, cxi.id_tipo_peso, ing.nombre AS nombreIng, tp.nombre AS nombreTp, cxi.fecha_vencimiento, cxi.lote, cxi.cantidad
 		FROM compra com
 		INNER JOIN compra_x_ingrediente cxi ON cxi.id_compra = com.id_compra
 		LEFT JOIN ingrediente ing ON ing.id_ingrediente = cxi.id_ingrediente

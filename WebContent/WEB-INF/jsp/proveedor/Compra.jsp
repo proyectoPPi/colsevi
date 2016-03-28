@@ -5,7 +5,6 @@
    <meta charset="UTF-8" />
 	<title>Establecimientos</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
-
 </head>
 <body>
 
@@ -68,13 +67,18 @@
 													<label>Fecha Compra</label>
 													<input type="text" class="form-control" id="fecha_compra" name="fecha_compra" data-field="datetime" data-format="yyyy-MM-dd HH:mm:ss"/>
 												</div>
-												<div class="col-xs-12 col-sm-6 col-md-6">
+												<div class="col-xs-12 col-sm-3 col-md-3">
 													<label>Valor</label>
 													<input type="text" class="form-control" id="valorsin" name="valorsin"/>
 												</div>
+												<div class="col-xs-12 col-sm-3 col-md-3">
+													<label>Pagado</label> <br/>
+													<input type="checkbox" id="pagado" name="pagado" data-toggle="switch"/>
+												</div>
+												
 												<div class="col-xs-12 col-sm-6 col-md-6">
 													<label>Clasificación Ingrediente</label>
-													<select class="form-control" id="clasificarIng" onchange="CargarIngredientes();">
+													<select class="form-control" id="clasificarIng">
 														<option value="">Seleccione</option>
 														<c:forEach items="${listaClasificar}" var="ing">
 															<option value="${ing.id_clasificar_ingrediente}">${ing.nombre}</option>
@@ -88,7 +92,7 @@
 													</div>
 													<div class="col-xs-6 col-sm-3 col-md-3">
 														<label>cantidad</label>
-														<input type="number" class="form-control" id="cantidad" name="cantidad"/>
+														<input type="number" class="form-control" id="cantidad" name="cantidad" min="0"/>
 													</div>
 													<div class="col-xs-12 col-sm-3 col-md-3">
 														<label>Tipo peso</label>
@@ -100,7 +104,7 @@
 														</select>
 													</div>
 													<div class="col-xs-6 col-sm-3 col-md-3"><br/>
-														<button type="button" class="btn btn-primary" onclick="Adicionar();"> Adicionar</button>
+														<button type="button" class="btn btn-primary" id="adicion"> Adicionar</button>
 													</div>
 												</div>
 												<div id="IngDynamic" class="col-xs-12 col-sm-12 col-md-12">
@@ -143,6 +147,7 @@
 		titulos["fecha_compra"] = "Fecha compra";
 		titulos["valor"] = "valor";
 		titulos["proveedor"] = "Proveedor";
+		titulos["pagado"] = "pagado";
 		
 	</script>
 </body>
