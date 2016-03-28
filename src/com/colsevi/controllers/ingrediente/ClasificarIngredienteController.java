@@ -18,14 +18,12 @@ import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
 import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
 import com.colsevi.dao.ingrediente.model.Ingrediente;
 import com.colsevi.dao.ingrediente.model.IngredienteExample;
-import com.colsevi.dao.usuario.model.Establecimiento;
-import com.colsevi.dao.usuario.model.EstablecimientoExample;
 
 @Controller
 public class ClasificarIngredienteController {
 	
 	@RequestMapping("/Ingrediente/Clasificar")
-	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
+	public ModelAndView Clasificar(HttpServletRequest request,ModelMap model){
 		return new ModelAndView("ingrediente/Clasificar");
 	}
 	
@@ -77,12 +75,12 @@ public class ClasificarIngredienteController {
 	}
 	
 	@RequestMapping("/Ingrediente/Clasificar/Guardar")
-	public ModelAndView GuardarLocal(HttpServletRequest request, ModelMap modelo, ClasificarIngrediente bean){
+	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, ClasificarIngrediente bean){
 		
 		String error = validarGuardado(bean);
 		if(!error.isEmpty()){
 			modelo.addAttribute("error", error);
-			return administrador(request, modelo);
+			return Clasificar(request, modelo);
 		}
 		try{
 			if(bean.getId_clasificar_ingrediente() != null){
@@ -95,7 +93,7 @@ public class ClasificarIngredienteController {
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
-		return administrador(request, modelo);
+		return Clasificar(request, modelo);
 	}
 	
 	public String validarGuardado(ClasificarIngrediente bean){
@@ -125,9 +123,7 @@ public class ClasificarIngredienteController {
 				ColseviDao.getInstance().getClasificarIngredienteMapper().deleteByPrimaryKey(id);
 				modelo.addAttribute("correcto", "Clasificación Eliminada");
 			}
-			
 		}
-		
-		return administrador(request, modelo);
+		return Clasificar(request, modelo);
 	}
 }

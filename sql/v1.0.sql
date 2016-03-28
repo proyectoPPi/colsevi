@@ -195,13 +195,16 @@ CREATE TABLE compra_x_ingrediente(
 	id_compra INT,
     id_ingrediente INT,
     id_tipo_peso INT NOT NULL,
-    lote VARCHAR(12) NOT NULL,
-    fecha_vencimiento DATETIME NOT NULL,
-    PRIMARY KEY(id_compra,id_ingrediente),
+    lote INT AUTO_INCREMENT,
+    fecha_vencimiento DATETIME,
+    cantidad INT,
+    PRIMARY KEY(lote,id_compra,id_ingrediente),
 	CONSTRAINT fk_comprasXIngrediente FOREIGN KEY (id_compra) REFERENCES compra(id_compra),
     CONSTRAINT fk_comprasXIngrediente2 FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
     CONSTRAINT fk_comprasXIngrediente3 FOREIGN KEY (id_tipo_peso) REFERENCES tipo_peso(id_tipo_peso)
 );
+
+ALTER TABLE compra_x_ingrediente AUTO_INCREMENT=1000;
 
 CREATE TABLE tipo_producto(
     id_tipo_producto INT AUTO_INCREMENT,
@@ -230,9 +233,12 @@ CREATE TABLE producto(
 CREATE TABLE ingrediente_x_producto(
     id_ingrediente INT,
 	id_producto INT,
+	cantidad INT,
+	id_tipo_peso INT,
     PRIMARY KEY(id_ingrediente,id_producto),
     CONSTRAINT fk_producto_ingrediente FOREIGN KEY (id_producto) REFERENCES tipo_producto(id_tipo_producto),
-    CONSTRAINT fk_ingredienteProducto FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente)
+    CONSTRAINT fk_ingredienteProducto FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
+    CONSTRAINT fk_ingredienteProdTipe FOREIGN KEY (id_tipo_peso) REFERENCES tipo_peso(id_tipo_peso)
 );
 
 
