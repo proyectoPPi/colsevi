@@ -147,7 +147,7 @@
 		titulos["fecha_compra"] = "Fecha compra";
 		titulos["valor"] = "valor";
 		titulos["proveedor"] = "Proveedor";
-		titulos["pagado"] = "pagado";
+		titulos["pagado"] = "Pagado";
 		
 	</script>
 </body>

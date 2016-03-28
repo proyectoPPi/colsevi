@@ -86,10 +86,14 @@ function EliminarDet(option){
 
 function CargarFormulario(Id){
 	HCargarFormulario(Id);
+	jQuery("#pagado").prop("checked", false);
 	jQuery('#IngDynamic > table > tbody > tr').remove();
 	jQuery('#count').val('0');
 	cargarIng();
 	jQuery('#valorsin').val(BuscarRegistro(Id)['valorsin']);
+	if(BuscarRegistro(Id)['pagado'] == "SI"){
+		jQuery("#pagado").prop("checked", true);
+	}
 }
 
 function cargarIng(){

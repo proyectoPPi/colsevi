@@ -170,7 +170,7 @@ public class CompraController {
 			bean.setFecha_compra(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")));
 		
 		if(request.getParameter("pagado") != null)
-			bean.setPagado(Boolean.valueOf(request.getParameter("pagado").equals("on") ? "true": "false"));
+			bean.setPagado(request.getParameter("pagado").equals("SI") || request.getParameter("pagado").equals("on") ? true: false);
 		
 		if(!error.isEmpty()){
 			modelo.addAttribute("error", error);
