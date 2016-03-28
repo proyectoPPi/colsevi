@@ -24,7 +24,7 @@ import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 public class IngredienteController {
 
 	@RequestMapping("/Ingrediente/Ing")
-	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
+	public ModelAndView Ingrediente(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaClasificar", listaClasificacion());
 		return new ModelAndView("ingrediente/Ingrediente");
 	}
@@ -105,7 +105,7 @@ public class IngredienteController {
 			String error = validarGuardado(bean);
 			if(!error.isEmpty()){
 				modelo.addAttribute("error", error);
-				return administrador(request, modelo);
+				return Ingrediente(request, modelo);
 			}
 
 			
@@ -119,7 +119,7 @@ public class IngredienteController {
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
-		return administrador(request, modelo);
+		return Ingrediente(request, modelo);
 	}
 	
 	public String validarGuardado(Ingrediente bean){
@@ -158,6 +158,6 @@ public class IngredienteController {
 			modelo.addAttribute("error", "Contacte al Administrador");
 		}
 		
-		return administrador(request, modelo);
+		return Ingrediente(request, modelo);
 	}
 }
