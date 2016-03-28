@@ -35,7 +35,7 @@ import com.colsevi.dao.proveedor.model.ProveedorExample;
 public class CompraController {
 
 	@RequestMapping("/Proveedor/Compra")
-	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
+	public ModelAndView Compra(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaProveedores", getProveedores());
 		model.addAttribute("listaClasificar", getClasificar());
 		model.addAttribute("listaTipoPeso", getTipoPeso());
@@ -174,7 +174,7 @@ public class CompraController {
 		
 		if(!error.isEmpty()){
 			modelo.addAttribute("error", error);
-			return administrador(request, modelo);
+			return Compra(request, modelo);
 		}
 
 		Integer count = Integer.parseInt(request.getParameter("count"));
@@ -198,12 +198,12 @@ public class CompraController {
 			}
 		}else{
 			modelo.addAttribute("error", "No hay detalle seleccionado");
-			return administrador(request, modelo);
+			return Compra(request, modelo);
 		}
 		
 		if(listaCXI == null || listaCXI.size() < 1){
 			modelo.addAttribute("error", "No hay detalle seleccionado");
-			return administrador(request, modelo);
+			return Compra(request, modelo);
 		}
 		
 		try{
@@ -233,7 +233,7 @@ public class CompraController {
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
-		return administrador(request, modelo);
+		return Compra(request, modelo);
 	}
 	
 	@SuppressWarnings("unchecked")
