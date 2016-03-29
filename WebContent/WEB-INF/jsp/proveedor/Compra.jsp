@@ -67,11 +67,11 @@
 													<label>Fecha Compra</label>
 													<input type="text" class="form-control" id="fecha_compra" name="fecha_compra" data-field="datetime" data-format="yyyy-MM-dd HH:mm:ss"/>
 												</div>
-												<div class="col-xs-12 col-sm-3 col-md-3">
+												<div class="col-xs-6 col-sm-3 col-md-3">
 													<label>Valor</label>
 													<input type="text" class="form-control" id="valorsin" name="valorsin"/>
 												</div>
-												<div class="col-xs-12 col-sm-3 col-md-3">
+												<div class="col-xs-6 col-sm-3 col-md-3">
 													<label>Pagado</label> <br/>
 													<input type="checkbox" id="pagado" name="pagado" data-toggle="switch"/>
 												</div>
@@ -114,7 +114,7 @@
 															<tr>
 																<th>Ingrediente</th>
 																<th>Cantidad</th>
-																<th>TipoPeso</th>
+																<th class="hidden-xs">TipoPeso</th>
 																<th>Fecha</th>
 																<th>Acción</th>
 															</tr>
@@ -148,6 +148,9 @@
 		titulos["valor"] = "valor";
 		titulos["proveedor"] = "Proveedor";
 		titulos["pagado"] = "Pagado";
+		
+		clase = new Array();
+		clase['proveedor'] = 'hidden-xs';
 		
 	</script>
 </body>

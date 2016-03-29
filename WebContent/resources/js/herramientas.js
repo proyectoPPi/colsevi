@@ -8,6 +8,9 @@ function HTabla(opciones){
 	var Id = opciones.Id;
 	var id = null;
 	dataMap['url'] = opciones.url;
+	dataMap['clase'] = opciones.clase;
+	
+	if(dataMap['clase'] == undefined) dataMap['clase'] = new Array();
 	
 	Setlimite(opciones.pagina);
 	
@@ -28,8 +31,12 @@ function HTabla(opciones){
 			
 			html='<table class="display table table-bordered table-striped dataTable"><thead><tr>';
 			for(k in titulos){
+				var className = '';
 				if(titulos[k] != "ID"){
-					html += "<th>"+opciones.titulos[k]+"</th>";
+					if(dataMap['clase'][k] != undefined){
+						className = 'class="' + dataMap['clase'][k] + '" ';
+					}
+					html += "<th " + className + ">"+opciones.titulos[k]+"</th>";
 				}else{
 					dataMap['id'] = k;
 				}
@@ -39,6 +46,7 @@ function HTabla(opciones){
 			 html += "<tr>";
 			 var sw = true;
 			 for(k in titulos){
+				 var className = '';
 				 if(titulos[k]=="ID"){
 					 id = data["datos"][i][k];
 				 }else{
@@ -46,10 +54,14 @@ function HTabla(opciones){
 						 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
 						 sw = false;
 					 }else{
+						 if(dataMap['clase'][k] != undefined){
+							className = 'class="' + dataMap['clase'][k] + '" ';
+						 }
+						 html += "<td "  + className + ">";
 						 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
-							 html += "<td>"+data["datos"][i][k]['label']+"</td>";
+							 html += data["datos"][i][k]['label']+"</td>";
 						 }else{
-							 html += "<td>"+data["datos"][i][k]+"</td>";
+							 html += data["datos"][i][k]+"</td>";
 						 }
 					 }
 				 }

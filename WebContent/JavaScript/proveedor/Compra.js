@@ -9,7 +9,8 @@ function Tabla(pagina){
 		url: contexto + "/Proveedor/Compra/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
-		pagina:pagina
+		pagina:pagina,
+		clase: clase
 	});
 }
 
@@ -25,7 +26,7 @@ jQuery('#adicion').click(function(){
 				var html ='<tr>';
 				html += '<td><input type="text" value="'+jQuery('#IngSelect option:selected').text()+'" class="fieldDynamic" readonly /><input type="hidden" name="idIng'+jQuery('#count').val()+'" value="'+jQuery('#IngSelect').val()+'"/></td>';
 				html += '<td><input type="text" value="'+jQuery('#cantidad').val()+'" class="fieldDynamic" readonly name="cant'+jQuery('#count').val()+'" /></td>';
-				html += '<td><input type="text" value="'+jQuery('#tipopeso option:selected').text()+'" class="fieldDynamic" readonly /><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+jQuery('#tipopeso').val()+'"/></td>';
+				html += '<td class="hidden-xs"><input type="text" value="'+jQuery('#tipopeso option:selected').text()+'" class="fieldDynamic" readonly /><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+jQuery('#tipopeso').val()+'"/></td>';
 				html += '<td><input type="text" name="fecha'+jQuery('#count').val()+'" data-field="date" data-format="yyyy-MM-dd" class="form-control"/></td>';		
 				html += '<td><buttton data-toggle="button" class="btn btn-white" onclick="EliminarDet(this);"><i class="fa fa-remove text-info"></i></button></td>';
 				html += '</tr>';
@@ -118,7 +119,7 @@ function cargarIng(){
 			html += '<tr>';
 			html += '<td><input type="text" value="'+data[i]['nombreIng']+'" class="fieldDynamic" readonly /><input type="hidden" name="idIng'+jQuery('#count').val()+'" value="'+data[i]['id_ingrediente']+'"/></td>';
 			html += '<td><input type="text" value="'+data[i]['cantidad']+'" class="fieldDynamic" readonly name="cant'+jQuery('#count').val()+'" /><input type="hidden" name="lote'+jQuery('#count').val()+'" value="'+data[i]['lote']+'"/></td>';
-			html += '<td><input type="text" value="'+data[i]['nombreTp']+'" class="fieldDynamic" readonly /><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+data[i]['id_tipo_peso']+'"/></td>';
+			html += '<td class="hidden-xs"><input type="text" value="'+data[i]['nombreTp']+'" class="fieldDynamic" readonly /><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+data[i]['id_tipo_peso']+'"/></td>';
 			html += '<td><input type="text" name="fecha'+jQuery('#count').val()+'" value="'+data[i]['fecha_vencimiento']+'" data-field="date" data-format="yyyy-MM-dd" class="form-control"/></td>';		
 			html += '<td><buttton data-toggle="button" class="btn btn-white" onclick="EliminarDet(this);"><i class="fa fa-remove text-info"></i></button></td>';
 			html += '</tr>';
