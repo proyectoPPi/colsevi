@@ -409,3 +409,4 @@ CREATE TABLE ingrediente_x_producto(
     CONSTRAINT fk_ingredienteProducto FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
     CONSTRAINT fk_ingredienteProdTipe FOREIGN KEY (id_tipo_peso) REFERENCES tipo_peso(id_tipo_peso)
 );
+
