@@ -62,7 +62,7 @@ public class TipoDocumentoController {
 	}
 	
 	@RequestMapping("/Usuario/TipoDocumento/GuardarTipo")
-	public ModelAndView GuardarLocal(HttpServletRequest request, ModelMap modelo, TipoDocumento bean){
+	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, TipoDocumento bean){
 		
 		String error = validarGuardado(bean);
 		if(!error.isEmpty()){
@@ -70,7 +70,6 @@ public class TipoDocumentoController {
 			return tipoDocumento(request, modelo);
 		}
 		try{
-//			bean.setEstadovisible("T");
 			if(bean.getId_tipo_documento() != null){
 				ColseviDao.getInstance().getTipoDocumentoMapper().updateByPrimaryKey(bean);
 				modelo.addAttribute("correcto", "Tipo de Documento Actualizado");

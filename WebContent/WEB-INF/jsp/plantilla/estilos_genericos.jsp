@@ -18,8 +18,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/compiled/timepicker.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/css/colorpicker.css" />
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker-bs3.css" />
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/css/datetimepicker.css" />
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/css/DateTimePicker.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/css/multi-select.css" />
     
 

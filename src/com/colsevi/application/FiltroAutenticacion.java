@@ -73,8 +73,10 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			path.startsWith("/General/Establecimiento") || 
 			path.startsWith("/Pedido/Visualizar") ||
 			path.startsWith("/Ingrediente/Clasificar") ||
+			path.startsWith("/Proveedor/Compra") ||
 			path.startsWith("/Ingrediente/Ing") ||
 			path.startsWith("/Proveedor/Prov") ||
+			path.startsWith("/Producto/Admin") ||
 			path.startsWith(LOGIN)
 			
 			){

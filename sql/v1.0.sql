@@ -9,7 +9,7 @@ CREATE TABLE tipo_documento(
     PRIMARY KEY(id_tipo_documento)
 );
 
-CREATE TABLE COLSEVI.persona(
+CREATE TABLE persona(
 	id_persona INT AUTO_INCREMENT,
     tipo_doc INT NOT NULL,
     documento VARCHAR (30) NOT NULL,
@@ -17,10 +17,10 @@ CREATE TABLE COLSEVI.persona(
     PRIMARY KEY(id_persona),
 	UNIQUE (documento),
     CONSTRAINT fk_tipoDocPersona FOREIGN KEY (tipo_doc)
-	REFERENCES COLSEVI.tipo_documento(id_tipo_documento)
+	REFERENCES tipo_documento(id_tipo_documento)
 );
 
-CREATE TABLE COLSEVI.usuario(
+CREATE TABLE usuario(
 	id_usuario INT AUTO_INCREMENT,
 	usuario VARCHAR(40) NOT NULL,
     id_persona INT NOT NULL,
@@ -31,10 +31,10 @@ CREATE TABLE COLSEVI.usuario(
 	PRIMARY KEY(id_usuario),
     UNIQUE (usuario),
     CONSTRAINT fk_Persona FOREIGN KEY (id_persona)
-	REFERENCES COLSEVI.persona(id_persona)
+	REFERENCES persona(id_persona)
 );
 
-CREATE TABLE COLSEVI.pagina(
+CREATE TABLE pagina(
 	id_pagina INT AUTO_INCREMENT,
     nivel INTEGER NOT NULL,
     codigo VARCHAR (30) NOT NULL,
@@ -43,109 +43,102 @@ CREATE TABLE COLSEVI.pagina(
     PRIMARY KEY(id_pagina)
 );
 
-CREATE TABLE COLSEVI.rol(
+CREATE TABLE rol(
 	id_rol INT AUTO_INCREMENT,
     nombre_rol VARCHAR(40) NOT NULL,
     codigo_rol VARCHAR(80) NOT NULL,
     pagina_defecto INT NOT NULL,
 	PRIMARY KEY(id_rol),
     CONSTRAINT fk_paginadefecto FOREIGN KEY (pagina_defecto)
-	REFERENCES COLSEVI.pagina(id_pagina)
+	REFERENCES pagina(id_pagina)
 );
 
-CREATE TABLE COLSEVI.pagina_x_rol(
+CREATE TABLE pagina_x_rol(
 	id_rol INT NOT NULL,
     id_pagina INT NOT NULL,
 	PRIMARY KEY(id_rol, id_pagina),
     CONSTRAINT fk_idrolpagina FOREIGN KEY (id_rol)
-	REFERENCES COLSEVI.rol(id_rol),
+	REFERENCES rol(id_rol),
     CONSTRAINT fk_paginaId FOREIGN KEY (id_pagina)
-	REFERENCES COLSEVI.pagina(id_pagina)
+	REFERENCES pagina(id_pagina)
 );
 
-CREATE TABLE COLSEVI.usuario_x_rol(
+CREATE TABLE usuario_x_rol(
 	id_rol INT NOT NULL,
     id_usuario INT NOT NULL,
 	PRIMARY KEY(id_rol, id_usuario),
     CONSTRAINT fk_idrol FOREIGN KEY (id_rol)
-	REFERENCES COLSEVI.rol(id_rol),
+	REFERENCES rol(id_rol),
     CONSTRAINT fk_UxPersona FOREIGN KEY (id_usuario)
-	REFERENCES COLSEVI.usuario(id_usuario)
+	REFERENCES usuario(id_usuario)
 );
 
-CREATE TABLE COLSEVI.establecimiento(
+CREATE TABLE establecimiento(
 	id_establecimiento INT AUTO_INCREMENT,
     nombre VARCHAR (30) NOT NULL,
     descripcion VARCHAR (30) NOT NULL,
     PRIMARY KEY(id_establecimiento)
 );
 
-INSERT INTO COLSEVI.tipo_documento VALUES(null,'Cedula','Cedula de Ciudadania');
-INSERT INTO COLSEVI.persona VALUES(null,1,960102613128,'F');
-INSERT INTO COLSEVI.usuario VALUES(null,'ppiAdmin',1,'711383a59fda05336fd2ccf70c8059d1523eb41a','T','brayycard@hotmail.com','F');
-INSERT INTO COLSEVI.pagina VALUES(null,0,'ESTABLECIMIENTO','/General/Establecimiento.html','Establecimiento');
-INSERT INTO COLSEVI.rol VALUES(null,1,'ADMIN',1);
-INSERT INTO COLSEVI.pagina_x_rol VALUES(1,1);
-INSERT INTO COLSEVI.usuario_x_rol VALUES(1,1);
+INSERT INTO tipo_documento VALUES(null,'Cedula','Cedula de Ciudadania');
+INSERT INTO persona VALUES(null,1,960102613128,'F');
+INSERT INTO usuario VALUES(null,'ppiAdmin',1,'711383a59fda05336fd2ccf70c8059d1523eb41a','T','brayycard@hotmail.com','F');
+INSERT INTO pagina VALUES(null,0,'ESTABLECIMIENTO','/General/Establecimiento.html','Establecimiento');
+INSERT INTO rol VALUES(null,1,'ADMIN',1);
+INSERT INTO pagina_x_rol VALUES(1,1);
+INSERT INTO usuario_x_rol VALUES(1,1);
 
+ALTER TABLE establecimiento ADD COLUMN hora_inicio VARCHAR(7);
+ALTER TABLE establecimiento ADD COLUMN hora_fin VARCHAR(7);
+ALTER TABLE establecimiento ADD COLUMN id_direccion INT;
+ALTER TABLE establecimiento ADD COLUMN id_telefono INT;
+ALTER TABLE establecimiento ADD COLUMN id_correo INT; 
 
-ALTER TABLE COLSEVI.establecimiento ADD COLUMN hora_inicio VARCHAR(7);
-ALTER TABLE COLSEVI.establecimiento ADD COLUMN hora_fin VARCHAR(7);
-ALTER TABLE COLSEVI.establecimiento ADD COLUMN id_direccion INT;
-ALTER TABLE COLSEVI.establecimiento ADD COLUMN id_telefono INT;
-ALTER TABLE COLSEVI.establecimiento ADD COLUMN id_correo INT; 
-
-CREATE TABLE COLSEVI.tipo_telefono(
+CREATE TABLE tipo_telefono(
 	id_tipo_telefono INT AUTO_INCREMENT,
     nombre VARCHAR (20) NOT NULL,
 	descripcion VARCHAR (40) NOT NULL,
     PRIMARY KEY(id_tipo_telefono)
 );
 
-CREATE TABLE COLSEVI.telefono(
+CREATE TABLE telefono(
 	id_telefono INT AUTO_INCREMENT,
     telefono INT  NOT NULL,
     id_tipo_telefono INT NOT NULL,
     id_persona INT DEFAULT NULL,
 	CONSTRAINT fk_tipo_telefono FOREIGN KEY (id_tipo_telefono)
-    REFERENCES COLSEVI.tipo_telefono(id_tipo_telefono),
+    REFERENCES tipo_telefono(id_tipo_telefono),
     CONSTRAINT fk_id_persona_telefono FOREIGN KEY (id_persona)
-    REFERENCES COLSEVI.persona(id_persona),
+    REFERENCES persona(id_persona),
     PRIMARY KEY(id_telefono)
 );
 
-CREATE TABLE COLSEVI.direccion(
+CREATE TABLE direccion(
 	id_direccion INT AUTO_INCREMENT,
     id_persona INT DEFAULT NULL,
 	direccion VARCHAR (20) NOT NULL,
     barrio VARCHAR (20) NOT NULL,
     descripcion VARCHAR (40) NOT NULL,
     CONSTRAINT fk_id_persona_direccion FOREIGN KEY (id_persona)
-    REFERENCES COLSEVI.persona(id_persona),
+    REFERENCES persona(id_persona),
     PRIMARY KEY(id_direccion)
 );
 
-CREATE TABLE COLSEVI.correo(
+CREATE TABLE correo(
 	id_correo INT AUTO_INCREMENT,
     id_persona INT DEFAULT NULL,
     CONSTRAINT fk_id_persona_correo FOREIGN KEY (id_persona)
-    REFERENCES COLSEVI.persona(id_persona),
+    REFERENCES persona(id_persona),
 	correo VARCHAR (50) NOT NULL,
     PRIMARY KEY(id_correo)
 );
 
-ALTER TABLE COLSEVI.establecimiento ADD CONSTRAINT fk_id_direccion FOREIGN KEY (id_direccion)
-REFERENCES COLSEVI.direccion(id_direccion);
-ALTER TABLE COLSEVI.establecimiento ADD CONSTRAINT fk_id_telefono FOREIGN KEY (id_telefono)
-REFERENCES COLSEVI.telefono(id_telefono);
-ALTER TABLE COLSEVI.establecimiento ADD CONSTRAINT fk_id_correo FOREIGN KEY (id_correo)
-REFERENCES COLSEVI.correo(id_correo);
-
-
-
-
-
-
+ALTER TABLE establecimiento ADD CONSTRAINT fk_id_direccion FOREIGN KEY (id_direccion)
+REFERENCES direccion(id_direccion);
+ALTER TABLE establecimiento ADD CONSTRAINT fk_id_telefono FOREIGN KEY (id_telefono)
+REFERENCES telefono(id_telefono);
+ALTER TABLE establecimiento ADD CONSTRAINT fk_id_correo FOREIGN KEY (id_correo)
+REFERENCES correo(id_correo);
 
 CREATE TABLE tipo_proveedor(
     id_tipo_proveedor INT AUTO_INCREMENT,
@@ -182,25 +175,36 @@ CREATE TABLE tipo_peso(
     PRIMARY KEY(id_tipo_peso)
 );
 
+CREATE TABLE clasificar_ingrediente(
+	id_clasificar_ingrediente INT AUTO_INCREMENT,
+    nombre VARCHAR(40),
+    descripcion VARCHAR(150),
+    PRIMARY KEY(id_clasificar_ingrediente)
+);
 
 CREATE TABLE ingrediente(
     id_ingrediente INT AUTO_INCREMENT,
+    id_clasificar_ingrediente INT,
 	nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
-    PRIMARY KEY(id_ingrediente)
+    PRIMARY KEY(id_ingrediente),
+    CONSTRAINT fk_IngClasificar FOREIGN KEY (id_clasificar_ingrediente) REFERENCES clasificar_ingrediente(id_clasificar_ingrediente)
 );
 
 CREATE TABLE compra_x_ingrediente(
 	id_compra INT,
     id_ingrediente INT,
     id_tipo_peso INT NOT NULL,
-    lote VARCHAR(12) NOT NULL,
-    fecha_vencimiento DATETIME NOT NULL,
-    PRIMARY KEY(id_compra,id_ingrediente),
+    lote INT AUTO_INCREMENT,
+    fecha_vencimiento DATETIME,
+    cantidad INT,
+    PRIMARY KEY(lote,id_compra,id_ingrediente),
 	CONSTRAINT fk_comprasXIngrediente FOREIGN KEY (id_compra) REFERENCES compra(id_compra),
     CONSTRAINT fk_comprasXIngrediente2 FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
     CONSTRAINT fk_comprasXIngrediente3 FOREIGN KEY (id_tipo_peso) REFERENCES tipo_peso(id_tipo_peso)
 );
+
+ALTER TABLE compra_x_ingrediente AUTO_INCREMENT=1000;
 
 CREATE TABLE tipo_producto(
     id_tipo_producto INT AUTO_INCREMENT,
@@ -229,9 +233,12 @@ CREATE TABLE producto(
 CREATE TABLE ingrediente_x_producto(
     id_ingrediente INT,
 	id_producto INT,
+	cantidad INT,
+	id_tipo_peso INT,
     PRIMARY KEY(id_ingrediente,id_producto),
     CONSTRAINT fk_producto_ingrediente FOREIGN KEY (id_producto) REFERENCES tipo_producto(id_tipo_producto),
-    CONSTRAINT fk_ingredienteProducto FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente)
+    CONSTRAINT fk_ingredienteProducto FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
+    CONSTRAINT fk_ingredienteProdTipe FOREIGN KEY (id_tipo_peso) REFERENCES tipo_peso(id_tipo_peso)
 );
 
 
@@ -292,12 +299,12 @@ CREATE TABLE detalle_pedido(
 
 CREATE TABLE inventario(
     id_inventario INT AUTO_INCREMENT,
-	id_catalogo INT,
+	id_establecimiento INT,
     id_producto INT,
     disponible INT,
     comprometido INT,
     PRIMARY KEY(id_inventario),
-    CONSTRAINT fk_catalogoInventario FOREIGN KEY (id_catalogo) REFERENCES catalogo(id_catalogo),
+    CONSTRAINT fk_EstablecimientoInventario FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento),
     CONSTRAINT fk_productoInventario FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
 );
 
@@ -377,36 +384,3 @@ CREATE TABLE movimiento_inventario(
 ALTER TABLE catalogo ADD COLUMN vigente BOOLEAN DEFAULT false;
 ALTER TABLE persona ADD COLUMN nombre VARCHAR(60);
 ALTER TABLE persona ADD COLUMN apellido VARCHAR(60);
-
-ALTER TABLE compra_x_ingrediente ADD COLUMN cantidad INT;
-
- DROP TABLE ingrediente_x_producto;
-
- DROP TABLE compra_x_ingrediente;
- 
- select * from ingrediente_x_producto;
- 
- CREATE TABLE compra_x_ingrediente(
-	id_compra INT,
-    id_ingrediente INT,
-    id_tipo_peso INT NOT NULL,
-    lote INT AUTO_INCREMENT,
-    fecha_vencimiento DATETIME,
-    cantidad INT,
-    PRIMARY KEY(lote,id_compra,id_ingrediente),
-	CONSTRAINT fk_comprasXIngrediente FOREIGN KEY (id_compra) REFERENCES compra(id_compra),
-    CONSTRAINT fk_comprasXIngrediente2 FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
-    CONSTRAINT fk_comprasXIngrediente3 FOREIGN KEY (id_tipo_peso) REFERENCES tipo_peso(id_tipo_peso)
-);
-
-CREATE TABLE ingrediente_x_producto(
-    id_ingrediente INT,
-	id_producto INT,
-	cantidad INT,
-	id_tipo_peso INT,
-    PRIMARY KEY(id_ingrediente,id_producto),
-    CONSTRAINT fk_producto_ingrediente FOREIGN KEY (id_producto) REFERENCES tipo_producto(id_tipo_producto),
-    CONSTRAINT fk_ingredienteProducto FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
-    CONSTRAINT fk_ingredienteProdTipe FOREIGN KEY (id_tipo_peso) REFERENCES tipo_peso(id_tipo_peso)
-);
-

@@ -19,7 +19,8 @@
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/js/DateTimePicker.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/js/i18n/DateTimePicker-i18n-es.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>

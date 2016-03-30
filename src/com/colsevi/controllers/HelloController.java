@@ -20,9 +20,9 @@ public class HelloController {
 
 	
 	
-	@RequestMapping("profile")
+	@RequestMapping("/")
 	public ModelAndView profile(){
-		ModelAndView model = new ModelAndView("Profile");
+		ModelAndView model = new ModelAndView("producto/ProductoAdmin");
 		return model;
 	}
 
