@@ -7,15 +7,20 @@ function Tabla(pagina){
 		url: contexto + "/Proveedor/Prov/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
-		pagina:pagina
+		pagina:pagina,
+		clase: clase
 	});
 }
 
 function Limpiar(){
 	HLimpliar();
-	jQuery('#clasificar').val(0);
+	jQuery('#tipoProv').val(0);
 }
 
 function Eliminar(){
 	HEliminar("formulario", contexto + "/Proveedor/Prov/Eliminar.html?");
+}
+
+function CargarFormulario(Id){
+	HCargarFormulario(Id);
 }

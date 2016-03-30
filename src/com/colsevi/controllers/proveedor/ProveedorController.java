@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.dao.general.model.TipoTelefono;
+import com.colsevi.dao.general.model.TipoTelefonoExample;
 import com.colsevi.dao.ingrediente.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 import com.colsevi.dao.proveedor.model.CompraExample;
@@ -28,11 +30,16 @@ public class ProveedorController {
 	@RequestMapping("/Proveedor/Prov")
 	public ModelAndView Proveedor(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipoProv", listaTipoProveedor());
+		model.addAttribute("listaTipoTel", listaTipoTelefono());
 		return new ModelAndView("proveedor/Proveedor");
 	}
 	
 	public static List<TipoProveedor> listaTipoProveedor(){
 		return ColseviDao.getInstance().getTipoProveedorMapper().selectByExample(new TipoProveedorExample());
+	}
+	
+	public static List<TipoTelefono> listaTipoTelefono(){
+		return ColseviDao.getInstance().getTipoTelefonoMapper().selectByExample(new TipoTelefonoExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -135,10 +142,10 @@ public class ProveedorController {
 		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
 			error += "Ingresar la descripción<br/>";
 		}
-		if(bean.getId_telefono() == null || bean.getId_telefono().trim().isEmpty()){
+		if(bean.getId_telefono() == null || bean.getId_telefono().equals(0)){
 			error += "Ingresar el teléfono<br/>";
 		}
-		if(bean.getId_direccion() == null || bean.getId_direccion().trim().isEmpty()){
+		if(bean.getId_direccion() == null || bean.getId_direccion().equals(0)){
 			error += "Ingresar la dirección<br/>";
 		}
 		if(bean.getId_tipo_proveedor() == null || bean.getId_tipo_proveedor().equals(0)){

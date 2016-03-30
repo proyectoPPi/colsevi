@@ -48,7 +48,7 @@
 					</div>
 					
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
+						<div class="modal-dialog modal-lg">
 							<div class="modal-content-wrap">
 								<form method="post" action="${pageContext.request.contextPath}/Proveedor/Prov/Guardar.html?" id="formulario">
 									<div class="modal-content">
@@ -58,7 +58,9 @@
 										</div>
 										<div class="modal-body">
 											<div class="row">
-												<input type="hidden" id="id_ingrediente" name="id_ingrediente"/>
+												<input type="hidden" id="id_proveedor" name="id_proveedor"/>
+												<input type="hidden" id="id_direccion" name="id_direccion"/>
+												<input type="hidden" id="id_telefono" name="id_telefono"/>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>*Nombre</label>
 													<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
@@ -66,11 +68,6 @@
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>*Descripci&#243;n</label>
 													<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
-												</div>
-												
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>*Tel&eacute;fono</label>
-													<input type="text" class="form-control" id="telefono" name="telefono" data-bv-notempty="true"/>
 												</div>
 												
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -87,6 +84,43 @@
 															</c:forEach>
 													</select>
 												</div>
+												
+												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+													<h4><strong>Teléfono</strong></h4>
+													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+														<label>*Número</label>
+														<input type="text" class="form-control" id="telefono" name="telefono" data-bv-notempty="true"/>
+													</div>
+													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+														<label>Tipo teléfono</label>
+														<select class="form-control" id="tipoTel" name="tipoTel">
+															<option value="0">Seleccione</option>
+																<c:forEach items="${listaTipoTel}" var="tipoTel">
+																	<option value="${tipoTel.id_tipo_telefono}">${tipoTel.nombre}</option>
+																</c:forEach>
+														</select>
+													</div>
+												</div>
+												
+												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+													<h4><strong>Dirección</strong></h4>
+													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+														<label>*Número</label>
+														<input type="text" class="form-control" id="NDireccion" name="NDireccion" data-bv-notempty="true"/>
+													</div>
+													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+														<label>*Barrio</label>
+														<input type="text" class="form-control" id="barrio" name="barrio" data-bv-notempty="true"/>
+													</div>
+													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+														<label>*Descipción</label>
+														<input type="text" class="form-control" id="descripB" name="descripB" data-bv-notempty="true"/>
+													</div>
+													
+												</div>
+												
+												
+												
 											</div>
 										</div>
 										<div class="modal-footer">
@@ -116,6 +150,10 @@
 		titulos["direccion"] = "Direcci&#243;n";
 		titulos["descripcion"] = "Descripci&#243;n";
 		
+		clase = new Array();
+		clase['telefono'] = 'hidden-xs';
+		clase['descripcion'] = 'hidden-xs';
+		clase['tipoProv'] = 'hidden-xs';
 		
 	</script>
 </body>
