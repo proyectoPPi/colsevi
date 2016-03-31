@@ -3,6 +3,8 @@ package com.colsevi.dao.producto.map;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 import com.colsevi.dao.producto.model.IngredienteXProductoKey;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
 
@@ -75,4 +77,6 @@ public interface IngredienteXProductoMapper {
 	 * @mbggenerated  Sat Mar 26 15:56:12 COT 2016
 	 */
 	int updateByPrimaryKey(IngredienteXProducto record);
+	
+	List<Map<String, Object>> SelectDataView(Map<String, Object> map);
 }
