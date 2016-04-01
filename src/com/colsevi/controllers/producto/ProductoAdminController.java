@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.UtilidadManager;
+import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.producto.model.ProductoExample;
 import com.colsevi.dao.producto.model.RecetaExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoExample;
@@ -34,7 +35,9 @@ import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 import com.colsevi.dao.producto.model.Producto;
 
 @Controller
-public class ProductoAdminController {
+public class ProductoAdminController extends BaseConfigController {
+
+	private static final long serialVersionUID = 4997906906136000223L;
 
 	@RequestMapping("/Producto/Admin")
 	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
@@ -42,7 +45,7 @@ public class ProductoAdminController {
 		model.addAttribute("listaClasificar", getClasificar());
 		model.addAttribute("listaTipoPeso", getTipoPeso());
 		
-		return new ModelAndView("producto/ProductoAdmin");
+		return new ModelAndView("producto/ProductoAdmin","col",getValoresGenericos(request));
 	}
 	
 	public static List<ClasificarIngrediente> getClasificar(){
