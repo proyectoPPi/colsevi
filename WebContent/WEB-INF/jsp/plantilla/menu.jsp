@@ -13,6 +13,7 @@
                           <span>Cerrar Sesión</span>
                       </a>
                   </li>
+                  ${col.menu}
               </ul>
           </div>
       </aside>

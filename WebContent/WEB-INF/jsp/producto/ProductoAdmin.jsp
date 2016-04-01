@@ -168,6 +168,7 @@
 	<c:import url="/WEB-INF/jsp/plantilla/javascript_genericos.jsp"></c:import>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/producto/productoAdmin.js"></script>
 	<script type="text/javascript">
+	
 		
 		titulos = new Array();
 		titulos["id_producto"] = "ID";
