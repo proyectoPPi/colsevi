@@ -164,6 +164,7 @@ CREATE TABLE compra(
     id_proveedor INT NOT NULL,
     valor DECIMAL(12,2) NOT NULL,
     fecha_compra DATETIME NOT NULL,
+    pagado BOOLEAN DEFAULT FALSE,
     PRIMARY KEY(id_compra),
 	CONSTRAINT fk_compra_proveedor FOREIGN KEY (id_proveedor) REFERENCES proveedor(id_proveedor)
 );

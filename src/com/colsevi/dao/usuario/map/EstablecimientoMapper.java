@@ -3,6 +3,8 @@ package com.colsevi.dao.usuario.map;
 import com.colsevi.dao.usuario.model.Establecimiento;
 import com.colsevi.dao.usuario.model.EstablecimientoExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface EstablecimientoMapper {
@@ -73,4 +75,8 @@ public interface EstablecimientoMapper {
 	 * @mbggenerated  Thu Mar 31 23:20:28 COT 2016
 	 */
 	int updateByPrimaryKey(Establecimiento record);
+	
+	List<Map<String, Object>> SelectDataView(Map<String, Object> map);
+	
+	int CountDataView (Map<String, Object> map);
 }
