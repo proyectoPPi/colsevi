@@ -62,6 +62,7 @@ function HTabla(opciones){
 							 html += data["datos"][i][k]['label']+"</td>";
 						 }else{
 							 html += data["datos"][i][k]+"</td>";
+							 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalMotivo">'+data["datos"][i][k]+'</a></span></td>';
 						 }
 					 }
 				 }

@@ -384,3 +384,5 @@ CREATE TABLE movimiento_inventario(
 ALTER TABLE catalogo ADD COLUMN vigente BOOLEAN DEFAULT false;
 ALTER TABLE persona ADD COLUMN nombre VARCHAR(60);
 ALTER TABLE persona ADD COLUMN apellido VARCHAR(60);
+
+ALTER TABLE compra ADD COLUMN motivo VARCHAR(200);

@@ -95,6 +95,7 @@ function CargarFormulario(Id){
 	if(BuscarRegistro(Id)['pagado'] == "SI"){
 		jQuery("#pagado").prop("checked", true);
 	}
+	jQuery('#motivo').val(BuscarRegistro(Id)['motivo']);
 }
 
 function cargarIng(){
