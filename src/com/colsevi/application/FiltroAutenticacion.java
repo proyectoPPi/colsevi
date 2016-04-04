@@ -74,6 +74,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			path.startsWith("/Ingrediente/Clasificar") ||
 			path.startsWith("/Proveedor/Compra") ||
 			path.startsWith("/Ingrediente/Ing") ||
+			path.startsWith("/Proveedor/Prov") ||
 			path.startsWith("/Producto/Admin") ||
 			path.startsWith(LOGIN)
 			
@@ -104,7 +105,6 @@ public class FiltroAutenticacion implements Filter, Serializable{
 	}
 	
 	public void init(FilterConfig arg0) throws ServletException {
-		System.out.println("hola");
 	}
 
 }

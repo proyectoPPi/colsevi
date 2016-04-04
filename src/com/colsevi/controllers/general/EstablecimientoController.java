@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.usuario.model.Establecimiento;
 import com.colsevi.dao.usuario.model.EstablecimientoExample;
 
@@ -32,8 +33,24 @@ public class EstablecimientoController {
 		JSONObject opciones = new JSONObject();
 		String Inicio = request.getParameter("Inicio");
 		String Final = request.getParameter("Final");
+		String nombre = request.getParameter("nombreF");
+		String descripcion = request.getParameter("descripcionF");
+		String direccion = request.getParameter("direccionF");
+		
 		EstablecimientoExample EstablecimientoExample = new EstablecimientoExample();
+		EstablecimientoExample.Criteria criteria = (EstablecimientoExample.Criteria) EstablecimientoExample.createCriteria();
 		EstablecimientoExample.setLimit(Inicio + ", " + Final);
+		
+		if(nombre != null && !nombre.trim().isEmpty()){
+			criteria.andNombreLike("%" + nombre + "%");   
+		}
+		if(descripcion != null && !descripcion.trim().isEmpty()){
+			criteria.andDescripcionLike("%" + descripcion + "%");   
+		}
+		if(direccion != null && !direccion.trim().isEmpty()){
+			criteria.andDescripcionLike("%" + descripcion + "%");   
+		}
+		
 		
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(EstablecimientoExample)));
 		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().countByExample(EstablecimientoExample));
@@ -93,16 +110,30 @@ public class EstablecimientoController {
 		
 		return error;
 	}
+	@SuppressWarnings("unused")
 	@RequestMapping("/General/Establecimiento/EliminarEstablecimiento")
 	public ModelAndView EliminarEstablecimiento(HttpServletRequest request, ModelMap modelo){
 		
 		String id = request.getParameter("id_establecimiento");
 		if(id != null){
 			
-			Establecimiento establecimiento = new Establecimiento();
-			establecimiento.setId_establecimiento(Integer.parseInt(id));
-			ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKeySelective(establecimiento);
-			modelo.addAttribute("correcto", "Establecimiento Eliminado");
+			try {
+				
+				CatalogoExample example = new CatalogoExample();
+				example.createCriteria().andId_establecimientoEqualTo(Integer.parseInt(id));
+				Integer contCatalogo = ColseviDao.getInstance().getCatalogoMapper().countByExample(example);
+				
+				if(contCatalogo == null && contCatalogo > 0){
+					ColseviDao.getInstance().getEstablecimientoMapper().deleteByPrimaryKey(Integer.parseInt(id));
+					modelo.addAttribute("correcto", "Establecimiento Eliminado");
+				}else{
+					modelo.addAttribute("error", "El establecimiento no se pudo eliminar porqué tiene un catálogo asociado");
+				}
+				
+			} catch (Exception e) {
+				modelo.addAttribute("error", "Ocurrió un error, contacte al administrador");
+			}
+			
 		}
 		
 		return administrador(request, modelo);

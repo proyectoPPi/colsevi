@@ -1,6 +1,7 @@
 jQuery(document).ready(function(){
 	Tabla();
 	HDatetime('pruebabasicA');
+	HDatetime('pruebabasicB');
 });
 
 function Tabla(pagina){
