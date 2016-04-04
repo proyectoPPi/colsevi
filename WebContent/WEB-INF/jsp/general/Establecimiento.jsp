@@ -16,20 +16,37 @@
 			<section class="wrapper">
 				<div class="row">
 				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
-					<section class="panel">
-						<header class="panel-heading">Establecimiento 
-						
-							<span class="tools pull-right">
-								<button class="btn btn-default" type="submit" onclick="printDiv('tabla')" style="margin-bottom: 2px;">Imprimir</button>
-								<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle fa-3x"></a></i>
-							</span>
-						</header>
-						
-						<div id="tabla"></div>
-						
-					</section>
-					<div id="paginacion" class="col-md-12"></div>
+					<h2>Establecimiento 
+						<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
+					</h2>
 					
+					<section class="panel">
+						<div class="panel-body">
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<label>Nombre</label>
+								<input type="text" class="form-control" id="nombreF" name="filtro"/>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<label>Descripción</label>
+								<input type="text" class="form-control" id="descripcionF" name="filtro"/>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<label>Dirección</label>
+								<input type="text" class="form-control" id="direccionF" name="filtro"/>
+							</div>
+							<div class="col-xs-12 col-md-12 col-lg-12"><br/>
+								<button class="btn btn-button" onclick="Tabla(1);">Filtrar</button>
+							</div>	
+						</div>	
+					</section>
+					<!-- <div id="paginacion" class="col-md-12"></div> -->
+					
+					<div class=" col-xs-12 col-md-12 col-lg-12">
+						<div id="tabla"></div>
+						<div id="paginacion" class="col-md-12"></div>
+					</div>
+					<button type="button" id="btnBuscar" class="btn btn-default">Buscar</button>
+										
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content-wrap">
@@ -51,8 +68,8 @@
 											</div>
 											<div class="form-group">
 				                                 <label>*Hora de inicio</label>
-		                                          <div class="input-group bootstrap-timepicker">
-		                                              <input type="text" class="form-control timepicker-default">
+		                                          <div class="input-group">
+		                                              <input type="text" id="pruebabasicB" class="form-control timepicker-default" readonly>
 		                                                <span class="input-group-btn">
 		                                                <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
 		                                                </span>
@@ -61,7 +78,7 @@
 											<div class="form-group">
 				                                 <label>*Hora de cierre</label>
 		                                          <div class="input-group">
-		                                              <input type="text" id="pruebabasicA" class="form-control timepicker-default">
+		                                              <input type="text" id="pruebabasicA" class="form-control timepicker-default" >
 		                                                <span class="input-group-btn">
 		                                                <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
 		                                                </span>
