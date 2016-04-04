@@ -34,7 +34,6 @@ public class EstablecimientoController {
 		String Final = request.getParameter("Final");
 		EstablecimientoExample EstablecimientoExample = new EstablecimientoExample();
 		EstablecimientoExample.setLimit(Inicio + ", " + Final);
-		EstablecimientoExample.createCriteria().andEstadovisibleEqualTo("T");
 		
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(EstablecimientoExample)));
 		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().countByExample(EstablecimientoExample));
@@ -70,7 +69,6 @@ public class EstablecimientoController {
 			return administrador(request, modelo);
 		}
 		try{
-			bean.setEstadovisible("T");
 			if(bean.getId_establecimiento() != null){
 				ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKey(bean);
 				modelo.addAttribute("correcto", "Establecimiento Actualizado");
@@ -102,7 +100,6 @@ public class EstablecimientoController {
 		if(id != null){
 			
 			Establecimiento establecimiento = new Establecimiento();
-			establecimiento.setEstadovisible("F");
 			establecimiento.setId_establecimiento(Integer.parseInt(id));
 			ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKeySelective(establecimiento);
 			modelo.addAttribute("correcto", "Establecimiento Eliminado");

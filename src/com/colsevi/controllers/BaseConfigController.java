@@ -29,7 +29,7 @@ public class BaseConfigController implements Serializable {
 		for(Pagina pag: listaPag){
 			menu += "<li>";
 			menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
-			menu += "<i class=\"fa fa-remove\"></i>";
+			menu += "<i class=\""+pag.getIcono()+"\"></i>";
 			menu += "<span>"+pag.getNombre()+"</span>";
 			menu += "</a>";
 			menu += "</li>";
