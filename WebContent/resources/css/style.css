@@ -37,11 +37,11 @@ a, a:hover, a:focus {
 }
 ::selection {
 
-    background: #FF6C60;
+    background: peru;
     color: #fff;
 }
 ::-moz-selection {
-    background: #FF6C60;
+    background: peru;
     color: #fff;
 }
 

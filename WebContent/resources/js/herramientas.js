@@ -11,9 +11,10 @@ function HTabla(opciones){
 	
 	Setlimite(opciones.pagina);
 	
+	SetFiltros();
+	
 	jQuery.ajaxQueue({
 		  url: dataMap['url'],
-		  contentType: "application/json; charset=utf-8",
 		}).done(function(result) {
 			data = jQuery.parseJSON( result );
 			var html = ""; 
@@ -36,16 +37,20 @@ function HTabla(opciones){
 			html += "</tr></thead><tbody>";
 		 for(i in data["datos"]){
 			 html += "<tr>";
+			 var sw = true;
 			 for(k in titulos){
 				 if(titulos[k]=="ID"){
 					 id = data["datos"][i][k];
-					 
 				 }else{
-					 if(id != null){
+					 if(sw){
 						 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
-						 id = null;
+						 sw = false;
 					 }else{
-						 html += "<td>"+data["datos"][i][k]+"</td>";
+						 if(data["datos"][i][k]['label'] != undefined){
+							 html += "<td>"+data["datos"][i][k]['label']+"</td>";
+						 }else{
+							 html += "<td>"+data["datos"][i][k]+"</td>";
+						 }
 					 }
 				 }
 			 }
@@ -80,7 +85,11 @@ function CargarFormulario(Id){
 	if(Fila != null){
 		for(tituloForm in dataMap["titulos"]){
 			if(dataMap["titulos"][tituloForm] != undefined){
-				jQuery("#" + tituloForm).val(Fila[tituloForm]);
+				if(Fila[tituloForm]['value'] != undefined){
+					jQuery("#" + tituloForm).val(Fila[tituloForm]['value']);
+				}else{
+					jQuery("#" + tituloForm).val(Fila[tituloForm]);
+				}
 			}
 		}
 	}
@@ -94,7 +103,14 @@ function Setlimite(pagina){
 	
 	dataMap['url'] += "&Inicio=" + dataMap['Inicio'];
 	dataMap['url'] += "&Final=" + dataMap['Final'];
+}
 
+function SetFiltros(){
+	var filtro = "&";
+	jQuery("[name*='filtro']").each(function() {
+		filtro += $(this).attr("id") +"="+ $(this).val() + "&";
+	});
+	dataMap['url'] += filtro;
 }
 
 function organizarPaginacion(pagina){
@@ -133,4 +149,8 @@ function HLimpliar(){
 function HEliminar(div, url){
 	jQuery('#' + div).attr('action', url);
 	jQuery('#' + div).submit();
+}
+
+function HDatetime(Id){
+	jQuery('#'+ Id).timepicker();
 }
