@@ -87,6 +87,7 @@ public class LoginController {
 		}
 		
 		U.setUsuario(usu.getUsuario());
+		U.setRol(1);
 		
 		return U;
 	}
