@@ -163,9 +163,13 @@ function organizarPaginacion(pagina){
 }
 
 function HLimpliar(){
-	for(titulos in dataMap["titulos"]){
-		if(dataMap["titulos"][titulos] != undefined){
-			jQuery("#" + titulos).val('');
+	
+	for(key in dataMap['keys']){
+		var valor = dataMap['keys'][key];
+		if(valor['value'] != undefined){
+			jQuery("#" + valor).val('0');
+		}else{
+			jQuery("#" + valor).val('');
 		}
 	}
 }
