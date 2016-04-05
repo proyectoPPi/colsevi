@@ -14,17 +14,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
 import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
 import com.colsevi.dao.ingrediente.model.Ingrediente;
 import com.colsevi.dao.ingrediente.model.IngredienteExample;
 
 @Controller
-public class ClasificarIngredienteController {
+public class ClasificarIngredienteController extends BaseConfigController {
+	
+	private static final long serialVersionUID = -7914278347217809210L;
 	
 	@RequestMapping("/Ingrediente/Clasificar")
 	public ModelAndView Clasificar(HttpServletRequest request,ModelMap model){
-		return new ModelAndView("ingrediente/Clasificar");
+		return new ModelAndView("ingrediente/Clasificar","col",getValoresGenericos(request));
 	}
 	
 	@SuppressWarnings("unchecked")

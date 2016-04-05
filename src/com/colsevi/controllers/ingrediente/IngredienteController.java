@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
 import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
 import com.colsevi.dao.ingrediente.model.Ingrediente;
@@ -21,12 +22,14 @@ import com.colsevi.dao.ingrediente.model.IngredienteExample;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 
 @Controller
-public class IngredienteController {
+public class IngredienteController extends BaseConfigController {
+
+	private static final long serialVersionUID = 8349230539753648934L;
 
 	@RequestMapping("/Ingrediente/Ing")
 	public ModelAndView Ingrediente(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaClasificar", listaClasificacion());
-		return new ModelAndView("ingrediente/Ingrediente");
+		return new ModelAndView("ingrediente/Ingrediente","col",getValoresGenericos(request));
 	}
 	
 	public static List<ClasificarIngrediente> listaClasificacion(){

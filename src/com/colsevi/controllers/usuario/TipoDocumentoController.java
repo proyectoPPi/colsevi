@@ -14,15 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.usuario.model.TipoDocumento;
 import com.colsevi.dao.usuario.model.TipoDocumentoExample;
 
 @Controller
-public class TipoDocumentoController {
+public class TipoDocumentoController extends BaseConfigController {
+	
+	private static final long serialVersionUID = 4256773623052938383L;
 	
 	@RequestMapping("/Usuario/TipoDocumento")
 	public ModelAndView tipoDocumento(HttpServletRequest request,ModelMap model){
-		return new ModelAndView("usuario/TipoDocumento");
+		return new ModelAndView("usuario/TipoDocumento","col",getValoresGenericos(request));
 	}
 	
 	@SuppressWarnings("unchecked")

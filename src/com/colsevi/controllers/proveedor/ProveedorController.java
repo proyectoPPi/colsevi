@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.general.model.TipoTelefono;
 import com.colsevi.dao.general.model.TipoTelefonoExample;
-import com.colsevi.dao.ingrediente.model.Ingrediente;
-import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 import com.colsevi.dao.proveedor.model.CompraExample;
 import com.colsevi.dao.proveedor.model.Proveedor;
 import com.colsevi.dao.proveedor.model.ProveedorExample;
@@ -25,13 +24,15 @@ import com.colsevi.dao.proveedor.model.TipoProveedor;
 import com.colsevi.dao.proveedor.model.TipoProveedorExample;
 
 @Controller
-public class ProveedorController {
+public class ProveedorController extends BaseConfigController {
 	
+	private static final long serialVersionUID = 6171705625439131732L;
+
 	@RequestMapping("/Proveedor/Prov")
 	public ModelAndView Proveedor(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipoProv", listaTipoProveedor());
 		model.addAttribute("listaTipoTel", listaTipoTelefono());
-		return new ModelAndView("proveedor/Proveedor");
+		return new ModelAndView("proveedor/Proveedor","col",getValoresGenericos(request));
 	}
 	
 	public static List<TipoProveedor> listaTipoProveedor(){
