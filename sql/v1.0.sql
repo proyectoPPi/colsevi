@@ -118,8 +118,8 @@ CREATE TABLE direccion(
 	id_direccion INT AUTO_INCREMENT,
     id_persona INT DEFAULT NULL,
 	direccion VARCHAR (20) NOT NULL,
-    barrio VARCHAR (20) NOT NULL,
-    descripcion VARCHAR (40) NOT NULL,
+    barrio VARCHAR (20),
+    descripcion VARCHAR (40),
     CONSTRAINT fk_id_persona_direccion FOREIGN KEY (id_persona)
     REFERENCES persona(id_persona),
     PRIMARY KEY(id_direccion)

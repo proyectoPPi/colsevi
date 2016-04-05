@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.UtilidadManager;
+import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
 import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
 import com.colsevi.dao.ingrediente.model.CompraXIngrediente;
@@ -33,7 +34,9 @@ import com.colsevi.dao.proveedor.model.Proveedor;
 import com.colsevi.dao.proveedor.model.ProveedorExample;
 
 @Controller
-public class CompraController {
+public class CompraController extends BaseConfigController {
+
+	private static final long serialVersionUID = 7006733943938315447L;
 
 	@RequestMapping("/Proveedor/Compra")
 	public ModelAndView Compra(HttpServletRequest request,ModelMap model){
@@ -41,7 +44,7 @@ public class CompraController {
 		model.addAttribute("listaClasificar", getClasificar());
 		model.addAttribute("listaTipoPeso", getTipoPeso());
 		
-		return new ModelAndView("proveedor/Compra");
+		return new ModelAndView("proveedor/Compra","col",getValoresGenericos(request));
 	}
 	
 	public static List<Proveedor> getProveedores(){
