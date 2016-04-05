@@ -77,6 +77,14 @@ function HTabla(opciones){
 			 opciones.pagina = 1;
 		 }
 		 organizarPaginacion(opciones.pagina);
+		 
+		 dataMap['keys'] = [];
+			var registro = dataMap["datos"][0];
+			if(registro != undefined){
+				for(key in registro){
+					dataMap['keys'].push(key);
+				}
+			}
 	});
 }
 
@@ -96,13 +104,16 @@ function BuscarRegistro(Id){
 function HCargarFormulario(Id){
 	var Fila = BuscarRegistro(Id);
 	if(Fila != null){
-		for(tituloForm in dataMap["titulos"]){
-			if(dataMap["titulos"][tituloForm] != undefined){
-				if(Fila[tituloForm]['value'] != undefined){
-					jQuery("#" + tituloForm).val(Fila[tituloForm]['value']);
+		for(key in dataMap['keys']){
+			var valor = dataMap['keys'][key];
+			if(Fila[valor] != null ){
+				if(Fila[valor]['value'] != undefined){
+					jQuery("#" + valor).val(Fila[valor]['value']);
 				}else{
-					jQuery("#" + tituloForm).val(Fila[tituloForm]);
+					jQuery("#" + valor).val(Fila[valor]);
 				}
+			}else{
+				jQuery("#" + valor).val("");
 			}
 		}
 	}

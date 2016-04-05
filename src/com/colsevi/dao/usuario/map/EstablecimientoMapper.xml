@@ -331,4 +331,26 @@
       id_correo = #{id_correo,jdbcType=INTEGER}
     where id_establecimiento = #{id_establecimiento,jdbcType=INTEGER}
   </update>
+  
+	<select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">  
+	  	SELECT esta.id_establecimiento, esta.nombre AS nombreEsta, esta.descripcion AS descipEsta, esta.hora_inicio, esta.hora_fin,
+		esta.id_direccion, dir.direccion, dir.barrio, dir.descripcion AS descripDir,
+		esta.id_telefono, tel.id_tipo_telefono AS telTipo, tel.telefono,
+		esta.id_correo, cor.correo
+		FROM establecimiento esta
+		LEFT JOIN direccion dir ON dir.id_direccion = esta.id_direccion
+		LEFT JOIN telefono tel ON tel.id_telefono = esta.id_telefono
+		LEFT JOIN correo cor ON cor.id_correo = esta.id_correo
+		
+		limit ${limit};
+	</select>
+	
+	<select id="CountDataView" parameterType="java.util.Map" resultType="java.lang.Integer">  
+	  	SELECT count(*)
+		FROM establecimiento esta
+		LEFT JOIN direccion dir ON dir.id_direccion = esta.id_direccion
+		LEFT JOIN telefono tel ON tel.id_telefono = esta.id_telefono
+		LEFT JOIN correo cor ON cor.id_correo = esta.id_correo;
+		
+	</select>
 </mapper>

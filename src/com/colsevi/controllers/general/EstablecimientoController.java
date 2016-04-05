@@ -1,7 +1,9 @@
 package com.colsevi.controllers.general;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
+import com.colsevi.dao.general.model.TipoTelefono;
+import com.colsevi.dao.general.model.TipoTelefonoExample;
 import com.colsevi.dao.usuario.model.Establecimiento;
 import com.colsevi.dao.usuario.model.EstablecimientoExample;
 
@@ -23,7 +27,12 @@ public class EstablecimientoController {
 	
 	@RequestMapping("/General/Establecimiento")
 	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
+		model.addAttribute("tipoTel", ListaTipoTel());
 		return new ModelAndView("general/Establecimiento");
+	}
+	
+	public static List<TipoTelefono> ListaTipoTel(){
+		return ColseviDao.getInstance().getTipoTelefonoMapper().selectByExample(new TipoTelefonoExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -31,45 +40,58 @@ public class EstablecimientoController {
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		
 		String Inicio = request.getParameter("Inicio");
 		String Final = request.getParameter("Final");
 		String nombre = request.getParameter("nombreF");
 		String descripcion = request.getParameter("descripcionF");
 		String direccion = request.getParameter("direccionF");
 		
-		EstablecimientoExample EstablecimientoExample = new EstablecimientoExample();
-		EstablecimientoExample.Criteria criteria = (EstablecimientoExample.Criteria) EstablecimientoExample.createCriteria();
-		EstablecimientoExample.setLimit(Inicio + ", " + Final);
+		mapa.put("limit",Inicio + ", " + Final);
 		
 		if(nombre != null && !nombre.trim().isEmpty()){
-			criteria.andNombreLike("%" + nombre + "%");   
+			mapa.put("","%" + nombre + "%");   
 		}
 		if(descripcion != null && !descripcion.trim().isEmpty()){
-			criteria.andDescripcionLike("%" + descripcion + "%");   
+			mapa.put("","%" + descripcion + "%");   
 		}
 		if(direccion != null && !direccion.trim().isEmpty()){
-			criteria.andDescripcionLike("%" + descripcion + "%");   
+			mapa.put("","%" + descripcion + "%");   
 		}
 		
-		
-		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(EstablecimientoExample)));
-		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().countByExample(EstablecimientoExample));
+		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().SelectDataView(mapa)));
+		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().CountDataView(mapa));
 
 		opciones.writeJSONString(response.getWriter());
 	}
 
 	@SuppressWarnings("unchecked")
-	public JSONArray ConstruirJson(List<Establecimiento> listgeneral){
+	public JSONArray ConstruirJson(List<Map<String, Object>> listgeneral){
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
 		
 		if(listgeneral != null && listgeneral.size() >0){
-			for (Establecimiento bean : listgeneral) {
+			for (Map<String, Object> map : listgeneral) {
 				opciones = new JSONObject();
-				opciones.put("id_establecimiento", bean.getId_establecimiento());
-				opciones.put("nombre", bean.getNombre());
-				opciones.put("descripcion", bean.getDescripcion());								
+				opciones.put("id_establecimiento", map.get("id_establecimiento"));
+				opciones.put("nombreEsta", map.get("nombreEsta"));
+				opciones.put("descipEsta", map.get("descipEsta"));	
+				opciones.put("hora_inicio", map.get("hora_inicio"));
+				opciones.put("hora_fin", map.get("hora_fin"));
+				opciones.put("id_direccion", map.get("id_direccion"));	
+				opciones.put("hora_fin", map.get("hora_fin"));
+				opciones.put("id_direccion", map.get("id_direccion"));
+				opciones.put("direccion", map.get("direccion"));	
+				opciones.put("barrio", map.get("barrio"));
+				opciones.put("descripDir", map.get("descripDir"));
+				opciones.put("id_telefono", map.get("id_telefono"));
+				opciones.put("telTipo", map.get("telTipo"));
+				opciones.put("telefono", map.get("telefono"));
+				opciones.put("id_correo", map.get("id_correo"));
+				opciones.put("correo", map.get("correo"));
+				
 				resultado.add(opciones);
 			}
 			
@@ -112,7 +134,7 @@ public class EstablecimientoController {
 	}
 	@SuppressWarnings("unused")
 	@RequestMapping("/General/Establecimiento/EliminarEstablecimiento")
-	public ModelAndView EliminarEstablecimiento(HttpServletRequest request, ModelMap modelo){
+	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
 		
 		String id = request.getParameter("id_establecimiento");
 		if(id != null){
