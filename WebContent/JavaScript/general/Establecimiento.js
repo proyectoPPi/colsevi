@@ -8,7 +8,8 @@ function Tabla(pagina){
 		url: contexto + "/General/Establecimiento/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
-		pagina:pagina
+		pagina:pagina,
+		clase: clase
 	});
 }
 

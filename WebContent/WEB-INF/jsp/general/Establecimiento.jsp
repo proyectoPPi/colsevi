@@ -46,8 +46,6 @@
 						<div id="paginacion" class="col-md-12"></div>
 					</div>
 					<div id="dtBox"></div>
-					<button type="button" id="btnBuscar" class="btn btn-default">Buscar</button>
-										
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content-wrap">
@@ -144,7 +142,13 @@
 		titulos["descipEsta"] = "Descripci&#243;n";
 		titulos["hora_inicio"] = "Hora Inicio";
 		titulos["hora_fin"] = "Hora Fin";
+		titulos["direccion"] = "Direcci&#243;n";
+		titulos["telefono"] = "Telefono";
 		
+		clase = new Array();
+		clase['descipEsta'] = 'hidden-xs';
+		clase['hora_inicio'] = 'hidden-xs hidden-sm';
+		clase['hora_fin'] = 'hidden-xs  hidden-sm';
 	</script>
 </body>
 </html>

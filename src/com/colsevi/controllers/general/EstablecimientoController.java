@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.general.model.TipoTelefono;
 import com.colsevi.dao.general.model.TipoTelefonoExample;
@@ -23,12 +24,14 @@ import com.colsevi.dao.usuario.model.Establecimiento;
 import com.colsevi.dao.usuario.model.EstablecimientoExample;
 
 @Controller
-public class EstablecimientoController {
+public class EstablecimientoController extends BaseConfigController {
+	
+	private static final long serialVersionUID = 1944372690226154900L;
 	
 	@RequestMapping("/General/Establecimiento")
 	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
 		model.addAttribute("tipoTel", ListaTipoTel());
-		return new ModelAndView("general/Establecimiento");
+		return new ModelAndView("general/Establecimiento", "col" ,getValoresGenericos(request));
 	}
 	
 	public static List<TipoTelefono> ListaTipoTel(){

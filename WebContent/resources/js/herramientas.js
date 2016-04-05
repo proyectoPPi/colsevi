@@ -62,7 +62,6 @@ function HTabla(opciones){
 							 html += data["datos"][i][k]['label']+"</td>";
 						 }else{
 							 html += data["datos"][i][k]+"</td>";
-							 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalMotivo">'+data["datos"][i][k]+'</a></span></td>';
 						 }
 					 }
 				 }
@@ -164,9 +163,13 @@ function organizarPaginacion(pagina){
 }
 
 function HLimpliar(){
-	for(titulos in dataMap["titulos"]){
-		if(dataMap["titulos"][titulos] != undefined){
-			jQuery("#" + titulos).val('');
+	
+	for(key in dataMap['keys']){
+		var valor = dataMap['keys'][key];
+		if(valor['value'] != undefined){
+			jQuery("#" + valor).val('0');
+		}else{
+			jQuery("#" + valor).val('');
 		}
 	}
 }

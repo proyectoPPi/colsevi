@@ -40,6 +40,7 @@ CREATE TABLE pagina(
     codigo VARCHAR (30) NOT NULL,
     url VARCHAR (50) NOT NULL,
     nombre VARCHAR (50) NOT NULL,
+    icono VARCHAR (50),
     PRIMARY KEY(id_pagina)
 );
 
