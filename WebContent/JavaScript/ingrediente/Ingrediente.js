@@ -19,3 +19,7 @@ function Limpiar(){
 function Eliminar(){
 	HEliminar("formulario", contexto + "/Ingrediente/Ing/Eliminar.html?");
 }
+
+function CargarFormulario(Id){
+	HCargarFormulario(Id);
+}
