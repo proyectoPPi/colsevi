@@ -41,11 +41,11 @@
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content-wrap">
-								<form method="post" action="${pageContext.request.contextPath}/Ingrediente/Ing/Guardar.html?" id="formulario">
+								<form method="post" action="${pageContext.request.contextPath}/TipoProveedor/TipoProv/Guardar.html?" id="formulario">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-											<h4 class="modal-title">Tipo de Proveedor</h4>
+											<h4 class="modal-title">Formulario tipo de Proveedor</h4>
 										</div>
 										<div class="modal-body">
 											<div class="row">
@@ -76,11 +76,8 @@
 	<script type="text/javascript">
 		
 		titulos = new Array();
-		titulos["id_ingrediente"] = "ID";
+		titulos["id_TipoProveedor"] = "ID";
 		titulos["nombre"] = "Nombre";
-		titulos["clasificar"] = "Clasificación";
-		titulos["descripcion"] = "Descripci&#243;n";
-		
 		
 	</script>
 </body>

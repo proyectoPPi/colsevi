@@ -4,7 +4,7 @@ jQuery(document).ready(function(){
 
 function Tabla(pagina){
 	HTabla({
-		url: contexto + "/Ingrediente/Ing/tabla.html?",
+		url: contexto + "/TipoProveedor/TipoProv/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
 		pagina:pagina
@@ -17,5 +17,9 @@ function Limpiar(){
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/Ingrediente/Ing/Eliminar.html?");
+	HEliminar("formulario", contexto + "/TipoProveedor/TipoProv/Eliminar.html?");
+}
+
+function CargarFormulario(Id){
+	HCargarFormulario(Id);
 }
