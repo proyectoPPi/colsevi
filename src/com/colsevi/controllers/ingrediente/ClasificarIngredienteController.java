@@ -111,7 +111,7 @@ public class ClasificarIngredienteController extends BaseConfigController {
 		return error;
 	}
 	@RequestMapping("/Ingrediente/Clasificar/Eliminar")
-	public ModelAndView EliminarEstablecimiento(HttpServletRequest request, ModelMap modelo){
+	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
 		
 		Integer id = Integer.parseInt(request.getParameter("id_clasificar_ingrediente"));
 		if(id != null){
