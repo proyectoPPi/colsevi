@@ -27,7 +27,7 @@
 								<input type="text" class="form-control" id="descripcionF" name="filtro"/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                  <label>Fech</label>
+                                  <label>Fecha</label>
                                   <input type="text" class="form-control" id="FechaF" data-field="datetime" data-format="yyyy-MM-dd hh:mm:ss AA"/>
                               </div>
 							<div class="col-xs-12 col-md-12 col-lg-12"><br/>
@@ -55,7 +55,7 @@
 											<div class="row">
 											<input type="hidden" id="id_compra" name="id_compra"/>
 												<div class="col-xs-12 col-sm-6 col-md-6">
-													<label>Proveedor</label>
+													<label>*Proveedor</label>
 													<select class="form-control" id="proveedor" name="proveedor">
 														<option value="">Seleccione</option>
 														<c:forEach items="${listaProveedores}" var="proveedor">
@@ -64,11 +64,11 @@
 													</select>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6">
-													<label>Fecha Compra</label>
+													<label>*Fecha Compra</label>
 													<input type="text" class="form-control" id="fecha_compra" name="fecha_compra" data-field="datetime" data-format="yyyy-MM-dd HH:mm:ss"/>
 												</div>
 												<div class="col-xs-6 col-sm-3 col-md-3">
-													<label>Valor</label>
+													<label>*Valor</label>
 													<input type="text" class="form-control" id="valorsin" name="valorsin"/>
 												</div>
 												<div class="col-xs-6 col-sm-3 col-md-3">
@@ -77,7 +77,7 @@
 												</div>
 												
 												<div class="col-xs-12 col-sm-6 col-md-6">
-													<label>Clasificación Ingrediente</label>
+													<label>*Clasificación Ingrediente</label>
 													<select class="form-control" id="clasificarIng">
 														<option value="">Seleccione</option>
 														<c:forEach items="${listaClasificar}" var="ing">
@@ -91,11 +91,11 @@
 														<div id="Ing"></div>	
 													</div>
 													<div class="col-xs-6 col-sm-3 col-md-3">
-														<label>cantidad</label>
+														<label>*cantidad</label>
 														<input type="number" class="form-control" id="cantidad" name="cantidad" min="0"/>
 													</div>
 													<div class="col-xs-12 col-sm-3 col-md-3">
-														<label>Tipo peso</label>
+														<label>*Tipo peso</label>
 														<select class="form-control" id="tipopeso">
 															<option value="">Seleccione</option>
 															<c:forEach items="${listaTipoPeso}" var="tipo">
@@ -115,7 +115,7 @@
 																<th>Ingrediente</th>
 																<th>Cantidad</th>
 																<th class="hidden-xs">TipoPeso</th>
-																<th>Fecha</th>
+																<th>Fecha de vencimiento</th>
 																<th>Acción</th>
 															</tr>
 														</thead>
@@ -133,6 +133,36 @@
 							</div>
 						</div>
 					</div>
+					
+					<div class="modal fade modal-dialog-center " id="ModalMotivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content-wrap">
+								<form method="post" action="${pageContext.request.contextPath}/Proveedor/Compra/GuardarMotivo.html?" id="formulario">
+									<div class="modal-content modal-lg">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											<h4 class="modal-title">Motivo de cancelación de la compra</h4>
+										</div>
+										<div class="modal-body">
+											<div class="row">
+												<input type="hidden" id="id_compraMotiv" name="id_compraMotiv"/>
+												<div class="col-xs-12 col-sm-6 col-md-6">
+													<label>Ingresar el motivo</label>
+													<textarea class="form-control" id="motivo" name="motivo" cols="60" rows="5"></textarea>
+												</div>
+					
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-warning" type="submit">Guardar</button>
+											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();" data-dismiss="modal">Cerrar</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					
 				</div>
 			</section>
 		</section>
@@ -148,9 +178,13 @@
 		titulos["valor"] = "valor";
 		titulos["proveedor"] = "Proveedor";
 		titulos["pagado"] = "Pagado";
+		titulos["Estado"] = "Estado";
 		
 		clase = new Array();
 		clase['proveedor'] = 'hidden-xs';
+		
+		metodo = new Array();
+		meto['proveedor'] = 'hidden-xs';
 		
 	</script>
 </body>

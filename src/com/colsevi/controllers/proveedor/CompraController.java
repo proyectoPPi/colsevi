@@ -2,6 +2,7 @@ package com.colsevi.controllers.proveedor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +104,12 @@ public class CompraController {
 					labels.put("value", bean.getId_proveedor());
 					opciones.put("proveedor", labels);
 				}
+				if( bean.getMotivo() == null || bean.getMotivo().equals(""))
+				{
+					opciones.put("Estado", "Disponible");
+				}else{
+					opciones.put("Estado", "Cancelado");
+				}
 				resultado.add(opciones);
 			}
 		}
@@ -166,8 +173,15 @@ public class CompraController {
 		
 		if(request.getParameter("fecha_compra") == null || request.getParameter("fecha_compra").trim().isEmpty())
 			error += "Ingresar la fecha de la compra<br/>";
-		else
-			bean.setFecha_compra(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")));
+		
+		else{
+			Date fec= new Date();
+			if(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")).getTime() > fec.getTime() ){
+				error += "La fecha no puede ser mayo a la actual<br/>";
+			}else{
+				bean.setFecha_compra(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")));
+			}
+		}
 		
 		if(request.getParameter("pagado") != null)
 			bean.setPagado(request.getParameter("pagado").equals("SI") || request.getParameter("pagado").equals("on") ? true: false);
@@ -235,6 +249,31 @@ public class CompraController {
 		}
 		return Compra(request, modelo);
 	}
+	
+	
+	
+	@RequestMapping("/Proveedor/Compra/GuardarMotivo")
+	public ModelAndView GuardarMotivo(HttpServletRequest request, ModelMap modelo){
+		
+		Compra bean = new Compra();
+		String error = "";
+		
+		if(request.getParameter("id_compraMotiv") != null && !request.getParameter("id_compraMotiv").trim().isEmpty())
+			bean.setId_compra(Integer.parseInt(request.getParameter("id_compraMotiv")));
+		
+		if(request.getParameter("motivo") != null && !request.getParameter("motivo").trim().isEmpty())
+			bean.setMotivo(request.getParameter("motivo"));
+		try{
+			
+				
+			ColseviDao.getInstance().getCompraMapper().updateByPrimaryKey(bean);
+			
+		}catch (Exception e) {
+			modelo.addAttribute("error", "Contactar al administrador");
+		}
+		return Compra(request, modelo);
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/Proveedor/Compra/cargarIng")
