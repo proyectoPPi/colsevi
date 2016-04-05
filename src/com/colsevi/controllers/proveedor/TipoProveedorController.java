@@ -29,7 +29,7 @@ public class TipoProveedorController extends BaseConfigController{
 	@RequestMapping("/TipoProveedor/TipoProv")
 	public ModelAndView TipoProveedor(HttpServletRequest request,ModelMap model){
 		
-		return new ModelAndView("tipoproveedor/TipoProveedor","col",getValoresGenericos(request));
+		return new ModelAndView("proveedor/TipoProveedor","col",getValoresGenericos(request));
 	}
 	
 	@SuppressWarnings("unchecked")
