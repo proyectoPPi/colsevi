@@ -96,8 +96,6 @@
 													</div>
 													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 														<label>*Descripci&#243;n</label>
-														<input type="text" class="form-control" id="descripDir" name="descripDir" data-bv-notempty="true"/>
-														<label>*Descripcion</label>
 														<input type="text" class="form-control" id="descripDir" name="descripDir" data-bv-notempty="true" maxlength="50"/>
 													</div>
 												</div>
