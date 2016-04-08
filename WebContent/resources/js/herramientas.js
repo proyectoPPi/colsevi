@@ -67,12 +67,12 @@ function HTabla(opciones){
 							 
 							 if(dataMap['boton'][k] != undefined){
 								for(var key in dataMap['boton'][k]){
-								var option = dataMap['boton'][k][key];
-								var method = "metodo";
-								if(option.method!=undefined){
-									method = option.method;
+								var opcion = dataMap['boton'][k][key];
+								var metodo = "metodo";
+								if(opcion.metodo!=undefined){
+									metodo = opcion.metodo;
 								}
-									html += '<span><a href="#" onclick="'+method+'(\''+id+'\');" style="float:left;" class="btn btn-xs '+option.color+'"><i class="'+option.img+'"></i></a></span>';
+									html += '<span><a href="#" onclick="'+metodo+'(\''+id+'\');" class="btn btn-xs '+opcion.color+'"><i class="'+opcion.img+'"></i></a></span>';
 								}
 							}
 						 }

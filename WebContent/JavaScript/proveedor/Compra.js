@@ -141,7 +141,8 @@ function buscarIngrediente(){
 	return false;
 }
 
-function modal2(value){
+function MotivoModal(value){
+	jQuery('#id_compraMotiv').val(value);
 	jQuery("#ModalMotivo").modal('show');
-	
+	jQuert('#motivo').val(BuscarRegistro(Id)['motivo']);
 }
