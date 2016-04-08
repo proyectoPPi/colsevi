@@ -47,6 +47,21 @@ public class LoginController {
 		return new ModelAndView("redirect:/General/Establecimiento.html");
 	}
 	
+	@RequestMapping("login/Cerrar")
+	public ModelAndView Logouth(HttpServletRequest request, HttpServletResponse response, ModelMap model){
+		
+		try{
+			HttpSession session = request.getSession(false);
+			if (session != null) {
+			    session.invalidate();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return login(request, model);
+	}
+	
 	public String validar(String usuario, String clave){
 		String error = "";
 		if(usuario == null || usuario.trim().isEmpty()){
