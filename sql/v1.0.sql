@@ -406,3 +406,22 @@ ALTER TABLE persona ADD COLUMN nombre VARCHAR(60);
 ALTER TABLE persona ADD COLUMN apellido VARCHAR(60);
 
 ALTER TABLE compra ADD COLUMN motivo VARCHAR(200);
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+select * from usuario;
+
+CREATE TABLE pagina(
+	id_pagina INT AUTO_INCREMENT,
+    codigo VARCHAR (30) NOT NULL,
+    url VARCHAR (50) NOT NULL,
+    nombre VARCHAR (50) NOT NULL,
+    icono VARCHAR (50),
+    padrePagina INT,
+    CONSTRAINT fk_PaginaPadre FOREIGN KEY (padrePagina)
+	REFERENCES pagina(id_pagina),
+    PRIMARY KEY(id_pagina)
+);
+
+SET FOREIGN_KEY_CHECKS = 1;
