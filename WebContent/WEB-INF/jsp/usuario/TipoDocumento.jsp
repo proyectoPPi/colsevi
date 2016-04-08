@@ -19,7 +19,7 @@
 						<header class="panel-heading">Tipo Documento 
 						
 							<span class="tools pull-right">
-								<button class="btn btn-default" type="submit" onclick="printDiv('tabla')" style="margin-bottom: 2px;">Imprimir</button>
+								
 								<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle fa-3x"></a></i>
 							</span>
 						</header>

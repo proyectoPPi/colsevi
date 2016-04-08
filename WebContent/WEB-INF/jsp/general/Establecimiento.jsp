@@ -27,11 +27,11 @@
 								<input type="text" class="form-control" id="nombreF" name="filtro"/>
 							</div>
 							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-								<label>Descripción</label>
+								<label>Descripci&#243;n</label>
 								<input type="text" class="form-control" id="descripcionF" name="filtro"/>
 							</div>
 							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-								<label>Dirección</label>
+								<label>*Direcci&#243;n</label>
 								<input type="text" class="form-control" id="direccionF" name="filtro"/>
 							</div>
 							<div class="col-xs-12 col-md-12 col-lg-12"><br/>
@@ -85,7 +85,7 @@
 												</div>
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 												
-													<h4><strong>DIRECCION</strong></h4>
+													<h4><strong>DIRECCI&Oacute;N</strong></h4>
 													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 														<label>*Direcci&#243;n</label>
 														<input type="text" class="form-control" id="direccion" name="direccion" data-bv-notempty="true"/>
@@ -95,18 +95,18 @@
 														<input type="text" class="form-control" id="barrio" name="barrio" data-bv-notempty="true"/>
 													</div>
 													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-														<label>*Descripcion</label>
+														<label>*Descripci&#243;n</label>
 														<input type="text" class="form-control" id="descripDir" name="descripDir" data-bv-notempty="true"/>
 													</div>
 												</div>
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-													<h4><strong>TELEFONO</strong></h4>
+													<h4><strong>TEL&Eacute;FONO</strong></h4>
 													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 														<label>*Tel&eacute;fono</label>
 														<input type="number" class="form-control" id="telefono" name="telefono" data-bv-notempty="true"/>
 													</div>
 													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-														<label>Tipo Telefono</label>
+														<label>Tipo T&eacute;lefono</label>
 														<select class="form-control" id="telTipo" name="telTipo">
 															<option value="0">Seleccione</option>
 															<c:forEach items="${tipoTel}" var="tipo">
