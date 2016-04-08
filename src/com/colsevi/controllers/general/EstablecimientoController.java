@@ -59,13 +59,13 @@ public class EstablecimientoController extends BaseConfigController {
 		mapa.put("limit",Inicio + ", " + Final);
 		
 		if(nombre != null && !nombre.trim().isEmpty()){
-			mapa.put("","%" + nombre + "%");   
+			mapa.put("nombre","%" + nombre + "%");   
 		}
 		if(descripcion != null && !descripcion.trim().isEmpty()){
-			mapa.put("","%" + descripcion + "%");   
+			mapa.put("desc","%" + descripcion + "%");   
 		}
 		if(direccion != null && !direccion.trim().isEmpty()){
-			mapa.put("","%" + descripcion + "%");   
+			mapa.put("direccion","%" + descripcion + "%");   
 		}
 		
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().SelectDataView(mapa)));

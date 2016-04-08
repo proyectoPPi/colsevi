@@ -12,6 +12,7 @@ function HTabla(opciones){
 	dataMap['boton'] = opciones.boton;
 	
 	if(dataMap['clase'] == undefined) dataMap['clase'] = new Array();
+	if(dataMap['boton'] == undefined) dataMap['boton'] = new Array();
 	
 	Setlimite(opciones.pagina);
 	

@@ -341,6 +341,18 @@
 		LEFT JOIN direccion dir ON dir.id_direccion = esta.id_direccion
 		LEFT JOIN telefono tel ON tel.id_telefono = esta.id_telefono
 		LEFT JOIN correo cor ON cor.id_correo = esta.id_correo
+		
+		WHERE 1 = 1
+		 <if test="nombre != null">
+			AND esta.nombre LIKE #{nombre}
+		 </if>
+		 <if test="desc != null">
+			AND esta.descripcion LIKE #{desc}
+		 </if>
+		 <if test="direccion != null">
+			AND dir.direccion LIKE #{direccion}
+		 </if>
+		
 		ORDER BY esta.id_establecimiento DESC
 		
 		limit ${limit};
@@ -351,7 +363,18 @@
 		FROM establecimiento esta
 		LEFT JOIN direccion dir ON dir.id_direccion = esta.id_direccion
 		LEFT JOIN telefono tel ON tel.id_telefono = esta.id_telefono
-		LEFT JOIN correo cor ON cor.id_correo = esta.id_correo;
+		LEFT JOIN correo cor ON cor.id_correo = esta.id_correo
 		
+		WHERE 1 = 1
+		 <if test="nombre != null">
+			AND esta.nombre LIKE #{nombre}
+		 </if>
+		 <if test="desc != null">
+			AND esta.descripcion LIKE #{desc}
+		 </if>
+		 <if test="direccion != null">
+			AND dir.direccion LIKE #{direccion}
+		 </if>
+		;
 	</select>
 </mapper>
