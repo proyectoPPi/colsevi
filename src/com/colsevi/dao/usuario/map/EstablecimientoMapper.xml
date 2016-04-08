@@ -341,6 +341,7 @@
 		LEFT JOIN direccion dir ON dir.id_direccion = esta.id_direccion
 		LEFT JOIN telefono tel ON tel.id_telefono = esta.id_telefono
 		LEFT JOIN correo cor ON cor.id_correo = esta.id_correo
+		ORDER BY esta.id_establecimiento DESC
 		
 		limit ${limit};
 	</select>

@@ -69,6 +69,7 @@ public class ProductoAdminController extends BaseConfigController {
 		
 		ProductoExample prodExample = new ProductoExample();
 		prodExample.setLimit(Inicio + ", " + Final);
+		prodExample.setOrderByClause("id_producto DESC");
 		
 		ProductoExample.Criteria criteria = (ProductoExample.Criteria) prodExample.createCriteria();
 		try{

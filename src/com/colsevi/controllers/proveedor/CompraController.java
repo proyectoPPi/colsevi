@@ -71,6 +71,7 @@ public class CompraController extends BaseConfigController {
 		
 		CompraExample compraExample = new CompraExample();
 		compraExample.setLimit(Inicio + ", " + Final);
+		compraExample.setOrderByClause("id_compra DESC");
 		
 		CompraExample.Criteria criteria = (CompraExample.Criteria) compraExample.createCriteria();
 		

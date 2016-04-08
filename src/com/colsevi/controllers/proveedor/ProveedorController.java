@@ -57,6 +57,7 @@ public class ProveedorController extends BaseConfigController {
 			
 			ProveedorExample ProvExample = new ProveedorExample();
 			ProveedorExample.Criteria criteria = (ProveedorExample.Criteria) ProvExample.createCriteria();
+			ProvExample.setOrderByClause("id_proveedor DESC");
 			
 			ProvExample.setLimit(Inicio + ", " + Final);
 			if(nombre != null && !nombre.trim().isEmpty()){
