@@ -146,9 +146,9 @@
 										<div class="modal-body">
 											<div class="row">
 												<input type="hidden" id="id_compraMotiv" name="id_compraMotiv"/>
-												<div class="col-xs-12 col-sm-6 col-md-6">
-													<label>Ingresar el motivo</label>
-													<textarea class="form-control" id="motivo" name="motivo" cols="60" rows="5"></textarea>
+												<div class="col-xs-12 col-sm-12 col-md-12">
+													<label>Motivo</label>
+													<input type="text" class="form-control" id="motivo" name="motivo"/>
 												</div>
 					
 											</div>
@@ -183,13 +183,14 @@
 		
 		clase = new Array();
 		clase['proveedor'] = 'hidden-xs';
+		clase['Estado'] = 'hidden-xs';
 		
 		boton = new Array();
 		boton['id_compraBoton'] = [
    			{
    				color: "btn-primary",
-          		img: 'fa  fa-plus',
-          		method: "modal2"
+          		img: 'fa fa-sort-desc',
+          		metodo: "MotivoModal"
    			}
    		];
 		

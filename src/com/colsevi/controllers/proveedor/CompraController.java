@@ -99,22 +99,25 @@ public class CompraController extends BaseConfigController {
 				opciones = new JSONObject();
 				labels = new JSONObject();
 				opciones.put("id_compra", bean.getId_compra().toString());
-				opciones.put("id_compraBoton", bean.getId_compra().toString());
+				opciones.put("id_compraBoton", "");
 				opciones.put("valor", UtilidadManager.Currency(bean.getValor()));
 				opciones.put("valorsin", bean.getValor().intValue());
 				opciones.put("fecha_compra", UtilidadManager.FormatDateDB(bean.getFecha_compra()));
 				opciones.put("pagado", bean.getPagado() != null && bean.getPagado().equals(true) ? "SI" : "NO");
+				opciones.put("motivo", bean.getMotivo());
+				
 				if(bean.getId_proveedor() != null){
 					labels.put("label",ColseviDao.getInstance().getProveedorMapper().selectByPrimaryKey(bean.getId_proveedor()).getNombre());
 					labels.put("value", bean.getId_proveedor());
 					opciones.put("proveedor", labels);
 				}
-				if( bean.getMotivo() == null || bean.getMotivo().equals(""))
-				{
+				
+				if( bean.getMotivo() == null || bean.getMotivo().equals("")){
 					opciones.put("Estado", "Disponible");
 				}else{
 					opciones.put("Estado", "Cancelado");
 				}
+				
 				resultado.add(opciones);
 			}
 		}
@@ -162,6 +165,7 @@ public class CompraController extends BaseConfigController {
 		List<CompraXIngrediente> listaCXI = new ArrayList<CompraXIngrediente>();
 		Compra bean = new Compra();
 		String error = "";
+		bean.setMotivo("");
 		
 		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty())
 			bean.setId_compra(Integer.parseInt(request.getParameter("id_compra")));
@@ -261,21 +265,20 @@ public class CompraController extends BaseConfigController {
 	public ModelAndView GuardarMotivo(HttpServletRequest request, ModelMap modelo){
 		
 		Compra bean = new Compra();
-		String error = "";
-		
+
 		if(request.getParameter("id_compraMotiv") != null && !request.getParameter("id_compraMotiv").trim().isEmpty())
 			bean.setId_compra(Integer.parseInt(request.getParameter("id_compraMotiv")));
 		
 		if(request.getParameter("motivo") != null && !request.getParameter("motivo").trim().isEmpty())
 			bean.setMotivo(request.getParameter("motivo"));
+		
 		try{
-			
-				
-			ColseviDao.getInstance().getCompraMapper().updateByPrimaryKey(bean);
-			
+			ColseviDao.getInstance().getCompraMapper().updateByPrimaryKeySelective(bean);
+			modelo.addAttribute("Correcto", "Compra Actualizada");
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
+		
 		return Compra(request, modelo);
 	}
 	

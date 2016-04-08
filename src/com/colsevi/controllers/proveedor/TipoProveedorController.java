@@ -65,18 +65,15 @@ public class TipoProveedorController extends BaseConfigController{
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
-		JSONObject labels = new JSONObject();
 		
 		if(listTipoProv != null && listTipoProv.size() >0){
 			for (TipoProveedor bean : listTipoProv) {
 				opciones = new JSONObject();
-				labels = new JSONObject();
-				opciones.put("id_TipoProveedor", bean.getId_tipo_proveedor());
+				opciones.put("id_tipo_proveedor", bean.getId_tipo_proveedor());
 				opciones.put("nombre", bean.getNombre());
 
 				resultado.add(opciones);
 			}
-			
 		}
 		return resultado;
 	}
@@ -85,13 +82,11 @@ public class TipoProveedorController extends BaseConfigController{
 	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, TipoProveedor bean){
 		
 		try{
-			
 			String error = validarGuardado(bean);
 			if(!error.isEmpty()){
 				modelo.addAttribute("error", error);
 				return TipoProveedor(request, modelo);
 			}
-
 			
 			if(bean.getId_tipo_proveedor() != null){
 				ColseviDao.getInstance().getTipoProveedorMapper().updateByPrimaryKey(bean);
