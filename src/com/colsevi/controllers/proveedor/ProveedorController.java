@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.dao.general.model.Direccion;
+import com.colsevi.dao.general.model.Telefono;
 import com.colsevi.dao.general.model.TipoTelefono;
 import com.colsevi.dao.general.model.TipoTelefonoExample;
 import com.colsevi.dao.proveedor.model.CompraExample;
@@ -22,6 +24,7 @@ import com.colsevi.dao.proveedor.model.Proveedor;
 import com.colsevi.dao.proveedor.model.ProveedorExample;
 import com.colsevi.dao.proveedor.model.TipoProveedor;
 import com.colsevi.dao.proveedor.model.TipoProveedorExample;
+import com.colsevi.dao.usuario.model.Establecimiento;
 
 @Controller
 public class ProveedorController extends BaseConfigController {
@@ -112,11 +115,74 @@ public class ProveedorController extends BaseConfigController {
 	
 	@RequestMapping("/Proveedor/Prov/Guardar")
 	public ModelAndView GuardarProveedor(HttpServletRequest request, ModelMap modelo, Proveedor bean){
+		String error = "";
+		Proveedor beanE = new Proveedor();
+		Direccion beanD = new Direccion();
+		Telefono beanT = new Telefono();
+		
+				
 		
 		try{
-			bean.setId_tipo_proveedor(Integer.parseInt(request.getParameter("tipoProv")));
+//			bean.setId_tipo_proveedor(Integer.parseInt(request.getParameter("tipoProv")));
 			
-			String error = validarGuardado(bean);
+			
+			if(request.getParameter("id_proveedor") != null && !request.getParameter("id_proveedor").trim().isEmpty())
+				bean.setId_proveedor(Integer.parseInt(request.getParameter("id_proveedor")));
+			
+			
+			if(request.getParameter("tipoProv") == null || request.getParameter("tipoProv").trim().isEmpty() || request.getParameter("tipoProv").equals("0")){
+				error += "Seleccionar el tipo de proveedor<br/>";
+			}else{
+				bean.setId_tipo_proveedor(Integer.parseInt(request.getParameter("tipoProv")));
+			}
+			
+			if(request.getParameter("nombre") == null || request.getParameter("nombre").trim().isEmpty()){
+				error += "Agregar nombre<br/>";
+			}else{
+				bean.setNombre(request.getParameter("nombre"));
+			}
+			
+			if(request.getParameter("descripcion") == null || request.getParameter("descripcion").trim().isEmpty()){
+				error += "Agregar descripcion<br/>";
+			}else{
+				bean.setDescripcion(request.getParameter("descripcion"));
+			}
+			
+			//Direccion proveedor
+			
+			if(request.getParameter("id_direccion") != null && !request.getParameter("id_direccion").trim().isEmpty())
+				beanD.setId_direccion(Integer.parseInt(request.getParameter("id_direccion")));
+			
+			if(request.getParameter("direccion") != null && !request.getParameter("direccion").trim().isEmpty())
+				beanD.setDireccion(request.getParameter("direccion"));
+			else
+				error += "Ingresar la dirección del establecimiento<br/>";
+			
+			if(request.getParameter("barrio") != null)
+				beanD.setBarrio(request.getParameter("barrio"));
+			
+			if(request.getParameter("descripDir") != null)
+				beanD.setDescripcion(request.getParameter("descripDir"));
+
+			//Telefono proveedor
+			
+			if(request.getParameter("id_telefono") != null && !request.getParameter("id_telefono").trim().isEmpty())
+				beanT.setId_telefono(Integer.parseInt(request.getParameter("id_telefono")));
+			
+			if(request.getParameter("telefono") != null && !request.getParameter("telefono").trim().isEmpty())
+				beanT.setTelefono(request.getParameter("telefono"));
+			else
+				error += "Ingresar el teléfono<br/>";
+			
+			if(request.getParameter("telTipo") != null && !request.getParameter("telTipo").trim().isEmpty() && !request.getParameter("telTipo").trim().equals("0"))
+				beanT.setId_tipo_telefono(Integer.parseInt(request.getParameter("telTipo")));
+			else
+				error+= "Ingresar el tipo de Télefono<br/>";
+			
+			
+
+			
+//			String error = validarGuardado(bean);
 			if(!error.isEmpty()){
 				modelo.addAttribute("error", error);
 				return Proveedor(request, modelo);
@@ -136,26 +202,26 @@ public class ProveedorController extends BaseConfigController {
 		return Proveedor(request, modelo);
 	}
 	
-	public String validarGuardado(Proveedor bean){
-		String error = "";
-		if(bean.getNombre() == null || bean.getNombre().trim().isEmpty()){
-			error = "Ingresar el Nombre<br/>";
-		}
-		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
-			error += "Ingresar la descripción<br/>";
-		}
-		if(bean.getId_telefono() == null || bean.getId_telefono().equals(0)){
-			error += "Ingresar el teléfono<br/>";
-		}
-		if(bean.getId_direccion() == null || bean.getId_direccion().equals(0)){
-			error += "Ingresar la dirección<br/>";
-		}
-		if(bean.getId_tipo_proveedor() == null || bean.getId_tipo_proveedor().equals(0)){
-			error += "Seleccionar una clasificación<br/>";
-		}
-		
-		return error;
-	}
+//	public String validarGuardado(Proveedor bean){
+//		String error = "";
+//		if(bean.getNombre() == null || bean.getNombre().trim().isEmpty()){
+//			error = "Ingresar el Nombre<br/>";
+//		}
+//		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
+//			error += "Ingresar la descripción<br/>";
+//		}
+//		if(bean.getId_telefono() == null || bean.getId_telefono().equals(0)){
+//			error += "Ingresar el teléfono<br/>";
+//		}
+//		if(bean.getId_direccion() == null || bean.getId_direccion().equals(0)){
+//			error += "Ingresar la dirección<br/>";
+//		}
+//		if(bean.getId_tipo_proveedor() == null || bean.getId_tipo_proveedor().equals(0)){
+//			error += "Seleccionar una clasificación<br/>";
+//		}
+//		
+//		return error;
+//	}
 	
 	@RequestMapping("/Proveedor/Prov/Eliminar")
 	public ModelAndView EliminarProveedor(HttpServletRequest request, ModelMap modelo){
