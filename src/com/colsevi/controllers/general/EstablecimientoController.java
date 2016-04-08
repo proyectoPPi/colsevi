@@ -218,7 +218,7 @@ public class EstablecimientoController extends BaseConfigController {
 			beanD.setBarrio(request.getParameter("barrio"));
 		
 		if(request.getParameter("descripDir") != null)
-			beanD.setBarrio(request.getParameter("descripDir"));
+			beanD.setDescripcion(request.getParameter("descripDir"));
 
 		//Telefono Establecimiento
 		
