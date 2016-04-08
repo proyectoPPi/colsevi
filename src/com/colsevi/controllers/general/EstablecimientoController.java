@@ -226,7 +226,7 @@ public class EstablecimientoController extends BaseConfigController {
 			beanT.setId_telefono(Integer.parseInt(request.getParameter("id_telefono")));
 		
 		if(request.getParameter("telefono") != null && !request.getParameter("telefono").trim().isEmpty())
-			beanT.setTelefono(Integer.parseInt(request.getParameter("telefono")));
+			beanT.setTelefono(request.getParameter("telefono"));
 		else
 			error += "Ingresar el teléfono<br/>";
 		

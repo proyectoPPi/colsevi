@@ -114,7 +114,7 @@
 															<tr>
 																<th>Ingrediente</th>
 																<th>Cantidad</th>
-																<th class="hidden-xs">TipoPeso</th>
+																<th class="hidden-xs">Tipo de Peso</th>
 																<th>Fecha de vencimiento</th>
 																<th>Acción</th>
 															</tr>
