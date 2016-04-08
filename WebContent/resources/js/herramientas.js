@@ -9,8 +9,10 @@ function HTabla(opciones){
 	var id = null;
 	dataMap['url'] = opciones.url;
 	dataMap['clase'] = opciones.clase;
+	dataMap['boton'] = opciones.boton;
 	
 	if(dataMap['clase'] == undefined) dataMap['clase'] = new Array();
+	if(dataMap['boton'] == undefined) dataMap['boton'] = new Array();
 	
 	Setlimite(opciones.pagina);
 	
@@ -59,10 +61,23 @@ function HTabla(opciones){
 						 }
 						 html += "<td "  + className + ">";
 						 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
-							 html += data["datos"][i][k]['label']+"</td>";
+							 html += data["datos"][i][k]['label'];
 						 }else{
-							 html += data["datos"][i][k]+"</td>";
+							 html += data["datos"][i][k];
+							 
+							 if(dataMap['boton'][k] != undefined){
+								for(var key in dataMap['boton'][k]){
+								var option = dataMap['boton'][k][key];
+								var method = "metodo";
+								if(option.method!=undefined){
+									method = option.method;
+								}
+									html += '<span><a href="#" onclick="'+method+'(\''+id+'\');" style="float:left;" class="btn btn-xs '+option.color+'"><i class="'+option.img+'"></i></a></span>';
+								}
+							}
 						 }
+						 
+						 html += "</td>";
 					 }
 				 }
 			 }

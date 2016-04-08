@@ -179,12 +179,19 @@
 		titulos["proveedor"] = "Proveedor";
 		titulos["pagado"] = "Pagado";
 		titulos["Estado"] = "Estado";
+		titulos["id_compraBoton"] = "Estado";
 		
 		clase = new Array();
 		clase['proveedor'] = 'hidden-xs';
 		
-		metodo = new Array();
-		meto['proveedor'] = 'hidden-xs';
+		boton = new Array();
+		boton['id_compraBoton'] = [
+   			{
+   				color: "btn-primary",
+          		img: 'fa  fa-plus',
+          		method: "modal2"
+   			}
+   		];
 		
 	</script>
 </body>

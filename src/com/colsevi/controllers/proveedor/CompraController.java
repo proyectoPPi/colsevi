@@ -99,6 +99,7 @@ public class CompraController extends BaseConfigController {
 				opciones = new JSONObject();
 				labels = new JSONObject();
 				opciones.put("id_compra", bean.getId_compra().toString());
+				opciones.put("id_compraBoton", bean.getId_compra().toString());
 				opciones.put("valor", UtilidadManager.Currency(bean.getValor()));
 				opciones.put("valorsin", bean.getValor().intValue());
 				opciones.put("fecha_compra", UtilidadManager.FormatDateDB(bean.getFecha_compra()));

@@ -10,7 +10,8 @@ function Tabla(pagina){
 		Id: "#tabla",
 		titulos: titulos,
 		pagina:pagina,
-		clase: clase
+		clase: clase,
+		boton: boton
 	});
 }
 
@@ -138,4 +139,9 @@ function buscarIngrediente(){
 		}
 	}
 	return false;
+}
+
+function modal2(value){
+	jQuery("#ModalMotivo").modal('show');
+	
 }
