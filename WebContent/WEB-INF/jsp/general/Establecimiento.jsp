@@ -95,13 +95,10 @@
 														<input type="text" class="form-control" id="barrio" name="barrio" data-bv-notempty="true" maxlength="50"/>
 													</div>
 													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-<<<<<<< HEAD
 														<label>*Descripci&#243;n</label>
 														<input type="text" class="form-control" id="descripDir" name="descripDir" data-bv-notempty="true"/>
-=======
 														<label>*Descripcion</label>
 														<input type="text" class="form-control" id="descripDir" name="descripDir" data-bv-notempty="true" maxlength="50"/>
->>>>>>> refs/remotes/origin/demo1.0
 													</div>
 												</div>
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
