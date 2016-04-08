@@ -16,18 +16,18 @@ public class NavegacionUsuario implements java.io.Serializable {
 
 	private static final long serialVersionUID = -7085558475246737852L;
 
-	private static Map params = null;
+	private static Map paramsMenu = null;
 	
 	private synchronized static void createInstance() {
-		if (params == null) {
-			params = new HashMap<>();
+		if (paramsMenu == null) {
+			paramsMenu = new HashMap<>();
 		}
 	}
-
+	
 	public static Map getInstance() {
-		if (params == null)
+		if (paramsMenu == null)
 			createInstance();
-		return params;
+		return paramsMenu;
 	}
 	
 	 public void cargarPermisos(){
@@ -47,11 +47,11 @@ public class NavegacionUsuario implements java.io.Serializable {
     		List<Pagina> ListaPaginas = ColseviDao.getInstance().getPaginaMapper().selectByExample(PaginasExample);
     		
     		if(ListaPaginas != null && ListaPaginas.size() > 0){
-    			params.put(bean.getId_rol(), ListaPaginas);
+    			paramsMenu.put(bean.getId_rol(), ListaPaginas);
     		}
 		}
     }
-	    
+	 
     public List<Pagina> getPaginasRol(Integer rol){
     	if(getInstance() == null || getInstance().isEmpty()){
     		cargarPermisos();
@@ -59,4 +59,5 @@ public class NavegacionUsuario implements java.io.Serializable {
     	List<Pagina> ListaPaginas = (List<Pagina>) getInstance().get(rol);
     	return ListaPaginas;
     }
+    
 }

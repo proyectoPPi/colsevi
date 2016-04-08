@@ -7,9 +7,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.colsevi.application.ColseviDao;
 import com.colsevi.application.NavegacionUsuario;
 import com.colsevi.application.SesionUsuario;
 import com.colsevi.dao.usuario.model.Pagina;
+import com.colsevi.dao.usuario.model.PaginaExample;
 
 public class BaseConfigController implements Serializable {
 
@@ -18,6 +20,8 @@ public class BaseConfigController implements Serializable {
 	public Map<String, Object> getValoresGenericos(HttpServletRequest request){
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("menu", getMenu(request));
+		mapa.put("SubMenu", SubMenu(request));
+		
 		return mapa;
 	}
 	
@@ -27,12 +31,45 @@ public class BaseConfigController implements Serializable {
 		List<Pagina> listaPag = NU.getPaginasRol(getUsuario(request).getRol());
 		
 		for(Pagina pag: listaPag){
-			menu += "<li>";
-			menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
-			menu += "<i class=\""+pag.getIcono()+"\"></i>";
-			menu += "<span>"+pag.getNombre()+"</span>";
-			menu += "</a>";
-			menu += "</li>";
+			if(pag.getPadrePagina() == null){
+				menu += "<li>";
+				menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
+				menu += "<i class=\""+pag.getIcono()+"\"></i>";
+				menu += "<span>"+pag.getNombre()+"</span>";
+				menu += "</a>";
+				menu += "</li>";
+			}
+		}
+		
+		return menu;
+	}
+	
+	public String SubMenu(HttpServletRequest request){
+
+		String uri = request.getRequestURI().substring(request.getContextPath().length());
+		String menu = "";
+		
+		try{
+			PaginaExample pE = new PaginaExample();
+			pE.createCriteria().andUrlLike(uri);
+			Integer id = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE).get(0).getId_pagina();
+			
+			if(id != null){
+				pE = new PaginaExample();
+				pE.createCriteria().andPadrePaginaEqualTo(id);
+				List<Pagina> listaPagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE);
+				
+				for(Pagina pag: listaPagina){
+					menu += "<li>";
+					menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
+					menu += "<span>"+pag.getNombre()+"</span>";
+					menu += "</a>";
+					menu += "</li>";
+				}
+			}
+
+		}catch(Exception e){
+			
 		}
 		
 		return menu;
