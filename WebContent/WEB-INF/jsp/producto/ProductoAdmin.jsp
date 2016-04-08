@@ -100,7 +100,7 @@
 													<input type="number" class="form-control" id="costo" name="costo" data-bv-notempty="true"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>*Venta</label>
+													<label>*Precio de venta</label>
 													<input type="number" class="form-control" id="venta" name="venta" data-bv-notempty="true"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6">
