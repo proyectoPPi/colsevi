@@ -98,7 +98,7 @@ public class TipoDocumentoController extends BaseConfigController {
 		return error;
 	}
 	@RequestMapping("/Usuario/TipoDocumento/EliminarTipoDocumento")
-	public ModelAndView EliminarEstablecimiento(HttpServletRequest request, ModelMap modelo){
+	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
 		
 		String id = request.getParameter("id_tipo_documento");
 		if(id != null){

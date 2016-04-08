@@ -141,7 +141,7 @@ public class IngredienteController extends BaseConfigController {
 	}
 	
 	@RequestMapping("/Ingrediente/Ing/Eliminar")
-	public ModelAndView EliminarEstablecimiento(HttpServletRequest request, ModelMap modelo){
+	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
 		
 		try{
 			Integer id = Integer.parseInt(request.getParameter("id_ingrediente"));

@@ -34,7 +34,7 @@ public class EstablecimientoController extends BaseConfigController {
 	private static final long serialVersionUID = 1944372690226154900L;
 	
 	@RequestMapping("/General/Establecimiento")
-	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
+	public ModelAndView Establecimiento(HttpServletRequest request,ModelMap model){
 		model.addAttribute("tipoTel", ListaTipoTel());
 		return new ModelAndView("general/Establecimiento", "col" ,getValoresGenericos(request));
 	}
@@ -115,7 +115,7 @@ public class EstablecimientoController extends BaseConfigController {
 				
 		if(!result[0].toString().isEmpty()){
 			modelo.addAttribute("error", result[0]);
-			return administrador(request, modelo);
+			return Establecimiento(request, modelo);
 		}
 		
 		Establecimiento bean= (Establecimiento) result[1];
@@ -168,7 +168,7 @@ public class EstablecimientoController extends BaseConfigController {
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
-		return administrador(request, modelo);
+		return Establecimiento(request, modelo);
 	}
 	
 	public Object[] validarGuardado(HttpServletRequest request){
@@ -276,6 +276,6 @@ public class EstablecimientoController extends BaseConfigController {
 			
 		}
 		
-		return administrador(request, modelo);
+		return Establecimiento(request, modelo);
 	}
 }

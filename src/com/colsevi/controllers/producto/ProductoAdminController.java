@@ -316,7 +316,7 @@ public class ProductoAdminController extends BaseConfigController {
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/Producto/Admin/cargarIng")
-	public void caregarIng(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	public void cargarIng(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject result = new JSONObject();
 		Map<String, Object> mapa = new HashMap<String, Object>();
