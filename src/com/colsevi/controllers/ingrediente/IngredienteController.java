@@ -51,6 +51,7 @@ public class IngredienteController extends BaseConfigController {
 			
 			IngredienteExample IngExample = new IngredienteExample();
 			IngredienteExample.Criteria criteria = (IngredienteExample.Criteria) IngExample.createCriteria();
+			IngExample.setOrderByClause("id_ingrediente DESC");
 			
 			IngExample.setLimit(Inicio + ", " + Final);
 			if(nombre != null && !nombre.trim().isEmpty()){

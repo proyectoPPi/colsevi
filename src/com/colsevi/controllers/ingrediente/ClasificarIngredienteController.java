@@ -42,6 +42,7 @@ public class ClasificarIngredienteController extends BaseConfigController {
 		
 		ClasificarIngredienteExample clasificarExample = new ClasificarIngredienteExample();
 		clasificarExample.setLimit(Inicio + ", " + Final);
+		clasificarExample.setOrderByClause("id_clasificar_ingrediente DESC");
 		
 		ClasificarIngredienteExample.Criteria criteria = (ClasificarIngredienteExample.Criteria) clasificarExample.createCriteria();
 		
