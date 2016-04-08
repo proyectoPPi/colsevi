@@ -18,3 +18,7 @@ function Limpiar(){
 function Eliminar(){
 	HEliminar("formulario", contexto + "/Ingrediente/Clasificar/Eliminar.html?");
 }
+
+function CargarFormulario(Id){
+	HCargarFormulario(Id);
+}

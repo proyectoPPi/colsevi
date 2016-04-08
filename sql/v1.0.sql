@@ -239,6 +239,24 @@ CREATE TABLE ingrediente_x_producto(
     CONSTRAINT fk_ingredienteProdTipe FOREIGN KEY (id_tipo_peso) REFERENCES tipo_peso(id_tipo_peso)
 );
 
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE pagina ;
+
+CREATE TABLE pagina(
+	id_pagina INT AUTO_INCREMENT,
+    codigo VARCHAR (30) NOT NULL,
+    url VARCHAR (50) NOT NULL,
+    nombre VARCHAR (50) NOT NULL,
+    icono VARCHAR (50),
+    padrePagina INT,
+    CONSTRAINT fk_PaginaPadre FOREIGN KEY (padrePagina)
+	REFERENCES pagina(id_pagina),
+    PRIMARY KEY(id_pagina)
+);
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 
 CREATE TABLE receta(
     id_receta INT AUTO_INCREMENT,

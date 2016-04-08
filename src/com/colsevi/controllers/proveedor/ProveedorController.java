@@ -167,7 +167,7 @@ public class ProveedorController extends BaseConfigController {
 				compra.createCriteria().andId_compraEqualTo(id);
 				Integer dataCruce = ColseviDao.getInstance().getCompraMapper().countByExample(compra);
 				if(dataCruce != null && dataCruce > 0){
-					modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociada a una compra");
+					modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociado a una compra");
 				}else{
 					ColseviDao.getInstance().getIngredienteMapper().deleteByPrimaryKey(id);
 					modelo.addAttribute("correcto", "Establecimiento Eliminado");
