@@ -97,7 +97,7 @@ CREATE TABLE tipo_telefono(
 
 CREATE TABLE telefono(
 	id_telefono INT AUTO_INCREMENT,
-    telefono INT  NOT NULL,
+    telefono VARCHAR(20)  NOT NULL,
     id_tipo_telefono INT NOT NULL,
     id_persona INT DEFAULT NULL,
 	CONSTRAINT fk_tipo_telefono FOREIGN KEY (id_tipo_telefono)
@@ -110,9 +110,9 @@ CREATE TABLE telefono(
 CREATE TABLE direccion(
 	id_direccion INT AUTO_INCREMENT,
     id_persona INT DEFAULT NULL,
-	direccion VARCHAR (20) NOT NULL,
-    barrio VARCHAR (20),
-    descripcion VARCHAR (40),
+	direccion VARCHAR (50) NOT NULL,
+    barrio VARCHAR (50),
+    descripcion VARCHAR (50),
     CONSTRAINT fk_id_persona_direccion FOREIGN KEY (id_persona)
     REFERENCES persona(id_persona),
     PRIMARY KEY(id_direccion)
