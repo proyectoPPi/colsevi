@@ -17,8 +17,8 @@ import com.colsevi.application.ColseviDao;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
 import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
-import com.colsevi.dao.ingrediente.model.Ingrediente;
-import com.colsevi.dao.ingrediente.model.IngredienteExample;
+import com.colsevi.dao.producto.model.Ingrediente;
+import com.colsevi.dao.producto.model.IngredienteExample;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 
 @Controller

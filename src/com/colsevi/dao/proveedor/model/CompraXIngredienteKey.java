@@ -1,4 +1,4 @@
-package com.colsevi.dao.ingrediente.model;
+package com.colsevi.dao.proveedor.model;
 
 public class CompraXIngredienteKey {
 

@@ -22,14 +22,14 @@ import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
 import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
-import com.colsevi.dao.ingrediente.model.CompraXIngrediente;
-import com.colsevi.dao.ingrediente.model.CompraXIngredienteExample;
-import com.colsevi.dao.ingrediente.model.Ingrediente;
-import com.colsevi.dao.ingrediente.model.IngredienteExample;
 import com.colsevi.dao.ingrediente.model.TipoPeso;
 import com.colsevi.dao.ingrediente.model.TipoPesoExample;
+import com.colsevi.dao.producto.model.Ingrediente;
+import com.colsevi.dao.producto.model.IngredienteExample;
 import com.colsevi.dao.proveedor.model.Compra;
 import com.colsevi.dao.proveedor.model.CompraExample;
+import com.colsevi.dao.proveedor.model.CompraXIngrediente;
+import com.colsevi.dao.proveedor.model.CompraXIngredienteExample;
 import com.colsevi.dao.proveedor.model.Proveedor;
 import com.colsevi.dao.proveedor.model.ProveedorExample;
 

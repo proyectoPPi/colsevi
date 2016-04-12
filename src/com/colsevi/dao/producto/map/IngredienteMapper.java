@@ -1,9 +1,10 @@
-package com.colsevi.dao.ingrediente.map;
+package com.colsevi.dao.producto.map;
 
-import com.colsevi.dao.ingrediente.model.Ingrediente;
-import com.colsevi.dao.ingrediente.model.IngredienteExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import com.colsevi.dao.producto.model.Ingrediente;
+import com.colsevi.dao.producto.model.IngredienteExample;
 
 public interface IngredienteMapper {
 

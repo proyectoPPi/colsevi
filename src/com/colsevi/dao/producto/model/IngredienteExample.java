@@ -1,4 +1,4 @@
-package com.colsevi.dao.ingrediente.model;
+package com.colsevi.dao.producto.model;
 
 import java.util.ArrayList;
 import java.util.List;

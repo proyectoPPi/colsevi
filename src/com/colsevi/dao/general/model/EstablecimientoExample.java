@@ -1,4 +1,4 @@
-package com.colsevi.dao.usuario.model;
+package com.colsevi.dao.general.model;
 
 import java.util.ArrayList;
 import java.util.List;

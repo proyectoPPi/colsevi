@@ -1,4 +1,4 @@
-package com.colsevi.dao.ingrediente.model;
+package com.colsevi.dao.producto.model;
 
 public class Ingrediente {
 

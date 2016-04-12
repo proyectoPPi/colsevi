@@ -1,12 +1,13 @@
-package com.colsevi.dao.ingrediente.map;
+package com.colsevi.dao.proveedor.map;
 
-import com.colsevi.dao.ingrediente.model.CompraXIngrediente;
-import com.colsevi.dao.ingrediente.model.CompraXIngredienteExample;
-import com.colsevi.dao.ingrediente.model.CompraXIngredienteKey;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+
+import com.colsevi.dao.proveedor.model.CompraXIngrediente;
+import com.colsevi.dao.proveedor.model.CompraXIngredienteExample;
+import com.colsevi.dao.proveedor.model.CompraXIngredienteKey;
 
 public interface CompraXIngredienteMapper {
 

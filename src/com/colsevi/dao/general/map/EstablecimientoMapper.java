@@ -1,11 +1,12 @@
-package com.colsevi.dao.usuario.map;
+package com.colsevi.dao.general.map;
 
-import com.colsevi.dao.usuario.model.Establecimiento;
-import com.colsevi.dao.usuario.model.EstablecimientoExample;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+
+import com.colsevi.dao.general.model.Establecimiento;
+import com.colsevi.dao.general.model.EstablecimientoExample;
 
 public interface EstablecimientoMapper {
 
