@@ -22,10 +22,10 @@ import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.producto.model.ProductoExample;
 import com.colsevi.dao.producto.model.RecetaExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoExample;
-import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
-import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
-import com.colsevi.dao.ingrediente.model.TipoPeso;
-import com.colsevi.dao.ingrediente.model.TipoPesoExample;
+import com.colsevi.dao.producto.model.ClasificarIngrediente;
+import com.colsevi.dao.producto.model.ClasificarIngredienteExample;
+import com.colsevi.dao.general.model.UnidadPeso;
+import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.inventario.model.InventarioExample;
 import com.colsevi.dao.pedido.model.DetallePedidoExample;
 import com.colsevi.dao.producto.model.Ingrediente;
@@ -52,8 +52,8 @@ public class ProductoAdminController extends BaseConfigController {
 		return ColseviDao.getInstance().getClasificarIngredienteMapper().selectByExample(new ClasificarIngredienteExample());
 	}
 	
-	public static List<TipoPeso> getTipoPeso(){
-		return ColseviDao.getInstance().getTipoPesoMapper().selectByExample(new TipoPesoExample());
+	public static List<UnidadPeso> getTipoPeso(){
+		return ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(new UnidadPesoExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -107,7 +107,6 @@ public class ProductoAdminController extends BaseConfigController {
 					opciones.put("nombre", bean.getNombre());
 					opciones.put("descripcion", bean.getDescripcion());
 					opciones.put("referencia", bean.getReferencia());
-					opciones.put("costo", bean.getCosto());
 					opciones.put("venta", bean.getVenta());
 					opciones.put("imagen", bean.getImagen());
 					
@@ -160,11 +159,6 @@ public class ProductoAdminController extends BaseConfigController {
 			}else{
 				error += "Seleccionar un tipo de producto<br/>";
 			}
-			if(request.getParameter("costo") != null && !request.getParameter("costo").trim().isEmpty()){
-				bean.setCosto(UtilidadManager.FormatStringBigDecimal(request.getParameter("costo")));
-			}else{
-				error += "Ingresar el costo<br/>";
-			}
 			if(request.getParameter("venta") != null && !request.getParameter("venta").trim().isEmpty()){
 				bean.setVenta(UtilidadManager.FormatStringBigDecimal(request.getParameter("venta")));
 			}else{
@@ -184,7 +178,7 @@ public class ProductoAdminController extends BaseConfigController {
 						IngredienteXProducto ixpB = new IngredienteXProducto();
 						ixpB.setId_ingrediente(Integer.parseInt(request.getParameter("idIng" + (i +1))));
 						ixpB.setCantidad(Integer.parseInt(request.getParameter("cant" + (i +1))));
-						ixpB.setId_tipo_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
+						ixpB.setId_unidad_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
 						ixpB.setId_producto(bean.getId_producto());
 
 						ixp.add(ixpB);
@@ -342,7 +336,7 @@ public class ProductoAdminController extends BaseConfigController {
 			try{
 				opciones = new JSONObject();
 				opciones.put("id_ingrediente", map.get("id_ingrediente"));
-				opciones.put("id_tipo_peso", map.get("id_tipo_peso"));
+				opciones.put("id_tipo_peso", map.get("id_unidad_peso"));
 				opciones.put("nombreIng", map.get("nombreIng"));
 				opciones.put("nombreTp", map.get("nombreTp"));
 				opciones.put("cantidad", map.get("cantidad"));

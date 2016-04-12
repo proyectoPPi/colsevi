@@ -94,11 +94,6 @@
 													<label>*Descripci&#243;n</label>
 													<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
 												</div>
-											
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>*Costo</label>
-													<input type="number" class="form-control" id="costo" name="costo" data-bv-notempty="true"/>
-												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>*Precio de venta</label>
 													<input type="number" class="form-control" id="venta" name="venta" data-bv-notempty="true"/>
@@ -176,12 +171,10 @@
 		titulos["nombre"] = "Nombre";
 		titulos["descripcion"] = "Descripci&#243;n";
 		titulos["tipoP"] = "Tipo";
-		titulos["costo"] = "Costo";
 		titulos["venta"] = "Venta";
 		
 		clase = new Array();
 		clase['tipoP'] = 'hidden-xs';
-		clase['costo'] = 'hidden-xs';
 		clase['descripcion'] = 'hidden-xs';
 		
 	</script>

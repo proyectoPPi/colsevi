@@ -15,8 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
-import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
+import com.colsevi.dao.producto.model.ClasificarIngrediente;
+import com.colsevi.dao.producto.model.ClasificarIngredienteExample;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteExample;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;
@@ -52,8 +52,8 @@ public class IngredienteController extends BaseConfigController {
 			IngredienteExample IngExample = new IngredienteExample();
 			IngredienteExample.Criteria criteria = (IngredienteExample.Criteria) IngExample.createCriteria();
 			IngExample.setOrderByClause("id_ingrediente DESC");
-			
 			IngExample.setLimit(Inicio + ", " + Final);
+
 			if(nombre != null && !nombre.trim().isEmpty()){
 				criteria.andNombreLike("%" + nombre + "%");   
 			}

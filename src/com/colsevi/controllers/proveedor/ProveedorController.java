@@ -24,7 +24,6 @@ import com.colsevi.dao.proveedor.model.Proveedor;
 import com.colsevi.dao.proveedor.model.ProveedorExample;
 import com.colsevi.dao.proveedor.model.TipoProveedor;
 import com.colsevi.dao.proveedor.model.TipoProveedorExample;
-import com.colsevi.dao.usuario.model.Establecimiento;
 
 @Controller
 public class ProveedorController extends BaseConfigController {

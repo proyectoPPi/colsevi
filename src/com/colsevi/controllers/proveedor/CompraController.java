@@ -20,10 +20,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.dao.ingrediente.model.ClasificarIngrediente;
-import com.colsevi.dao.ingrediente.model.ClasificarIngredienteExample;
-import com.colsevi.dao.ingrediente.model.TipoPeso;
-import com.colsevi.dao.ingrediente.model.TipoPesoExample;
+import com.colsevi.dao.producto.model.ClasificarIngrediente;
+import com.colsevi.dao.producto.model.ClasificarIngredienteExample;
+import com.colsevi.dao.general.model.UnidadPeso;
+import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteExample;
 import com.colsevi.dao.proveedor.model.Compra;
@@ -55,8 +55,8 @@ public class CompraController extends BaseConfigController {
 		return ColseviDao.getInstance().getClasificarIngredienteMapper().selectByExample(new ClasificarIngredienteExample());
 	}
 	
-	public static List<TipoPeso> getTipoPeso(){
-		return ColseviDao.getInstance().getTipoPesoMapper().selectByExample(new TipoPesoExample());
+	public static List<UnidadPeso> getTipoPeso(){
+		return ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(new UnidadPesoExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -207,7 +207,7 @@ public class CompraController extends BaseConfigController {
 					CompraXIngrediente cxi = new CompraXIngrediente();
 					cxi.setId_ingrediente(Integer.parseInt(request.getParameter("idIng" + (i +1))));
 					cxi.setCantidad(Integer.parseInt(request.getParameter("cant" + (i +1))));
-					cxi.setId_tipo_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
+					cxi.setId_unidad_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
 
 					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
 						cxi.setFecha_vencimiento(UtilidadManager.FormatDateFormDB2(request.getParameter("fecha" + (i +1))));
@@ -310,7 +310,7 @@ public class CompraController extends BaseConfigController {
 			try{
 				opciones = new JSONObject();
 				opciones.put("id_ingrediente", map.get("id_ingrediente"));
-				opciones.put("id_tipo_peso", map.get("id_tipo_peso"));
+				opciones.put("id_tipo_peso", map.get("id_unidad_peso"));
 				opciones.put("nombreIng", map.get("nombreIng"));
 				opciones.put("nombreTp", map.get("nombreTp"));
 				opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatDateComplete(map.get("fecha_vencimiento").toString()) : "");

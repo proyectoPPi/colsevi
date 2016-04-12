@@ -6,27 +6,30 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.colsevi.dao.catalogo.map.CatalogoMapper;
 import com.colsevi.dao.catalogo.map.CatalogoXProductoMapper;
+import com.colsevi.dao.deuda.map.DeudaPedidoMapper;
+import com.colsevi.dao.deuda.map.DeudaProveedorMapper;
 import com.colsevi.dao.general.map.CorreoMapper;
 import com.colsevi.dao.general.map.DireccionMapper;
 import com.colsevi.dao.general.map.EstablecimientoMapper;
+import com.colsevi.dao.general.map.MotivoMapper;
 import com.colsevi.dao.general.map.TelefonoMapper;
 import com.colsevi.dao.general.map.TipoTelefonoMapper;
-import com.colsevi.dao.ingrediente.map.ClasificarIngredienteMapper;
-import com.colsevi.dao.ingrediente.map.TipoPesoMapper;
-import com.colsevi.dao.inventario.map.CategoriaModuloMapper;
+import com.colsevi.dao.general.map.UnidadPesoMapper;
+import com.colsevi.dao.producto.map.ClasificarIngredienteMapper;
 import com.colsevi.dao.inventario.map.InventarioMapper;
-import com.colsevi.dao.inventario.map.MotivoMapper;
+import com.colsevi.dao.inventario.map.MovimientoCompraMapper;
 import com.colsevi.dao.inventario.map.MovimientoInventarioMapper;
-import com.colsevi.dao.pago.map.CobroCategoriaMapper;
-import com.colsevi.dao.pago.map.CobroMapper;
-import com.colsevi.dao.pago.map.DetallePagoMapper;
-import com.colsevi.dao.pago.map.DeudaMapper;
-import com.colsevi.dao.pago.map.PagoMapper;
+import com.colsevi.dao.pago.map.PagoPedidoMapper;
+import com.colsevi.dao.pago.map.PagoProveedorMapper;
+import com.colsevi.dao.pedido.map.CategoriaCobroMapper;
+import com.colsevi.dao.pedido.map.CobroMapper;
 import com.colsevi.dao.pedido.map.DetallePedidoMapper;
 import com.colsevi.dao.pedido.map.EstadoPedidoMapper;
 import com.colsevi.dao.pedido.map.PedidoMapper;
+import com.colsevi.dao.pedido.model.CategoriaCobro;
 import com.colsevi.dao.producto.map.IngredienteMapper;
 import com.colsevi.dao.producto.map.IngredienteXProductoMapper;
+import com.colsevi.dao.producto.map.PreparacionRecetaMapper;
 import com.colsevi.dao.producto.map.ProductoMapper;
 import com.colsevi.dao.producto.map.RecetaMapper;
 import com.colsevi.dao.producto.map.TipoProductoMapper;
@@ -44,43 +47,46 @@ import com.colsevi.dao.usuario.map.UsuarioXRolMapper;
 
 public class ColseviDao {
 	
-	private TipoDocumentoMapper tipoDocumentoMapper;
-	private PersonaMapper personaMapper;
-	private PaginaMapper paginaMapper;
-	private RolMapper rolMapper;
-	private UsuarioMapper usuarioMapper; 
-	private UsuarioXRolMapper usuarioXRolMapper; 
 	private EstablecimientoMapper establecimientoMapper;
-	private PaginaXRolMapper paginaXRolMapper; 
+	private TipoTelefonoMapper tipoTelefonoMapper;
 	private TelefonoMapper telefonoMapper;
 	private DireccionMapper direccionMapper;
 	private CorreoMapper correoMapper;
-	private TipoTelefonoMapper tipoTelefonoMapper;
+	private UnidadPesoMapper unidadPesoMapper;
+	private MotivoMapper motivoMapper;
+	private EstadoPedidoMapper estadoPedidoMapper;
+	private PedidoMapper pedidoMapper;
+	private DetallePedidoMapper detallePedidoMapper;
+	private CategoriaCobroMapper categoriaCobroMapper;
+	private CobroMapper cobroMapper;
 	private TipoProveedorMapper tipoProveedorMapper;
 	private ProveedorMapper proveedorMapper;
 	private CompraMapper compraMapper;
-	private TipoPesoMapper tipoPesoMapper;
-	private IngredienteMapper ingredienteMapper;
 	private CompraXIngredienteMapper compraXIngredienteMapper;
+	private PagoPedidoMapper pagoPedidoMapper;
+	private PagoProveedorMapper pagoProveedorMapper;
+	private DeudaPedidoMapper deudaPedidoMapper;
+	private DeudaProveedorMapper deudaProveedorMapper;
+	private InventarioMapper inventarioMapper;
+	private MovimientoInventarioMapper movimientoInventarioMapper;
+	private MovimientoCompraMapper movimientoCompraMapper;
+	private ClasificarIngredienteMapper clasificarIngredienteMapper; 
+	private IngredienteMapper ingredienteMapper;
 	private TipoProductoMapper tipoProductoMapper;
 	private ProductoMapper productoMapper;
 	private IngredienteXProductoMapper ingredienteXProductoMapper;
 	private RecetaMapper recetaMapper;
+	private PreparacionRecetaMapper preparacionRecetaMapper;
 	private CatalogoMapper catalogoMapper;
 	private CatalogoXProductoMapper catalogoXProductoMapper;
-	private EstadoPedidoMapper estadoPedidoMapper;
-	private PedidoMapper pedidoMapper;
-	private DetallePedidoMapper detallePedidoMapper;
-	private InventarioMapper inventarioMapper;
-	private CategoriaModuloMapper categoriaModuloMapper;
-	private PagoMapper pagoMapper;
-	private DetallePagoMapper detallePagoMapper;
-	private DeudaMapper deudaMapper;
-	private CobroCategoriaMapper cobroCategoriaMapper;
-	private CobroMapper cobroMapper;
-	private MotivoMapper motivoMapper;
-	private MovimientoInventarioMapper movimientoInventarioMapper;
-	private ClasificarIngredienteMapper clasificarIngredienteMapper;
+	private PersonaMapper personaMapper;
+	private UsuarioMapper usuarioMapper;
+	private RolMapper rolMapper;
+	private UsuarioXRolMapper usuarioXRolMapper;
+	private PaginaMapper paginaMapper;
+	private PaginaXRolMapper paginaXRolMapper;
+	private TipoDocumentoMapper tipoDocumentoMapper;
+
 	
 	private static ColseviDao current = null;
 
@@ -107,91 +113,47 @@ public class ColseviDao {
 	}
 	// inicializar Mappers MyBatis
 	public void inicializarMappers(BeanFactory beanFactoryMyBatis) {
-		tipoDocumentoMapper = (TipoDocumentoMapper) beanFactoryMyBatis.getBean("tipoDocumentoMapper");
-		personaMapper = (PersonaMapper) beanFactoryMyBatis.getBean("personaMapper");
-		paginaMapper = (PaginaMapper) beanFactoryMyBatis.getBean("paginaMapper");
-		rolMapper = (RolMapper) beanFactoryMyBatis.getBean("rolMapper");
-		usuarioMapper = (UsuarioMapper) beanFactoryMyBatis.getBean("usuarioMapper");
-		usuarioXRolMapper = (UsuarioXRolMapper) beanFactoryMyBatis.getBean("usuarioXRolMapper");
+		
 		establecimientoMapper = (EstablecimientoMapper) beanFactoryMyBatis.getBean("establecimientoMapper");
-		paginaXRolMapper = (PaginaXRolMapper) beanFactoryMyBatis.getBean("paginaXRolMapper");
+		tipoTelefonoMapper = (TipoTelefonoMapper) beanFactoryMyBatis.getBean("tipoTelefonoMapper");
 		telefonoMapper = (TelefonoMapper) beanFactoryMyBatis.getBean("telefonoMapper");
 		direccionMapper = (DireccionMapper) beanFactoryMyBatis.getBean("direccionMapper");
 		correoMapper = (CorreoMapper) beanFactoryMyBatis.getBean("correoMapper");
-		tipoTelefonoMapper = (TipoTelefonoMapper) beanFactoryMyBatis.getBean("tipoTelefonoMapper");
+		unidadPesoMapper = (UnidadPesoMapper) beanFactoryMyBatis.getBean("unidadPesoMapper");
+		motivoMapper = (MotivoMapper) beanFactoryMyBatis.getBean("motivoMapper");
+		estadoPedidoMapper = (EstadoPedidoMapper) beanFactoryMyBatis.getBean("estadoPedidoMapper");
+		pedidoMapper = (PedidoMapper) beanFactoryMyBatis.getBean("pedidoMapper");
+		detallePedidoMapper = (DetallePedidoMapper) beanFactoryMyBatis.getBean("detallePedidoMapper");
+		categoriaCobroMapper = (CategoriaCobroMapper) beanFactoryMyBatis.getBean("categoriaCobroMapper");
+		cobroMapper = (CobroMapper) beanFactoryMyBatis.getBean("cobroMapper");
 		tipoProveedorMapper = (TipoProveedorMapper) beanFactoryMyBatis.getBean("tipoProveedorMapper");
 		proveedorMapper = (ProveedorMapper) beanFactoryMyBatis.getBean("proveedorMapper");
 		compraMapper = (CompraMapper) beanFactoryMyBatis.getBean("compraMapper");
-		tipoPesoMapper = (TipoPesoMapper) beanFactoryMyBatis.getBean("tipoPesoMapper");
-		ingredienteMapper = (IngredienteMapper) beanFactoryMyBatis.getBean("ingredienteMapper");
 		compraXIngredienteMapper = (CompraXIngredienteMapper) beanFactoryMyBatis.getBean("compraXIngredienteMapper");
+		pagoPedidoMapper = (PagoPedidoMapper) beanFactoryMyBatis.getBean("pagoPedidoMapper");
+		pagoProveedorMapper = (PagoProveedorMapper) beanFactoryMyBatis.getBean("pagoProveedorMapper");
+		deudaPedidoMapper = (DeudaPedidoMapper) beanFactoryMyBatis.getBean("deudaPedidoMapper");
+		deudaProveedorMapper = (DeudaProveedorMapper) beanFactoryMyBatis.getBean("deudaProveedorMapper");
+		inventarioMapper = (InventarioMapper) beanFactoryMyBatis.getBean("inventarioMapper");
+		movimientoInventarioMapper = (MovimientoInventarioMapper) beanFactoryMyBatis.getBean("movimientoInventarioMapper");
+		movimientoCompraMapper = (MovimientoCompraMapper) beanFactoryMyBatis.getBean("movimientoCompraMapper");
+		clasificarIngredienteMapper = (ClasificarIngredienteMapper) beanFactoryMyBatis.getBean("clasificarIngredienteMapper");
+		ingredienteMapper = (IngredienteMapper) beanFactoryMyBatis.getBean("ingredienteMapper");
 		tipoProductoMapper = (TipoProductoMapper) beanFactoryMyBatis.getBean("tipoProductoMapper");
 		productoMapper = (ProductoMapper) beanFactoryMyBatis.getBean("productoMapper");
 		ingredienteXProductoMapper = (IngredienteXProductoMapper) beanFactoryMyBatis.getBean("ingredienteXProductoMapper");
 		recetaMapper = (RecetaMapper) beanFactoryMyBatis.getBean("recetaMapper");
+		preparacionRecetaMapper = (PreparacionRecetaMapper) beanFactoryMyBatis.getBean("preparacionRecetaMapper");
 		catalogoMapper = (CatalogoMapper) beanFactoryMyBatis.getBean("catalogoMapper");
 		catalogoXProductoMapper = (CatalogoXProductoMapper) beanFactoryMyBatis.getBean("catalogoXProductoMapper");
-		estadoPedidoMapper = (EstadoPedidoMapper) beanFactoryMyBatis.getBean("estadoPedidoMapper");
-		pedidoMapper = (PedidoMapper) beanFactoryMyBatis.getBean("pedidoMapper");
-		detallePedidoMapper = (DetallePedidoMapper) beanFactoryMyBatis.getBean("detallePedidoMapper");
-		inventarioMapper = (InventarioMapper) beanFactoryMyBatis.getBean("inventarioMapper");
-		categoriaModuloMapper = (CategoriaModuloMapper) beanFactoryMyBatis.getBean("categoriaModuloMapper");
-		pagoMapper = (PagoMapper) beanFactoryMyBatis.getBean("pagoMapper");
-		detallePagoMapper = (DetallePagoMapper) beanFactoryMyBatis.getBean("detallePagoMapper");
-		deudaMapper = (DeudaMapper) beanFactoryMyBatis.getBean("deudaMapper");
-		cobroCategoriaMapper = (CobroCategoriaMapper) beanFactoryMyBatis.getBean("cobroCategoriaMapper");
-		cobroMapper = (CobroMapper) beanFactoryMyBatis.getBean("cobroMapper");
-		motivoMapper = (MotivoMapper) beanFactoryMyBatis.getBean("motivoMapper");
-		movimientoInventarioMapper = (MovimientoInventarioMapper) beanFactoryMyBatis.getBean("movimientoInventarioMapper");
-		clasificarIngredienteMapper = (ClasificarIngredienteMapper) beanFactoryMyBatis.getBean("clasificarIngredienteMapper");
-	}
-
-	public TipoDocumentoMapper getTipoDocumentoMapper() {
-		return tipoDocumentoMapper;
-	}
-
-	public void setTipoDocumentoMapper(TipoDocumentoMapper tipoDocumentoMapper) {
-		this.tipoDocumentoMapper = tipoDocumentoMapper;
-	}
-
-	public PersonaMapper getPersonaMapper() {
-		return personaMapper;
-	}
-
-	public void setPersonaMapper(PersonaMapper personaMapper) {
-		this.personaMapper = personaMapper;
-	}
-
-	public PaginaMapper getPaginaMapper() {
-		return paginaMapper;
-	}
-
-	public void setPaginaMapper(PaginaMapper paginaMapper) {
-		this.paginaMapper = paginaMapper;
-	}
-
-	public RolMapper getRolMapper() {
-		return rolMapper;
-	}
-
-	public void setRolMapper(RolMapper rolMapper) {
-		this.rolMapper = rolMapper;
-	}
-
-	public UsuarioMapper getUsuarioMapper() {
-		return usuarioMapper;
-	}
-
-	public void setUsuarioMapper(UsuarioMapper usuarioMapper) {
-		this.usuarioMapper = usuarioMapper;
-	}
-
-	public UsuarioXRolMapper getUsuarioXRolMapper() {
-		return usuarioXRolMapper;
-	}
-
-	public void setUsuarioXRolMapper(UsuarioXRolMapper usuarioXRolMapper) {
-		this.usuarioXRolMapper = usuarioXRolMapper;
+		personaMapper = (PersonaMapper) beanFactoryMyBatis.getBean("personaMapper");
+		usuarioMapper = (UsuarioMapper) beanFactoryMyBatis.getBean("usuarioMapper");
+		rolMapper = (RolMapper) beanFactoryMyBatis.getBean("rolMapper");
+		usuarioXRolMapper = (UsuarioXRolMapper) beanFactoryMyBatis.getBean("usuarioXRolMapper");
+		paginaMapper = (PaginaMapper) beanFactoryMyBatis.getBean("paginaMapper");
+		paginaXRolMapper = (PaginaXRolMapper) beanFactoryMyBatis.getBean("paginaXRolMapper");
+		tipoDocumentoMapper = (TipoDocumentoMapper) beanFactoryMyBatis.getBean("tipoDocumentoMapper");
+		
 	}
 
 	public EstablecimientoMapper getEstablecimientoMapper() {
@@ -202,12 +164,12 @@ public class ColseviDao {
 		this.establecimientoMapper = establecimientoMapper;
 	}
 
-	public PaginaXRolMapper getPaginaXRolMapper() {
-		return paginaXRolMapper;
+	public TipoTelefonoMapper getTipoTelefonoMapper() {
+		return tipoTelefonoMapper;
 	}
 
-	public void setPaginaXRolMapper(PaginaXRolMapper paginaXRolMapper) {
-		this.paginaXRolMapper = paginaXRolMapper;
+	public void setTipoTelefonoMapper(TipoTelefonoMapper tipoTelefonoMapper) {
+		this.tipoTelefonoMapper = tipoTelefonoMapper;
 	}
 
 	public TelefonoMapper getTelefonoMapper() {
@@ -234,12 +196,60 @@ public class ColseviDao {
 		this.correoMapper = correoMapper;
 	}
 
-	public TipoTelefonoMapper getTipoTelefonoMapper() {
-		return tipoTelefonoMapper;
+	public UnidadPesoMapper getUnidadPesoMapper() {
+		return unidadPesoMapper;
 	}
 
-	public void setTipoTelefonoMapper(TipoTelefonoMapper tipoTelefonoMapper) {
-		this.tipoTelefonoMapper = tipoTelefonoMapper;
+	public void setUnidadPesoMapper(UnidadPesoMapper unidadPesoMapper) {
+		this.unidadPesoMapper = unidadPesoMapper;
+	}
+
+	public MotivoMapper getMotivoMapper() {
+		return motivoMapper;
+	}
+
+	public void setMotivoMapper(MotivoMapper motivoMapper) {
+		this.motivoMapper = motivoMapper;
+	}
+
+	public EstadoPedidoMapper getEstadoPedidoMapper() {
+		return estadoPedidoMapper;
+	}
+
+	public void setEstadoPedidoMapper(EstadoPedidoMapper estadoPedidoMapper) {
+		this.estadoPedidoMapper = estadoPedidoMapper;
+	}
+
+	public PedidoMapper getPedidoMapper() {
+		return pedidoMapper;
+	}
+
+	public void setPedidoMapper(PedidoMapper pedidoMapper) {
+		this.pedidoMapper = pedidoMapper;
+	}
+
+	public DetallePedidoMapper getDetallePedidoMapper() {
+		return detallePedidoMapper;
+	}
+
+	public void setDetallePedidoMapper(DetallePedidoMapper detallePedidoMapper) {
+		this.detallePedidoMapper = detallePedidoMapper;
+	}
+
+	public CategoriaCobroMapper getCategoriaCobroMapper() {
+		return categoriaCobroMapper;
+	}
+
+	public void setCategoriaCobroMapper(CategoriaCobroMapper categoriaCobroMapper) {
+		this.categoriaCobroMapper = categoriaCobroMapper;
+	}
+
+	public CobroMapper getCobroMapper() {
+		return cobroMapper;
+	}
+
+	public void setCobroMapper(CobroMapper cobroMapper) {
+		this.cobroMapper = cobroMapper;
 	}
 
 	public TipoProveedorMapper getTipoProveedorMapper() {
@@ -266,12 +276,76 @@ public class ColseviDao {
 		this.compraMapper = compraMapper;
 	}
 
-	public TipoPesoMapper getTipoPesoMapper() {
-		return tipoPesoMapper;
+	public CompraXIngredienteMapper getCompraXIngredienteMapper() {
+		return compraXIngredienteMapper;
 	}
 
-	public void setTipoPesoMapper(TipoPesoMapper tipoPesoMapper) {
-		this.tipoPesoMapper = tipoPesoMapper;
+	public void setCompraXIngredienteMapper(CompraXIngredienteMapper compraXIngredienteMapper) {
+		this.compraXIngredienteMapper = compraXIngredienteMapper;
+	}
+
+	public PagoPedidoMapper getPagoPedidoMapper() {
+		return pagoPedidoMapper;
+	}
+
+	public void setPagoPedidoMapper(PagoPedidoMapper pagoPedidoMapper) {
+		this.pagoPedidoMapper = pagoPedidoMapper;
+	}
+
+	public PagoProveedorMapper getPagoProveedorMapper() {
+		return pagoProveedorMapper;
+	}
+
+	public void setPagoProveedorMapper(PagoProveedorMapper pagoProveedorMapper) {
+		this.pagoProveedorMapper = pagoProveedorMapper;
+	}
+
+	public DeudaPedidoMapper getDeudaPedidoMapper() {
+		return deudaPedidoMapper;
+	}
+
+	public void setDeudaPedidoMapper(DeudaPedidoMapper deudaPedidoMapper) {
+		this.deudaPedidoMapper = deudaPedidoMapper;
+	}
+
+	public DeudaProveedorMapper getDeudaProveedorMapper() {
+		return deudaProveedorMapper;
+	}
+
+	public void setDeudaProveedorMapper(DeudaProveedorMapper deudaProveedorMapper) {
+		this.deudaProveedorMapper = deudaProveedorMapper;
+	}
+
+	public InventarioMapper getInventarioMapper() {
+		return inventarioMapper;
+	}
+
+	public void setInventarioMapper(InventarioMapper inventarioMapper) {
+		this.inventarioMapper = inventarioMapper;
+	}
+
+	public MovimientoInventarioMapper getMovimientoInventarioMapper() {
+		return movimientoInventarioMapper;
+	}
+
+	public void setMovimientoInventarioMapper(MovimientoInventarioMapper movimientoInventarioMapper) {
+		this.movimientoInventarioMapper = movimientoInventarioMapper;
+	}
+
+	public MovimientoCompraMapper getMovimientoCompraMapper() {
+		return movimientoCompraMapper;
+	}
+
+	public void setMovimientoCompraMapper(MovimientoCompraMapper movimientoCompraMapper) {
+		this.movimientoCompraMapper = movimientoCompraMapper;
+	}
+
+	public ClasificarIngredienteMapper getClasificarIngredienteMapper() {
+		return clasificarIngredienteMapper;
+	}
+
+	public void setClasificarIngredienteMapper(ClasificarIngredienteMapper clasificarIngredienteMapper) {
+		this.clasificarIngredienteMapper = clasificarIngredienteMapper;
 	}
 
 	public IngredienteMapper getIngredienteMapper() {
@@ -280,14 +354,6 @@ public class ColseviDao {
 
 	public void setIngredienteMapper(IngredienteMapper ingredienteMapper) {
 		this.ingredienteMapper = ingredienteMapper;
-	}
-
-	public CompraXIngredienteMapper getCompraXIngredienteMapper() {
-		return compraXIngredienteMapper;
-	}
-
-	public void setCompraXIngredienteMapper(CompraXIngredienteMapper compraXIngredienteMapper) {
-		this.compraXIngredienteMapper = compraXIngredienteMapper;
 	}
 
 	public TipoProductoMapper getTipoProductoMapper() {
@@ -322,6 +388,14 @@ public class ColseviDao {
 		this.recetaMapper = recetaMapper;
 	}
 
+	public PreparacionRecetaMapper getPreparacionRecetaMapper() {
+		return preparacionRecetaMapper;
+	}
+
+	public void setPreparacionRecetaMapper(PreparacionRecetaMapper preparacionRecetaMapper) {
+		this.preparacionRecetaMapper = preparacionRecetaMapper;
+	}
+
 	public CatalogoMapper getCatalogoMapper() {
 		return catalogoMapper;
 	}
@@ -338,107 +412,60 @@ public class ColseviDao {
 		this.catalogoXProductoMapper = catalogoXProductoMapper;
 	}
 
-	public EstadoPedidoMapper getEstadoPedidoMapper() {
-		return estadoPedidoMapper;
+	public PersonaMapper getPersonaMapper() {
+		return personaMapper;
 	}
 
-	public void setEstadoPedidoMapper(EstadoPedidoMapper estadoPedidoMapper) {
-		this.estadoPedidoMapper = estadoPedidoMapper;
+	public void setPersonaMapper(PersonaMapper personaMapper) {
+		this.personaMapper = personaMapper;
 	}
 
-	public PedidoMapper getPedidoMapper() {
-		return pedidoMapper;
+	public UsuarioMapper getUsuarioMapper() {
+		return usuarioMapper;
 	}
 
-	public void setPedidoMapper(PedidoMapper pedidoMapper) {
-		this.pedidoMapper = pedidoMapper;
+	public void setUsuarioMapper(UsuarioMapper usuarioMapper) {
+		this.usuarioMapper = usuarioMapper;
 	}
 
-	public DetallePedidoMapper getDetallePedidoMapper() {
-		return detallePedidoMapper;
+	public RolMapper getRolMapper() {
+		return rolMapper;
 	}
 
-	public void setDetallePedidoMapper(DetallePedidoMapper detallePedidoMapper) {
-		this.detallePedidoMapper = detallePedidoMapper;
+	public void setRolMapper(RolMapper rolMapper) {
+		this.rolMapper = rolMapper;
 	}
 
-	public InventarioMapper getInventarioMapper() {
-		return inventarioMapper;
+	public UsuarioXRolMapper getUsuarioXRolMapper() {
+		return usuarioXRolMapper;
 	}
 
-	public void setInventarioMapper(InventarioMapper inventarioMapper) {
-		this.inventarioMapper = inventarioMapper;
+	public void setUsuarioXRolMapper(UsuarioXRolMapper usuarioXRolMapper) {
+		this.usuarioXRolMapper = usuarioXRolMapper;
 	}
 
-	public CategoriaModuloMapper getCategoriaModuloMapper() {
-		return categoriaModuloMapper;
+	public PaginaMapper getPaginaMapper() {
+		return paginaMapper;
 	}
 
-	public void setCategoriaModuloMapper(CategoriaModuloMapper categoriaModuloMapper) {
-		this.categoriaModuloMapper = categoriaModuloMapper;
+	public void setPaginaMapper(PaginaMapper paginaMapper) {
+		this.paginaMapper = paginaMapper;
 	}
 
-	public PagoMapper getPagoMapper() {
-		return pagoMapper;
+	public PaginaXRolMapper getPaginaXRolMapper() {
+		return paginaXRolMapper;
 	}
 
-	public void setPagoMapper(PagoMapper pagoMapper) {
-		this.pagoMapper = pagoMapper;
+	public void setPaginaXRolMapper(PaginaXRolMapper paginaXRolMapper) {
+		this.paginaXRolMapper = paginaXRolMapper;
 	}
 
-	public DetallePagoMapper getDetallePagoMapper() {
-		return detallePagoMapper;
+	public TipoDocumentoMapper getTipoDocumentoMapper() {
+		return tipoDocumentoMapper;
 	}
 
-	public void setDetallePagoMapper(DetallePagoMapper detallePagoMapper) {
-		this.detallePagoMapper = detallePagoMapper;
+	public void setTipoDocumentoMapper(TipoDocumentoMapper tipoDocumentoMapper) {
+		this.tipoDocumentoMapper = tipoDocumentoMapper;
 	}
 
-	public DeudaMapper getDeudaMapper() {
-		return deudaMapper;
-	}
-
-	public void setDeudaMapper(DeudaMapper deudaMapper) {
-		this.deudaMapper = deudaMapper;
-	}
-
-	public CobroCategoriaMapper getCobroCategoriaMapper() {
-		return cobroCategoriaMapper;
-	}
-
-	public void setCobroCategoriaMapper(CobroCategoriaMapper cobroCategoriaMapper) {
-		this.cobroCategoriaMapper = cobroCategoriaMapper;
-	}
-
-	public CobroMapper getCobroMapper() {
-		return cobroMapper;
-	}
-
-	public void setCobroMapper(CobroMapper cobroMapper) {
-		this.cobroMapper = cobroMapper;
-	}
-
-	public MotivoMapper getMotivoMapper() {
-		return motivoMapper;
-	}
-
-	public void setMotivoMapper(MotivoMapper motivoMapper) {
-		this.motivoMapper = motivoMapper;
-	}
-
-	public MovimientoInventarioMapper getMovimientoInventarioMapper() {
-		return movimientoInventarioMapper;
-	}
-
-	public void setMovimientoInventarioMapper(MovimientoInventarioMapper movimientoInventarioMapper) {
-		this.movimientoInventarioMapper = movimientoInventarioMapper;
-	}
-
-	public ClasificarIngredienteMapper getClasificarIngredienteMapper() {
-		return clasificarIngredienteMapper;
-	}
-
-	public void setClasificarIngredienteMapper(ClasificarIngredienteMapper clasificarIngredienteMapper) {
-		this.clasificarIngredienteMapper = clasificarIngredienteMapper;
-	}
 }
