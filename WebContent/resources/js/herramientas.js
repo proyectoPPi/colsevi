@@ -1,5 +1,5 @@
 var dataMap = {};
-var registrosPagina = 9;
+var registrosPagina = 10;
 /*
  * Método para pintar la tabla
  */
@@ -8,12 +8,18 @@ function HTabla(opciones){
 	var Id = opciones.Id;
 	var id = null;
 	dataMap['url'] = opciones.url;
+	dataMap['clase'] = opciones.clase;
+	dataMap['boton'] = opciones.boton;
+	
+	if(dataMap['clase'] == undefined) dataMap['clase'] = new Array();
+	if(dataMap['boton'] == undefined) dataMap['boton'] = new Array();
 	
 	Setlimite(opciones.pagina);
 	
+	SetFiltros();
+	
 	jQuery.ajaxQueue({
 		  url: dataMap['url'],
-		  contentType: "application/json; charset=utf-8",
 		}).done(function(result) {
 			data = jQuery.parseJSON( result );
 			var html = ""; 
@@ -27,8 +33,12 @@ function HTabla(opciones){
 			
 			html='<table class="display table table-bordered table-striped dataTable"><thead><tr>';
 			for(k in titulos){
+				var className = '';
 				if(titulos[k] != "ID"){
-					html += "<th>"+opciones.titulos[k]+"</th>";
+					if(dataMap['clase'][k] != undefined){
+						className = 'class="' + dataMap['clase'][k] + '" ';
+					}
+					html += "<th " + className + ">"+opciones.titulos[k]+"</th>";
 				}else{
 					dataMap['id'] = k;
 				}
@@ -36,16 +46,38 @@ function HTabla(opciones){
 			html += "</tr></thead><tbody>";
 		 for(i in data["datos"]){
 			 html += "<tr>";
+			 var sw = true;
 			 for(k in titulos){
+				 var className = '';
 				 if(titulos[k]=="ID"){
 					 id = data["datos"][i][k];
-					 
 				 }else{
-					 if(id != null){
+					 if(sw){
 						 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
-						 id = null;
+						 sw = false;
 					 }else{
-						 html += "<td>"+data["datos"][i][k]+"</td>";
+						 if(dataMap['clase'][k] != undefined){
+							className = 'class="' + dataMap['clase'][k] + '" ';
+						 }
+						 html += "<td "  + className + ">";
+						 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
+							 html += data["datos"][i][k]['label'];
+						 }else{
+							 html += data["datos"][i][k];
+							 
+							 if(dataMap['boton'][k] != undefined){
+								for(var key in dataMap['boton'][k]){
+								var opcion = dataMap['boton'][k][key];
+								var metodo = "metodo";
+								if(opcion.metodo!=undefined){
+									metodo = opcion.metodo;
+								}
+									html += '<span><a href="#" onclick="'+metodo+'(\''+id+'\');" class="btn btn-xs '+opcion.color+'"><i class="'+opcion.img+'"></i></a></span>';
+								}
+							}
+						 }
+						 
+						 html += "</td>";
 					 }
 				 }
 			 }
@@ -59,6 +91,14 @@ function HTabla(opciones){
 			 opciones.pagina = 1;
 		 }
 		 organizarPaginacion(opciones.pagina);
+		 
+		 dataMap['keys'] = [];
+			var registro = dataMap["datos"][0];
+			if(registro != undefined){
+				for(key in registro){
+					dataMap['keys'].push(key);
+				}
+			}
 	});
 }
 
@@ -75,12 +115,19 @@ function BuscarRegistro(Id){
 	return null;
 }
 
-function CargarFormulario(Id){
+function HCargarFormulario(Id){
 	var Fila = BuscarRegistro(Id);
 	if(Fila != null){
-		for(tituloForm in dataMap["titulos"]){
-			if(dataMap["titulos"][tituloForm] != undefined){
-				jQuery("#" + tituloForm).val(Fila[tituloForm]);
+		for(key in dataMap['keys']){
+			var valor = dataMap['keys'][key];
+			if(Fila[valor] != null ){
+				if(Fila[valor]['value'] != undefined){
+					jQuery("#" + valor).val(Fila[valor]['value']);
+				}else{
+					jQuery("#" + valor).val(Fila[valor]);
+				}
+			}else{
+				jQuery("#" + valor).val("");
 			}
 		}
 	}
@@ -94,7 +141,14 @@ function Setlimite(pagina){
 	
 	dataMap['url'] += "&Inicio=" + dataMap['Inicio'];
 	dataMap['url'] += "&Final=" + dataMap['Final'];
+}
 
+function SetFiltros(){
+	var filtro = "&";
+	jQuery("[name*='filtro']").each(function() {
+		filtro += $(this).attr("id") +"="+ $(this).val() + "&";
+	});
+	dataMap['url'] += filtro;
 }
 
 function organizarPaginacion(pagina){
@@ -124,13 +178,32 @@ function organizarPaginacion(pagina){
 }
 
 function HLimpliar(){
-	for(titulos in dataMap["titulos"]){
-		if(dataMap["titulos"][titulos] != undefined){
-			jQuery("#" + titulos).val('');
+	
+	for(key in dataMap['keys']){
+		var valor = dataMap['keys'][key];
+		if(valor['value'] != undefined){
+			jQuery("#" + valor).val('0');
+		}else{
+			jQuery("#" + valor).val('');
 		}
 	}
 }
 function HEliminar(div, url){
 	jQuery('#' + div).attr('action', url);
 	jQuery('#' + div).submit();
+}
+
+/*
+ @Id id del campo de texto que servirá para desplegar el selector
+ @Popup Si es true se muestra en un popup, de lo contrario se mostrará como un Dropdown
+ */
+function HDatetimePicker(Id, Popup){
+	if(Popup == undefined){
+		Popup = true;
+	}
+	
+	jQuery('#'+ Id).DateTimePicker({
+		language: "es",
+		isPopup: Popup
+	});
 }

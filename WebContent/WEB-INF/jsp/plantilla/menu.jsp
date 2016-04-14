@@ -1,14 +1,9 @@
       <aside>
           <div id="sidebar"  class="nav-collapse ">
               <ul class="sidebar-menu" id="nav-accordion">
+                  ${col.menu}
                   <li>
-                      <a href="index.html">
-                          <i class="fa fa-dashboard"></i>
-                          <span>Inicio</span>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="index.html">
+                      <a href="${pageContext.request.contextPath}/login/Cerrar.html">
                           <i class="fa fa-remove"></i>
                           <span>Cerrar Sesión</span>
                       </a>

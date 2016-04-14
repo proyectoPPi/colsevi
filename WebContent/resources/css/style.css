@@ -22,7 +22,6 @@ body {
 
 #footer {
     width: 100%;
-    position: absolute;
     bottom: 0;
     left: 0;
 }
@@ -37,11 +36,11 @@ a, a:hover, a:focus {
 }
 ::selection {
 
-    background: #FF6C60;
+    background: peru;
     color: #fff;
 }
 ::-moz-selection {
-    background: #FF6C60;
+    background: peru;
     color: #fff;
 }
 
@@ -50,6 +49,10 @@ a, a:hover, a:focus {
     height: 100%;
 }
 
+.fieldDynamic{
+    border: transparent;
+    background-color: transparent;
+}
 /*login page*/
 
 .login-body {
