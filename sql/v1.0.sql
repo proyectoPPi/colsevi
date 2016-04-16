@@ -266,13 +266,22 @@ CREATE TABLE ingrediente_x_producto(
     CONSTRAINT fk_ingProdUP FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso)
 );
 
+CREATE TABLE dificultad_receta(
+	id_dificultad_receta INT AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(80),
+    icono VARCHAR (15),
+    PRIMARY KEY(id_dificultad_receta)
+);
+
 CREATE TABLE receta(
     id_receta INT AUTO_INCREMENT,
 	id_producto INT,
-    preparacion VARCHAR(2000),
+    id_dificultad_receta INT,
     tiempo VARCHAR(5),
     PRIMARY KEY(id_receta),
-    CONSTRAINT fk_recetaProducto FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
+    CONSTRAINT fk_recetaProducto FOREIGN KEY (id_producto) REFERENCES producto(id_producto),
+    CONSTRAINT fk_recetaDif FOREIGN KEY (id_dificultad_receta) REFERENCES dificultad_receta(id_dificultad_receta)
 );
 
 CREATE TABLE preparacion_receta(

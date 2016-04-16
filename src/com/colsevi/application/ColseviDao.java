@@ -16,6 +16,7 @@ import com.colsevi.dao.general.map.TelefonoMapper;
 import com.colsevi.dao.general.map.TipoTelefonoMapper;
 import com.colsevi.dao.general.map.UnidadPesoMapper;
 import com.colsevi.dao.producto.map.ClasificarIngredienteMapper;
+import com.colsevi.dao.producto.map.DificultadRecetaMapper;
 import com.colsevi.dao.inventario.map.InventarioMapper;
 import com.colsevi.dao.inventario.map.MovimientoCompraMapper;
 import com.colsevi.dao.inventario.map.MovimientoInventarioMapper;
@@ -76,6 +77,7 @@ public class ColseviDao {
 	private ProductoMapper productoMapper;
 	private IngredienteXProductoMapper ingredienteXProductoMapper;
 	private RecetaMapper recetaMapper;
+	private DificultadRecetaMapper dificultadRecetaMapper;
 	private PreparacionRecetaMapper preparacionRecetaMapper;
 	private CatalogoMapper catalogoMapper;
 	private CatalogoXProductoMapper catalogoXProductoMapper;
@@ -144,6 +146,7 @@ public class ColseviDao {
 		ingredienteXProductoMapper = (IngredienteXProductoMapper) beanFactoryMyBatis.getBean("ingredienteXProductoMapper");
 		recetaMapper = (RecetaMapper) beanFactoryMyBatis.getBean("recetaMapper");
 		preparacionRecetaMapper = (PreparacionRecetaMapper) beanFactoryMyBatis.getBean("preparacionRecetaMapper");
+		dificultadRecetaMapper = (DificultadRecetaMapper) beanFactoryMyBatis.getBean("dificultadRecetaMapper");
 		catalogoMapper = (CatalogoMapper) beanFactoryMyBatis.getBean("catalogoMapper");
 		catalogoXProductoMapper = (CatalogoXProductoMapper) beanFactoryMyBatis.getBean("catalogoXProductoMapper");
 		personaMapper = (PersonaMapper) beanFactoryMyBatis.getBean("personaMapper");
@@ -466,6 +469,14 @@ public class ColseviDao {
 
 	public void setTipoDocumentoMapper(TipoDocumentoMapper tipoDocumentoMapper) {
 		this.tipoDocumentoMapper = tipoDocumentoMapper;
+	}
+
+	public DificultadRecetaMapper getDificultadRecetaMapper() {
+		return dificultadRecetaMapper;
+	}
+
+	public void setDificultadRecetaMapper(DificultadRecetaMapper dificultadRecetaMapper) {
+		this.dificultadRecetaMapper = dificultadRecetaMapper;
 	}
 
 }

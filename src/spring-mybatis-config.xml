@@ -136,6 +136,10 @@
 		<property value="com.colsevi.dao.producto.map.RecetaMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	<bean id="dificultadRecetaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.producto.map.DificultadRecetaMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 	<bean id="preparacionRecetaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property value="com.colsevi.dao.producto.map.PreparacionRecetaMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
