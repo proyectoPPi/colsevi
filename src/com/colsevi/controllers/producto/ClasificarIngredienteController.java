@@ -1,4 +1,4 @@
-package com.colsevi.controllers.ingrediente;
+package com.colsevi.controllers.producto;
 
 import java.io.IOException;
 import java.util.List;

@@ -27,20 +27,22 @@ public class BaseConfigController implements Serializable {
 	
 	public String getMenu(HttpServletRequest request){
 		String menu = "";
-		NavegacionUsuario NU = new NavegacionUsuario();
-		List<Pagina> listaPag = NU.getPaginasRol(getUsuario(request).getRol());
-		
-		for(Pagina pag: listaPag){
-			if(pag.getPadrePagina() == null){
-				menu += "<li>";
-				menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
-				menu += "<i class=\""+pag.getIcono()+"\"></i>";
-				menu += "<span>"+pag.getNombre()+"</span>";
-				menu += "</a>";
-				menu += "</li>";
+
+		if(getUsuario(request) != null){
+			NavegacionUsuario NU = new NavegacionUsuario();
+			List<Pagina> listaPag = NU.getPaginasRol(getUsuario(request).getRol());
+			
+			for(Pagina pag: listaPag){
+				if(pag.getPadrePagina() == null){
+					menu += "<li>";
+					menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
+					menu += "<i class=\""+pag.getIcono()+"\"></i>";
+					menu += "<span>"+pag.getNombre()+"</span>";
+					menu += "</a>";
+					menu += "</li>";
+				}
 			}
 		}
-		
 		return menu;
 	}
 	

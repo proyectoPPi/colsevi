@@ -23,7 +23,6 @@
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/js/i18n/DateTimePicker-i18n-es.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/js/jquery.multi-select.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/js/jquery.quicksearch.js"></script>
