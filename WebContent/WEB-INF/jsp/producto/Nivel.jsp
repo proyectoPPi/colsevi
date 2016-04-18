@@ -5,7 +5,10 @@
    <meta charset="UTF-8" />
 	<title>Clasificar ingrediente</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
-
+<style>
+ .color-fill-icon{display:inline-block;width:16px;height:16px;border:1px solid #000;background-color:#fff;margin: 2px;}
+        .dropdown-color-fill-icon{position:relative;float:left;margin-left:0;margin-right: 0}
+        </style>
 </head>
 <body>
 
@@ -18,7 +21,7 @@
 				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
 				
 					<h2>Clasificar Ingredientes 
-						<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></a></i>
+						<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 					</h2>
 					<section class="panel">
 						<div class="panel-body">
@@ -44,14 +47,14 @@
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content-wrap">
-								<form method="post" action="${pageContext.request.contextPath}/Ingrediente/Clasificar/Guardar.html?" id="formulario">
+								<form method="post" action="${pageContext.request.contextPath}/Receta/Nivel/Guardar.html?" id="formulario">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 											<h4 class="modal-title">Clasificar...</h4>
 										</div>
 										<div class="modal-body">
-											<input type="hidden" id="id_clasificar_ingrediente" name="id_clasificar_ingrediente"/>
+											<input type="hidden" id="id_dificultad_receta" name="id_dificultad_receta"/>
 											<div class="form-group">
 												<label>*Nombre</label>
 												<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
@@ -60,6 +63,15 @@
 												<label>*Descripci&#243;n</label>
 												<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
 											</div>
+											<div class="form-group">
+												<input type="hidden" id="icono" name="icono" />
+											  	<div class="btn-group btn-group-sm">
+												      <button type="button" class="btn btn-default" id="color">
+												      	<span class="color-fill-icon dropdown-color-fill-icon" style="background-color:#000;"></span>&nbsp;
+												      	<b class="caret"></b>
+												 	  </button>
+												 </div>
+											 </div>
 										</div>
 										<div class="modal-footer">
 											<button class="btn btn-warning" type="submit">Guardar</button>
@@ -83,8 +95,12 @@
 		titulos = new Array();
 		titulos["id_dificultad_receta"] = "ID";
 		titulos["nombre"] = "Nombre";
-		titulos["descripcion"] = "Descripci&#243;n";
+		titulos["descripcion"] = "Descripción";
+		titulos["icono"] = "Color";
 		
+		color = new Array();
+		color["icono"] = "Color";
+				
 	</script>
 </body>
 </html>

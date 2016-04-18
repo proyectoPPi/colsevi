@@ -56,7 +56,7 @@ public class DificultadRecetaController extends BaseConfigController {
 		
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getDificultadRecetaMapper().selectByExample(DRE)));
 		opciones.put("total", ColseviDao.getInstance().getDificultadRecetaMapper().countByExample(DRE));
-
+		
 		opciones.writeJSONString(response.getWriter());
 	}
 
@@ -72,7 +72,8 @@ public class DificultadRecetaController extends BaseConfigController {
 					opciones = new JSONObject();
 					opciones.put("id_dificultad_receta", bean.getId_dificultad_receta());
 					opciones.put("nombre", bean.getNombre());
-					opciones.put("descripcion", bean.getDescripcion());								
+					opciones.put("descripcion", bean.getDescripcion());		
+					opciones.put("icono", bean.getIcono());		
 					resultado.add(opciones);
 				}catch(Exception e){
 					continue;
