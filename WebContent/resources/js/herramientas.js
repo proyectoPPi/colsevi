@@ -10,9 +10,11 @@ function HTabla(opciones){
 	dataMap['url'] = opciones.url;
 	dataMap['clase'] = opciones.clase;
 	dataMap['boton'] = opciones.boton;
+	dataMap['color'] = opciones.color;
 	
 	if(dataMap['clase'] == undefined) dataMap['clase'] = new Array();
 	if(dataMap['boton'] == undefined) dataMap['boton'] = new Array();
+	if(dataMap['color'] == undefined) dataMap['color'] = new Array();
 	
 	Setlimite(opciones.pagina);
 	
@@ -59,11 +61,19 @@ function HTabla(opciones){
 						 if(dataMap['clase'][k] != undefined){
 							className = 'class="' + dataMap['clase'][k] + '" ';
 						 }
-						 html += "<td "  + className + ">";
+						 
+						 if(dataMap['color'] != undefined && dataMap['color'][k] != undefined){
+							 html += '<td style="background-color: ' + data["datos"][i][k] +'" ' + className + ">";
+						 }else{
+							 html += "<td "  + className + ">";
+						 }
+						 
 						 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
 							 html += data["datos"][i][k]['label'];
 						 }else{
-							 html += data["datos"][i][k];
+							 if(dataMap['color'] != undefined && dataMap['color'][k] == undefined){
+								 html += data["datos"][i][k];
+							 }
 							 
 							 if(dataMap['boton'][k] != undefined){
 								for(var key in dataMap['boton'][k]){
@@ -206,4 +216,8 @@ function HDatetimePicker(Id, Popup){
 		language: "es",
 		isPopup: Popup
 	});
+}
+
+function HColorPicker(Id){
+	jQuery('#' + Id).colorpickerplus();
 }

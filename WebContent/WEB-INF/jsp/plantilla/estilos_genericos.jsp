@@ -17,10 +17,10 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/compiled/timepicker.css" />
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/css/colorpicker.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/css/DateTimePicker.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/css/multi-select.css" />
-    
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/colorpicker/css/bootstrap-colorpicker-plus.min.css" />
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/colorpicker/css/bootstrap-colorpicker-plus.css" />
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
     <!--[if lt IE 9]>

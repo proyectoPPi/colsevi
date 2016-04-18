@@ -1,5 +1,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/colorpicker/js/bootstrap-colorpicker.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/colorpicker/js/bootstrap-colorpicker-plus.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.dcjqaccordion.2.7.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.scrollTo.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.nicescroll.js"></script>
@@ -14,23 +16,20 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.min.map"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/pulstate.js"></script>
-      <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/fuelux/js/spinner.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/fuelux/js/spinner.min.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/js/DateTimePicker.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-datetimepicker/js/i18n/DateTimePicker-i18n-es.js"></script>
-  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/moment.min.js"></script>
-  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/js/jquery.multi-select.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/js/jquery.quicksearch.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap-switch.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.tagsinput.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ga.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
     
     <script type="text/javascript">
     	
