@@ -27,7 +27,7 @@ public class ClasificarIngredienteController extends BaseConfigController {
 	
 	@RequestMapping("/Ingrediente/Clasificar")
 	public ModelAndView Clasificar(HttpServletRequest request,ModelMap model){
-		return new ModelAndView("ingrediente/Clasificar","col",getValoresGenericos(request));
+		return new ModelAndView("producto/Clasificar","col",getValoresGenericos(request));
 	}
 	
 	@SuppressWarnings("unchecked")

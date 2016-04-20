@@ -121,7 +121,7 @@
 														<select class="form-control" id="tipopeso">
 															<option value="">Seleccione</option>
 															<c:forEach items="${listaTipoPeso}" var="tipo">
-																<option value="${tipo.id_tipo_peso}">${tipo.nombre}</option>
+																<option value="${tipo.id_unidad_peso}">${tipo.nombre}</option>
 															</c:forEach>
 														</select>
 													</div>

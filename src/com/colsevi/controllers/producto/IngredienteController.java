@@ -29,7 +29,7 @@ public class IngredienteController extends BaseConfigController {
 	@RequestMapping("/Ingrediente/Ing")
 	public ModelAndView Ingrediente(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaClasificar", listaClasificacion());
-		return new ModelAndView("ingrediente/Ingrediente","col",getValoresGenericos(request));
+		return new ModelAndView("producto/Ingrediente","col",getValoresGenericos(request));
 	}
 	
 	public static List<ClasificarIngrediente> listaClasificacion(){
