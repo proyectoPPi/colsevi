@@ -1,15 +1,12 @@
 package com.colsevi.application;
  
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -69,6 +66,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 		if (path.endsWith("jpg")  || path.endsWith("png")  || path.endsWith("gif") ||
 			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") ||  path.endsWith("map") ||
 			path.startsWith("/Receta/Nivel")||
+			path.startsWith("/Inventario/Vista")||
 			path.startsWith(LOGIN)
 			
 			){

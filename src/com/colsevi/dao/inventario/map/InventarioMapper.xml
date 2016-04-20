@@ -285,4 +285,24 @@
       compromiso = #{compromiso,jdbcType=INTEGER}
     where id_inventario = #{id_inventario,jdbcType=INTEGER}
   </update>
+  
+  <select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
+		SELECT inv.id_inventario, prod.id_producto, prod.nombre, prod.referencia, cat.id_establecimiento, esta.nombreEsta, inv.disponible, inv.compromiso
+		FROM producto prod
+		LEFT JOIN inventario inv on inv.id_producto = prod.id_producto
+		LEFT JOIN catalogo_x_producto cxp ON cxp.id_producto = prod.id_producto
+		LEFT JOIN catalogo cat ON cat.id_catalogo = cxp.id_catalogo
+		LEFT JOIN establecimiento esta ON esta.id_establecimiento = cat.id_establecimiento
+		WHERE 1 = 1
+		 <if test="documento != null">
+			AND per.documento LIKE #{documento}
+		 </if>
+		 <if test="estado != null">
+			AND estado.id_estado_pedido = #{estado}
+		 </if>
+		 <if test="cliente != null">
+			OR (per.nombre LIKE #{cliente} AND per.apellido LIKE #{cliente})
+		 </if>
+		ORDER BY inv.id_inventario DESC;
+	</select>
 </mapper>
