@@ -194,6 +194,7 @@ CREATE TABLE unidad_peso(
     id_unidad_peso INT AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
+    codigo VARCHAR(4) DEFAULT NULL,
     PRIMARY KEY(id_unidad_peso)
 );
 
@@ -400,4 +401,16 @@ CREATE TABLE cobro(
     PRIMARY KEY(id_cobro),
     CONSTRAINT fk_cobroPed FOREIGN KEY (id_deuda) REFERENCES deuda_pedido(id_deuda_pedido),
     CONSTRAINT fk_cobroCat FOREIGN KEY (id_categoria_cobro) REFERENCES categoria_cobro(id_categoria_cobro)
+);
+
+CREATE TABLE inventario_x_materia(
+    id_inventario INT,
+    id_ingrediente INT,
+	lote INT,
+    id_unidad_peso INT,
+    cantidad INT,
+    CONSTRAINT fk_invCom1 FOREIGN KEY (id_inventario) REFERENCES inventario(id_inventario),
+	CONSTRAINT fk_invCom2 FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
+    CONSTRAINT fk_invCom3 FOREIGN KEY (lote) REFERENCES compra_x_ingrediente(lote),
+    CONSTRAINT fk_invCom4 FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso)
 );

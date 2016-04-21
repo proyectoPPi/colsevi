@@ -5,7 +5,14 @@
    <meta charset="UTF-8" />
 	<title>Establecimientos</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
-
+	<style>
+		.success {
+	    	background:  #3F8A24;
+	    }
+	    .error {
+	    	background:  #ff6c60;
+	    }
+	</style>
 </head>
 <body>
 
@@ -49,7 +56,7 @@
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content-wrap">
-								<form method="post" action="${pageContext.request.contextPath}/General/Establecimiento/GuardarLocal.html?" id="formulario">
+								<form method="post" action="${pageContext.request.contextPath}/Inventario/Inv/Guardar.html?" id="formulario">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -58,63 +65,61 @@
 										<div class="modal-body">
 											<div class="row">
 												
-												<input type="hidden" id="id_establecimiento" name="id_establecimiento"/>
-												<input type="hidden" id="id_direccion" name="id_direccion"/>
-												<input type="hidden" id="id_telefono" name="id_telefono"/>
-												<input type="hidden" id="id_correo" name="id_correo"/>
+												<input type="hidden" id="id_inventario" name="id_inventario"/>
+												<input type="hidden" id="id_producto" name="id_producto"/>
+												<input type="hidden" id="secuencia" name="secuencia"/>
 												
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>*Nombre</label>
-													<input type="text" class="form-control" id="nombreEsta" name="nombreEsta" data-bv-notempty="true"/>
-												</div>
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>*Descripci&#243;n</label>
-													<input type="text" class="form-control" id="descipEsta" name="descipEsta" data-bv-notempty="true"/>
-												</div>
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-					                                 <label>*Hora de inicio</label>
-		                                              <input type="text" id="hora_inicio" name="hora_inicio" class="form-control" data-field="time" data-format="HH:mm"/>
-												</div>
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-					                                 <label>*Hora de cierre</label>
-		                                              <input type="text" id="hora_fin" name="hora_fin" class="form-control"  data-field="time" data-format="HH:mm"/>
-												</div>
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>*Correo</label>
-													<input type="text" class="form-control" id="correo" name="correo" data-bv-notempty="true" maxlength="50"/>
-												</div>
-												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+												<select id="listaUnidad" style="display: none;">
+													<option value="0">Seleccione</option>
+													<c:forEach items="${listaUnidad}" var="um">
+														<option value="${um.id_unidad_peso}">${um.nombre}</option>
+													</c:forEach>
+												</select>
 												
-													<h4><strong>DIRECCI&Oacute;N</strong></h4>
-													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-														<label>*Direcci&#243;n</label>
-														<input type="text" class="form-control" id="direccion" name="direccion" data-bv-notempty="true" maxlength="50"/>
-													</div>
-													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-														<label>*Barrio</label>
-														<input type="text" class="form-control" id="barrio" name="barrio" data-bv-notempty="true" maxlength="50"/>
-													</div>
-													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-														<label>*Descripci&#243;n</label>
-														<input type="text" class="form-control" id="descripDir" name="descripDir" data-bv-notempty="true" maxlength="50"/>
-													</div>
-												</div>
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-													<h4><strong>TEL&Eacute;FONO</strong></h4>
-													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-														<label>*Tel&eacute;fono</label>
-														<input type="number" class="form-control" id="telefono" name="telefono" data-bv-notempty="true" maxlength="20"/>
-													</div>
-													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-														<label>Tipo T&eacute;lefono</label>
-														<select class="form-control" id="telTipo" name="telTipo">
-															<option value="0">Seleccione</option>
-															<c:forEach items="${tipoTel}" var="tipo">
-																<option value="${tipo.id_tipo_telefono}">${tipo.nombre}</option>
-															</c:forEach>
-														</select>
-													</div>
-												</div>
+													<section class="panel">
+								                          <header class="panel-heading tab-bg-dark-navy-blue ">
+								                              <ul class="nav nav-tabs">
+								                                  <li class="active">
+								                                      <a data-toggle="tab" href="#producto">Producto</a>
+								                                  </li>
+								                                  <li class="">
+								                                      <a data-toggle="tab" href="#profile" id="carga">About</a>
+								                                  </li>
+								                              </ul>
+								                          </header>
+								                          <div class="panel-body">
+								                              <div class="tab-content">
+								                                  <div id="producto" class="tab-pane active">
+								                                  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+										                                 <label>*Producto</label>
+							                                              <input type="text" id="nombreProd" name="nombreProd" class="form-control" data-bv-notempty="true"/>
+																	</div>
+																	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+																		<label>*Cantidad</label>
+																		<input type="text" class="form-control" id="cantSolicitada" name="cantSolicitada"/>
+																	</div>
+																	
+																	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+																		<label>Clasificar</label>
+																		<select class="form-control" id="clasificarF" name="filtro">
+																			<option value="0">Seleccione</option>
+																			<c:forEach items="${listaEsta}" var="esta">
+																				<option value="${esta.id_establecimiento}">${esta.nombre}</option>
+																			</c:forEach>
+																		</select>
+																	</div>
+								                                  
+								                                  </div>
+								                                  <div id="profile" class="tab-pane">
+								                                  	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								                                  		<div id="viewData"></div>
+																	</div>
+								                                  </div>
+								                              </div>
+								                          </div>
+	                     							</section>
+                     							</div>
 											</div>
 										</div>
 										<div class="modal-footer">
@@ -137,11 +142,11 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/inventario/inventarioVista.js"></script>
 	<script type="text/javascript">
 		titulos = new Array();
-		titulos["id_inventario"] = "ID";
-		titulos["id_producto"] = "Nombre";
-		titulos["nombreEsta"] = "Descripci&#243;n";
-		titulos["disponible"] = "Hora Inicio";
-		titulos["compromiso"] = "Hora Fin";
+		titulos["id_producto"] = "ID";
+		titulos["nombreProd"] = "Producto";
+		titulos["establecimiento"] = "Descripci&#243;n";
+		titulos["disponible"] = "disponible";
+		titulos["compromiso"] = "compromiso";
 		
 		clase = new Array();
 		clase['descipEsta'] = 'hidden-xs';

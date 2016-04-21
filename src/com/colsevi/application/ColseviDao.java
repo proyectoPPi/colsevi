@@ -20,6 +20,7 @@ import com.colsevi.dao.producto.map.DificultadRecetaMapper;
 import com.colsevi.dao.inventario.map.InventarioMapper;
 import com.colsevi.dao.inventario.map.MovimientoCompraMapper;
 import com.colsevi.dao.inventario.map.MovimientoInventarioMapper;
+import com.colsevi.dao.inventario.map.InventarioXMateriaMapper;
 import com.colsevi.dao.pago.map.PagoPedidoMapper;
 import com.colsevi.dao.pago.map.PagoProveedorMapper;
 import com.colsevi.dao.pedido.map.CategoriaCobroMapper;
@@ -88,6 +89,7 @@ public class ColseviDao {
 	private PaginaMapper paginaMapper;
 	private PaginaXRolMapper paginaXRolMapper;
 	private TipoDocumentoMapper tipoDocumentoMapper;
+	private InventarioXMateriaMapper inventarioXMateriaMapper;
 
 	
 	private static ColseviDao current = null;
@@ -156,6 +158,7 @@ public class ColseviDao {
 		paginaMapper = (PaginaMapper) beanFactoryMyBatis.getBean("paginaMapper");
 		paginaXRolMapper = (PaginaXRolMapper) beanFactoryMyBatis.getBean("paginaXRolMapper");
 		tipoDocumentoMapper = (TipoDocumentoMapper) beanFactoryMyBatis.getBean("tipoDocumentoMapper");
+		inventarioXMateriaMapper = (InventarioXMateriaMapper) beanFactoryMyBatis.getBean("inventarioXMateriaMapper");
 		
 	}
 
@@ -477,6 +480,14 @@ public class ColseviDao {
 
 	public void setDificultadRecetaMapper(DificultadRecetaMapper dificultadRecetaMapper) {
 		this.dificultadRecetaMapper = dificultadRecetaMapper;
+	}
+
+	public InventarioXMateriaMapper getInventarioXMateriaMapper() {
+		return inventarioXMateriaMapper;
+	}
+
+	public void setInventarioXMateriaMapper(InventarioXMateriaMapper inventarioXMateriaMapper) {
+		this.inventarioXMateriaMapper = inventarioXMateriaMapper;
 	}
 
 }

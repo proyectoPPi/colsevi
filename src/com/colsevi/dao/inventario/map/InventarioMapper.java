@@ -97,4 +97,6 @@ public interface InventarioMapper {
     int updateByPrimaryKey(Inventario record);
     
     List<Map<String, Object>> SelectDataView(Map<String, Object> map);
+    List<Map<String, Object>> CargarInv(Map<String, Object> map);
+    List<Map<String, Object>> CargarIngProd(Map<String, Object> map);
 }
