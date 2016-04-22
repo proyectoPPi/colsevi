@@ -22,6 +22,8 @@ import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.producto.model.ClasificarIngrediente;
 import com.colsevi.dao.producto.model.ClasificarIngredienteExample;
+import com.colsevi.dao.general.model.Establecimiento;
+import com.colsevi.dao.general.model.EstablecimientoExample;
 import com.colsevi.dao.general.model.UnidadPeso;
 import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.producto.model.Ingrediente;
@@ -43,6 +45,7 @@ public class CompraController extends BaseConfigController {
 		model.addAttribute("listaProveedores", getProveedores());
 		model.addAttribute("listaClasificar", getClasificar());
 		model.addAttribute("listaTipoPeso", getTipoPeso());
+		model.addAttribute("listaEstablecimiento", getEstablecimiento());
 		
 		return new ModelAndView("proveedor/Compra","col",getValoresGenericos(request));
 	}
@@ -57,6 +60,10 @@ public class CompraController extends BaseConfigController {
 	
 	public static List<UnidadPeso> getTipoPeso(){
 		return ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(new UnidadPesoExample());
+	}
+	
+	public static List<Establecimiento> getEstablecimiento(){
+		return ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(new EstablecimientoExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -110,6 +117,12 @@ public class CompraController extends BaseConfigController {
 					labels.put("label",ColseviDao.getInstance().getProveedorMapper().selectByPrimaryKey(bean.getId_proveedor()).getNombre());
 					labels.put("value", bean.getId_proveedor());
 					opciones.put("proveedor", labels);
+				}
+				
+				if(bean.getId_establecimiento() != null){
+					labels.put("label",ColseviDao.getInstance().getEstablecimientoMapper().selectByPrimaryKey(bean.getId_establecimiento()).getNombre());
+					labels.put("value", bean.getId_establecimiento());
+					opciones.put("establecimiento", labels);
 				}
 				
 				if( bean.getMotivo() == null || bean.getMotivo().equals("")){
@@ -170,10 +183,15 @@ public class CompraController extends BaseConfigController {
 		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty())
 			bean.setId_compra(Integer.parseInt(request.getParameter("id_compra")));
 		
-		if(request.getParameter("proveedor") == null || request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").equals("0"))
+		if(request.getParameter("proveedor") == null || request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").trim().equals("0"))
 			error += "Seleccionar el proveedor<br/>";
 		else
 			bean.setId_proveedor(Integer.parseInt(request.getParameter("proveedor")));
+		
+		if(request.getParameter("establecimiento") == null || request.getParameter("establecimiento").trim().isEmpty() || request.getParameter("establecimiento").trim().equals("0"))
+			error += "Seleccione un establecimiento <br/>";
+		else
+			bean.setId_establecimiento(Integer.parseInt(request.getParameter("establecimiento")));
 		
 		if(request.getParameter("valorsin") == null || request.getParameter("valorsin").trim().isEmpty())
 			error += "Ingresar el valor de la compra<br/>";
@@ -206,7 +224,7 @@ public class CompraController extends BaseConfigController {
 				if(request.getParameter("idIng" + (i +1)) != null && !request.getParameter("idIng" + (i +1)).trim().isEmpty()){
 					CompraXIngrediente cxi = new CompraXIngrediente();
 					cxi.setId_ingrediente(Integer.parseInt(request.getParameter("idIng" + (i +1))));
-					cxi.setCantidad(Integer.parseInt(request.getParameter("cant" + (i +1))));
+					cxi.setCantidad(Double.valueOf(request.getParameter("cant" + (i +1))));
 					cxi.setId_unidad_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
 
 					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
@@ -233,11 +251,6 @@ public class CompraController extends BaseConfigController {
 			if(bean.getId_compra() != null){
 				ColseviDao.getInstance().getCompraMapper().updateByPrimaryKey(bean);
 				modelo.addAttribute("correcto", "Compra Actualizada");
-				
-				CompraXIngredienteExample cxiE = new CompraXIngredienteExample();
-				cxiE.createCriteria().andId_compraEqualTo(bean.getId_compra());
-				ColseviDao.getInstance().getCompraXIngredienteMapper().deleteByExample(cxiE);
-				
 			}else{
 				ColseviDao.getInstance().getCompraMapper().insert(bean);
 				
@@ -250,7 +263,13 @@ public class CompraController extends BaseConfigController {
 			
 			for(CompraXIngrediente cxi: listaCXI){
 				cxi.setId_compra(bean.getId_compra());
-				ColseviDao.getInstance().getCompraXIngredienteMapper().insertSelective(cxi);
+				if(cxi.getLote() != null){
+					CompraXIngredienteExample comIngE = new CompraXIngredienteExample();
+					comIngE.createCriteria().andLoteEqualTo(cxi.getLote());
+					ColseviDao.getInstance().getCompraXIngredienteMapper().updateByExampleSelective(cxi, comIngE);
+				}else{
+					ColseviDao.getInstance().getCompraXIngredienteMapper().insertSelective(cxi);
+				}
 			}
 			
 		}catch (Exception e) {

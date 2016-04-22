@@ -54,7 +54,7 @@ function cargarInv(ingrediente,id_unidad_peso, cant){
 
 	jQuery.ajaxQueue({
 		url: contexto + "/Inventario/Inv/cargarIng.html?",
-		 data:{ing: ingrediente, um: id_unidad_peso, cantidad: cant},
+		 data:{ing: ingrediente, um: id_unidad_peso, cantidad: cant, establecimiento: jQuery('#establecimiento').val()},
 	}).done(function(result) {
 		var data; 
  		try{ 
@@ -65,6 +65,9 @@ function cargarInv(ingrediente,id_unidad_peso, cant){
          	jQuery('#dynamic').hide();
  		} 
  		data = data['datos'];
+ 		if(data.length == 0){
+ 			jQuery('<p>No hay materia prima disponible</p>').appendTo('#viewData');
+ 		}
  		for(i in data){
  			var html = '';
 			html += '<div class="col-xs-12 col-md-3">';

@@ -127,4 +127,16 @@ public class UtilidadManager {
 		return result;
 	}
 	
+	public static String retirarCaracteresEspeciales(String valor){
+		
+		valor.replace(",", ".");
+		valor.replace("-", "");
+		valor.replace("+", "");
+		valor.replace("*", "");
+		valor.replace("/", "");
+		valor.replace(" ", "");
+		
+		return valor;
+	}
+	
 }

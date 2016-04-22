@@ -101,8 +101,8 @@
 																	</div>
 																	
 																	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-																		<label>Clasificar</label>
-																		<select class="form-control" id="clasificarF" name="filtro">
+																		<label>Establecimiento</label>
+																		<select class="form-control" id="establecimiento" name="establecimiento">
 																			<option value="0">Seleccione</option>
 																			<c:forEach items="${listaEsta}" var="esta">
 																				<option value="${esta.id_establecimiento}">${esta.nombre}</option>

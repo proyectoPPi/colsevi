@@ -20,13 +20,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.controllers.general.MotivoE;
 import com.colsevi.controllers.general.UnidadMedidaE;
 import com.colsevi.dao.general.model.Establecimiento;
 import com.colsevi.dao.general.model.EstablecimientoExample;
 import com.colsevi.dao.general.model.UnidadPeso;
 import com.colsevi.dao.general.model.UnidadPesoExample;
+import com.colsevi.dao.inventario.model.Inventario;
+import com.colsevi.dao.inventario.model.InventarioExample;
 import com.colsevi.dao.inventario.model.InventarioXMateria;
 import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
+import com.colsevi.dao.inventario.model.MovimientoCompra;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;
@@ -87,6 +91,7 @@ public class InventarioController extends BaseConfigController {
 		if(listData != null && listData.size() >0){
 			for (Map<String, Object> map : listData) {
 				labels = new JSONObject();
+				opciones = new JSONObject();
 				try{
 					opciones.put("id_inventario", map.get("id_inventario"));
 					opciones.put("id_producto", map.get("id_producto"));
@@ -164,6 +169,7 @@ public class InventarioController extends BaseConfigController {
 		Integer um = Integer.parseInt(request.getParameter("um"));
 		
 		mapa.put("ing",request.getParameter("ing"));
+		mapa.put("esta", request.getParameter("establecimiento"));
 		opciones.put("datos", ConstruirInv(ColseviDao.getInstance().getInventarioMapper().CargarInv(mapa), cantidad, um));
 		
 		opciones.writeJSONString(response.getWriter());
@@ -175,7 +181,8 @@ public class InventarioController extends BaseConfigController {
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
-		Integer medida = 0, cant = 0;
+		Double cant = 0d;
+		Integer medida = 0;
 		double op = 0;
 		if(listData != null && listData.size() >0){
 			for (Map<String, Object> map : listData) {
@@ -188,14 +195,15 @@ public class InventarioController extends BaseConfigController {
 					opciones.put("color", true);
 					opciones.put("codUM", map.get("codUM"));
 					opciones.put("id_ingrediente", map.get("id_ingrediente"));
+					opciones.put("cantAsig", map.get("cantAsig"));
+					opciones.put("umAsig", map.get("umAsig"));
 					
 					medida = (Integer) map.get("um");
-					cant = (Integer) map.get("cantidad");
+					cant = (Double) map.get("cantidad");
 					opciones.put("cantidad", cant);
+					op = cant;
 					
-					if(um.equals(medida)){
-						opciones.put("cantidad", cant * cantidad);
-					}else if(um.equals(UnidadMedidaE.KILO.getUnidadM())){
+					if(um.equals(UnidadMedidaE.KILO.getUnidadM())){
 						if(medida.equals(UnidadMedidaE.LIBRA.getUnidadM())){
 							op = cant * 0.45359237;
 						}else if(medida.equals(UnidadMedidaE.GRAMO.getUnidadM())){
@@ -213,7 +221,6 @@ public class InventarioController extends BaseConfigController {
 						}else if(medida.equals(UnidadMedidaE.KILO.getUnidadM())){
 							op = cant * 1000;
 						}
-					}else if(um.equals(UnidadMedidaE.LITRO.getUnidadM())){
 					}
 					
 					if(op < cantidad){
@@ -232,36 +239,63 @@ public class InventarioController extends BaseConfigController {
 	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
 		
 		try{
-			Integer inventario = request.getParameter("id_inventario") == null ? 0 : Integer.parseInt(request.getParameter("id_inventario"));
+			Inventario bean = new Inventario();
 			Object[] result = validarGuardado(request);
 			
 			if(!result[0].toString().isEmpty()){
 				modelo.addAttribute("error", result[0]);
 				return Ingrediente(request, modelo);
 			}
+
+			bean.setId_inventario(request.getParameter("id_inventario") == null || request.getParameter("id_inventario").trim().isEmpty() ? 0 : Integer.parseInt(request.getParameter("id_inventario")));
+			bean.setCompromiso(0);
+			bean.setDisponible(Integer.parseInt(request.getParameter("cantSolicitada")));
+			bean.setId_establecimiento(Integer.parseInt(request.getParameter("establecimiento")));
+			bean.setId_producto(Integer.parseInt(request.getParameter("id_producto")));
 			
 			List<InventarioXMateria> listaInv = (List<InventarioXMateria>) result[1];
+			List<CompraXIngrediente> listaCompra = (List<CompraXIngrediente>) result[2];
 			
-			if(!inventario.equals(0)){
+			if(!bean.getId_inventario().equals(0)){
+			
+				ColseviDao.getInstance().getInventarioMapper().updateByPrimaryKey(bean);
+				modelo.addAttribute("correcto", "Ingrediente Actualizado");
+			}else{
+				ColseviDao.getInstance().getInventarioMapper().insert(bean);
 				
+				InventarioExample invE = new InventarioExample();
+				invE.setOrderByClause("id_inventario DESC");
+				bean.setId_inventario(ColseviDao.getInstance().getInventarioMapper().selectByExample(invE).get(0).getId_inventario());
+				
+				modelo.addAttribute("correcto", "Inventario insertado");
 			}
-			
-//			if(bean.getId_ingrediente() != null){
-//				ColseviDao.getInstance().getIngredienteMapper().updateByPrimaryKey(bean);
-//				modelo.addAttribute("correcto", "Ingrediente Actualizado");
-//			}else{
-//				ColseviDao.getInstance().getIngredienteMapper().insert(bean);
-//				modelo.addAttribute("correcto", "Ingrediente insertado");
-//			}
 
 			InventarioXMateriaExample ixm = new InventarioXMateriaExample();
-			ixm.createCriteria().andId_inventarioEqualTo(inventario);
+			ixm.createCriteria().andId_inventarioEqualTo(bean.getId_inventario());
 			ColseviDao.getInstance().getInventarioXMateriaMapper().deleteByExample(ixm);
 			
-			for(InventarioXMateria bean: listaInv){
-				bean.setId_inventario(inventario);
-				ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(bean);
+			for(InventarioXMateria beanMateria: listaInv){
+				beanMateria.setId_inventario(bean.getId_inventario());
+				ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(beanMateria);
+				
+				MovimientoCompra mv = new MovimientoCompra();
+				mv.setLote(beanMateria.getLote());
+				mv.setId_unidad_peso(beanMateria.getId_unidad_peso());
+				mv.setId_establecimiento(bean.getId_establecimiento());
+				mv.setCantidad(beanMateria.getCantidad());
+				mv.setFecha_movimiento(new Date());
+				mv.setId_motivo(MotivoE.ASIGNACION.getMotivoE());
+				
+				ColseviDao.getInstance().getMovimientoCompraMapper().insertSelective(mv);
 			}
+			
+			for(CompraXIngrediente beanC: listaCompra){
+				
+				CompraXIngredienteExample compraIngE = new CompraXIngredienteExample();
+				compraIngE.createCriteria().andLoteEqualTo(beanC.getLote());
+				ColseviDao.getInstance().getCompraXIngredienteMapper().updateByExampleSelective(beanC, compraIngE);
+			}
+			
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
@@ -272,20 +306,18 @@ public class InventarioController extends BaseConfigController {
 
 		Object[] obj = new Object[5];
 		List<InventarioXMateria> ListaIinv = new ArrayList<InventarioXMateria>();
+		List<CompraXIngrediente> listaCompra = new ArrayList<CompraXIngrediente>();
 		String error = "";
 		String[] sec = request.getParameter("secuencia").split(",");
 		Integer producto = Integer.parseInt(request.getParameter("id_producto"));
 		Integer cantSolicitada = Integer.parseInt(request.getParameter("cantSolicitada"));
-		Integer cantidadVista = 0;
 		Integer umVista = 0;
-		Double op = 0d;
-		Double opcompra = 0d;
-		Double totalAsignado = 0d;
+		Double opcompra = 0d,op = 0d,cantidadVista = 0d, totalAsignado = 0d;
 		
 		for(int i = 0; i < sec.length ; i ++){
 			if(request.getParameter("cant" + sec[i]) != null && !request.getParameter("cant" + sec[i]).trim().isEmpty() &&
 					!request.getParameter("um" + sec[i]).trim().equals("0")){
-				cantidadVista = Integer.parseInt(request.getParameter("cant" + sec[i]));	
+				cantidadVista = Double.valueOf(UtilidadManager.retirarCaracteresEspeciales(request.getParameter("cant" + sec[i])));	
 				umVista = Integer.parseInt(request.getParameter("um" + sec[i]));
 				
 				if(cantidadVista != null && !cantidadVista.equals(0)){
@@ -301,7 +333,7 @@ public class InventarioController extends BaseConfigController {
 					
 					Ingrediente ing = ColseviDao.getInstance().getIngredienteMapper().selectByPrimaryKey(Integer.parseInt(request.getParameter("ing" + sec[i])));
 					
-					op = Double.valueOf(cantidadVista);
+					op = cantidadVista;
 					opcompra = Double.valueOf(CXI.getCantidad());
 					
 					ingProd.setCantidad(ingProd.getCantidad() * cantSolicitada);
@@ -316,7 +348,7 @@ public class InventarioController extends BaseConfigController {
 						}
 					}else if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM())){
 						if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.KILO.getUnidadM())){
-							op = cantidadVista / 0.45359237;
+							op = cantidadVista * 0.45359237;
 							umVista = ingProd.getId_unidad_peso();
 						}else if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.GRAMO.getUnidadM())){
 							op = cantidadVista * 453.59237;
@@ -340,7 +372,7 @@ public class InventarioController extends BaseConfigController {
 						}
 					}else if(CXI.getId_unidad_peso().equals(UnidadMedidaE.LIBRA.getUnidadM())){
 						if(umVista.equals(UnidadMedidaE.KILO.getUnidadM())){
-							opcompra = CXI.getCantidad() / 0.45359237;
+							opcompra = CXI.getCantidad() * 0.45359237;
 						}else if(umVista.equals(UnidadMedidaE.GRAMO.getUnidadM())){
 							opcompra = CXI.getCantidad() * 453.59237;
 						}
@@ -354,31 +386,54 @@ public class InventarioController extends BaseConfigController {
 					
 					totalAsignado =+ op;
 					if(op <= opcompra && op <= ingProd.getCantidad() && totalAsignado <= ingProd.getCantidad()){
-						System.out.println("hola");
 						InventarioXMateria ixm = new InventarioXMateria();
 						ixm.setId_ingrediente(Integer.parseInt(request.getParameter("ing" + sec[i])));
-						ixm.setCantidad(op);
-						ixm.setId_unidad_peso(umVista);
+						ixm.setCantidad(Double.valueOf(request.getParameter("cant" + sec[i])));
+						ixm.setId_unidad_peso(Integer.parseInt(request.getParameter("um" + sec[i])));
 						ixm.setLote(Integer.parseInt(sec[i]));
 						ListaIinv.add(ixm);
+						
+						opcompra -= op;
+						if(opcompra < 1){
+							
+							if(umVista.equals(UnidadMedidaE.KILO.getUnidadM())){
+								opcompra *= 2.20462262;
+								umVista = UnidadMedidaE.LIBRA.getUnidadM();
+								if(opcompra < 1){
+									opcompra *= 1000;
+									umVista = UnidadMedidaE.GRAMO.getUnidadM();
+								}
+							}else if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM())){
+								opcompra *= 453.59237;
+								umVista = UnidadMedidaE.GRAMO.getUnidadM();
+							}
+						}
+						
+						CompraXIngrediente cxi = new CompraXIngrediente();
+						cxi.setCantidad(opcompra);
+						cxi.setId_unidad_peso(umVista);
+						cxi.setLote(Integer.parseInt(sec[i]));
+						listaCompra.add(cxi);
+						
 					}else{
-						if(totalAsignado <= ingProd.getCantidad()){
-							System.out.println("La cantidad seleccionada supera el numero requerido");
+						if(totalAsignado > ingProd.getCantidad()){
+							error += "La cantidad seleccionada supera el numero requerido<br/>";
 						}
-						if(op <= opcompra){
-							System.out.println("La cantidad seleccionada del lote" + sec[i] +  " supera la capacidad disponible");
+						if(op > opcompra){
+							error += "La cantidad seleccionada del lote" + sec[i] +  " supera la capacidad disponible<br/>";
 						}
-						if(op <= ingProd.getCantidad()){
-							System.out.println("La cantidad seleccionada del ingrediente " + ing.getNombre() + " supera la capacidad configurada para el producto");
+						if(op > ingProd.getCantidad()){
+							error += "La cantidad seleccionada del ingrediente " + ing.getNombre() + " supera la capacidad configurada para el producto<br/>";
 						}
 					}
-					
 				}
 			}
-			
-			obj[0] = error;
-			obj[1] = ListaIinv;
 		}
+
+		obj[0] = error;
+		obj[1] = ListaIinv;
+		obj[2] = listaCompra;
+		
 		return obj;
 	}
 	

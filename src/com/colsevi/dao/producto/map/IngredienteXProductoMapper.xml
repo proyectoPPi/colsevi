@@ -269,11 +269,11 @@
       and id_producto = #{id_producto,jdbcType=INTEGER}
   </update>
   <select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
-  	SELECT ixp.id_ingrediente, ixp.id_tipo_peso, ing.nombre AS nombreIng, tp.nombre AS nombreTp, ixp.cantidad
+  	SELECT ixp.id_ingrediente, ixp.id_unidad_peso, ing.nombre AS nombreIng, tp.nombre AS nombreTp, ixp.cantidad
 		FROM producto prod
 		INNER JOIN ingrediente_x_producto ixp ON ixp.id_producto = prod.id_producto
 		LEFT JOIN ingrediente ing ON ing.id_ingrediente = ixp.id_ingrediente
-		LEFT JOIN tipo_peso tp ON tp.id_tipo_peso = ixp.id_tipo_peso
+		LEFT JOIN unidad_peso tp ON tp.id_unidad_peso = ixp.id_unidad_peso
 		
 		WHERE prod.id_producto = #{producto};
 	</select>
