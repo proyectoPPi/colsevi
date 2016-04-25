@@ -71,6 +71,16 @@ public class UtilidadManager {
 		return null;
 	}
 
+	public static String FormatoFechaVistaO(Object date){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		try {
+			return sdf.format(date); 
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
 	
 	public static String Currency(BigDecimal valor){
 		Locale locale = new Locale("es","CO"); // elegimos COLOMBIA

@@ -308,28 +308,25 @@
 	
 	<select id="CargarInv" parameterType="java.util.Map" resultType="java.util.HashMap">
 		
-		
-		SELECT cxi.lote, cxi.cantidad, cxi.fecha_vencimiento, up.nombre,up.id_unidad_peso AS um, up.codigo AS codUM, ing.id_ingrediente,
+		SELECT mp.lote, mp.cantidad, mp.fecha_vencimiento, up.nombre,up.id_unidad_peso AS um, up.codigo AS codUM, ing.id_ingrediente,
 			ixm.cantidad AS cantAsig, ixm.id_unidad_peso As umAsig
 		FROM ingrediente ing
-		LEFT JOIN compra_x_ingrediente cxi ON cxi.id_ingrediente = ing.id_ingrediente
-		LEFT JOIN compra com ON com.id_compra = cxi.id_compra
-		LEFT JOIN unidad_peso up ON up.id_unidad_peso = cxi.id_unidad_peso
-	    LEFT JOIN  inventario_x_materia ixm ON ixm.id_ingrediente = ing.id_ingrediente
+		LEFT JOIN materia_prima mp ON mp.id_ingrediente = ing.id_ingrediente
+		LEFT JOIN unidad_peso up ON up.id_unidad_peso = mp.id_unidad_peso
+	    LEFT JOIN  inventario_x_materia ixm ON mp.id_ingrediente = ing.id_ingrediente
 		WHERE 1 = 1
     
-		AND fecha_vencimiento > NOW() AND cxi.cantidad > 0 AND com.motivo = ''
-		
-		 <if test="ing != null">
-			AND ing.id_ingrediente = #{ing}
+		AND fecha_vencimiento > NOW() AND mp.cantidad > 0
+ 		<if test="ing != null">
+			AND ing.id_ingrediente = 1
 		 </if>
 		 <if test="esta != null">
-			 AND com.id_establecimiento = #{esta}
-		 </if>
-		 
-		ORDER BY ing.id_ingrediente DESC
+			 AND mp.id_establecimiento = 1
+		  </if>
+		  
+		GROUP BY ing.id_ingrediente, mp.lote
+		ORDER BY ing.id_ingrediente DESC;
 		
-		GROUP BY ing.id_ingrediente, cxi.lote;
 	</select>
 	
 	<select id="CargarIngProd" parameterType="java.util.Map" resultType="java.util.HashMap">

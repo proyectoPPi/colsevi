@@ -198,17 +198,30 @@ CREATE TABLE unidad_peso(
     PRIMARY KEY(id_unidad_peso)
 );
 
-CREATE TABLE compra_x_ingrediente(
+CREATE TABLE materia_prima(
 	lote INT AUTO_INCREMENT,
+    id_unidad_peso INT,
+    id_ingrediente INT,
+    id_establecimiento INT,
+    cantidad DOUBLE,
+    fecha_vencimiento DATETIME,
+    PRIMARY KEY(lote),
+    CONSTRAINT fk_ump FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso),
+    CONSTRAINT fk_imp FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
+    CONSTRAINT fk_emp FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento)
+);
+
+CREATE TABLE compra_x_ingrediente(
     id_compra INT,
     id_ingrediente INT,
     id_unidad_peso INT NOT NULL,
-    fecha_vencimiento DATETIME,
     cantidad DOUBLE NOT NULL,
+    lote INT,
     PRIMARY KEY(lote,id_compra,id_ingrediente),
 	CONSTRAINT fk_cxi FOREIGN KEY (id_compra) REFERENCES compra(id_compra),
     CONSTRAINT fk_icx FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
-    CONSTRAINT fk_ucxi FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso)
+    CONSTRAINT fk_ucxi FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso),
+    CONSTRAINT fk_lcxi FOREIGN KEY (lote) REFERENCES materia_prima(lote)
 );
 
 ALTER TABLE compra_x_ingrediente AUTO_INCREMENT = 1000;
@@ -219,17 +232,17 @@ CREATE TABLE motivo(
     PRIMARY KEY(id_motivo)
 );
 
-CREATE TABLE movimiento_compra(
-	id_momivimiento_compra INT AUTO_INCREMENT,
+CREATE TABLE movimiento_materia(
+	id_momivimiento_materia INT AUTO_INCREMENT,
     id_motivo INT NOT NULL,
     lote INT NOT NULL,
     id_unidad_peso INT NOT NULL,
     id_establecimiento INT,
     cantidad DOUBLE,
 	fecha_movimiento DATETIME NOT NULL,
-    PRIMARY KEY(id_momivimiento_compra),
+    PRIMARY KEY(id_momivimiento_materia),
     CONSTRAINT fk_movcomMotivo FOREIGN KEY (id_motivo) REFERENCES motivo(id_motivo),
-    CONSTRAINT fk_comxIngMov FOREIGN KEY (lote) REFERENCES compra_x_ingrediente(lote),
+    CONSTRAINT fk_matxIngMov FOREIGN KEY (lote) REFERENCES materia_prima(lote),
     CONSTRAINT fk_umc FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso),
     CONSTRAINT fk_movIngEst FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento)
 );
@@ -411,6 +424,6 @@ CREATE TABLE inventario_x_materia(
     cantidad DOUBLE,
     CONSTRAINT fk_invCom1 FOREIGN KEY (id_inventario) REFERENCES inventario(id_inventario),
 	CONSTRAINT fk_invCom2 FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
-    CONSTRAINT fk_invCom3 FOREIGN KEY (lote) REFERENCES compra_x_ingrediente(lote),
+    CONSTRAINT fk_invCom3 FOREIGN KEY (lote) REFERENCES materia_prima(lote),
     CONSTRAINT fk_invCom4 FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso)
 );

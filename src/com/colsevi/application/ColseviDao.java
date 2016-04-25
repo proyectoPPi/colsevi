@@ -18,9 +18,10 @@ import com.colsevi.dao.general.map.UnidadPesoMapper;
 import com.colsevi.dao.producto.map.ClasificarIngredienteMapper;
 import com.colsevi.dao.producto.map.DificultadRecetaMapper;
 import com.colsevi.dao.inventario.map.InventarioMapper;
-import com.colsevi.dao.inventario.map.MovimientoCompraMapper;
 import com.colsevi.dao.inventario.map.MovimientoInventarioMapper;
+import com.colsevi.dao.inventario.map.MovimientoMateriaMapper;
 import com.colsevi.dao.inventario.map.InventarioXMateriaMapper;
+import com.colsevi.dao.inventario.map.MateriaPrimaMapper;
 import com.colsevi.dao.pago.map.PagoPedidoMapper;
 import com.colsevi.dao.pago.map.PagoProveedorMapper;
 import com.colsevi.dao.pedido.map.CategoriaCobroMapper;
@@ -71,7 +72,8 @@ public class ColseviDao {
 	private DeudaProveedorMapper deudaProveedorMapper;
 	private InventarioMapper inventarioMapper;
 	private MovimientoInventarioMapper movimientoInventarioMapper;
-	private MovimientoCompraMapper movimientoCompraMapper;
+	private MovimientoMateriaMapper movimientoMateriaMapper;
+	private MateriaPrimaMapper materiaPrimaMapper;
 	private ClasificarIngredienteMapper clasificarIngredienteMapper; 
 	private IngredienteMapper ingredienteMapper;
 	private TipoProductoMapper tipoProductoMapper;
@@ -140,7 +142,8 @@ public class ColseviDao {
 		deudaProveedorMapper = (DeudaProveedorMapper) beanFactoryMyBatis.getBean("deudaProveedorMapper");
 		inventarioMapper = (InventarioMapper) beanFactoryMyBatis.getBean("inventarioMapper");
 		movimientoInventarioMapper = (MovimientoInventarioMapper) beanFactoryMyBatis.getBean("movimientoInventarioMapper");
-		movimientoCompraMapper = (MovimientoCompraMapper) beanFactoryMyBatis.getBean("movimientoCompraMapper");
+		movimientoMateriaMapper = (MovimientoMateriaMapper) beanFactoryMyBatis.getBean("movimientoMateriaMapper");
+		materiaPrimaMapper = (MateriaPrimaMapper) beanFactoryMyBatis.getBean("materiaPrimaMapper");
 		clasificarIngredienteMapper = (ClasificarIngredienteMapper) beanFactoryMyBatis.getBean("clasificarIngredienteMapper");
 		ingredienteMapper = (IngredienteMapper) beanFactoryMyBatis.getBean("ingredienteMapper");
 		tipoProductoMapper = (TipoProductoMapper) beanFactoryMyBatis.getBean("tipoProductoMapper");
@@ -338,12 +341,12 @@ public class ColseviDao {
 		this.movimientoInventarioMapper = movimientoInventarioMapper;
 	}
 
-	public MovimientoCompraMapper getMovimientoCompraMapper() {
-		return movimientoCompraMapper;
+	public MovimientoMateriaMapper getMovimientoMateriaMapper() {
+		return movimientoMateriaMapper;
 	}
 
-	public void setMovimientoCompraMapper(MovimientoCompraMapper movimientoCompraMapper) {
-		this.movimientoCompraMapper = movimientoCompraMapper;
+	public void setMovimientoMateriaMapper(MovimientoMateriaMapper movimientoMateriaMapper) {
+		this.movimientoMateriaMapper = movimientoMateriaMapper;
 	}
 
 	public ClasificarIngredienteMapper getClasificarIngredienteMapper() {
@@ -489,5 +492,14 @@ public class ColseviDao {
 	public void setInventarioXMateriaMapper(InventarioXMateriaMapper inventarioXMateriaMapper) {
 		this.inventarioXMateriaMapper = inventarioXMateriaMapper;
 	}
+
+	public MateriaPrimaMapper getMateriaPrimaMapper() {
+		return materiaPrimaMapper;
+	}
+
+	public void setMateriaPrimaMapper(MateriaPrimaMapper materiaPrimaMapper) {
+		this.materiaPrimaMapper = materiaPrimaMapper;
+	}
+	
 
 }

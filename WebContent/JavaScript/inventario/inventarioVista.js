@@ -92,10 +92,10 @@ function cargarInv(ingrediente,id_unidad_peso, cant){
 			html += '<div class="col-xs-6">';
 			html += data[i]['cantidad'] + ' ' + data[i]['codUM'];
 			html += '</div>';
-			html += '<input type="text" class="form-control" id="cant'+data[i]['lote']+'" id="cant'+data[i]['lote']+'" name="cant'+data[i]['lote']+'"/>';
+			html += '<input type="text" class="form-control" id="cant'+data[i]['lote']+'" id="cant'+data[i]['lote']+'" name="cant'+data[i]['lote']+'" value="'+data[i]['cantAsig']+'"/>';
 			html += '</div>';
 			html += '<div class="col-xs-12"><br/>';
-			html += '<select class="form-control" id="um'+data[i]['lote']+'" name="um'+data[i]['lote']+'">';
+			html += '<select class="form-control" id="um'+data[i]['lote']+'" name="um'+data[i]['lote']+'" value="'+data[i]['umAsig']+'">';
 			
 			$('#listaUnidad > option').each(function(){
 				html += $(this)[0].outerHTML;

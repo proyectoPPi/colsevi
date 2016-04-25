@@ -108,8 +108,8 @@
 		<property value="com.colsevi.dao.inventario.map.MovimientoInventarioMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	<bean id="movimientoCompraMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property value="com.colsevi.dao.inventario.map.MovimientoCompraMapper" name="mapperInterface" />
+	<bean id="movimientoMateriaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.inventario.map.MovimientoMateriaMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	<bean id="clasificarIngredienteMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
@@ -182,6 +182,10 @@
 	</bean>
 	<bean id="inventarioXMateriaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property value="com.colsevi.dao.inventario.map.InventarioXMateriaMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="materiaPrimaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.inventario.map.MateriaPrimaMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	
