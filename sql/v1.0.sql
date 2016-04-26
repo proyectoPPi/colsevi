@@ -233,14 +233,14 @@ CREATE TABLE motivo(
 );
 
 CREATE TABLE movimiento_materia(
-	id_momivimiento_materia INT AUTO_INCREMENT,
+	id_movimiento_materia INT AUTO_INCREMENT,
     id_motivo INT NOT NULL,
     lote INT NOT NULL,
     id_unidad_peso INT NOT NULL,
     id_establecimiento INT,
     cantidad DOUBLE,
 	fecha_movimiento DATETIME NOT NULL,
-    PRIMARY KEY(id_momivimiento_materia),
+    PRIMARY KEY(id_movimiento_materia),
     CONSTRAINT fk_movcomMotivo FOREIGN KEY (id_motivo) REFERENCES motivo(id_motivo),
     CONSTRAINT fk_matxIngMov FOREIGN KEY (lote) REFERENCES materia_prima(lote),
     CONSTRAINT fk_umc FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso),

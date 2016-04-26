@@ -76,4 +76,6 @@ public interface MateriaPrimaMapper {
 	int updateByPrimaryKey(MateriaPrima record);
 	
 	List<Map<String, Object>> SelectDataView(Map<String, Object> map);
+	
+	int CountDataView(Map<String, Object> map);
 }

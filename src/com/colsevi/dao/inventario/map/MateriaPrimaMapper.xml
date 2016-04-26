@@ -307,8 +307,46 @@
 		LEFT JOIN unidad_peso up ON up.id_unidad_peso = mp.id_unidad_peso
 		LEFT JOIN ingrediente ing ON ing.id_ingrediente = mp.id_ingrediente
 		LEFT JOIN establecimiento esta ON esta.id_establecimiento = mp.id_establecimiento
+		WHERE 1 = 1
+		
+		 <if test="lote != null">
+			AND mp.lote = #{lote}
+		 </if>
+		 <if test="esta != null">
+			AND esta.id_establecimiento = #{esta}
+		 </if>
+		 <if test="cant != null">
+			AND mp.cantidad = #{cant}
+		 </if>
+		 <if test="um != null">
+			AND up.id_unidad_peso = #{um}
+		 </if>
+		
 		ORDER BY lote DESC
 		LIMIT ${limite};
+	</select>
+	
+	 <select id="CountDataView" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM materia_prima mp
+		LEFT JOIN unidad_peso up ON up.id_unidad_peso = mp.id_unidad_peso
+		LEFT JOIN ingrediente ing ON ing.id_ingrediente = mp.id_ingrediente
+		LEFT JOIN establecimiento esta ON esta.id_establecimiento = mp.id_establecimiento
+		WHERE 1 = 1
+		
+		 <if test="lote != null">
+			AND mp.lote = #{lote}
+		 </if>
+		 <if test="esta != null">
+			AND esta.id_establecimiento = #{esta}
+		 </if>
+		 <if test="cant != null">
+			AND mp.cantidad = #{cant}
+		 </if>
+		 <if test="um != null">
+			AND up.id_unidad_peso = #{um}
+		 </if>
+		;
 	</select>
   
 </mapper>

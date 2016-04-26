@@ -3,7 +3,7 @@
 <html>
 <head>
    <meta charset="UTF-8" />
-	<title>Materia Prima</title>
+	<title>Movimiento materia</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 
 </head>
@@ -17,7 +17,7 @@
 				<div class="row">
 				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
 				
-					<h2>Materia Prima</h2>
+					<h2>Movimiento materia</h2>
 					<section class="panel">
 						<div class="panel-body">
 							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
@@ -62,21 +62,19 @@
 		<c:import url="/WEB-INF/jsp/plantilla/pie_pagina.jsp"></c:import>
 	</section>
 	<c:import url="/WEB-INF/jsp/plantilla/javascript_genericos.jsp"></c:import>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/inventario/MateriaPrima.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/inventario/MovimientoMateria.js"></script>
 	<script type="text/javascript">
 		
 		titulos = new Array();
-		titulos["lote"] = "ID";
-		titulos["loteid"] = "Lote";
-		titulos["nombreIng"] = "Ingrediente";
+		titulos["id_movimiento_materia"] = "ID";
+		titulos["lote"] = "Lote";
+		titulos["motivo"] = "Motivo";
+		titulos["fecha_movimiento"] = "Fecha movimiento";
+		titulos["um"] = "Unidad de Medida";
 		titulos["cantidad"] = "Cantidad";
-		titulos["nombreUp"] = "Unidad de Medida";
-		titulos["fecha_vencimiento"] = "Fecha Vencimiento";
-		titulos["nombreEsta"] = "Establecimiento";
+		titulos["esta"] = "Establecimiento";
 		
 		clase = new Array();
-		clase['fecha_vencimiento'] = 'hidden-xs';
-		clase['nombreEsta'] = 'hidden-xs';
 		
 	</script>
 </body>

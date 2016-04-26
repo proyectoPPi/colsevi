@@ -24,15 +24,15 @@ import com.colsevi.dao.general.model.UnidadPeso;
 import com.colsevi.dao.general.model.UnidadPesoExample;
 
 @Controller
-public class MateriaPrimaController extends BaseConfigController{
+public class MovimientoMateriaController extends BaseConfigController{
 
-	private static final long serialVersionUID = 55977124238424730L;
+	private static final long serialVersionUID = 8419735704984053475L;
 
-	@RequestMapping("/Inventario/MateriaPrima")
-	public ModelAndView MateriaPrima(HttpServletRequest request, ModelMap model){
+	@RequestMapping("/Inventario/MovimientoMateria")
+	public ModelAndView MovimientoMateria(HttpServletRequest request, ModelMap model){
 		model.addAttribute("ListaUM", ListaUM());
 		model.addAttribute("ListaE", ListaE());
-		return new ModelAndView("/inventario/MateriaPrima", "col", getValoresGenericos(request));
+		return new ModelAndView("/inventario/MovimientoMateria", "col", getValoresGenericos(request));
 	}
 	
 	public static List<UnidadPeso> ListaUM(){
@@ -44,7 +44,7 @@ public class MateriaPrimaController extends BaseConfigController{
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Inventario/MateriaPrima/tabla")
+	@RequestMapping("/Inventario/MovimientoMateria/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject options = new JSONObject();
@@ -72,14 +72,12 @@ public class MateriaPrimaController extends BaseConfigController{
 		}
 		
 		try{
-			options.put("datos", ConstruirJSON(ColseviDao.getInstance().getMateriaPrimaMapper().SelectDataView(mapa)));
-			options.put("total", ColseviDao.getInstance().getMateriaPrimaMapper().CountDataView(mapa));
+			options.put("datos", ConstruirJSON(ColseviDao.getInstance().getMovimientoMateriaMapper().SelectDataView(mapa)));
+			options.put("total", ColseviDao.getInstance().getMovimientoMateriaMapper().CountDataView(mapa));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
 		options.writeJSONString(response.getWriter());
-		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -90,13 +88,13 @@ public class MateriaPrimaController extends BaseConfigController{
 		for(Map<String, Object> map: ListaMP){
 			try{
 				options = new JSONObject();
+				options.put("id_movimiento_materia", map.get("id_movimiento_materia"));
 				options.put("lote", map.get("lote"));
-				options.put("loteid", map.get("lote"));
+				options.put("motivo", map.get("motivo"));
+				options.put("fecha_movimiento", map.get("fecha_movimiento") != null ? UtilidadManager.FormatoFechaVistaO(map.get("fecha_movimiento")) : "");
+				options.put("um", map.get("um"));
 				options.put("cantidad", map.get("cantidad"));
-				options.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatoFechaVistaO(map.get("fecha_vencimiento")) : "");
-				options.put("nombreIng", map.get("nombreIng"));
-				options.put("nombreEsta", map.get("nombreEsta"));
-				options.put("nombreUp", map.get("nombreUp"));
+				options.put("esta", map.get("esta"));
 				
 				result.add(options);
 			}catch(Exception e){
@@ -106,4 +104,5 @@ public class MateriaPrimaController extends BaseConfigController{
 		
 		return result;
 	}
+
 }
