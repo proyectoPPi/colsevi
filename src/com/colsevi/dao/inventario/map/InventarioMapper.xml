@@ -285,4 +285,79 @@
       compromiso = #{compromiso,jdbcType=INTEGER}
     where id_inventario = #{id_inventario,jdbcType=INTEGER}
   </update>
+  
+  <select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
+		SELECT inv.id_inventario, prod.id_producto, prod.nombre AS nombreProd, prod.referencia, inv.id_establecimiento,
+			esta.nombre AS nombreEsta, inv.disponible, inv.compromiso
+		FROM producto prod
+		LEFT JOIN inventario inv on inv.id_producto = prod.id_producto
+		LEFT JOIN catalogo_x_producto cxp ON cxp.id_producto = prod.id_producto
+		LEFT JOIN catalogo cat ON cat.id_catalogo = cxp.id_catalogo
+		LEFT JOIN establecimiento esta ON esta.id_establecimiento = inv.id_establecimiento
+		WHERE 1 = 1
+		 <if test="documento != null">
+			AND per.documento LIKE #{documento}
+		 </if>
+		 <if test="estado != null">
+			AND estado.id_estado_pedido = #{estado}
+		 </if>
+		 <if test="cliente != null">
+			OR (per.nombre LIKE #{cliente} AND per.apellido LIKE #{cliente})
+		 </if>
+		ORDER BY inv.id_inventario DESC;
+	</select>
+	<select id="CountDataView" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM producto prod
+		LEFT JOIN inventario inv on inv.id_producto = prod.id_producto
+		LEFT JOIN catalogo_x_producto cxp ON cxp.id_producto = prod.id_producto
+		LEFT JOIN catalogo cat ON cat.id_catalogo = cxp.id_catalogo
+		LEFT JOIN establecimiento esta ON esta.id_establecimiento = inv.id_establecimiento
+		WHERE 1 = 1
+		 <if test="documento != null">
+			AND per.documento LIKE #{documento}
+		 </if>
+		 <if test="estado != null">
+			AND estado.id_estado_pedido = #{estado}
+		 </if>
+		 <if test="cliente != null">
+			OR (per.nombre LIKE #{cliente} AND per.apellido LIKE #{cliente})
+		 </if>
+		 ;
+	</select>
+	
+	<select id="CargarInv" parameterType="java.util.Map" resultType="java.util.HashMap">
+		
+		SELECT mp.lote, mp.cantidad, mp.fecha_vencimiento, up.nombre,up.id_unidad_peso AS um, up.codigo AS codUM, ing.id_ingrediente,
+			ixm.cantidad AS cantAsig, ixm.id_unidad_peso As umAsig
+		FROM ingrediente ing
+		LEFT JOIN materia_prima mp ON mp.id_ingrediente = ing.id_ingrediente
+		LEFT JOIN unidad_peso up ON up.id_unidad_peso = mp.id_unidad_peso
+	    LEFT JOIN  inventario_x_materia ixm ON mp.id_ingrediente = ing.id_ingrediente
+		WHERE 1 = 1
+    
+		AND fecha_vencimiento > NOW() AND mp.cantidad > 0
+ 		<if test="ing != null">
+			AND ing.id_ingrediente = 1
+		 </if>
+		 <if test="esta != null">
+			 AND mp.id_establecimiento = 1
+		  </if>
+		  
+		GROUP BY ing.id_ingrediente, mp.lote
+		ORDER BY ing.id_ingrediente DESC;
+		
+	</select>
+	
+	<select id="CargarIngProd" parameterType="java.util.Map" resultType="java.util.HashMap">
+		SELECT ixp.id_ingrediente, ixp.cantidad AS cantidadProd, up.nombre As nombreIngU, ing.nombre as nombreIng,
+			up.id_unidad_peso, up.codigo AS codUM, ixm.cantidad AS cantAsig, ixm.id_unidad_peso As umAsig
+		FROM producto prod
+		LEFT JOIN ingrediente_x_producto ixp ON ixp.id_producto = prod.id_producto
+		LEFT JOIN unidad_peso up ON up.id_unidad_peso = ixp.id_unidad_peso
+		LEFT JOIN ingrediente ing ON ing.id_ingrediente = ixp.id_ingrediente
+        LEFT JOIN inventario_x_materia ixm ON ixm.id_ingrediente = ing.id_ingrediente
+		WHERE prod.id_producto = #{producto}
+		GROUP BY ixp.id_ingrediente; 
+	</select>   
 </mapper>

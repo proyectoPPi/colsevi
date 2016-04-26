@@ -1820,7 +1820,7 @@ ul.ft-link li a i {
 /*weather*/
 
 .weather-bg {
-    background: #8175c7;
+	background:  #3F8A24;
     border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
     color: #fff;
@@ -1830,12 +1830,12 @@ ul.ft-link li a i {
 }
 
 .weather-bg i {
-    font-size: 60px;
+    font-size: 30px;
     display: block;
 }
 
 .weather-bg .degree {
-    font-size: 60px;
+    font-size: 20px;
 }
 
 .weather-category {
@@ -1852,7 +1852,7 @@ ul.ft-link li a i {
 
 .weather-category ul li {
     display: inline-block;
-    width: 32%;
+    width: 49%;
     text-align: center;
     border-right:1px solid #e6e6e6 ;
     display: inline-block;

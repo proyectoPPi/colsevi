@@ -92,7 +92,7 @@ public class LoginController {
 		try{
 			usu = ColseviDao.getInstance().getUsuarioMapper().selectByExample(UsuarioExample).get(0);
 		}catch(Exception e){
-			model.addAttribute("error", "No existe el usuario");
+			model.addAttribute("error", "Usuario y/o contraseña incorrecta");
 			return null;
 		}
 		
@@ -102,7 +102,7 @@ public class LoginController {
 		}
 		
 		U.setUsuario(usu.getUsuario());
-		U.setRol(1);
+		U.setRol(usu.getId_rol());
 		
 		return U;
 	}

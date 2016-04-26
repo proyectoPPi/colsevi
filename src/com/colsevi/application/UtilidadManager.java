@@ -60,6 +60,28 @@ public class UtilidadManager {
 		return null;
 	}
 	
+	public static String FormatoFechaVista(Date date){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		try {
+			return sdf.format(date); 
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String FormatoFechaVistaO(Object date){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		try {
+			return sdf.format(date); 
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static String Currency(BigDecimal valor){
 		Locale locale = new Locale("es","CO"); // elegimos COLOMBIA
 		NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
@@ -113,6 +135,18 @@ public class UtilidadManager {
 		}
 		
 		return result;
+	}
+	
+	public static String retirarCaracteresEspeciales(String valor){
+		
+		valor.replace(",", ".");
+		valor.replace("-", "");
+		valor.replace("+", "");
+		valor.replace("*", "");
+		valor.replace("/", "");
+		valor.replace(" ", "");
+		
+		return valor;
 	}
 	
 }

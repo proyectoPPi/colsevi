@@ -64,6 +64,15 @@
 													</select>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6">
+													<label>*Establecimiento</label>
+													<select class="form-control" id="establecimiento" name="establecimiento">
+														<option value="">Seleccione</option>
+														<c:forEach items="${listaEstablecimiento}" var="esta">
+															<option value="${esta.id_establecimiento}">${esta.nombre}</option>
+														</c:forEach>
+													</select>
+												</div>
+												<div class="col-xs-12 col-sm-6 col-md-6">
 													<label>*Fecha Compra</label>
 													<input type="text" class="form-control" id="fecha_compra" name="fecha_compra" data-field="datetime" data-format="yyyy-MM-dd HH:mm:ss"/>
 												</div>
@@ -125,7 +134,7 @@
 											</div>
 										</div>
 										<div class="modal-footer">
-											<button class="btn btn-warning" type="submit">Guardar</button>
+											<button class="btn btn-warning" type="submit" id="validarModificacion">Guardar</button>
 											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();" data-dismiss="modal">Cerrar</button>
 										</div>
 									</div>
@@ -178,6 +187,7 @@
 		titulos["valor"] = "valor";
 		titulos["proveedor"] = "Proveedor";
 		titulos["pagado"] = "Pagado";
+		titulos["establecimiento"] = "establecimiento";
 		titulos["Estado"] = "Estado";
 		titulos["id_compraBoton"] = "Estado";
 		
