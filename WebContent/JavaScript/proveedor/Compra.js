@@ -97,6 +97,7 @@ function CargarFormulario(Id){
 		jQuery("#pagado").prop("checked", true);
 	}
 	jQuery('#motivo').val(BuscarRegistro(Id)['motivo']);
+	validarModificacion();
 }
 
 function cargarIng(){
@@ -145,4 +146,23 @@ function MotivoModal(value){
 	jQuery('#id_compraMotiv').val(value);
 	jQuery("#ModalMotivo").modal('show');
 	jQuert('#motivo').val(BuscarRegistro(Id)['motivo']);
+}
+
+function validarModificacion(){
+	jQuery.ajaxQueue({
+		url: contexto + "/Proveedor/Compra/ValidarModificacion.html?",
+		 data:{id_compra: jQuery('#id_compra').val()},
+	}).done(function(result) {
+		var data; 
+ 		try{ 
+ 			data = jQuery.parseJSON(result); 
+ 		} catch(err){ 
+ 			console.log("Error ejecutando CargarIng" + err); 
+         	return; 
+         	jQuery('#dynamic').hide();
+ 		} 
+ 		if(data['error'] != ''){
+ 			jQuery('#validarModificacion').hide();
+ 		}
+	});
 }

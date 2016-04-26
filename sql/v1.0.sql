@@ -209,6 +209,7 @@ CREATE TABLE compra_x_ingrediente(
     id_ingrediente INT,
     id_unidad_peso INT NOT NULL,
     cantidad DOUBLE NOT NULL,
+    fecha_vencimiento DATETIME,
     lote INT,
     PRIMARY KEY(lote,id_compra,id_ingrediente),
 	CONSTRAINT fk_cxi FOREIGN KEY (id_compra) REFERENCES compra(id_compra),

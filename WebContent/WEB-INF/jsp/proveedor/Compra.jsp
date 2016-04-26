@@ -134,7 +134,7 @@
 											</div>
 										</div>
 										<div class="modal-footer">
-											<button class="btn btn-warning" type="submit">Guardar</button>
+											<button class="btn btn-warning" type="submit" id="validarModificacion">Guardar</button>
 											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();" data-dismiss="modal">Cerrar</button>
 										</div>
 									</div>

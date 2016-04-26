@@ -30,6 +30,7 @@ import com.colsevi.dao.inventario.model.InventarioXMateria;
 import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.dao.inventario.model.MateriaPrimaExample;
+import com.colsevi.dao.inventario.model.MovimientoMateriaExample;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteExample;
 import com.colsevi.dao.proveedor.model.Compra;
@@ -186,9 +187,10 @@ public class CompraController extends BaseConfigController {
 		String error = "";
 		bean.setMotivo("");
 		
-		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty())
+		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty()){
 			bean.setId_compra(Integer.parseInt(request.getParameter("id_compra")));
-		
+			error = validarNoInv(Integer.parseInt(request.getParameter("id_compra")));
+		}
 		if(request.getParameter("proveedor") == null || request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").trim().equals("0"))
 			error += "Seleccionar el proveedor<br/>";
 		else
@@ -240,6 +242,7 @@ public class CompraController extends BaseConfigController {
 					
 					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
 						mp.setFecha_vencimiento(UtilidadManager.FormatDateFormDB2(request.getParameter("fecha" + (i +1))));
+						cxi.setFecha_vencimiento(UtilidadManager.FormatDateFormDB2(request.getParameter("fecha" + (i +1))));
 					}
 					if(request.getParameter("lote" + (i +1)) != null && !request.getParameter("lote" + (i +1)).trim().isEmpty()){
 						cxi.setLote(Integer.parseInt(request.getParameter("lote" + (i +1))));
@@ -348,18 +351,33 @@ public class CompraController extends BaseConfigController {
 		return Compra(request, modelo);
 	}
 	
-	
-	
 	@RequestMapping("/Proveedor/Compra/GuardarMotivo")
 	public ModelAndView GuardarMotivo(HttpServletRequest request, ModelMap modelo){
 		
 		Compra bean = new Compra();
-
+		String error = "";
+		
 		if(request.getParameter("id_compraMotiv") != null && !request.getParameter("id_compraMotiv").trim().isEmpty())
 			bean.setId_compra(Integer.parseInt(request.getParameter("id_compraMotiv")));
+		else
+			error += "Seleccionar una compra";
 		
 		if(request.getParameter("motivo") != null && !request.getParameter("motivo").trim().isEmpty())
 			bean.setMotivo(request.getParameter("motivo"));
+		else
+			error += "Ingresar un motivo";
+		
+		if(!error.isEmpty()){
+			modelo.addAttribute("error", error);
+			return Compra(request, modelo);
+		}
+		
+		error = validarNoInv(bean.getId_compra());
+		
+		if(error != null){
+			modelo.addAttribute("error", error);
+			return Compra(request, modelo);
+		}
 		
 		try{
 			ColseviDao.getInstance().getCompraMapper().updateByPrimaryKeySelective(bean);
@@ -367,8 +385,42 @@ public class CompraController extends BaseConfigController {
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
-		
 		return Compra(request, modelo);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Proveedor/Compra/ValidarModificacion")
+	public void validarModificarCompra(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
+		
+		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty()){
+			String error = validarNoInv(Integer.parseInt(request.getParameter("id_compra")));
+			if(error != null)
+				result.put("error", error);
+		}else{
+			result.put("error", "Seleccionar compra");
+		}
+		result.writeJSONString(response.getWriter());
+	}
+	
+	public String validarNoInv(Integer id){
+		CompraXIngredienteExample cxiE = new CompraXIngredienteExample();
+		cxiE.createCriteria().andId_compraEqualTo(id);
+		List<CompraXIngrediente> listcxi = ColseviDao.getInstance().getCompraXIngredienteMapper().selectByExample(cxiE);
+		
+		if(listcxi != null && listcxi.size() > 0){
+			for (CompraXIngrediente cxi : listcxi) {
+				if(cxi.getLote() != null){
+					MovimientoMateriaExample mmE = new MovimientoMateriaExample();
+					mmE.createCriteria().andLoteEqualTo(cxi.getLote());
+					Integer count = ColseviDao.getInstance().getMovimientoMateriaMapper().countByExample(mmE);
+					if(count > 0){
+						return "No se puede dar de baja a la compra ya que algunos ingredientes se encuentran ya asignados en el inventario;";
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	
