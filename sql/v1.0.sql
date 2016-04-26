@@ -47,7 +47,6 @@ CREATE TABLE usuario(
 	usuario VARCHAR(40) NOT NULL,
     clave VARCHAR(80) NOT NULL,
     estado VARCHAR(1) NOT NULL,
-    correo VARCHAR(50) NOT NULL,
     primer_login VARCHAR(1) NOT NULL,
     id_rol INT NOT NULL,
 	PRIMARY KEY(id_usuario),
