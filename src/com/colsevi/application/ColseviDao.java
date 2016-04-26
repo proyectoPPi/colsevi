@@ -46,7 +46,6 @@ import com.colsevi.dao.usuario.map.PersonaMapper;
 import com.colsevi.dao.usuario.map.RolMapper;
 import com.colsevi.dao.usuario.map.TipoDocumentoMapper;
 import com.colsevi.dao.usuario.map.UsuarioMapper;
-import com.colsevi.dao.usuario.map.UsuarioXRolMapper;
 
 public class ColseviDao {
 	
@@ -87,7 +86,6 @@ public class ColseviDao {
 	private PersonaMapper personaMapper;
 	private UsuarioMapper usuarioMapper;
 	private RolMapper rolMapper;
-	private UsuarioXRolMapper usuarioXRolMapper;
 	private PaginaMapper paginaMapper;
 	private PaginaXRolMapper paginaXRolMapper;
 	private TipoDocumentoMapper tipoDocumentoMapper;
@@ -157,7 +155,6 @@ public class ColseviDao {
 		personaMapper = (PersonaMapper) beanFactoryMyBatis.getBean("personaMapper");
 		usuarioMapper = (UsuarioMapper) beanFactoryMyBatis.getBean("usuarioMapper");
 		rolMapper = (RolMapper) beanFactoryMyBatis.getBean("rolMapper");
-		usuarioXRolMapper = (UsuarioXRolMapper) beanFactoryMyBatis.getBean("usuarioXRolMapper");
 		paginaMapper = (PaginaMapper) beanFactoryMyBatis.getBean("paginaMapper");
 		paginaXRolMapper = (PaginaXRolMapper) beanFactoryMyBatis.getBean("paginaXRolMapper");
 		tipoDocumentoMapper = (TipoDocumentoMapper) beanFactoryMyBatis.getBean("tipoDocumentoMapper");
@@ -443,14 +440,6 @@ public class ColseviDao {
 
 	public void setRolMapper(RolMapper rolMapper) {
 		this.rolMapper = rolMapper;
-	}
-
-	public UsuarioXRolMapper getUsuarioXRolMapper() {
-		return usuarioXRolMapper;
-	}
-
-	public void setUsuarioXRolMapper(UsuarioXRolMapper usuarioXRolMapper) {
-		this.usuarioXRolMapper = usuarioXRolMapper;
 	}
 
 	public PaginaMapper getPaginaMapper() {

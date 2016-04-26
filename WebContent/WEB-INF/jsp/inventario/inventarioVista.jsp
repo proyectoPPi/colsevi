@@ -3,7 +3,7 @@
 <html>
 <head>
    <meta charset="UTF-8" />
-	<title>Establecimientos</title>
+	<title>Inventario</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 	<style>
 		.success {
@@ -23,7 +23,7 @@
 			<section class="wrapper">
 				<div class="row">
 				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
-					<h2>Establecimiento 
+					<h2>Inventario 
 						<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 					</h2>
 					
@@ -60,7 +60,7 @@
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-											<h4 class="modal-title">Establecimiento...</h4>
+											<h4 class="modal-title">Inventario...</h4>
 										</div>
 										<div class="modal-body">
 											<div class="row">
@@ -68,6 +68,7 @@
 												<input type="hidden" id="id_inventario" name="id_inventario"/>
 												<input type="hidden" id="id_producto" name="id_producto"/>
 												<input type="hidden" id="secuencia" name="secuencia"/>
+												<input type="hidden" id="detalle" name="detalle"/>
 												
 												<select id="listaUnidad" style="display: none;">
 													<option value="0">Seleccione</option>
@@ -84,7 +85,7 @@
 								                                      <a data-toggle="tab" href="#producto">Producto</a>
 								                                  </li>
 								                                  <li class="">
-								                                      <a data-toggle="tab" href="#profile" id="carga">About</a>
+								                                      <a data-toggle="tab" href="#ingview" id="carga">Ingredientes</a>
 								                                  </li>
 								                              </ul>
 								                          </header>
@@ -111,7 +112,7 @@
 																	</div>
 								                                  
 								                                  </div>
-								                                  <div id="profile" class="tab-pane">
+								                                  <div id="ingview" class="tab-pane">
 								                                  	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								                                  		<div id="viewData"></div>
 																	</div>
@@ -144,7 +145,7 @@
 		titulos = new Array();
 		titulos["id_producto"] = "ID";
 		titulos["nombreProd"] = "Producto";
-		titulos["establecimiento"] = "Descripci&#243;n";
+		titulos["establecimiento"] = "Establecimiento";
 		titulos["disponible"] = "disponible";
 		titulos["compromiso"] = "compromiso";
 		

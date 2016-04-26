@@ -58,7 +58,7 @@ public class BaseConfigController implements Serializable {
 			
 			if(id != null){
 				pE = new PaginaExample();
-				pE.createCriteria().andPadrePaginaEqualTo(id);
+				pE.createCriteria().andPadrePaginaLike(id.toString());
 				List<Pagina> listaPagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE);
 				
 				for(Pagina pag: listaPagina){
@@ -71,15 +71,16 @@ public class BaseConfigController implements Serializable {
 			}
 
 		}catch(Exception e){
-			
+			e.printStackTrace();
 		}
-		
 		return menu;
 	}
 	
 	public SesionUsuario getUsuario(HttpServletRequest request){
-		return (SesionUsuario) request.getSession().getAttribute("sesion");
-		
+		if(request.getSession() != null && request.getSession().getAttribute("sesion") != null){
+			return (SesionUsuario) request.getSession().getAttribute("sesion");
+		}
+		return null;
 	}
 
 }

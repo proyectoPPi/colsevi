@@ -34,6 +34,13 @@ CREATE TABLE persona(
     CONSTRAINT fk_tdocPer FOREIGN KEY (tipo_doc) REFERENCES tipo_documento(id_tipo_documento)
 );
 
+CREATE TABLE rol(
+	id_rol INT AUTO_INCREMENT,
+    nombre_rol VARCHAR(40) NOT NULL,
+    codigo_rol VARCHAR(80) NOT NULL,
+	PRIMARY KEY(id_rol)
+);
+
 CREATE TABLE usuario(
 	id_usuario INT AUTO_INCREMENT,
     id_persona INT NOT NULL,
@@ -42,24 +49,11 @@ CREATE TABLE usuario(
     estado VARCHAR(1) NOT NULL,
     correo VARCHAR(50) NOT NULL,
     primer_login VARCHAR(1) NOT NULL,
+    id_rol INT NOT NULL,
 	PRIMARY KEY(id_usuario),
     UNIQUE (usuario),
-    CONSTRAINT fk_Persona FOREIGN KEY (id_persona) REFERENCES persona(id_persona)
-);
-
-CREATE TABLE rol(
-	id_rol INT AUTO_INCREMENT,
-    nombre_rol VARCHAR(40) NOT NULL,
-    codigo_rol VARCHAR(80) NOT NULL,
-	PRIMARY KEY(id_rol)
-);
-
-CREATE TABLE usuario_x_rol(
-	id_rol INT NOT NULL,
-    id_usuario INT NOT NULL,
-	PRIMARY KEY(id_rol, id_usuario),
-    CONSTRAINT fk_rolu FOREIGN KEY (id_rol) REFERENCES rol(id_rol),
-    CONSTRAINT fk_usuarior FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+    CONSTRAINT fk_Persona FOREIGN KEY (id_persona) REFERENCES persona(id_persona),
+    CONSTRAINT fk_rolu FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
 );
 
 CREATE TABLE pagina(
@@ -68,9 +62,8 @@ CREATE TABLE pagina(
     url VARCHAR (50) NOT NULL,
     nombre VARCHAR (50) NOT NULL,
     icono VARCHAR (50),
-    padrePagina INT DEFAULT NULL,
-    PRIMARY KEY(id_pagina),
-    CONSTRAINT fk_PagPadre FOREIGN KEY (padrePagina) REFERENCES pagina(id_pagina)
+    padrePagina VARCHAR(60) DEFAULT NULL,
+    PRIMARY KEY(id_pagina)
 );
 
 CREATE TABLE pagina_x_rol(

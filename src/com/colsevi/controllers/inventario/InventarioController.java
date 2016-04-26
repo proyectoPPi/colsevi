@@ -35,7 +35,6 @@ import com.colsevi.dao.inventario.model.MateriaPrimaExample;
 import com.colsevi.dao.inventario.model.MovimientoMateria;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
-import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 import com.colsevi.dao.producto.model.IngredienteXProductoKey;
 
 @Controller
@@ -73,7 +72,7 @@ public class InventarioController extends BaseConfigController {
 			mapa.put("limit",Inicio + ", " + Final);
 			
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getInventarioMapper().SelectDataView(mapa)));
-			opciones.put("total", 0);
+			opciones.put("total", ColseviDao.getInstance().getInventarioMapper().CountDataView(mapa));
 
 		}catch(Exception e){
 			e.printStackTrace();
@@ -100,6 +99,9 @@ public class InventarioController extends BaseConfigController {
 					if(map.get("id_establecimiento") != null){
 						labels.put("label", map.get("nombreEsta"));
 						labels.put("value", map.get("id_establecimiento"));
+					}else{
+						labels.put("label", "");
+						labels.put("value", "0");
 					}
 					opciones.put("establecimiento", labels);
 					
@@ -129,7 +131,6 @@ public class InventarioController extends BaseConfigController {
 		opciones.put("datos", Construir(ColseviDao.getInstance().getInventarioMapper().CargarIngProd(mapa), cantidad));
 		
 		opciones.writeJSONString(response.getWriter());
-		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -235,6 +236,7 @@ public class InventarioController extends BaseConfigController {
 		return resultado;
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/Inventario/Inv/Guardar")
 	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
 		
@@ -270,32 +272,34 @@ public class InventarioController extends BaseConfigController {
 				modelo.addAttribute("correcto", "Inventario insertado");
 			}
 
-			InventarioXMateriaExample ixm = new InventarioXMateriaExample();
-			ixm.createCriteria().andId_inventarioEqualTo(bean.getId_inventario());
-			ColseviDao.getInstance().getInventarioXMateriaMapper().deleteByExample(ixm);
-			
-			for(InventarioXMateria beanMateria: listaInv){
-				beanMateria.setId_inventario(bean.getId_inventario());
-				ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(beanMateria);
+			if(request.getParameter("detalle") != null && !request.getParameter("detalle").trim().isEmpty() && request.getParameter("detalle").trim().equals("1")){
+
+				InventarioXMateriaExample ixm = new InventarioXMateriaExample();
+				ixm.createCriteria().andId_inventarioEqualTo(bean.getId_inventario());
+				ColseviDao.getInstance().getInventarioXMateriaMapper().deleteByExample(ixm);
 				
-				MovimientoMateria mm = new MovimientoMateria();
-				mm.setLote(beanMateria.getLote());
-				mm.setId_unidad_peso(beanMateria.getId_unidad_peso());
-				mm.setId_establecimiento(bean.getId_establecimiento());
-				mm.setCantidad(beanMateria.getCantidad());
-				mm.setFecha_movimiento(new Date());
-				mm.setId_motivo(MotivoE.ASIGNACION.getMotivoE());
+				for(InventarioXMateria beanMateria: listaInv){
+					beanMateria.setId_inventario(bean.getId_inventario());
+					ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(beanMateria);
+					
+					MovimientoMateria mm = new MovimientoMateria();
+					mm.setLote(beanMateria.getLote());
+					mm.setId_unidad_peso(beanMateria.getId_unidad_peso());
+					mm.setId_establecimiento(bean.getId_establecimiento());
+					mm.setCantidad(beanMateria.getCantidad());
+					mm.setFecha_movimiento(new Date());
+					mm.setId_motivo(MotivoE.ASIGNACION.getMotivoE());
+					
+					ColseviDao.getInstance().getMovimientoMateriaMapper().insertSelective(mm);
+				}
 				
-				ColseviDao.getInstance().getMovimientoMateriaMapper().insertSelective(mm);
+				for(MateriaPrima beanMP: listaMP){
+					MateriaPrimaExample MPE = new MateriaPrimaExample();
+					MPE.createCriteria().andLoteEqualTo(beanMP.getLote());
+					beanMP.setId_establecimiento(bean.getId_establecimiento());
+					ColseviDao.getInstance().getMateriaPrimaMapper().updateByExampleSelective(beanMP, MPE);
+				}
 			}
-			
-			for(MateriaPrima beanMP: listaMP){
-				MateriaPrimaExample MPE = new MateriaPrimaExample();
-				MPE.createCriteria().andLoteEqualTo(beanMP.getLote());
-				beanMP.setId_establecimiento(bean.getId_establecimiento());
-				ColseviDao.getInstance().getMateriaPrimaMapper().updateByExampleSelective(beanMP, MPE);
-			}
-			
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
@@ -407,6 +411,21 @@ public class InventarioController extends BaseConfigController {
 								opcompra *= 453.59237;
 								umVista = UnidadMedidaE.GRAMO.getUnidadM();
 							}
+						}else{
+							if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM()) && (opcompra  * 0.45359237) > 1){
+								opcompra *= 0.45359237;
+								umVista = UnidadMedidaE.KILO.getUnidadM();
+							}else if(umVista.equals(UnidadMedidaE.GRAMO.getUnidadM())){
+								if((opcompra  * 0.00220462262) > 1){
+									if((opcompra  / 1000) > 1){
+										opcompra /= 1000;
+										umVista = UnidadMedidaE.KILO.getUnidadM();
+									}else{
+										opcompra *= 0.00220462262;
+										umVista = UnidadMedidaE.LIBRA.getUnidadM();
+									}
+								}
+							}
 						}
 						
 						MateriaPrima mp = new MateriaPrima();
@@ -429,7 +448,6 @@ public class InventarioController extends BaseConfigController {
 				}
 			}
 		}
-
 		obj[0] = error;
 		obj[1] = ListaIinv;
 		obj[2] = listaMP;

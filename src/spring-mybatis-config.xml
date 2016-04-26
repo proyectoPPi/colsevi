@@ -164,10 +164,6 @@
 		<property value="com.colsevi.dao.usuario.map.RolMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	<bean id="usuarioXRolMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property value="com.colsevi.dao.usuario.map.UsuarioXRolMapper" name="mapperInterface" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
-	</bean>
 	<bean id="paginaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property value="com.colsevi.dao.usuario.map.PaginaMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />

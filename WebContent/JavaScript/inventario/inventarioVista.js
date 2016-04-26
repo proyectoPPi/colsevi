@@ -24,6 +24,10 @@ function CargarFormulario(Id){
 	jQuery('#cantSolicitada').val(BuscarRegistro(Id)['disponible']);
 }
 
+jQuery('#viewData').click(function(e) { 
+	jQuery('#detalle').val("1");
+});
+
 jQuery('#carga').click(function(){
 	
 	jQuery('#viewData').html('');
@@ -82,23 +86,18 @@ function cargarInv(ingrediente,id_unidad_peso, cant){
 			html += '<div class="panel-body">';
 			html += '<div class="row">';
 			html += '<div class="col-xs-12">';
-			html += '<div class="col-xs-6">';
-			if(data[i]['color'] == true ){
-				html += '<i class="fa fa-check"></i>';
-			}else{
-				html += '<i class="fa fa-times"></i>';
-			}
-			html += '</div>';
-			html += '<div class="col-xs-6">';
 			html += data[i]['cantidad'] + ' ' + data[i]['codUM'];
-			html += '</div>';
 			html += '<input type="text" class="form-control" id="cant'+data[i]['lote']+'" id="cant'+data[i]['lote']+'" name="cant'+data[i]['lote']+'" value="'+data[i]['cantAsig']+'"/>';
 			html += '</div>';
 			html += '<div class="col-xs-12"><br/>';
 			html += '<select class="form-control" id="um'+data[i]['lote']+'" name="um'+data[i]['lote']+'" value="'+data[i]['umAsig']+'">';
 			
-			$('#listaUnidad > option').each(function(){
-				html += $(this)[0].outerHTML;
+			jQuery('#listaUnidad > option').each(function(){
+				html += '<option';
+				if($(this).val() == data[i]['umAsig']){
+					html += ' selected="selected"';
+				}
+				html += ' value='+$(this).val()+'>'+$(this).text() + '</option>';
 	        });
 			
 			html += jQuery('#listaUnidad > option') + '</select>';
