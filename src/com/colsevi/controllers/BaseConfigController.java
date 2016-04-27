@@ -48,31 +48,35 @@ public class BaseConfigController implements Serializable {
 	
 	public String SubMenu(HttpServletRequest request){
 
-		String uri = request.getRequestURI().substring(request.getContextPath().length());
 		String menu = "";
+		if(getUsuario(request) != null){
+			String uri = request.getRequestURI().substring(request.getContextPath().length());
 		
-		try{
-			PaginaExample pE = new PaginaExample();
-			pE.createCriteria().andUrlLike(uri);
-			Integer id = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE).get(0).getId_pagina();
+			try{
 			
-			if(id != null){
-				pE = new PaginaExample();
-				pE.createCriteria().andPadrePaginaLike(id.toString());
-				List<Pagina> listaPagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE);
+				PaginaExample pE = new PaginaExample();
+				pE.createCriteria().andUrlLike(uri);
+				Integer id = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE).get(0).getId_pagina();
 				
-				for(Pagina pag: listaPagina){
-					menu += "<li>";
-					menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
-					menu += "<span>"+pag.getNombre()+"</span>";
-					menu += "</a>";
-					menu += "</li>";
+				if(id != null){
+					pE = new PaginaExample();
+					pE.createCriteria().andPadrePaginaLike(id.toString());
+					List<Pagina> listaPagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE);
+					
+					for(Pagina pag: listaPagina){
+						menu += "<li>";
+						menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
+						menu += "<span>"+pag.getNombre()+"</span>";
+						menu += "</a>";
+						menu += "</li>";
+					}
 				}
+				
+			}catch(Exception e){
+				e.printStackTrace();
 			}
-
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+				
+			}
 		return menu;
 	}
 	
