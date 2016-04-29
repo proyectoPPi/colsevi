@@ -89,9 +89,8 @@
 	}else if("${info}"  != undefined && "${info}" != ""){
 		jQuery("#info").show();
 	}
-	if(subMenu == ""){
-		jQuery('#bread').remove();
-	}
+	
+	jQuery('#bread').remove();
 	</script>
   </body>
 </html>
