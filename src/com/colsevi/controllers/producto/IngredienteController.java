@@ -67,6 +67,9 @@ public class IngredienteController extends BaseConfigController {
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getIngredienteMapper().selectByExample(IngExample)));
 			opciones.put("total", ColseviDao.getInstance().getIngredienteMapper().countByExample(IngExample));
 
+			response.setContentType("text/html;charset=ISO-8859-1");
+			request.setCharacterEncoding("UTF8");
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}

@@ -71,6 +71,9 @@ public class EstablecimientoController extends BaseConfigController {
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().SelectDataView(mapa)));
 		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().CountDataView(mapa));
 
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		opciones.writeJSONString(response.getWriter());
 	}
 

@@ -1,5 +1,7 @@
 jQuery(document).ready(function(){
 	Tabla();
+	validarF();
+	HDatetimePicker('dtBox',false);
 });
 
 function Tabla(pagina){
@@ -17,4 +19,8 @@ function Limpiar(){
 
 function CargarFormulario(Id){
 	HCargarFormulario(Id);
+}
+
+function validarF(){
+	HValidador('formulario');
 }

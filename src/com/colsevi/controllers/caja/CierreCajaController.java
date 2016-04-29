@@ -1,6 +1,10 @@
 package com.colsevi.controllers.caja;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +22,13 @@ import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.caja.model.CierreCaja;
 import com.colsevi.dao.caja.model.CierreCajaExample;
+import com.colsevi.dao.deuda.model.DeudaProveedor;
+import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
+import com.colsevi.dao.pago.model.PagoProveedor;
+import com.colsevi.dao.pedido.model.Pedido;
+import com.colsevi.dao.pedido.model.PedidoExample;
+import com.colsevi.dao.proveedor.model.Compra;
+import com.colsevi.dao.proveedor.model.CompraExample;
 import com.colsevi.dao.usuario.model.Persona;
 
 @Controller
@@ -45,6 +56,10 @@ public class CierreCajaController extends BaseConfigController{
 		}catch(Exception e){
 			
 		}
+		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		result.writeJSONString(response.getWriter());
 	}
 	
@@ -72,4 +87,82 @@ public class CierreCajaController extends BaseConfigController{
 		
 		return resultado;
 	}
+	
+	
+	public void ejecutarCierre(HttpServletRequest request, ModelMap model){
+		
+		PagoProveedor pp = new PagoProveedor();
+		DeudaProveedor dp = new DeudaProveedor();
+		CierreCaja cc = new CierreCaja();
+		List<Compra> listaC = new ArrayList<Compra>();
+		List<Pedido> listaP = new ArrayList<Pedido>();
+		CompraExample CE = new CompraExample();
+		PedidoExample PE = new PedidoExample();
+		Date inicio = getStartOfDay(new Date(System.currentTimeMillis()));
+		Date fin = getEndOfDay(new Date(System.currentTimeMillis()));
+		
+		
+		CE.createCriteria().andFecha_compraBetween(inicio, fin);
+		listaC = ColseviDao.getInstance().getCompraMapper().selectByExample(CE);
+		
+		for(Compra bean: listaC){
+			if(bean.getPagado()){
+				pp = new PagoProveedor();
+				pp.setId_compra(bean.getId_compra());
+				pp.setFecha_pago(new Date());
+				pp.setPendiente(new BigDecimal(0));
+				pp.setValor_pagado(bean.getValor());
+				pp.setObservacion("Pago de la compra al proveedor");
+				
+				ColseviDao.getInstance().getPagoProveedorMapper().insertSelective(pp);
+			}else{
+				dp = new DeudaProveedor();
+				dp.setId_compra(bean.getId_compra());
+				dp.setFecha_deuda(new Date());
+				dp.setPendiente(bean.getValor());
+				dp.setObservacion("Deuda de la compra al proveedor");
+				
+				ColseviDao.getInstance().getDeudaProveedorMapper().insertSelective(dp);
+			}
+		}
+		
+		ColseviDao.getInstance().getInventarioXMateriaMapper().deleteByExample(new InventarioXMateriaExample());
+		
+		List<Integer> estados = new ArrayList<Integer>();
+		estados.add(2);
+		PE.createCriteria().andId_estado_pedidoNotIn(estados).andFecha_pedidoBetween(inicio, fin);
+		listaP = ColseviDao.getInstance().getPedidoMapper().selectByExample(PE);
+		
+		for(Pedido ped: listaP){
+			ped.setId_estado_pedido(1);
+			ColseviDao.getInstance().getPedidoMapper().updateByPrimaryKey(ped);
+		}
+		
+		cc.setFecha_cierre(new Date(System.currentTimeMillis()));
+		cc.setFecha_ejecucion(new Date());
+		cc.setId_persona(getUsuario(request).getPersona());
+		cc.setMensaje(request.getParameter("mensaje"));
+		
+		ColseviDao.getInstance().getCierreCajaMapper().insertSelective(cc);
+		
+	}
+	
+	 private Date getStartOfDay(Date date) {
+		    Calendar calendar = Calendar.getInstance();
+		    int year = calendar.get(Calendar.YEAR);
+		    int month = calendar.get(Calendar.MONTH);
+		    int day = calendar.get(Calendar.DATE);
+		    calendar.set(year, month, day, 0, 0, 0);
+		    return calendar.getTime();
+		}
+
+		private Date getEndOfDay(Date date) {
+		    Calendar calendar = Calendar.getInstance();
+		    int year = calendar.get(Calendar.YEAR);
+		    int month = calendar.get(Calendar.MONTH);
+		    int day = calendar.get(Calendar.DATE);
+		    calendar.set(year, month, day, 23, 59, 59);
+		    return calendar.getTime();
+		}
+
 }

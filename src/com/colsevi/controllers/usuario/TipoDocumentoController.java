@@ -42,6 +42,9 @@ public class TipoDocumentoController extends BaseConfigController {
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getTipoDocumentoMapper().selectByExample(tipoDocExample)));
 		opciones.put("total", ColseviDao.getInstance().getTipoDocumentoMapper().countByExample(tipoDocExample));
 
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		opciones.writeJSONString(response.getWriter());
 	}
 

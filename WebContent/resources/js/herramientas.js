@@ -221,3 +221,11 @@ function HDatetimePicker(Id, Popup){
 function HColorPicker(Id){
 	jQuery('#' + Id).colorpickerplus();
 }
+
+function HValidador(Id){
+	jQuery('#'+Id).validate({
+		submitHandler: function(form) {
+		    form.submit();
+		  }
+	});
+}

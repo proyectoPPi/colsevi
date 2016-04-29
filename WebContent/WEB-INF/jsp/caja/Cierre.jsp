@@ -40,34 +40,31 @@
 						<div id="tabla"></div>
 						<div id="paginacion" class="col-md-12"></div>
 					</div>
-					
+					<div id="dtBox"></div>
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-jg">
 							<div class="modal-content-wrap">
-								<form method="post" action="${pageContext.request.contextPath}/Ingrediente/Clasificar/Guardar.html?" id="formulario">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-											<h4 class="modal-title">Cierre de Caja...</h4>
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+										<h4 class="modal-title">Cierre de Caja...</h4>
+									</div>
+									<div class="modal-body">
+										<input type="hidden" id="id_clasificar_ingrediente" name="id_clasificar_ingrediente"/>
+										<div class="form-group">
+											<label>*fecha</label>
+											<input type="text" class="form-control" id="nombre" name="nombre" data-field="date"/>
 										</div>
-										<div class="modal-body">
-											<input type="hidden" id="id_clasificar_ingrediente" name="id_clasificar_ingrediente"/>
-											<div class="form-group">
-												<label>*Nombre</label>
-												<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
-											</div>
-											<div class="form-group">
-												<label>*Descripci&#243;n</label>
-												<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
-											</div>
-										</div>
-										<div class="modal-footer">
-											<button class="btn btn-warning" type="submit">Guardar</button>
-											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
-											<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
+										<div class="form-group">
+											<label>*Mensaje</label>
+											<input type="text" class="form-control" id="mensaje" name="mensaje" data-bv-notempty="true"/>
 										</div>
 									</div>
-								</form>
+									<div class="modal-footer">
+										<button class="btn btn-warning" type="button" id="generar">Generar</button>
+										<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -62,6 +62,7 @@ CREATE TABLE pagina(
     nombre VARCHAR (50) NOT NULL,
     icono VARCHAR (50),
     padrePagina VARCHAR(60) DEFAULT NULL,
+    menu BOOLEAN DEFAULT,
     PRIMARY KEY(id_pagina)
 );
 

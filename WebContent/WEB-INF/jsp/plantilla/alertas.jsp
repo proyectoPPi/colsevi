@@ -1,3 +1,10 @@
+<div class="col-lg-12" id="bread">
+    <ul class="breadcrumb">
+    	${col.SubMenu}
+    </ul>
+    <!--breadcrumbs end -->
+</div>
+
 <div class="alert alert-block alert-danger fade in" id="error" style="display: none;">
 	<button data-dismiss="alert" class="close close-sm" type="button">
 		<i class="fa fa-times"></i>
