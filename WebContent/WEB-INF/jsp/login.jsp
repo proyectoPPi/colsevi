@@ -74,6 +74,23 @@
 
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+	
+	var contexto = "${pageContext.request.contextPath}";
+	var subMenu = "${col.SubMenu}";
 
+	jQuery("#error, #correcto, #peligro, #info").hide();
+	if("${error}"  != undefined && "${error}" != ""){
+		jQuery("#error").show();
+	}else if("${correcto}"  != undefined && "${correcto}" != ""){
+		jQuery("#correcto").show();
+	}else if("${peligro}"  != undefined && "${peligro}" != ""){
+		jQuery("#peligro").show();
+	}else if("${info}"  != undefined && "${info}" != ""){
+		jQuery("#info").show();
+	}
+	
+	jQuery('#bread').remove();
+	</script>
   </body>
 </html>

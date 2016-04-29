@@ -20,12 +20,6 @@ body {
     -moz-font-smoothing: antialiased;
 }
 
-#footer {
-    width: 100%;
-    bottom: 0;
-    left: 0;
-}
-
 ul li {
     list-style: none;
 }

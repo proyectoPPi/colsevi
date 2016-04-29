@@ -78,6 +78,9 @@ public class MateriaPrimaController extends BaseConfigController{
 			e.printStackTrace();
 		}
 		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		options.writeJSONString(response.getWriter());
 		
 	}

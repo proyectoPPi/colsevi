@@ -4,6 +4,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.colsevi.dao.caja.map.CierreCajaMapper;
 import com.colsevi.dao.catalogo.map.CatalogoMapper;
 import com.colsevi.dao.catalogo.map.CatalogoXProductoMapper;
 import com.colsevi.dao.deuda.map.DeudaPedidoMapper;
@@ -29,7 +30,6 @@ import com.colsevi.dao.pedido.map.CobroMapper;
 import com.colsevi.dao.pedido.map.DetallePedidoMapper;
 import com.colsevi.dao.pedido.map.EstadoPedidoMapper;
 import com.colsevi.dao.pedido.map.PedidoMapper;
-import com.colsevi.dao.pedido.model.CategoriaCobro;
 import com.colsevi.dao.producto.map.IngredienteMapper;
 import com.colsevi.dao.producto.map.IngredienteXProductoMapper;
 import com.colsevi.dao.producto.map.PreparacionRecetaMapper;
@@ -90,6 +90,7 @@ public class ColseviDao {
 	private PaginaXRolMapper paginaXRolMapper;
 	private TipoDocumentoMapper tipoDocumentoMapper;
 	private InventarioXMateriaMapper inventarioXMateriaMapper;
+	private CierreCajaMapper cierreCajaMapper;
 
 	
 	private static ColseviDao current = null;
@@ -159,7 +160,15 @@ public class ColseviDao {
 		paginaXRolMapper = (PaginaXRolMapper) beanFactoryMyBatis.getBean("paginaXRolMapper");
 		tipoDocumentoMapper = (TipoDocumentoMapper) beanFactoryMyBatis.getBean("tipoDocumentoMapper");
 		inventarioXMateriaMapper = (InventarioXMateriaMapper) beanFactoryMyBatis.getBean("inventarioXMateriaMapper");
-		
+		cierreCajaMapper = (CierreCajaMapper) beanFactoryMyBatis.getBean("cierreCajaMapper");
+	}
+
+	public CierreCajaMapper getCierreCajaMapper() {
+		return cierreCajaMapper;
+	}
+
+	public void setCierreCajaMapper(CierreCajaMapper cierreCajaMapper) {
+		this.cierreCajaMapper = cierreCajaMapper;
 	}
 
 	public EstablecimientoMapper getEstablecimientoMapper() {
