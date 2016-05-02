@@ -42,7 +42,7 @@
 					<div class="modal fade modal-dialog-center" id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content-wrap">
-								<form method="post" action="${pageContext.request.contextPath}/Receta/Nivel/Guardar.html?" id="formulario">
+								<form method="post" action="${pageContext.request.contextPath}/Recetario/Guardar.html?" id="formulario">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -50,9 +50,9 @@
 										</div>
 										<div class="modal-body">
 											<div class="row">
-												<input type="hidden" id="id_dificultad_receta" name="id_dificultad_receta"/>
+												<input type="hidden" id="id_receta" name="id_receta"/>
 												<input type="hidden" id="id_producto" name="id_producto"/>
-												<input type="hidden" id="secuencia" name="secuencia"/>
+												<input type="hidden" id="secuencia" name="secuencia" value="0"/>
 												<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 													<label>*producto</label>
 													<input type="text" class="form-control" id="prod" name="prod" data-bv-notempty="true"/>
@@ -72,8 +72,8 @@
 													<br/>
 												</div>
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-													<h5><strong>Preparacion</strong><button type="button" class="btn btn-white"><i class="fa fa-plus"></i></button></h5>
-													<div class="col-lg-12" id="detalle"></div>
+													<h5><strong>Preparacion</strong><button type="button" class="btn btn-white" id="adicionarTexto"><i class="fa fa-plus"></i></button></h5>
+													<div id="detalle"></div>
 												</div>
 											</div>
 										</div>

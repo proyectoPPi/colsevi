@@ -1,6 +1,7 @@
 package com.colsevi.controllers.producto;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.colsevi.application.ColseviDao;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.producto.model.Producto;
 import com.colsevi.dao.producto.model.Receta;
+import com.colsevi.dao.producto.model.RecetaExample;
 import com.colsevi.dao.producto.model.DificultadReceta;
 import com.colsevi.dao.producto.model.DificultadRecetaExample;
 import com.colsevi.dao.producto.model.PreparacionReceta;
@@ -146,4 +148,108 @@ public class RecetaController extends BaseConfigController{
 		
 		return result;
 	}
+	
+	@RequestMapping("/Recetario/Guardar")
+	public ModelAndView guardar(HttpServletRequest request, ModelMap model){
+		
+		try{
+			Object[] result = validarGuardado(request);
+			
+			if(!result[0].toString().isEmpty()){
+				model.addAttribute("error", result[0]);
+				return Recetario(request, model);
+			}
+			
+			Receta rec = (Receta) result[1];
+			List<PreparacionReceta> listaP = (List<PreparacionReceta>) result[2];
+			
+			if(rec.getId_receta() == null){
+				
+				ColseviDao.getInstance().getRecetaMapper().insert(rec);
+				
+				RecetaExample RE = new RecetaExample();
+				RE.setLimit("1");
+				RE.setOrderByClause("id_receta DESC");
+				rec.setId_receta(ColseviDao.getInstance().getRecetaMapper().selectByExample(RE).get(0).getId_receta());
+				
+				model.addAttribute("correcto", "Receta creada");
+			}else{
+				PreparacionRecetaExample PRE = new PreparacionRecetaExample();
+				PRE.createCriteria().andId_recetaEqualTo(rec.getId_receta());
+				ColseviDao.getInstance().getPreparacionRecetaMapper().deleteByExample(PRE);
+				
+				ColseviDao.getInstance().getRecetaMapper().updateByPrimaryKey(rec);
+				
+				model.addAttribute("correcto", "Receta actualizada");
+			}
+
+			for (PreparacionReceta bean : listaP) {
+				
+				bean.setId_receta(rec.getId_receta());
+				ColseviDao.getInstance().getPreparacionRecetaMapper().insert(bean);
+			}
+			
+		}catch(Exception e){
+			model.addAttribute("error", "Contactar al administrador");
+		}
+		
+		return Recetario(request, model);
+	}
+	
+	public Object[] validarGuardado(HttpServletRequest request){
+		
+		Object[] obj = new Object[3];
+		
+		try{
+			Receta rece = new Receta();
+			PreparacionReceta preparacion = new PreparacionReceta();
+			List<PreparacionReceta> ListaP = new ArrayList<PreparacionReceta>();
+	
+			String error = "";
+			
+			if(request.getParameter("id_receta") != null && !request.getParameter("id_receta").trim().isEmpty())
+				rece.setId_receta(Integer.parseInt(request.getParameter("id_receta")));
+			
+			if(request.getParameter("id_producto") != null && !request.getParameter("id_producto").trim().isEmpty() && !request.getParameter("id_producto").trim().isEmpty())
+				rece.setId_producto(Integer.parseInt(request.getParameter("id_producto")));
+			else
+				error += "Seleccionar un producto<br/>";
+		
+			if(request.getParameter("dificultad") != null && !request.getParameter("dificultad").trim().isEmpty() && !request.getParameter("dificultad").trim().equals("0"))
+				rece.setId_dificultad_receta(Integer.parseInt(request.getParameter("dificultad")));
+			else
+				error += "Seleccionar una difciltad de receta<br/>";
+			
+			if(request.getParameter("tiempo") != null && !request.getParameter("tiempo").trim().isEmpty())
+				rece.setTiempo(request.getParameter("tiempo"));
+			else
+				error += "Ingresar tiempo de receta en minutos<br/>";
+			
+			Integer secuencia = Integer.parseInt(request.getParameter("secuencia")), sw = 0;
+			
+			for(int i=1;i<=secuencia && sw == 0; i++){
+				preparacion = new PreparacionReceta();
+				
+				if(request.getParameter("texto" + i) != null && !request.getParameter("texto" + i).trim().isEmpty())
+					preparacion.setPreparacion(request.getParameter("texto" + i));
+				else
+					sw = 1;
+				ListaP.add(preparacion);
+			}
+			
+			if(sw==1)
+				error += "Ingresar los apartes de la preparación";
+			
+			obj[0] = error;
+			obj[1] = rece;
+			obj[2] = ListaP;
+			
+		}catch(Exception e){
+			obj[0] = "Contactar al administrador";
+			return null;
+		}
+		
+		return obj;
+	}
+
 }
