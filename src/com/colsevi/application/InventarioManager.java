@@ -60,12 +60,37 @@ public class InventarioManager {
 				obj[1] = UnidadMedidaE.KILO.getUnidadM();
 			}
 		}
-		
 		return obj;
-		
 	}
 	
-	public static Object[] conversionMayor(Integer tipoP, Double cantidad){
+public static Object[] ConversionPMenorMayor(Integer tipoP, Integer tipoH, Double cantidad){
+		
+		Object[] obj = new Object[2];
+		
+		if(tipoP.equals(UnidadMedidaE.KILO.getUnidadM())){
+			if(tipoH.equals(UnidadMedidaE.LIBRA.getUnidadM())){
+				obj[0] = cantidad * 0.45359237;
+			}else if(tipoH.equals(UnidadMedidaE.GRAMO.getUnidadM())){
+				obj[0] = cantidad / 100;
+			}
+		}else if(tipoP.equals(UnidadMedidaE.LIBRA.getUnidadM())){
+			if(tipoH.equals(UnidadMedidaE.KILO.getUnidadM())){
+				obj[0] = cantidad *  2.20462262;
+			}else if(tipoH.equals(UnidadMedidaE.GRAMO.getUnidadM())){
+				obj[0] = cantidad * 0.00220462262;
+			}
+		}else if(tipoP.equals(UnidadMedidaE.GRAMO.getUnidadM())){
+			if(tipoH.equals(UnidadMedidaE.LIBRA.getUnidadM())){
+				obj[0] = cantidad * 453.59237;
+			}else if(tipoH.equals(UnidadMedidaE.KILO.getUnidadM())){
+				obj[0] = cantidad * 1000;
+			}
+		}
+		
+		return obj;
+	}
+	
+	public static Object[] conversionEncontrarMayorUnidad(Integer tipoP, Double cantidad){
 		Object[] obj = new Object[2];
 		
 		if(tipoP.equals(UnidadMedidaE.KILO.getUnidadM())){
@@ -82,7 +107,7 @@ public class InventarioManager {
 		return obj;
 	}
 	
-	public static Object[] conversionM(Integer tipoP, Double cantidad){
+	public static Object[] conversionMOptima(Integer tipoP, Double cantidad){
 		Object[] obj = new Object[2];
 		
 		if(tipoP.equals(UnidadMedidaE.LIBRA.getUnidadM()) && (cantidad  * 0.45359237) > 1){

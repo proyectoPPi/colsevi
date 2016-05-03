@@ -208,25 +208,8 @@ public class InventarioController extends BaseConfigController {
 					opciones.put("cantidad", cant);
 					op = cant;
 					
-					if(um.equals(UnidadMedidaE.KILO.getUnidadM())){
-						if(medida.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							op = cant * 0.45359237;
-						}else if(medida.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							op = cant / 100;
-						}
-					}else if(um.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-						if(medida.equals(UnidadMedidaE.KILO.getUnidadM())){
-							op = cant *  2.20462262;
-						}else if(medida.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							op = cant * 0.00220462262;
-						}
-					}else if(um.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-						if(medida.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							op = cant * 453.59237;
-						}else if(medida.equals(UnidadMedidaE.KILO.getUnidadM())){
-							op = cant * 1000;
-						}
-					}
+					Object[] result = InventarioManager.ConversionPMayorMenor(um, medida, cant);
+					op = (Double) result[0];
 					
 					if(op < cantidad){
 						opciones.put("color", false);
@@ -354,15 +337,14 @@ public class InventarioController extends BaseConfigController {
 						
 						opcompra -= op;
 						if(opcompra < 1){
-							result = InventarioManager.conversionMayor(umVista, opcompra);
+							result = InventarioManager.conversionEncontrarMayorUnidad(umVista, opcompra);
 							opcompra = (Double) result[0];
 							umVista = (Integer) result[1];
 						}else{
 							
-							result = InventarioManager.conversionM(umVista, opcompra);
+							result = InventarioManager.conversionMOptima(umVista, opcompra);
 							opcompra = (Double) result[0];
 							umVista = (Integer) result[1];
-							
 						}
 						
 						MateriaPrima mp = new MateriaPrima();
