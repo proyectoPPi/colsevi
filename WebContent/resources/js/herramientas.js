@@ -1,6 +1,7 @@
 var dataMap = {};
 var registrosPagina = 10;
-var cantPagina = 8;
+var cantPagina = 16;
+
 /*
  * Método para pintar la tabla
  */
@@ -33,7 +34,13 @@ function HTabla(opciones){
 			dataMap["datos"] = data["datos"];
 			dataMap["titulos"] = titulos;
 			dataMap["total"] = data["total"];
-			
+			if(dataMap["datos"].length == 0){
+	 			jQuery('#tabla').html("<br/>No hay datos");
+	         	return;
+	 		}
+			if(data["total"] == 0){
+				organizarPaginacion(1);
+			}
 			html='<table class="display table table-bordered table-striped dataTable"><thead><tr>';
 			for(k in titulos){
 				var className = '';
@@ -228,5 +235,66 @@ function HValidador(Id){
 		submitHandler: function(form) {
 		    form.submit();
 		  }
+	});
+}
+
+function HiniciarAutocompletar(url,input){
+
+	var value = "campo="+jQuery("#"+input).val();
+	dataMap['AutocompletarUrl'] = url;
+	
+	jQuery.ajaxQueue({
+		url: dataMap['AutocompletarUrl'] + value,
+	}).done(function(result) {
+		var data;
+		try{
+			data = jQuery.parseJSON(result);
+		} catch(err){
+			console.log("Error ejecutando HiniciarAutocompletar" + err);
+        	return;
+		}
+		dataMap['autocompletar'] = data['labels'];
+		
+		AuxiliarAutocompletar(input);
+		
+		jQuery("#"+input).keyup(function(e) {
+			if((e.which<37 || e.which>40) && e.which!=13){
+				ActualizarAutocompletar(input);
+			}
+		});
+	
+	});
+}
+
+function AuxiliarAutocompletar(input){
+
+	jQuery( "#"+input ).autocomplete({
+		source: dataMap['autocompletar'],
+		minLength: 0,
+		open: function( event, ui ) {}
+	});
+
+	jQuery("#"+input).focus(function() {
+		jQuery("#"+input).autocomplete("search");
+	});
+}
+
+function ActualizarAutocompletar(input){
+
+	jQuery.ajaxQueue({
+	  	url: dataMap['AutocompletarUrl'],
+	  	data: {campo: jQuery("#"+input).val()},
+	  	success: function(o) {
+			var data;
+			try{
+				data = jQuery.parseJSON(o);
+			} catch(err){
+				console.log("Error ejecutando ajaxQueue en ActualizarAutocompletar " + err);
+	        	return;
+			}
+			if(data.labels==undefined) data.labels = [];
+			jQuery("#"+input).autocomplete( "option", "source", data.labels );
+			jQuery("#"+input).autocomplete("search", "");
+	  	}
 	});
 }

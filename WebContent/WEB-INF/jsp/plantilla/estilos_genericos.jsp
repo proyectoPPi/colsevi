@@ -21,7 +21,8 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/jquery-multi-select/css/multi-select.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/colorpicker/css/bootstrap-colorpicker-plus.min.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/colorpicker/css/bootstrap-colorpicker-plus.css" />
-
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/jquery-ui/jquery-ui-1.10.1.custom.min.css" />
+	
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
     <!--[if lt IE 9]>
       <script src="js/html5shiv.js"></script>

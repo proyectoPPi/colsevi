@@ -16,7 +16,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.colsevi.application.ClienteManager;
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.ProductoManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.producto.model.Producto;
 import com.colsevi.dao.producto.model.Receta;
@@ -50,10 +52,23 @@ public class RecetaController extends BaseConfigController{
 		
 		String Inicio = request.getParameter("Inicio");
 		String Final = request.getParameter("Final");
+		String difi = request.getParameter("difi");
+		String prod = request.getParameter("prodV");
+		String tiempo = request.getParameter("tiempo");
+		Boolean mayorF = Boolean.valueOf(request.getParameter("mayorF") != null && request.getParameter("mayorF").trim().equals("true") ? "true" : "false");
 		mapa.put("limit",Inicio + ", " + Final);
 		
+		if(difi != null && !difi.trim().isEmpty() && !difi.trim().equals("0"))
+			mapa.put("dif", difi);
+		if(prod != null && !prod.trim().isEmpty())
+			mapa.put("prod", prod);
+		if(tiempo != null && !tiempo.trim().isEmpty() && mayorF)
+			mapa.put("tiempo", "> " + tiempo);
+		else if(tiempo != null && !tiempo.trim().isEmpty())
+			mapa.put("tiempo", "< " + tiempo);
+		
 		result.put("datos", ConstruirJson(ColseviDao.getInstance().getRecetaMapper().SelectDataView(mapa)));
-		result.put("total", 0);
+		result.put("total", ColseviDao.getInstance().getRecetaMapper().CountDataView(mapa));
 		
 		response.setContentType("text/html;charset=ISO-8859-1");
 		request.setCharacterEncoding("UTF8");
@@ -145,8 +160,24 @@ public class RecetaController extends BaseConfigController{
 				continue;
 			}
 		}
-		
 		return result;
+	}
+	
+	@RequestMapping("/Recetario/buscarProd")
+	public void auto(HttpServletRequest request, HttpServletResponse response){
+		try{
+			JSONObject result = new JSONObject();
+			
+			String producto = request.getParameter("campo");
+			result = ProductoManager.AutocompletarProducto(producto);
+
+			if(result != null){
+				result.writeJSONString(response.getWriter());
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	@RequestMapping("/Recetario/Guardar")
@@ -195,9 +226,8 @@ public class RecetaController extends BaseConfigController{
 		
 		return Recetario(request, model);
 	}
-	
+
 	public Object[] validarGuardado(HttpServletRequest request){
-		
 		Object[] obj = new Object[3];
 		
 		try{

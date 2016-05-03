@@ -1,10 +1,35 @@
 jQuery(document).ready(function(){
 	Tabla();
+	HiniciarAutocompletar(contexto + '/Recetario/buscarProd.html?', 'prod');
+	HiniciarAutocompletar(contexto + '/Recetario/buscarProd.html?', 'prodF');
 });
 
+function Filtro(){
+	var filtro = "&";
+	jQuery("[name*='filtro']").each(function() {
+		filtro += $(this).attr("id") +"="+ $(this).val() + "&";
+	});
+	return filtro;
+}
+
+function Limite(pagina){
+	if(pagina==undefined) pagina = 1;
+	return "&Inicio=" + (pagina-1)*cantPagina + "&Final=" + cantPagina;
+}
+
 function Tabla(pagina){
+	
+	if(jQuery('#prodF').val() == ""){
+		jQuery('#prodV').val('');
+	}
+	if(jQuery('#mayorF').is(':checked')){
+		jQuery('#mayorF').val('true');
+	}else{
+		jQuery('#mayorF').val('false');
+	}
+	
 	jQuery.ajaxQueue({
-		url: contexto + "/Recetario/tabla.html?",
+		url: contexto + "/Recetario/tabla.html?" + Filtro() + Limite(pagina),
 	}).done(function(result) {
 		var data; 
  		try{ 
@@ -20,6 +45,10 @@ function Tabla(pagina){
  		Paginacion(pagina,data['total']);
  		
  		data = data['datos'];
+ 		if(data.length == 0){
+ 			jQuery('#tabla').html("<br/>No hay datos");
+         	return;
+ 		}
  		for(i in data){
  			var html = '';
 			html +='<div class="col-xs-12 col-lg-3">';
@@ -29,7 +58,7 @@ function Tabla(pagina){
 			html +='<button data-toggle="dropdown" class="btn btn-white" aria-pressed="false"><i class="fa fa-ellipsis-v"></i></button>';
 			html +='<ul role="menu" class="dropdown-menu">';
 			html +='<li><a data-toggle="modal" href="#ModalFormulario" onclick="CargarFormulario('+data[i]['id_receta']+');" href="#">Receta</a></li>';
-			html +='<li><a href="'+contexto+'/Producto/Admin.html?id=12">Producto</a></li>';
+			html +='<li><a href="'+contexto+'/Producto/Admin.html?producto='+data[i]['id_producto']+'">Producto</a></li>';
 			html +='</ul>';
 			html +='</div>';
 			html +='<img src="http://thevectorlab.net/flatlab/img/product-list/pro-1.jpg">';
@@ -83,6 +112,7 @@ function Limpiar(){
 	jQuery('#id_receta').val('');
 	jQuery('#detalle').html('');
 	jQuery('#secuencia').val('0');
+	jQuery('#prod').prop('disabled', false);
 }
 
 function CargarFormulario(Id){
@@ -94,6 +124,7 @@ function CargarFormulario(Id){
 		jQuery('#id_receta').val('0');
 		jQuery('#detalle').html('');
 		jQuery('#secuencia').val('0');
+		jQuery('#prod').prop('disabled', true);
 	
 	jQuery.ajaxQueue({
 		url: contexto + "/Recetario/detalle.html?",
@@ -154,3 +185,16 @@ jQuery('#adicionarTexto').click(function(){
 	}
 });
 
+jQuery("#prod").autocomplete({
+	   select: function(e, ui) {
+     this.value = ui.item.value;
+     jQuery('#id_producto').val(ui.item.id_producto);
+ }
+});
+
+jQuery("#prodF").autocomplete({
+	   select: function(e, ui) {
+     this.value = ui.item.value;
+     jQuery('#prodV').val(ui.item.id_producto);
+ }
+});

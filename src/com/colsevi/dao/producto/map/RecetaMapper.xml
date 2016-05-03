@@ -276,6 +276,34 @@
 		FROM receta rec
 		LEFT JOIN producto prod ON prod.id_producto = rec.id_producto
 		LEFT JOIN dificultad_receta dr ON dr.id_dificultad_receta = rec.id_dificultad_receta
+		WHERE 1 = 1
+		<if test="prod != null">
+			AND rec.id_producto = #{prod}
+		</if>
+		<if test="dif != null">
+			AND dr.id_dificultad_receta = #{dif}
+		</if>
+		<if test="tiempo != null">
+			AND rec.tiempo ${tiempo}
+		</if>
+		
 		ORDER BY rec.id_receta DESC;
+	</select>
+	<select id="CountDataView" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM receta rec
+		LEFT JOIN producto prod ON prod.id_producto = rec.id_producto
+		LEFT JOIN dificultad_receta dr ON dr.id_dificultad_receta = rec.id_dificultad_receta
+		WHERE 1 = 1
+		<if test="prod != null">
+			AND rec.id_producto = #{prod}
+		</if>
+		<if test="dif != null">
+			AND dr.id_dificultad_receta = #{dif}
+		</if>
+		<if test="tiempo != null">
+			AND rec.tiempo ${tiempo}
+		</if>
+		;
 	</select>
 </mapper>

@@ -21,13 +21,25 @@
 					</h2>
 					<section class="panel">
 						<div class="panel-body">
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-								<label>Nombre</label>
-								<input type="text" class="form-control" id="nombreF" name="filtro"/>
+							<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+								<label>Producto</label>
+								<input type="text" class="form-control" id="prodF" name="prodF"/>
+								<input type="hidden" id="prodV" name="filtro"/>
 							</div>
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-								<label>Descripción</label>
-								<input type="text" class="form-control" id="descripcionF" name="filtro"/>
+							<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+								<label>Tiempo</label>
+								<input type="text" class="form-control" id="tiempo" name="filtro"/>
+								<label>Mayor valor</label> <input type="checkbox" id="mayorF" name="filtro"/>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+								<label>Dificultad Receta</label>
+								<select class="form-control" id="difi" name="filtro">
+									<option value="0">Seleccione</option>
+									<c:forEach items="${ListaD}" var="difi">
+										<option value="${difi.id_dificultad_receta}">${difi.nombre}</option>
+									</c:forEach>
+								</select>
+								<br/>
 							</div>
 							<div class="col-xs-12 col-md-12 col-lg-12"><br/>
 								<button class="btn btn-button" onclick="Tabla(1);">Filtrar</button>
@@ -53,10 +65,12 @@
 												<input type="hidden" id="id_receta" name="id_receta"/>
 												<input type="hidden" id="id_producto" name="id_producto"/>
 												<input type="hidden" id="secuencia" name="secuencia" value="0"/>
+												
 												<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 													<label>*producto</label>
-													<input type="text" class="form-control" id="prod" name="prod" data-bv-notempty="true"/>
+													<input type="text" class="form-control" id="prod" name="prod"/>
 												</div>
+												
 												<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 													<label>*Tiempo</label>
 													<input type="number" class="form-control" id="tiempo" name="tiempo" min="0"/>

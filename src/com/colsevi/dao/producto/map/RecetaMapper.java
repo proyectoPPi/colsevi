@@ -76,4 +76,5 @@ public interface RecetaMapper {
 	int updateByPrimaryKey(Receta record);
 	
 	List<Map<String, Object>> SelectDataView(Map<String, Object> map);
+	int CountDataView(Map<String, Object> map);
 }

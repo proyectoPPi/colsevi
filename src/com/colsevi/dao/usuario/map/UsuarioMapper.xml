@@ -315,4 +315,11 @@
       id_rol = #{id_rol,jdbcType=INTEGER}
     where id_usuario = #{id_usuario,jdbcType=INTEGER}
   </update>
+  <select id="SelectAutocomplete" parameterType="java.util.Map" resultType="java.util.HashMap">
+  	SELECT per.id_persona, per.documento, per.nombre, per.apellido 
+  	FROM persona per
+  	WHERE 1= 1 
+  		AND(per.documento LIKE #{cliente} OR per.nombre LIKE #{cliente} OR per.apellido LIKE #{cliente});
+  		
+  </select>
 </mapper>

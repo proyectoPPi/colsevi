@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.InventarioManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.controllers.general.MotivoE;
@@ -32,7 +33,6 @@ import com.colsevi.dao.inventario.model.InventarioXMateria;
 import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.dao.inventario.model.MateriaPrimaExample;
-import com.colsevi.dao.inventario.model.MovimientoMateria;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
 import com.colsevi.dao.producto.model.IngredienteXProductoKey;
@@ -281,28 +281,18 @@ public class InventarioController extends BaseConfigController {
 				InventarioXMateriaExample ixm = new InventarioXMateriaExample();
 				ixm.createCriteria().andId_inventarioEqualTo(bean.getId_inventario());
 				ColseviDao.getInstance().getInventarioXMateriaMapper().deleteByExample(ixm);
+
+				for(MateriaPrima beanMP: listaMP){
+					beanMP.setId_establecimiento(bean.getId_establecimiento());
+					InventarioManager.ActualizarMateriaPrima(beanMP);
+				}
 				
 				for(InventarioXMateria beanMateria: listaInv){
 					beanMateria.setId_inventario(bean.getId_inventario());
-					ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(beanMateria);
 					
-					MovimientoMateria mm = new MovimientoMateria();
-					mm.setLote(beanMateria.getLote());
-					mm.setId_unidad_peso(beanMateria.getId_unidad_peso());
-					mm.setId_establecimiento(bean.getId_establecimiento());
-					mm.setCantidad(beanMateria.getCantidad());
-					mm.setFecha_movimiento(new Date());
-					mm.setId_motivo(MotivoE.ASIGNACION.getMotivoE());
-					
-					ColseviDao.getInstance().getMovimientoMateriaMapper().insertSelective(mm);
+					InventarioManager.RegistrarMovimientoMateria(beanMateria, bean.getId_establecimiento(), new Date(), MotivoE.ASIGNACION.getMotivoE());
 				}
 				
-				for(MateriaPrima beanMP: listaMP){
-					MateriaPrimaExample MPE = new MateriaPrimaExample();
-					MPE.createCriteria().andLoteEqualTo(beanMP.getLote());
-					beanMP.setId_establecimiento(bean.getId_establecimiento());
-					ColseviDao.getInstance().getMateriaPrimaMapper().updateByExampleSelective(beanMP, MPE);
-				}
 			}
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
@@ -346,51 +336,12 @@ public class InventarioController extends BaseConfigController {
 					
 					ingProd.setCantidad(ingProd.getCantidad() * cantSolicitada);
 			
-					if(umVista.equals(UnidadMedidaE.KILO.getUnidadM())){
-						if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							op = cantidadVista *  2.20462262;
-							umVista = ingProd.getId_unidad_peso();
-						}else if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							op = (double) (cantidadVista *  1000);
-							umVista = ingProd.getId_unidad_peso();
-						}
-					}else if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-						if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.KILO.getUnidadM())){
-							op = cantidadVista * 0.45359237;
-							umVista = ingProd.getId_unidad_peso();
-						}else if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							op = cantidadVista * 453.59237;
-							umVista = ingProd.getId_unidad_peso();
-						}
-					}else if(umVista.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-						if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							op = cantidadVista * 0.00220462262;
-							umVista = ingProd.getId_unidad_peso();
-						}else if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.KILO.getUnidadM())){
-							op = (double) (cantidadVista / 1000);
-							umVista = ingProd.getId_unidad_peso();
-						}
-					}
+					Object[] result = InventarioManager.ConversionPMayorMenor(umVista, ingProd.getId_unidad_peso(), cantidadVista);
+					op = (Double) result[0];
+					umVista = (Integer) result[1];
 					
-					if(MP.getId_unidad_peso().equals(UnidadMedidaE.KILO.getUnidadM())){
-						if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							opcompra = MP.getCantidad() *  2.20462262;
-						}else if(umVista.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							opcompra = (double) (MP.getCantidad() *  1000);
-						}
-					}else if(MP.getId_unidad_peso().equals(UnidadMedidaE.LIBRA.getUnidadM())){
-						if(umVista.equals(UnidadMedidaE.KILO.getUnidadM())){
-							opcompra = MP.getCantidad() * 0.45359237;
-						}else if(umVista.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							opcompra = MP.getCantidad() * 453.59237;
-						}
-					}else if(MP.getId_unidad_peso().equals(UnidadMedidaE.GRAMO.getUnidadM())){
-						if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							opcompra = MP.getCantidad() * 0.00220462262;
-						}else if(umVista.equals(UnidadMedidaE.KILO.getUnidadM())){
-							opcompra = (double) (MP.getCantidad() / 1000);
-						}
-					}
+					result = InventarioManager.ConversionPMayorMenor(MP.getId_unidad_peso(), umVista, MP.getCantidad());
+					opcompra = (Double) result[0];
 					
 					totalAsignado =+ op;
 					if(op <= opcompra && op <= ingProd.getCantidad() && totalAsignado <= ingProd.getCantidad()){
@@ -403,33 +354,15 @@ public class InventarioController extends BaseConfigController {
 						
 						opcompra -= op;
 						if(opcompra < 1){
-							
-							if(umVista.equals(UnidadMedidaE.KILO.getUnidadM())){
-								opcompra *= 2.20462262;
-								umVista = UnidadMedidaE.LIBRA.getUnidadM();
-								if(opcompra < 1){
-									opcompra *= 1000;
-									umVista = UnidadMedidaE.GRAMO.getUnidadM();
-								}
-							}else if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-								opcompra *= 453.59237;
-								umVista = UnidadMedidaE.GRAMO.getUnidadM();
-							}
+							result = InventarioManager.conversionMayor(umVista, opcompra);
+							opcompra = (Double) result[0];
+							umVista = (Integer) result[1];
 						}else{
-							if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM()) && (opcompra  * 0.45359237) > 1){
-								opcompra *= 0.45359237;
-								umVista = UnidadMedidaE.KILO.getUnidadM();
-							}else if(umVista.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-								if((opcompra  * 0.00220462262) > 1){
-									if((opcompra  / 1000) > 1){
-										opcompra /= 1000;
-										umVista = UnidadMedidaE.KILO.getUnidadM();
-									}else{
-										opcompra *= 0.00220462262;
-										umVista = UnidadMedidaE.LIBRA.getUnidadM();
-									}
-								}
-							}
+							
+							result = InventarioManager.conversionM(umVista, opcompra);
+							opcompra = (Double) result[0];
+							umVista = (Integer) result[1];
+							
 						}
 						
 						MateriaPrima mp = new MateriaPrima();
