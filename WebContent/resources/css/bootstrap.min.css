@@ -5323,7 +5323,6 @@ a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover {
 	padding: 15px;
 	margin-bottom: 20px;
 	border: 1px solid transparent;
-	border-radius: 4px
 }
 
 .alert h4 {
@@ -5355,9 +5354,9 @@ a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover {
 }
 
 .alert-success {
-	color: #3c763d;
-	background-color: #dff0d8;
-	border-color: #d6e9c6
+	color: #fff;
+	background-color: #3F8A24;
+	border-color: #3F8A24;
 }
 
 .alert-success hr {
