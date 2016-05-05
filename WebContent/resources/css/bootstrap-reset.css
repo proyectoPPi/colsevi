@@ -100,7 +100,7 @@ a:hover {
 }
 
 .modal-header {
-    background: peru;
+    background: #331d08;
     color: #fff;
     border-radius: 5px 5px 0 0;
     -webkit-border-radius: 5px 5px 0 0;
@@ -200,14 +200,14 @@ ul {
 }
 
 .btn-warning {
-    background-color: #f1c500;
-    border-color: #f1c500;
+    background-color: #ffb347;
+    border-color: #ffb347;
     color: #FFFFFF;
 }
 
 .btn-warning:hover, .btn-warning:focus, .btn-warning:active, .btn-warning.active, .open .dropdown-toggle.btn-warning {
-    background-color: #e4ba00;
-    border-color: #e4ba00;
+    background-color: #ffb347;
+    border-color: #ffb347;
     color: #FFFFFF;
 }
 

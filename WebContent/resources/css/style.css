@@ -14,7 +14,7 @@ body {
     font-family: 'Roboto Condensed', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
-    font-size:13px;
+    font-size:14px;
     text-rendering:optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
@@ -30,7 +30,7 @@ a, a:hover, a:focus {
 }
 ::selection {
 
-    background: peru;
+    background: #ffb347;
     color: #fff;
 }
 ::-moz-selection {
@@ -269,7 +269,7 @@ ul.sidebar-menu li ul.sub li a {
 }
 
 ul.sidebar-menu li ul.sub li a:hover, ul.sidebar-menu li ul.sub li.active a {
-    color: #FF6C60;
+    color: white;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
@@ -298,7 +298,7 @@ ul.sidebar-menu li a{
     text-decoration: none;
     display: block;
     padding: 15px 0 15px 10px;
-    font-size: 14px;
+    font-size: 16px;
     outline: none;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -308,7 +308,7 @@ ul.sidebar-menu li a{
 }
 
 ul.sidebar-menu li a.active, ul.sidebar-menu li a:hover, ul.sidebar-menu li a:focus {
-    background: #35404d;
+    background: #331d08;
     color: #fff;
     display: block;
     border-radius: 4px;
@@ -328,11 +328,11 @@ ul.sidebar-menu li a i {
 }
 
 ul.sidebar-menu li a:hover i, ul.sidebar-menu li a:focus i {
-    color: #FF6C60;
+    color: white;
 }
 
 ul.sidebar-menu li a.active i {
-    color: #FF6C60;
+    color: white;
 }
 
 
@@ -2217,12 +2217,12 @@ ul.inbox-pagination li {
 
 .modal-header h4.modal-title {
     font-weight: 300;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 .modal-body label {
     font-weight: 400;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 .heading-inbox h4{
@@ -2968,12 +2968,12 @@ ul.amounts li {
 
 .panel-heading .nav {
     border: medium none;
-    font-size: 13px;
+    font-size: 14px;
     margin: -10px -15px -11px;
 }
 
 .tab-bg-dark-navy-blue {
-    background: #7087A3;
+    background: #f7f6f1;
     border-radius: 5px 5px 0 0;
     -webkit-border-radius: 5px 5px 0 0;
     border-bottom: none;
@@ -2986,12 +2986,17 @@ ul.amounts li {
 }
 
 .panel-heading .nav > li > a {
-    color: #fff;
+    color: #331d08;
 }
 
-.panel-heading .nav > li.active > a, .panel-heading .nav > li > a:hover {
+.panel-heading .nav > li.active > a {
+    color: white;
+    background: #331d08;
+}
+
+.panel-heading .nav > li > a:hover {
     color: #47596f;
-    background: #fff;
+    background: #ffb347;
 }
 
 .panel-heading .nav > li:first-child.active > a, .panel-heading .nav > li:first-child > a:hover {
