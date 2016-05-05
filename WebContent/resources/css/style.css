@@ -6,12 +6,12 @@ Website: http://thevectorlab.net/
 */
 
 /* Import fonts */
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic);
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,400italic,700,700italic);
 
 body {
-    color: #FFB973;
+    color: #331d08;
     background: #f7f6f1;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
     font-size:13px;
@@ -733,6 +733,7 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
     cursor: pointer;
     display: inline-block;
     font-size: 20px;
+    background: #FFB973;
 }
 
 
