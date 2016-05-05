@@ -904,7 +904,7 @@ $.cf = {
 					iElemLeft = $(oDTP.oData.oInputElement).offset().left,
 					iElemWidth =  $(oDTP.oData.oInputElement).outerWidth();
 				
-					$(oDTP.element).css({position: "absolute", top: iElemTop, left: iElemLeft, width: iElemWidth, height: "auto"});
+					$(oDTP.element).css({position: "absolute", top: iElemTop, left: iElemLeft, width: iElemWidth, background: "transparent", height: "auto"});
 				}
 
 				if(oDTP.settings.beforeShow)

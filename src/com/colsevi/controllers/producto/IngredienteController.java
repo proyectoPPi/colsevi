@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.ProductoManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.producto.model.ClasificarIngrediente;
 import com.colsevi.dao.producto.model.ClasificarIngredienteExample;
@@ -28,12 +29,8 @@ public class IngredienteController extends BaseConfigController {
 
 	@RequestMapping("/Ingrediente/Ing")
 	public ModelAndView Ingrediente(HttpServletRequest request,ModelMap model){
-		model.addAttribute("listaClasificar", listaClasificacion());
+		model.addAttribute("listaClasificar", ProductoManager.getClasificar());
 		return new ModelAndView("producto/Ingrediente","col",getValoresGenericos(request));
-	}
-	
-	public static List<ClasificarIngrediente> listaClasificacion(){
-		return ColseviDao.getInstance().getClasificarIngredienteMapper().selectByExample(new ClasificarIngredienteExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -67,6 +64,9 @@ public class IngredienteController extends BaseConfigController {
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getIngredienteMapper().selectByExample(IngExample)));
 			opciones.put("total", ColseviDao.getInstance().getIngredienteMapper().countByExample(IngExample));
 
+			response.setContentType("text/html;charset=ISO-8859-1");
+			request.setCharacterEncoding("UTF8");
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}

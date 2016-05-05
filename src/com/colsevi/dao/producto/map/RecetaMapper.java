@@ -3,6 +3,8 @@ package com.colsevi.dao.producto.map;
 import com.colsevi.dao.producto.model.Receta;
 import com.colsevi.dao.producto.model.RecetaExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface RecetaMapper {
@@ -72,4 +74,7 @@ public interface RecetaMapper {
 	 * @mbggenerated  Fri Apr 15 20:34:25 COT 2016
 	 */
 	int updateByPrimaryKey(Receta record);
+	
+	List<Map<String, Object>> SelectDataView(Map<String, Object> map);
+	int CountDataView(Map<String, Object> map);
 }

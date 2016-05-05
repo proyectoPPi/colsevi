@@ -57,6 +57,9 @@ public class TipoProveedorController extends BaseConfigController{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+
 		opciones.writeJSONString(response.getWriter());
 	}
 

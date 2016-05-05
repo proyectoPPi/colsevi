@@ -1,5 +1,7 @@
 var dataMap = {};
 var registrosPagina = 10;
+var cantPagina = 16;
+
 /*
  * Método para pintar la tabla
  */
@@ -11,10 +13,12 @@ function HTabla(opciones){
 	dataMap['clase'] = opciones.clase;
 	dataMap['boton'] = opciones.boton;
 	dataMap['color'] = opciones.color;
+	dataMap['accion'] = opciones.accion;
 	
 	if(dataMap['clase'] == undefined) dataMap['clase'] = new Array();
 	if(dataMap['boton'] == undefined) dataMap['boton'] = new Array();
 	if(dataMap['color'] == undefined) dataMap['color'] = new Array();
+	if(dataMap['accion'] == undefined) dataMap['accion'] = new Array();
 	
 	Setlimite(opciones.pagina);
 	
@@ -32,7 +36,13 @@ function HTabla(opciones){
 			dataMap["datos"] = data["datos"];
 			dataMap["titulos"] = titulos;
 			dataMap["total"] = data["total"];
-			
+			if(dataMap["datos"].length == 0){
+	 			jQuery('#tabla').html("<br/>No hay datos");
+	         	return;
+	 		}
+			if(data["total"] == 0){
+				organizarPaginacion(1);
+			}
 			html='<table class="display table table-bordered table-striped dataTable"><thead><tr>';
 			for(k in titulos){
 				var className = '';
@@ -85,6 +95,20 @@ function HTabla(opciones){
 									html += '<span><a href="#" onclick="'+metodo+'(\''+id+'\');" class="btn btn-xs '+opcion.color+'"><i class="'+opcion.img+'"></i></a></span>';
 								}
 							}
+							 if(dataMap['accion'][k] != undefined){
+								 html +='<div class="btn-group">';
+								 html +='<button data-toggle="dropdown" class="btn btn-white" aria-pressed="false"><i class="fa fa-ellipsis-v"></i></button>';
+								 html +='<ul role="menu" class="dropdown-menu">';
+								 
+								 for(var key in dataMap['accion'][k]){
+									var opcion = dataMap['accion'][k][key];
+									var metodo = "metodo";
+									if(opcion.metodo != undefined){
+										metodo = opcion.metodo;
+									}
+									html +='<li><a href="#" onclick="'+metodo+'(\''+id+'\');" href="#">'+opcion.label+'</a></li>';
+								}
+							 }
 						 }
 						 
 						 html += "</td>";
@@ -220,4 +244,73 @@ function HDatetimePicker(Id, Popup){
 
 function HColorPicker(Id){
 	jQuery('#' + Id).colorpickerplus();
+}
+
+function HValidador(Id){
+	jQuery('#'+Id).validate({
+		submitHandler: function(form) {
+		    form.submit();
+		  }
+	});
+}
+
+function HiniciarAutocompletar(url,input){
+
+	var value = "campo="+jQuery("#"+input).val();
+	dataMap['AutocompletarUrl'] = url;
+	
+	jQuery.ajaxQueue({
+		url: dataMap['AutocompletarUrl'] + value,
+	}).done(function(result) {
+		var data;
+		try{
+			data = jQuery.parseJSON(result);
+		} catch(err){
+			console.log("Error ejecutando HiniciarAutocompletar" + err);
+        	return;
+		}
+		dataMap['autocompletar'] = data['labels'];
+		
+		AuxiliarAutocompletar(input);
+		
+		jQuery("#"+input).keyup(function(e) {
+			if((e.which<37 || e.which>40) && e.which!=13){
+				ActualizarAutocompletar(input);
+			}
+		});
+	
+	});
+}
+
+function AuxiliarAutocompletar(input){
+
+	jQuery( "#"+input ).autocomplete({
+		source: dataMap['autocompletar'],
+		minLength: 0,
+		open: function( event, ui ) {}
+	});
+
+	jQuery("#"+input).focus(function() {
+		jQuery("#"+input).autocomplete("search");
+	});
+}
+
+function ActualizarAutocompletar(input){
+
+	jQuery.ajaxQueue({
+	  	url: dataMap['AutocompletarUrl'],
+	  	data: {campo: jQuery("#"+input).val()},
+	  	success: function(o) {
+			var data;
+			try{
+				data = jQuery.parseJSON(o);
+			} catch(err){
+				console.log("Error ejecutando ajaxQueue en ActualizarAutocompletar " + err);
+	        	return;
+			}
+			if(data.labels==undefined) data.labels = [];
+			jQuery("#"+input).autocomplete( "option", "source", data.labels );
+			jQuery("#"+input).autocomplete("search", "");
+	  	}
+	});
 }

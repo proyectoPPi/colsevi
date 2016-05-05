@@ -16,6 +16,7 @@ public class NavegacionUsuario implements java.io.Serializable {
 
 	private static final long serialVersionUID = -7085558475246737852L;
 
+	@SuppressWarnings("rawtypes")
 	private static Map paramsMenu = null;
 	
 	private synchronized static void createInstance() {
@@ -24,13 +25,15 @@ public class NavegacionUsuario implements java.io.Serializable {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static Map getInstance() {
 		if (paramsMenu == null)
 			createInstance();
 		return paramsMenu;
 	}
 	
-	 public void cargarPermisos(){
+	 @SuppressWarnings("unchecked")
+	public void cargarPermisos(){
     	List<Rol> listRol = ColseviDao.getInstance().getRolMapper().selectByExample(new RolExample());
     	List<Integer> paginasId = new ArrayList<Integer>();
     	for (Rol bean : listRol) {
@@ -46,13 +49,13 @@ public class NavegacionUsuario implements java.io.Serializable {
     		PaginasExample.createCriteria().andId_paginaIn(paginasId);
     		List<Pagina> ListaPaginas = ColseviDao.getInstance().getPaginaMapper().selectByExample(PaginasExample);
     		
-    		if(ListaPaginas != null && ListaPaginas.size() > 0){
+    		if(ListaPaginas != null && ListaPaginas.size() > 0)
     			paramsMenu.put(bean.getId_rol(), ListaPaginas);
-    		}
 		}
     }
 	 
-    public List<Pagina> getPaginasRol(Integer rol){
+    @SuppressWarnings("unchecked")
+	public List<Pagina> getPaginasRol(Integer rol){
     	if(getInstance() == null || getInstance().isEmpty()){
     		cargarPermisos();
     	}
