@@ -13,10 +13,12 @@ function HTabla(opciones){
 	dataMap['clase'] = opciones.clase;
 	dataMap['boton'] = opciones.boton;
 	dataMap['color'] = opciones.color;
+	dataMap['accion'] = opciones.accion;
 	
 	if(dataMap['clase'] == undefined) dataMap['clase'] = new Array();
 	if(dataMap['boton'] == undefined) dataMap['boton'] = new Array();
 	if(dataMap['color'] == undefined) dataMap['color'] = new Array();
+	if(dataMap['accion'] == undefined) dataMap['accion'] = new Array();
 	
 	Setlimite(opciones.pagina);
 	
@@ -93,6 +95,20 @@ function HTabla(opciones){
 									html += '<span><a href="#" onclick="'+metodo+'(\''+id+'\');" class="btn btn-xs '+opcion.color+'"><i class="'+opcion.img+'"></i></a></span>';
 								}
 							}
+							 if(dataMap['accion'][k] != undefined){
+								 html +='<div class="btn-group">';
+								 html +='<button data-toggle="dropdown" class="btn btn-white" aria-pressed="false"><i class="fa fa-ellipsis-v"></i></button>';
+								 html +='<ul role="menu" class="dropdown-menu">';
+								 
+								 for(var key in dataMap['accion'][k]){
+									var opcion = dataMap['accion'][k][key];
+									var metodo = "metodo";
+									if(opcion.metodo != undefined){
+										metodo = opcion.metodo;
+									}
+									html +='<li><a href="#" onclick="'+metodo+'(\''+id+'\');" href="#">'+opcion.label+'</a></li>';
+								}
+							 }
 						 }
 						 
 						 html += "</td>";

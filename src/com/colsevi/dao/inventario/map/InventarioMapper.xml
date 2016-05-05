@@ -295,16 +295,17 @@
 		LEFT JOIN catalogo cat ON cat.id_catalogo = cxp.id_catalogo
 		LEFT JOIN establecimiento esta ON esta.id_establecimiento = inv.id_establecimiento
 		WHERE 1 = 1
-		 <if test="documento != null">
-			AND per.documento LIKE #{documento}
+		 <if test="prodV != null">
+			AND prod.id_producto = #{prodV}
 		 </if>
-		 <if test="estado != null">
-			AND estado.id_estado_pedido = #{estado}
+		 <if test="estaF != null">
+			AND inv.id_establecimiento = #{estaF}
 		 </if>
-		 <if test="cliente != null">
-			OR (per.nombre LIKE #{cliente} AND per.apellido LIKE #{cliente})
+		 <if test="dis != null">
+			OR inv.disponible ${dis}
 		 </if>
-		ORDER BY inv.id_inventario DESC;
+		ORDER BY inv.id_inventario DESC
+		LIMIT ${limit};
 	</select>
 	<select id="CountDataView" parameterType="java.util.Map" resultType="java.lang.Integer">
 		SELECT COUNT(*)
@@ -314,14 +315,14 @@
 		LEFT JOIN catalogo cat ON cat.id_catalogo = cxp.id_catalogo
 		LEFT JOIN establecimiento esta ON esta.id_establecimiento = inv.id_establecimiento
 		WHERE 1 = 1
-		 <if test="documento != null">
-			AND per.documento LIKE #{documento}
+		 <if test="prodV != null">
+			AND prod.id_producto = #{prodV}
 		 </if>
-		 <if test="estado != null">
-			AND estado.id_estado_pedido = #{estado}
+		 <if test="estaF != null">
+			AND inv.id_establecimiento = #{estaF}
 		 </if>
-		 <if test="cliente != null">
-			OR (per.nombre LIKE #{cliente} AND per.apellido LIKE #{cliente})
+		 <if test="dis != null">
+			OR inv.disponible ${dis}
 		 </if>
 		 ;
 	</select>
@@ -336,7 +337,9 @@
 	    LEFT JOIN  inventario_x_materia ixm ON mp.id_ingrediente = ing.id_ingrediente
 		WHERE 1 = 1
     
-		AND fecha_vencimiento > NOW() AND mp.cantidad > 0
+		AND (fecha_vencimiento is null OR fecha_vencimiento > NOW()) 
+		AND mp.cantidad > 0
+		
  		<if test="ing != null">
 			AND ing.id_ingrediente = 1
 		 </if>

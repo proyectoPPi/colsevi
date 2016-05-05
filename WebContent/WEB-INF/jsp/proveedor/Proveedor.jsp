@@ -5,10 +5,8 @@
    <meta charset="UTF-8" />
 	<title>Proveedor</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
-
 </head>
 <body>
-
 	<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
 	<section id="container" class="">
 		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>

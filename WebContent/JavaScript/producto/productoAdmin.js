@@ -142,8 +142,8 @@ function EliminarDet(option){
 }
 
 jQuery("#prodF").autocomplete({
-	   select: function(e, ui) {
-  this.value = ui.item.value;
-  jQuery('#prodV').val(ui.item.id_producto);
-}
+	  select: function(e, ui) {
+	  this.value = ui.item.value;
+	  jQuery('#prodV').val(ui.item.id_producto);
+	}
 });

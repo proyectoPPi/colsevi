@@ -3,21 +3,19 @@ package com.colsevi.application;
 import java.util.Date;
 
 import com.colsevi.controllers.general.UnidadMedidaE;
-import com.colsevi.dao.inventario.model.InventarioXMateria;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.dao.inventario.model.MateriaPrimaExample;
 import com.colsevi.dao.inventario.model.MovimientoMateria;
 
 public class InventarioManager {
 
-	public static void RegistrarMovimientoMateria(InventarioXMateria invMat, Integer establecimiento, Date Fecha, Integer motivo){
-		ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(invMat);
+	public static void RegistrarMovimientoMateria(Integer lote, Integer unidadPeso, Double cantidad, Integer establecimiento, Date Fecha, Integer motivo){
 		
 		MovimientoMateria mm = new MovimientoMateria();
-		mm.setLote(invMat.getLote());
-		mm.setId_unidad_peso(invMat.getId_unidad_peso());
+		mm.setLote(lote);
+		mm.setId_unidad_peso(unidadPeso);
 		mm.setId_establecimiento(establecimiento);
-		mm.setCantidad(invMat.getCantidad());
+		mm.setCantidad(cantidad);
 		mm.setFecha_movimiento(Fecha);
 		mm.setId_motivo(motivo);
 		
@@ -37,7 +35,7 @@ public class InventarioManager {
 		
 		if(tipoP.equals(UnidadMedidaE.KILO.getUnidadM())){
 			if(tipoH.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-				obj[0] = cantidad *  2.20462262;
+				obj[0] = cantidad *  2;
 				obj[1] = UnidadMedidaE.LIBRA.getUnidadM();
 			}else if(tipoH.equals(UnidadMedidaE.GRAMO.getUnidadM())){
 				obj[0] = (double) (cantidad *  1000);
@@ -45,15 +43,15 @@ public class InventarioManager {
 			}
 		}else if(tipoP.equals(UnidadMedidaE.LIBRA.getUnidadM())){
 			if(tipoH.equals(UnidadMedidaE.KILO.getUnidadM())){
-				obj[0] = cantidad * 0.45359237;
+				obj[0] = cantidad * 0.5;
 				obj[1] = UnidadMedidaE.KILO.getUnidadM();
 			}else if(tipoH.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-				obj[0] = cantidad * 453.59237;
+				obj[0] = cantidad * 500;
 				obj[1] = UnidadMedidaE.GRAMO.getUnidadM();
 			}
 		}else if(tipoP.equals(UnidadMedidaE.GRAMO.getUnidadM())){
 			if(tipoH.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-				obj[0] = cantidad * 0.00220462262;
+				obj[0] = cantidad * 0.002;
 				obj[1] = UnidadMedidaE.LIBRA.getUnidadM();
 			}else if(tipoH.equals(UnidadMedidaE.KILO.getUnidadM())){
 				obj[0] = (double) (cantidad / 1000);
@@ -69,19 +67,19 @@ public static Object[] ConversionPMenorMayor(Integer tipoP, Integer tipoH, Doubl
 		
 		if(tipoP.equals(UnidadMedidaE.KILO.getUnidadM())){
 			if(tipoH.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-				obj[0] = cantidad * 0.45359237;
+				obj[0] = cantidad * 0.5;
 			}else if(tipoH.equals(UnidadMedidaE.GRAMO.getUnidadM())){
 				obj[0] = cantidad / 100;
 			}
 		}else if(tipoP.equals(UnidadMedidaE.LIBRA.getUnidadM())){
 			if(tipoH.equals(UnidadMedidaE.KILO.getUnidadM())){
-				obj[0] = cantidad *  2.20462262;
+				obj[0] = cantidad *  2;
 			}else if(tipoH.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-				obj[0] = cantidad * 0.00220462262;
+				obj[0] = cantidad * 0.002;
 			}
 		}else if(tipoP.equals(UnidadMedidaE.GRAMO.getUnidadM())){
 			if(tipoH.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-				obj[0] = cantidad * 453.59237;
+				obj[0] = cantidad * 500;
 			}else if(tipoH.equals(UnidadMedidaE.KILO.getUnidadM())){
 				obj[0] = cantidad * 1000;
 			}
@@ -94,14 +92,14 @@ public static Object[] ConversionPMenorMayor(Integer tipoP, Integer tipoH, Doubl
 		Object[] obj = new Object[2];
 		
 		if(tipoP.equals(UnidadMedidaE.KILO.getUnidadM())){
-			obj[0] = cantidad * 2.20462262;
+			obj[0] = cantidad * 2;
 			obj[1] = UnidadMedidaE.LIBRA.getUnidadM();
 			if(cantidad < 1){
 				obj[0] = cantidad * 1000;
 				obj[1] = UnidadMedidaE.GRAMO.getUnidadM();
 			}
 		}else if(tipoP.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-			obj[0] = cantidad * 453.59237;
+			obj[0] = cantidad * 500;
 			obj[1] = UnidadMedidaE.GRAMO.getUnidadM();
 		}
 		return obj;
@@ -111,15 +109,15 @@ public static Object[] ConversionPMenorMayor(Integer tipoP, Integer tipoH, Doubl
 		Object[] obj = new Object[2];
 		
 		if(tipoP.equals(UnidadMedidaE.LIBRA.getUnidadM()) && (cantidad  * 0.45359237) > 1){
-			obj[0] = cantidad * 0.45359237;
+			obj[0] = cantidad * 0.5;
 			obj[1] = UnidadMedidaE.KILO.getUnidadM();
 		}else if(tipoP.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-			if((cantidad * 0.00220462262) > 1){
+			if((cantidad * 0.002) > 1){
 				if((cantidad  / 1000) > 1){
 					obj[0] = cantidad / 1000;
 					tipoP = UnidadMedidaE.KILO.getUnidadM();
 				}else{
-					obj[0] = cantidad * 0.00220462262;
+					obj[0] = cantidad * 0.002;
 					obj[1] = UnidadMedidaE.LIBRA.getUnidadM();
 				}
 			}

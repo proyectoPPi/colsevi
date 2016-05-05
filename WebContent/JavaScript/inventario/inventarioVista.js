@@ -1,8 +1,20 @@
 jQuery(document).ready(function(){
 	Tabla();
+	HiniciarAutocompletar(contexto + '/Inventario/Inv/buscarProd.html?', 'prodF');
 });
 
 function Tabla(pagina){
+	
+	if(jQuery('#prodF').val() == ""){
+		jQuery('#prodV').val('');
+	}
+	if(jQuery('#mayorF').is(':checked')){
+		jQuery('#mayorF').val('true');
+	}else{
+		jQuery('#mayorF').val('false');
+	}
+	
+	
 	HTabla({
 		url: contexto + "/Inventario/Inv/tabla.html?",
 		Id: "#tabla",
@@ -124,3 +136,10 @@ function cargarInv(ingrediente,id_unidad_peso, cant){
  		}
 	});
 }
+
+jQuery("#prodF").autocomplete({
+	  select: function(e, ui) {
+	  this.value = ui.item.value;
+	  jQuery('#prodV').val(ui.item.id_producto);
+	}
+});

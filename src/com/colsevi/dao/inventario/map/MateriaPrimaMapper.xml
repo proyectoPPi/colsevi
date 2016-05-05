@@ -302,7 +302,8 @@
   </update>
   
   <select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
-		SELECT mp.lote, mp.cantidad, mp.fecha_vencimiento, ing.nombre As nombreIng, esta.nombre AS nombreEsta, up.nombre AS nombreUp
+		SELECT mp.lote, mp.cantidad, mp.fecha_vencimiento, ing.nombre As nombreIng, esta.nombre AS nombreEsta, up.nombre AS nombreUp,
+			up.id_unidad_peso, esta.id_establecimiento
 		FROM materia_prima mp
 		LEFT JOIN unidad_peso up ON up.id_unidad_peso = mp.id_unidad_peso
 		LEFT JOIN ingrediente ing ON ing.id_ingrediente = mp.id_ingrediente
@@ -316,7 +317,7 @@
 			AND esta.id_establecimiento = #{esta}
 		 </if>
 		 <if test="cant != null">
-			AND mp.cantidad = #{cant}
+			AND mp.cantidad #{cant}
 		 </if>
 		 <if test="um != null">
 			AND up.id_unidad_peso = #{um}
@@ -341,7 +342,7 @@
 			AND esta.id_establecimiento = #{esta}
 		 </if>
 		 <if test="cant != null">
-			AND mp.cantidad = #{cant}
+			AND mp.cantidad #{cant}
 		 </if>
 		 <if test="um != null">
 			AND up.id_unidad_peso = #{um}

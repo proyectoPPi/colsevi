@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.ProveedorManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.caja.model.CierreCaja;
@@ -107,14 +108,9 @@ public class CierreCajaController extends BaseConfigController{
 		
 		for(Compra bean: listaC){
 			if(bean.getPagado()){
-				pp = new PagoProveedor();
-				pp.setId_compra(bean.getId_compra());
-				pp.setFecha_pago(new Date());
-				pp.setPendiente(new BigDecimal(0));
-				pp.setValor_pagado(bean.getValor());
-				pp.setObservacion("Pago de la compra al proveedor");
-				
-				ColseviDao.getInstance().getPagoProveedorMapper().insertSelective(pp);
+
+				ProveedorManager.InsertarPago(bean.getId_compra(), new Date(), new  BigDecimal(0), bean.getValor(), "Pago completo al proveedor");
+			
 			}else{
 				dp = new DeudaProveedor();
 				dp.setId_compra(bean.getId_compra());

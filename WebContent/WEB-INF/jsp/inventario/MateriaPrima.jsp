@@ -19,15 +19,15 @@
 					<h2>Materia Prima</h2>
 					<section class="panel">
 						<div class="panel-body">
-							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
 								<label>Lote</label>
 								<input type="number" class="form-control" id="loteF" name="filtro"/>
 							</div>
-							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
 								<label>Cantidad</label>
 								<input type="text" class="form-control" id="cantidadF" name="filtro"/>
 							</div>
-							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
 								<label>Unidad de Medida</label>
 								<select class="form-control" id="unidadMF" name="filtro">
 									<option value="0">Seleccione</option>
@@ -36,7 +36,7 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
 								<label>Establecimiento</label>
 								<select class="form-control" id="establecimientoF" name="filtro">
 									<option value="0">Seleccione</option>
@@ -58,38 +58,78 @@
 					<div class="modal fade modal-dialog-center" id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content-wrap">
-								<form method="post" action="${pageContext.request.contextPath}/Recetario/Guardar.html?" id="formulario">
+								<form method="post" action="${pageContext.request.contextPath}/Inventario/MateriaPrima/GuardarMovimiento.html?" id="formulario">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-											<h4 class="modal-title">Movimiento Materia...</h4>
+											<h4 class="modal-title">Materia Prima...</h4>
 										</div>
 										<div class="modal-body">
 											<div class="row">
 												<input type="hidden" id="lote" name="lote"/>
 												
-												<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-													<label>*producto</label>
-													<input type="text" class="form-control" id="prod" name="prod"/>
+												<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+													<label>Ingrediente</label>
+													<input type="text" class="form-control" id="nombreIng" name="nombreIng" disabled/>
 												</div>
 												
-												<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-													<label>*Tiempo</label>
-													<input type="number" class="form-control" id="tiempo" name="tiempo" min="0"/>
+												<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+													<label>Cantidad</label>
+													<input type="number" class="form-control" id="cantidad" name="cantidad" disabled/>
 												</div>
-												<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-													<label>Dificultad Receta</label>
-													<select class="form-control" id="dificultad" name="dificultad">
+												<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+													<label>Unidad medida</label>
+													<select class="form-control" id="id_unidad_peso" name="id_unidad_peso" disabled>
 														<option value="0">Seleccione</option>
-														<c:forEach items="${ListaD}" var="difi">
-															<option value="${difi.id_dificultad_receta}">${difi.nombre}</option>
+														<c:forEach items="${ListaUM}" var="um">
+															<option value="${um.id_unidad_peso}">${um.nombre}</option>
 														</c:forEach>
 													</select>
 													<br/>
 												</div>
-												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-													<h5><strong>Preparacion</strong><button type="button" class="btn btn-white" id="adicionarTexto"><i class="fa fa-plus"></i></button></h5>
-													<div id="detalle"></div>
+												<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+													<label>Establecimiento</label>
+													<select class="form-control" id="id_establecimiento" name="id_establecimiento" disabled>
+														<option value="0">Seleccione</option>
+														<c:forEach items="${ListaE}" var="esta">
+															<option value="${esta.id_establecimiento}">${esta.nombre}</option>
+														</c:forEach>
+													</select>
+												</div>
+												
+												<div class="col-lg-12">
+													<h4><strong>Realizar Movimiento</strong></h4>
+													<hr/>
+												</div>
+												<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+													<label>Cantidad</label>
+													<input type="number" class="form-control" id="cantMov" name="cantMov"/>
+												</div>
+												<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+													<label>Unidad medida</label>
+													<select class="form-control" id="unidadMov" name="unidadMov">
+														<option value="0">Seleccione</option>
+														<c:forEach items="${ListaUM}" var="um">
+															<option value="${um.id_unidad_peso}">${um.nombre}</option>
+														</c:forEach>
+													</select>
+													<br/>
+												</div>
+												<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+													<label>Establecimiento</label>
+													<select class="form-control" id="estaMov" name="estaMov">
+														<option value="0">Seleccione</option>
+														<c:forEach items="${ListaE}" var="esta">
+															<option value="${esta.id_establecimiento}">${esta.nombre}</option>
+														</c:forEach>
+													</select>
+												</div>
+												<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+													<label>Motivo</label>
+													<select class="form-control" id="motivoMov" name="motivoMov">
+														<option value="3">Prestamo</option>
+														<option value="4">Pago</option>
+													</select>
 												</div>
 											</div>
 										</div>

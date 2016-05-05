@@ -5,10 +5,8 @@
    <meta charset="UTF-8" />
 	<title>Productos</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
-
 </head>
 <body>
-
 	<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
 	<section id="container" class="">
 		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
@@ -72,7 +70,7 @@
 												
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 													<section class="panel">
-								                          <header class="panel-heading tab-bg-dark-navy-blue ">
+								                          <header class="panel-heading tab-bg-dark-navy-blue">
 								                              <ul class="nav nav-tabs">
 								                                  <li class="active">
 								                                      <a data-toggle="tab" href="#producto">Producto</a>
