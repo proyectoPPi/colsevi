@@ -9,8 +9,8 @@ Website: http://thevectorlab.net/
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic);
 
 body {
-    color: #797979;
-    background: #f1f2f7;
+    color: #FFB973;
+    background: #f7f6f1;
     font-family: 'Open Sans', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
@@ -18,12 +18,6 @@ body {
     text-rendering:optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
-}
-
-#footer {
-    width: 100%;
-    bottom: 0;
-    left: 0;
 }
 
 ul li {
@@ -181,7 +175,7 @@ a, a:hover, a:focus {
     width: 210px;
     height: 100%;
     position: fixed;
-    background: #2a3542;
+    background: #ffb347;
 }
 
 #sidebar ul li {
@@ -289,11 +283,11 @@ ul.sidebar-menu li a span{
 }
 
 ul.sidebar-menu li a{
-    color: #aeb2b7;
+    color: #331d08;
     text-decoration: none;
     display: block;
     padding: 15px 0 15px 10px;
-    font-size: 12px;
+    font-size: 14px;
     outline: none;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -355,8 +349,8 @@ ul.sidebar-menu li a.active i {
 }
 
 .white-bg {
-    background: #fff;
-    border-bottom: 1px solid #f1f2f7;
+    background: #331d08;
+    border-bottom: 1px solid #331d08;
 }
 
 .wrapper {
@@ -380,7 +374,7 @@ a.logo:hover, a.logo:focus {
 }
 
 a.logo span {
-    color: #FF6C60;
+    color: #FFE;
 }
 
 
@@ -1820,7 +1814,7 @@ ul.ft-link li a i {
 /*weather*/
 
 .weather-bg {
-    background: #8175c7;
+	background:  #3F8A24;
     border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
     color: #fff;
@@ -1830,12 +1824,12 @@ ul.ft-link li a i {
 }
 
 .weather-bg i {
-    font-size: 60px;
+    font-size: 30px;
     display: block;
 }
 
 .weather-bg .degree {
-    font-size: 60px;
+    font-size: 20px;
 }
 
 .weather-category {
@@ -1852,7 +1846,7 @@ ul.ft-link li a i {
 
 .weather-category ul li {
     display: inline-block;
-    width: 32%;
+    width: 49%;
     text-align: center;
     border-right:1px solid #e6e6e6 ;
     display: inline-block;
@@ -4745,8 +4739,8 @@ tr.odd.gradeX td.sorting_1, tr.even.gradeX td.sorting_1, table.display tr.even.g
 /*footer*/
 
 .site-footer {
-    background: #5b6e84;
-    color: #fff;
+    background: #331d08;
+    color: #FFB973;
     padding: 10px 0;
 }
 
