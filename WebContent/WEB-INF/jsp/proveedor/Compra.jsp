@@ -147,14 +147,14 @@
 																</div>	
 																<input type="hidden" value="0" id="count" name="count"/>
 																<div class="col-xs-12 col-sm-12 col-md-12" id="dynamic">
-																	<div class="col-xs-12 col-sm-3 col-md-3">
+																	<div class="col-xs-6 col-sm-3 col-md-3">
 																		<div id="Ing"></div>	
 																	</div>
 																	<div class="col-xs-6 col-sm-3 col-md-3">
 																		<label>*cantidad</label>
 																		<input type="number" class="form-control" id="cantidad" name="cantidad" min="0"/>
 																	</div>
-																	<div class="col-xs-12 col-sm-3 col-md-3">
+																	<div class="col-xs-6 col-sm-3 col-md-3">
 																		<label>*Tipo peso</label>
 																		<select class="form-control" id="tipopeso">
 																			<option value="">Seleccione</option>
@@ -205,10 +205,10 @@
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content-wrap">
 								<form method="post" action="${pageContext.request.contextPath}/Proveedor/Compra/GuardarMotivo.html?" id="formulario">
-									<div class="modal-content modal-lg">
+									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-											<h4 class="modal-title">Motivo de cancelación de la compra</h4>
+											<h4 class="modal-title">Cancelación de la compra</h4>
 										</div>
 										<div class="modal-body">
 											<div class="row">

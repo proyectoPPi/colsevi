@@ -64,11 +64,11 @@
 														<option value="0">Seleccione</option>
 													</select>
 												</div>
-												<div class="col-xs-12 col-md-6">
+												<div class="col-xs-12 col-sm-6 col-md-12">
 													<label>Pendiente</label>
 													<input type="text" class="form-control" id="pendiente" name="pendiente" readonly/>
 												</div>
-												<div class="col-xs-12 col-md-6">
+												<div class="col-xs-12 col-sm-6 col-md-12">
 													<label>*Valor a Pagar</label>
 													<input type="text" class="form-control" id="valorP" name="valorP"/>
 												</div>

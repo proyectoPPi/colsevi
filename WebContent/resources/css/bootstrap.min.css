@@ -4447,6 +4447,12 @@ select[multiple].input-group-sm>.form-control, select[multiple].input-group-sm>.
 	max-height: 340px
 }
 
+@media screen and (max-width: 950px){
+	.open>.dropdown-menu{
+		right: 0;
+		left: auto;
+	}
+}
 @media ( max-device-width :480px) and (orientation:landscape) {
 	.navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse
 		{
