@@ -14,15 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.usuario.model.TipoDocumento;
 import com.colsevi.dao.usuario.model.TipoDocumentoExample;
 
 @Controller
-public class TipoDocumentoController {
+public class TipoDocumentoController extends BaseConfigController {
+	
+	private static final long serialVersionUID = 4256773623052938383L;
 	
 	@RequestMapping("/Usuario/TipoDocumento")
 	public ModelAndView tipoDocumento(HttpServletRequest request,ModelMap model){
-		return new ModelAndView("usuario/TipoDocumento");
+		return new ModelAndView("usuario/TipoDocumento","col",getValoresGenericos(request));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -39,6 +42,9 @@ public class TipoDocumentoController {
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getTipoDocumentoMapper().selectByExample(tipoDocExample)));
 		opciones.put("total", ColseviDao.getInstance().getTipoDocumentoMapper().countByExample(tipoDocExample));
 
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		opciones.writeJSONString(response.getWriter());
 	}
 
@@ -62,7 +68,7 @@ public class TipoDocumentoController {
 	}
 	
 	@RequestMapping("/Usuario/TipoDocumento/GuardarTipo")
-	public ModelAndView GuardarLocal(HttpServletRequest request, ModelMap modelo, TipoDocumento bean){
+	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, TipoDocumento bean){
 		
 		String error = validarGuardado(bean);
 		if(!error.isEmpty()){
@@ -70,7 +76,6 @@ public class TipoDocumentoController {
 			return tipoDocumento(request, modelo);
 		}
 		try{
-//			bean.setEstadovisible("T");
 			if(bean.getId_tipo_documento() != null){
 				ColseviDao.getInstance().getTipoDocumentoMapper().updateByPrimaryKey(bean);
 				modelo.addAttribute("correcto", "Tipo de Documento Actualizado");
@@ -96,7 +101,7 @@ public class TipoDocumentoController {
 		return error;
 	}
 	@RequestMapping("/Usuario/TipoDocumento/EliminarTipoDocumento")
-	public ModelAndView EliminarEstablecimiento(HttpServletRequest request, ModelMap modelo){
+	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
 		
 		String id = request.getParameter("id_tipo_documento");
 		if(id != null){

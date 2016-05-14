@@ -17,16 +17,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.UtilidadManager;
+import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.pedido.model.EstadoPedido;
 import com.colsevi.dao.pedido.model.EstadoPedidoExample;
 
 @Controller
-public class PedidoController {
+public class PedidoController extends BaseConfigController {
 	
+	private static final long serialVersionUID = 2451593747890604373L;
+
 	@RequestMapping("/Pedido/Visualizar")
-	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
+	public ModelAndView Pedido(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaEstado", listaEstadoP());
-		return new ModelAndView("pedido/visualizadorPedido");
+		return new ModelAndView("pedido/visualizadorPedido","col",getValoresGenericos(request));
 	}
 	
 	public static List<EstadoPedido> listaEstadoP(){
@@ -60,6 +63,9 @@ public class PedidoController {
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getPedidoMapper().SelectDataView(mapa)));
 		opciones.put("total", 0);
 
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		opciones.writeJSONString(response.getWriter());
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.EnviarCorreo;
 import com.colsevi.application.SesionUsuario;
 import com.colsevi.dao.usuario.model.Usuario;
 import com.colsevi.dao.usuario.model.UsuarioExample;
@@ -47,6 +48,21 @@ public class LoginController {
 		return new ModelAndView("redirect:/General/Establecimiento.html");
 	}
 	
+	@RequestMapping("login/Cerrar")
+	public ModelAndView Logouth(HttpServletRequest request, HttpServletResponse response, ModelMap model){
+		
+		try{
+			HttpSession session = request.getSession(false);
+			if (session != null) {
+			    session.invalidate();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return login(request, model);
+	}
+	
 	public String validar(String usuario, String clave){
 		String error = "";
 		if(usuario == null || usuario.trim().isEmpty()){
@@ -77,7 +93,7 @@ public class LoginController {
 		try{
 			usu = ColseviDao.getInstance().getUsuarioMapper().selectByExample(UsuarioExample).get(0);
 		}catch(Exception e){
-			model.addAttribute("error", "No existe el usuario");
+			model.addAttribute("error", "Usuario y/o contraseña incorrecta");
 			return null;
 		}
 		
@@ -85,8 +101,13 @@ public class LoginController {
 			model.addAttribute("error", "Usuario inactivo");
 			return null;
 		}
+		if(usu.getId_rol() == null){
+			model.addAttribute("error", "Usuario sin perfil asignado");
+			return null;
+		}
 		
 		U.setUsuario(usu.getUsuario());
+		U.setRol(usu.getId_rol());
 		
 		return U;
 	}
@@ -100,5 +121,10 @@ public class LoginController {
 	    String result = formatter.toString();
 	    formatter.close();
 	    return result;
+	}
+	
+	public void recuperar(HttpServletRequest request, HttpServletResponse response){
+		
+//		EnviarCorreo.enviar(subject, mensaje, to);
 	}
 }

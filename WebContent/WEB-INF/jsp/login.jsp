@@ -14,7 +14,6 @@
 
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap-reset.css" type="text/css" media="screen" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/resources/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/resources/css/style-responsive.css" rel="stylesheet" />
 
@@ -73,6 +72,25 @@
 
     </div>
 
-    <c:import url="plantilla/javascript_genericos.jsp"></c:import>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+	
+	var contexto = "${pageContext.request.contextPath}";
+	var subMenu = "${col.SubMenu}";
+
+	jQuery("#error, #correcto, #peligro, #info").hide();
+	if("${error}"  != undefined && "${error}" != ""){
+		jQuery("#error").show();
+	}else if("${correcto}"  != undefined && "${correcto}" != ""){
+		jQuery("#correcto").show();
+	}else if("${peligro}"  != undefined && "${peligro}" != ""){
+		jQuery("#peligro").show();
+	}else if("${info}"  != undefined && "${info}" != ""){
+		jQuery("#info").show();
+	}
+	
+	jQuery('#bread').remove();
+	</script>
   </body>
 </html>
