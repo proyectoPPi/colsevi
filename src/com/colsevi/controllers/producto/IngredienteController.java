@@ -16,8 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.dao.producto.model.ClasificarIngrediente;
-import com.colsevi.dao.producto.model.ClasificarIngredienteExample;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteExample;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;

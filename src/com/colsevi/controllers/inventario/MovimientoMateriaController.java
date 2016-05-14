@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.GeneralManager;
+import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.general.model.Establecimiento;
@@ -30,17 +32,9 @@ public class MovimientoMateriaController extends BaseConfigController{
 
 	@RequestMapping("/Inventario/MovimientoMateria")
 	public ModelAndView MovimientoMateria(HttpServletRequest request, ModelMap model){
-		model.addAttribute("ListaUM", ListaUM());
-		model.addAttribute("ListaE", ListaE());
+		model.addAttribute("ListaUM", ProductoManager.getTipoPeso());
+		model.addAttribute("ListaE", GeneralManager.getEstablecimientos());
 		return new ModelAndView("/inventario/MovimientoMateria", "col", getValoresGenericos(request));
-	}
-	
-	public static List<UnidadPeso> ListaUM(){
-		return ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(new UnidadPesoExample());
-	}
-	
-	public static List<Establecimiento> ListaE(){
-		return ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(new EstablecimientoExample());
 	}
 	
 	@SuppressWarnings("unchecked")

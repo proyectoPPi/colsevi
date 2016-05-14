@@ -35,7 +35,7 @@
     <script type="text/javascript">
     	
     	var contexto = "${pageContext.request.contextPath}";
-    	var subMenu = "${col.SubMenu}";
+    	var subMenu = '${col.SubMenu}';
     
     	jQuery("#error, #correcto, #peligro, #info").hide();
     	if("${error}"  != undefined && "${error}" != ""){

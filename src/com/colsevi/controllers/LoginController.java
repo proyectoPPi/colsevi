@@ -101,6 +101,10 @@ public class LoginController {
 			model.addAttribute("error", "Usuario inactivo");
 			return null;
 		}
+		if(usu.getId_rol() == null){
+			model.addAttribute("error", "Usuario sin perfil asignado");
+			return null;
+		}
 		
 		U.setUsuario(usu.getUsuario());
 		U.setRol(usu.getId_rol());

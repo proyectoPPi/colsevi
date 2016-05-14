@@ -30,7 +30,6 @@ public class FiltroAutenticacion implements Filter, Serializable{
 				url += "?"+httpServletRequest.getQueryString();
 			}
 			
-			
 			boolean ExcluirVerficacion= isExcluirVerficacion(uri);
 			if(ExcluirVerficacion){
 				chain.doFilter(servletRequest, servletResponse);
@@ -61,14 +60,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 
 		if (path.endsWith("jpg")  || path.endsWith("png")  || path.endsWith("gif") ||
 			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") ||  path.endsWith("map") ||
-			path.startsWith("/Receta/Nivel")||
-			path.startsWith("/Inventario/Inv")||
-			path.startsWith("/Inventario/MateriaPrima")||
-			path.startsWith("/Inventario/MovimientoMateria")||
 			path.startsWith("/Caja/CierreCaja")||
-			path.startsWith("/Recetario")||
-			path.startsWith("/pago/Proveedor")||
-			path.startsWith("/Proveedor/Compra")||
 			path.startsWith(LOGIN)
 			){
 			return true;

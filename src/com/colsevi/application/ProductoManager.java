@@ -12,6 +12,8 @@ import com.colsevi.dao.general.model.UnidadPeso;
 import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.producto.model.ClasificarIngrediente;
 import com.colsevi.dao.producto.model.ClasificarIngredienteExample;
+import com.colsevi.dao.producto.model.DificultadReceta;
+import com.colsevi.dao.producto.model.DificultadRecetaExample;
 import com.colsevi.dao.producto.model.TipoProducto;
 import com.colsevi.dao.producto.model.TipoProductoExample;
 
@@ -23,6 +25,10 @@ public class ProductoManager {
 	
 	public static List<UnidadPeso> getTipoPeso(){
 		return ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(new UnidadPesoExample());
+	}
+	
+	public static List<DificultadReceta> getDificultad(){
+		return ColseviDao.getInstance().getDificultadRecetaMapper().selectByExample(new DificultadRecetaExample());
 	}
 	
 	public static List<ListaGenerica> tipoProducto(){
