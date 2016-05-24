@@ -288,6 +288,16 @@
 		FROM catalogo cata
 		LEFT JOIN catalogo_x_producto cxp ON cxp.id_catalogo = cata.id_catalogo
 		LEFT JOIN producto prod ON prod.id_producto = cxp.id_producto
-		WHERE prod.id_tipo_producto = #{tipo} AND cata.vigente = false;
+		WHERE 
+		prod.id_tipo_producto = #{tipo} 
+		AND cata.id_establecimiento = #{esta};
+	</select>
+	
+	<select id="obtenerDetalle" parameterType="java.util.HashMap" resultType="java.util.Map">
+		SELECT prod.id_producto, prod.referencia, prod.nombre, det.cantidad, det.sub_total
+		FROM pedido ped
+		LEFT JOIN detalle_pedido det ON det.id_pedido = ped.id_pedido
+		LEFT JOIN producto prod ON prod.id_producto = det.id_producto
+		WHERE ped.id_pedido = #{ped};
 	</select>
 </mapper>

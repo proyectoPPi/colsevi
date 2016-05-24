@@ -78,4 +78,5 @@ public interface DetallePedidoMapper {
 	int updateByPrimaryKey(DetallePedido record);
 	
 	List<Map<String, Object>> SelectDataView(Map<String, Object> map);
+	List<Map<String, Object>> obtenerDetalle(Map<String, Object> map);
 }

@@ -14,11 +14,13 @@ function HTabla(opciones){
 	dataMap['boton'] = opciones.boton;
 	dataMap['color'] = opciones.color;
 	dataMap['accion'] = opciones.accion;
+	dataMap['campo'] = opciones.campo;
 	
 	if(dataMap['clase'] == undefined) dataMap['clase'] = new Array();
 	if(dataMap['boton'] == undefined) dataMap['boton'] = new Array();
 	if(dataMap['color'] == undefined) dataMap['color'] = new Array();
 	if(dataMap['accion'] == undefined) dataMap['accion'] = new Array();
+	if(dataMap['campo'] == undefined) dataMap['campo'] = new Array();
 	
 	Setlimite(opciones.pagina);
 	
@@ -27,7 +29,12 @@ function HTabla(opciones){
 	jQuery.ajaxQueue({
 		  url: dataMap['url'],
 		}).done(function(result) {
-			data = jQuery.parseJSON( result );
+			try{
+				data = jQuery.parseJSON(result);
+			} catch(err){
+				console.log("Error ejecutando tabla" + err);
+	        	return;
+			}
 			var html = ""; 
 			if(data == "" || data['datos'][0] == undefined ){
 				 jQuery(Id).html("<br/>No hay datos");
@@ -76,12 +83,15 @@ function HTabla(opciones){
 							 html += '<td style="background-color: ' + data["datos"][i][k] +'" ' + className + ">";
 						 }else{
 							 html += "<td "  + className + ">";
+						 }		 
+						 if(dataMap['campo'] != undefined && dataMap['campo'][k] != undefined){
+							 html += '<input type="number" value="'+data['datos'][i][k]+'" class="form-control" id="campo'+id+'" name="cantTbl"/>';
 						 }
 						 
 						 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
 							 html += data["datos"][i][k]['label'];
 						 }else{
-							 if(dataMap['color'] != undefined && dataMap['color'][k] == undefined){
+							 if(dataMap['color'][k] == undefined && dataMap['campo'][k] == undefined && dataMap['boton'][k] == undefined && dataMap['accion'][k] == undefined){
 								 html += data["datos"][i][k];
 							 }
 							 
@@ -92,7 +102,7 @@ function HTabla(opciones){
 								if(opcion.metodo!=undefined){
 									metodo = opcion.metodo;
 								}
-									html += '<span><a href="#" onclick="'+metodo+'(\''+id+'\');" class="btn btn-xs '+opcion.color+'"><i class="'+opcion.img+'"></i></a></span>';
+									html += '<span><a href="#" onclick="'+metodo+'(\''+id+'\', this);" class="btn '+opcion.color+'"><i class="'+opcion.img+'"></i></a></span>';
 								}
 							}
 							 if(dataMap['accion'][k] != undefined){

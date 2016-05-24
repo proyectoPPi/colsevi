@@ -39,32 +39,32 @@ public class ProductoManager {
 		tpExample.createCriteria().andPadreIsNull();
 		List<TipoProducto> listaTipo = ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tpExample);
 		
-		for(TipoProducto bean: listaTipo){
-			lg = new ListaGenerica();
-			lg.setNombre(bean.getNombre());
-			lg.setId(bean.getId_tipo_producto().toString());
-			lg.setSeleccionable(true);
-			
-			result.add(lg);
-			
-			tpExample = new TipoProductoExample();
-			tpExample.createCriteria().andPadreEqualTo(bean.getId_tipo_producto());
-			List<TipoProducto> listaHijo = ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tpExample);
-			
-			if(listaHijo != null && listaHijo.size() < 1){
-				lg.setSeleccionable(false);
-				continue;
-			}
-			
-			for(TipoProducto bh: listaHijo){
-				lg = new ListaGenerica();
-				lg.setNombre(bh.getNombre());
-				lg.setId(bh.getId_tipo_producto().toString());
-				lg.setSeleccionable(false);
-			
-				result.add(lg);
-			}
-		}
+//		for(TipoProducto bean: listaTipo){
+//			lg = new ListaGenerica();
+//			lg.setNombre(bean.getNombre());
+//			lg.setId(bean.getId_tipo_producto().toString());
+//			lg.setSeleccionable(true);
+//			
+//			result.add(lg);
+//
+//			tpExample = new TipoProductoExample();
+//			tpExample.createCriteria().andPadreEqualTo(bean.getId_tipo_producto());
+//			List<TipoProducto> listaHijo = ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tpExample);
+//			
+//			if(listaHijo != null && listaHijo.size() < 1){
+//				lg.setSeleccionable(false);
+//				continue;
+//			}
+//			
+//			for(TipoProducto bh: listaHijo){
+//				lg = new ListaGenerica();
+//				lg.setNombre(bh.getNombre());
+//				lg.setId(bh.getId_tipo_producto().toString());
+//				lg.setSeleccionable(false);
+//				
+//				result.add(lg);
+//			}
+//		}
 		
 		return result;
 	}

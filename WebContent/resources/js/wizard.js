@@ -27,7 +27,7 @@ $(document).ready(function(){
         },
         onNext: function(tab, navigation, index){
             if(index == 1){
-                return validateFirstStep();
+            	return validateFirstStep();
             } else if(index == 2){
                 return validateSecondStep();
             } else if(index == 3){
@@ -37,11 +37,9 @@ $(document).ready(function(){
         },
         onPrevious: function(tab, navigation, index){
         	 if(index == 0){
-        		 alert('devolucion 0');
-                 return validateFirstStep();
+                 return true;
              } else if(index == 1){
-            	 alert('devolucion 1');
-                 return validateSecondStep();
+                 return true;
              } else if(index == 2){
             	 alert('devolucion 2');
                  return validateThirdStep();
@@ -98,52 +96,48 @@ $(document).ready(function(){
 });
 
 function validateFirstStep(){
-    
-if(jQuery('#CodigoPersona').val() != ""){
-	
-	jQuery.ajaxQueue({
-	  url: contexto + '/Pedido/Flujo/crearPedido.html?',
-	  data:{persona: jQuery('#CodigoPersona').val()},
-	}).done(function(result) {
-		try{
-			data = jQuery.parseJSON( result );
-		} catch(err){
-			console.log("Error Creando Pedido" + err);
-        	return false;
-		}
-		
-		if(data.error == undefined){
-			return true;
+    var result = false;
+    if(jQuery('#estab').val() == "0"){
+    	jQuery("#mensajeE").html("Seleccionar un establecimiento");
+    	jQuery("#error").show();
+    }else{
+	    if(jQuery('#CodigoPersona').val() != ""){
+			
+	    	if(jQuery('#interno').is(':checked')){
+	    		jQuery('#interno').val('true');
+	    	}else{
+	    		jQuery('#interno').val('false');
+	    	}
+	    	
+			jQuery.ajax({
+			  url: contexto + '/Pedido/Flujo/crearPedido.html?',
+			  data:{persona: jQuery('#CodigoPersona').val(), pedido: jQuery('#pedidosec').val(), interno: jQuery('#interno').val(), establecimiento: jQuery('#estab').val()},
+			}).done(function(result) {
+				try{
+					data = jQuery.parseJSON( result );
+				} catch(err){
+					console.log("Error Creando Pedido" + err);
+				}
+				
+				if(data.error == undefined){
+					jQuery('#pedidosec').val(data.pedsec);
+					jQuery('[href=#producto]').tab('show');
+				}else{
+			    	jQuery("#mensajeE").html(data.error);
+			    	jQuery("#error").show();
+			    	jQuery('[href=#cliente]').tab('show');
+				}
+			});
 		}else{
-			//Contacte al administrador
-			return false;
+			jQuery("#mensajeE").html("Ingresar un cliente");
+	    	jQuery("#error").show();
 		}
-		
-	});
-	
-	
-	return true;
-}
-	
-	return false;
+    }
+	return result;
 }
 
 function validateSecondStep(){
-//   
-//    //code here for second step
-//    $(".wizard-card form").validate({
-//		rules: {
-//			
-//		},
-//		messages: {
-//			
-//		}
-//	}); 
-//	
-//	if(!$(".wizard-card form").valid()){
-//    	console.log('invalid');
-//    	return false;
-//	}
+	cargarDetalle();
 	return true;
     
 }
@@ -166,16 +160,3 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-    
-
-
-
-
-
-
-
-
-
-
-
-

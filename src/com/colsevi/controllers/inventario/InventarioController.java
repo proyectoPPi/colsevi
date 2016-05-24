@@ -135,7 +135,10 @@ public class InventarioController extends BaseConfigController {
 		
 		mapa.put("producto",request.getParameter("prod"));
 		opciones.put("datos", Construir(ColseviDao.getInstance().getInventarioMapper().CargarIngProd(mapa), cantidad));
-		
+
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+
 		opciones.writeJSONString(response.getWriter());
 	}
 	
@@ -178,6 +181,9 @@ public class InventarioController extends BaseConfigController {
 		mapa.put("ing",request.getParameter("ing"));
 		mapa.put("esta", request.getParameter("establecimiento"));
 		opciones.put("datos", ConstruirInv(ColseviDao.getInstance().getInventarioMapper().CargarInv(mapa), cantidad, um));
+		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
 		
 		opciones.writeJSONString(response.getWriter());
 		
@@ -274,10 +280,8 @@ public class InventarioController extends BaseConfigController {
 				
 				for(InventarioXMateria beanMateria: listaInv){
 					beanMateria.setId_inventario(bean.getId_inventario());
-					ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(beanMateria);
 					InventarioManager.RegistrarMovimientoMateria(beanMateria.getLote(), beanMateria.getId_unidad_peso(), beanMateria.getCantidad(), bean.getId_establecimiento(), new Date(), MotivoE.ASIGNACION.getMotivoE());
 				}
-				
 			}
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
