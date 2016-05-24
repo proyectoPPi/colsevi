@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.EnviarCorreo;
 import com.colsevi.application.SesionUsuario;
 import com.colsevi.dao.usuario.model.Usuario;
 import com.colsevi.dao.usuario.model.UsuarioExample;
@@ -100,6 +101,10 @@ public class LoginController {
 			model.addAttribute("error", "Usuario inactivo");
 			return null;
 		}
+		if(usu.getId_rol() == null){
+			model.addAttribute("error", "Usuario sin perfil asignado");
+			return null;
+		}
 		
 		U.setUsuario(usu.getUsuario());
 		U.setRol(usu.getId_rol());
@@ -116,5 +121,10 @@ public class LoginController {
 	    String result = formatter.toString();
 	    formatter.close();
 	    return result;
+	}
+	
+	public void recuperar(HttpServletRequest request, HttpServletResponse response){
+		
+//		EnviarCorreo.enviar(subject, mensaje, to);
 	}
 }

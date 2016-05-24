@@ -18,21 +18,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.GeneralManager;
+import com.colsevi.application.InventarioManager;
+import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.controllers.general.MotivoE;
-import com.colsevi.controllers.general.UnidadMedidaE;
-import com.colsevi.dao.general.model.Establecimiento;
-import com.colsevi.dao.general.model.EstablecimientoExample;
-import com.colsevi.dao.general.model.UnidadPeso;
-import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.inventario.model.Inventario;
 import com.colsevi.dao.inventario.model.InventarioExample;
 import com.colsevi.dao.inventario.model.InventarioXMateria;
 import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.dao.inventario.model.MateriaPrimaExample;
-import com.colsevi.dao.inventario.model.MovimientoMateria;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
 import com.colsevi.dao.producto.model.IngredienteXProductoKey;
@@ -44,18 +41,10 @@ public class InventarioController extends BaseConfigController {
 	private static final long serialVersionUID = -1900570445397410663L;
 
 	@RequestMapping("/Inventario/Inv")
-	public ModelAndView Ingrediente(HttpServletRequest request,ModelMap model){
-		model.addAttribute("listaEsta", listaEstablecimiento());
-		model.addAttribute("listaUnidad", listaUnidad());
+	public ModelAndView Inventario(HttpServletRequest request,ModelMap model){
+		model.addAttribute("listaEsta", GeneralManager.getEstablecimientos());
+		model.addAttribute("listaUnidad", ProductoManager.getTipoPeso());
 		return new ModelAndView("inventario/inventarioVista","col",getValoresGenericos(request));
-	}
-	
-	public static List<Establecimiento> listaEstablecimiento(){
-		return ColseviDao.getInstance().getEstablecimientoMapper().selectByExample(new EstablecimientoExample());
-	}
-	
-	public List<UnidadPeso> listaUnidad(){
-		return ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(new UnidadPesoExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -68,9 +57,22 @@ public class InventarioController extends BaseConfigController {
 		try{
 			String Inicio = request.getParameter("Inicio");
 			String Final = request.getParameter("Final");
+			String prodV = request.getParameter("prodV");
+			String estaF = request.getParameter("estaF");
+			String disF = request.getParameter("disF");
+			Boolean mayorF = Boolean.valueOf(request.getParameter("mayorF") != null && request.getParameter("mayorF").trim().equals("true") ? "true" : "false");
 			
 			mapa.put("limit",Inicio + ", " + Final);
-			
+			if(prodV != null && !prodV.trim().isEmpty())
+				mapa.put("prodV", prodV);
+			if(estaF != null && !estaF.trim().isEmpty() && !estaF.trim().equals("0"))
+				mapa.put("estaF", estaF);
+			if(disF != null && !disF.trim().isEmpty()){
+				if(mayorF)
+					mapa.put("dis", ">=" + disF);
+				else
+					mapa.put("dis", "<=" + disF);
+			}
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getInventarioMapper().SelectDataView(mapa)));
 			opciones.put("total", ColseviDao.getInstance().getInventarioMapper().CountDataView(mapa));
 
@@ -195,7 +197,7 @@ public class InventarioController extends BaseConfigController {
 					opciones = new JSONObject();
 					
 					opciones.put("nombre", map.get("nombre"));
-					opciones.put("fecha_vencimiento", UtilidadManager.FormatoFechaVista((Date) map.get("fecha_vencimiento")));
+					opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatoFechaVista((Date) map.get("fecha_vencimiento")) : "");
 					opciones.put("lote", map.get("lote"));
 					opciones.put("color", true);
 					opciones.put("codUM", map.get("codUM"));
@@ -208,25 +210,8 @@ public class InventarioController extends BaseConfigController {
 					opciones.put("cantidad", cant);
 					op = cant;
 					
-					if(um.equals(UnidadMedidaE.KILO.getUnidadM())){
-						if(medida.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							op = cant * 0.45359237;
-						}else if(medida.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							op = cant / 100;
-						}
-					}else if(um.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-						if(medida.equals(UnidadMedidaE.KILO.getUnidadM())){
-							op = cant *  2.20462262;
-						}else if(medida.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							op = cant * 0.00220462262;
-						}
-					}else if(um.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-						if(medida.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							op = cant * 453.59237;
-						}else if(medida.equals(UnidadMedidaE.KILO.getUnidadM())){
-							op = cant * 1000;
-						}
-					}
+					Object[] result = InventarioManager.ConversionPMayorMenor(um, medida, cant);
+					op = (Double) result[0];
 					
 					if(op < cantidad){
 						opciones.put("color", false);
@@ -250,7 +235,7 @@ public class InventarioController extends BaseConfigController {
 			
 			if(!result[0].toString().isEmpty()){
 				modelo.addAttribute("error", result[0]);
-				return Ingrediente(request, modelo);
+				return Inventario(request, modelo);
 			}
 
 			bean.setId_inventario(request.getParameter("id_inventario") == null || request.getParameter("id_inventario").trim().isEmpty() ? 0 : Integer.parseInt(request.getParameter("id_inventario")));
@@ -281,33 +266,23 @@ public class InventarioController extends BaseConfigController {
 				InventarioXMateriaExample ixm = new InventarioXMateriaExample();
 				ixm.createCriteria().andId_inventarioEqualTo(bean.getId_inventario());
 				ColseviDao.getInstance().getInventarioXMateriaMapper().deleteByExample(ixm);
+
+				for(MateriaPrima beanMP: listaMP){
+					beanMP.setId_establecimiento(bean.getId_establecimiento());
+					InventarioManager.ActualizarMateriaPrima(beanMP);
+				}
 				
 				for(InventarioXMateria beanMateria: listaInv){
 					beanMateria.setId_inventario(bean.getId_inventario());
 					ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(beanMateria);
-					
-					MovimientoMateria mm = new MovimientoMateria();
-					mm.setLote(beanMateria.getLote());
-					mm.setId_unidad_peso(beanMateria.getId_unidad_peso());
-					mm.setId_establecimiento(bean.getId_establecimiento());
-					mm.setCantidad(beanMateria.getCantidad());
-					mm.setFecha_movimiento(new Date());
-					mm.setId_motivo(MotivoE.ASIGNACION.getMotivoE());
-					
-					ColseviDao.getInstance().getMovimientoMateriaMapper().insertSelective(mm);
+					InventarioManager.RegistrarMovimientoMateria(beanMateria.getLote(), beanMateria.getId_unidad_peso(), beanMateria.getCantidad(), bean.getId_establecimiento(), new Date(), MotivoE.ASIGNACION.getMotivoE());
 				}
 				
-				for(MateriaPrima beanMP: listaMP){
-					MateriaPrimaExample MPE = new MateriaPrimaExample();
-					MPE.createCriteria().andLoteEqualTo(beanMP.getLote());
-					beanMP.setId_establecimiento(bean.getId_establecimiento());
-					ColseviDao.getInstance().getMateriaPrimaMapper().updateByExampleSelective(beanMP, MPE);
-				}
 			}
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
-		return Ingrediente(request, modelo);
+		return Inventario(request, modelo);
 	}
 	
 	public Object[] validarGuardado(HttpServletRequest request){
@@ -346,51 +321,12 @@ public class InventarioController extends BaseConfigController {
 					
 					ingProd.setCantidad(ingProd.getCantidad() * cantSolicitada);
 			
-					if(umVista.equals(UnidadMedidaE.KILO.getUnidadM())){
-						if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							op = cantidadVista *  2.20462262;
-							umVista = ingProd.getId_unidad_peso();
-						}else if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							op = (double) (cantidadVista *  1000);
-							umVista = ingProd.getId_unidad_peso();
-						}
-					}else if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-						if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.KILO.getUnidadM())){
-							op = cantidadVista * 0.45359237;
-							umVista = ingProd.getId_unidad_peso();
-						}else if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							op = cantidadVista * 453.59237;
-							umVista = ingProd.getId_unidad_peso();
-						}
-					}else if(umVista.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-						if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							op = cantidadVista * 0.00220462262;
-							umVista = ingProd.getId_unidad_peso();
-						}else if(ingProd.getId_unidad_peso().equals(UnidadMedidaE.KILO.getUnidadM())){
-							op = (double) (cantidadVista / 1000);
-							umVista = ingProd.getId_unidad_peso();
-						}
-					}
+					Object[] result = InventarioManager.ConversionPMayorMenor(umVista, ingProd.getId_unidad_peso(), cantidadVista);
+					op = (Double) result[0];
+					umVista = (Integer) result[1];
 					
-					if(MP.getId_unidad_peso().equals(UnidadMedidaE.KILO.getUnidadM())){
-						if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							opcompra = MP.getCantidad() *  2.20462262;
-						}else if(umVista.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							opcompra = (double) (MP.getCantidad() *  1000);
-						}
-					}else if(MP.getId_unidad_peso().equals(UnidadMedidaE.LIBRA.getUnidadM())){
-						if(umVista.equals(UnidadMedidaE.KILO.getUnidadM())){
-							opcompra = MP.getCantidad() * 0.45359237;
-						}else if(umVista.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-							opcompra = MP.getCantidad() * 453.59237;
-						}
-					}else if(MP.getId_unidad_peso().equals(UnidadMedidaE.GRAMO.getUnidadM())){
-						if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-							opcompra = MP.getCantidad() * 0.00220462262;
-						}else if(umVista.equals(UnidadMedidaE.KILO.getUnidadM())){
-							opcompra = (double) (MP.getCantidad() / 1000);
-						}
-					}
+					result = InventarioManager.ConversionPMayorMenor(MP.getId_unidad_peso(), umVista, MP.getCantidad());
+					opcompra = (Double) result[0];
 					
 					totalAsignado =+ op;
 					if(op <= opcompra && op <= ingProd.getCantidad() && totalAsignado <= ingProd.getCantidad()){
@@ -403,33 +339,14 @@ public class InventarioController extends BaseConfigController {
 						
 						opcompra -= op;
 						if(opcompra < 1){
-							
-							if(umVista.equals(UnidadMedidaE.KILO.getUnidadM())){
-								opcompra *= 2.20462262;
-								umVista = UnidadMedidaE.LIBRA.getUnidadM();
-								if(opcompra < 1){
-									opcompra *= 1000;
-									umVista = UnidadMedidaE.GRAMO.getUnidadM();
-								}
-							}else if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM())){
-								opcompra *= 453.59237;
-								umVista = UnidadMedidaE.GRAMO.getUnidadM();
-							}
+							result = InventarioManager.conversionEncontrarMayorUnidad(umVista, opcompra);
+							opcompra = (Double) result[0];
+							umVista = (Integer) result[1];
 						}else{
-							if(umVista.equals(UnidadMedidaE.LIBRA.getUnidadM()) && (opcompra  * 0.45359237) > 1){
-								opcompra *= 0.45359237;
-								umVista = UnidadMedidaE.KILO.getUnidadM();
-							}else if(umVista.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-								if((opcompra  * 0.00220462262) > 1){
-									if((opcompra  / 1000) > 1){
-										opcompra /= 1000;
-										umVista = UnidadMedidaE.KILO.getUnidadM();
-									}else{
-										opcompra *= 0.00220462262;
-										umVista = UnidadMedidaE.LIBRA.getUnidadM();
-									}
-								}
-							}
+							
+							result = InventarioManager.conversionMOptima(umVista, opcompra);
+							opcompra = (Double) result[0];
+							umVista = (Integer) result[1];
 						}
 						
 						MateriaPrima mp = new MateriaPrima();
@@ -459,4 +376,20 @@ public class InventarioController extends BaseConfigController {
 		return obj;
 	}
 	
+	@RequestMapping("/Inventario/Inv/buscarProd")
+	public void auto(HttpServletRequest request, HttpServletResponse response){
+		try{
+			JSONObject result = new JSONObject();
+			
+			String producto = request.getParameter("campo");
+			result = ProductoManager.AutocompletarProducto(producto);
+
+			if(result != null){
+				result.writeJSONString(response.getWriter());
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 }

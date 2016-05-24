@@ -59,7 +59,7 @@ public class BaseConfigController implements Serializable {
 				pE.createCriteria().andUrlLike(uri);
 				Pagina pagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE).get(0);
 				
-				if(pagina != null){
+				if(pagina != null && pagina.getPadrePagina() != null){
 					pE = new PaginaExample();
 					String[] padre = pagina.getPadrePagina().split(",");
 					List<Integer> ListaP = new ArrayList<Integer>();

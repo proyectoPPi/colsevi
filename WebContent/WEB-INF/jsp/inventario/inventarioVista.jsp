@@ -29,17 +29,24 @@
 					
 					<section class="panel">
 						<div class="panel-body">
-							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-								<label>Nombre</label>
-								<input type="text" class="form-control" id="nombreF" name="filtro"/>
+							<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+								<label>Producto</label>
+								<input type="text" class="form-control" id="prodF" name="prodF"/>
+								<input type="hidden" id="prodV" name="filtro"/>
 							</div>
 							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-								<label>Descripci&#243;n</label>
-								<input type="text" class="form-control" id="descripcionF" name="filtro"/>
+								<label>Establecimiento</label>
+								<select class="form-control" id="estaF" name="filtro">
+									<option value="0">Seleccione</option>
+									<c:forEach items="${listaEsta}" var="esta">
+										<option value="${esta.id_establecimiento}">${esta.nombre}</option>
+									</c:forEach>
+								</select>
 							</div>
-							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-								<label>*Direcci&#243;n</label>
-								<input type="text" class="form-control" id="direccionF" name="filtro"/>
+							<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+								<label>Disponible</label>
+								<input type="number" class="form-control" id="disF" name="filtro"/>
+								<label>Cantidad Mayor </label> <input type="checkbox" id="mayorF" name="filtro"/>
 							</div>
 							<div class="col-xs-12 col-md-12 col-lg-12"><br/>
 								<button class="btn btn-button" onclick="Tabla(1);">Filtrar</button>

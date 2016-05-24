@@ -1,6 +1,7 @@
 package com.colsevi.controllers.producto;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,15 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.producto.model.ProductoExample;
 import com.colsevi.dao.producto.model.RecetaExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoExample;
-import com.colsevi.dao.producto.model.ClasificarIngrediente;
-import com.colsevi.dao.producto.model.ClasificarIngredienteExample;
-import com.colsevi.dao.general.model.UnidadPeso;
-import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.inventario.model.InventarioExample;
 import com.colsevi.dao.pedido.model.DetallePedidoExample;
 import com.colsevi.dao.producto.model.Ingrediente;
@@ -41,19 +39,22 @@ public class ProductoAdminController extends BaseConfigController {
 
 	@RequestMapping("/Producto/Admin")
 	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
-		model.addAttribute("listaTipo", UtilidadManager.tipoProducto());
-		model.addAttribute("listaClasificar", getClasificar());
-		model.addAttribute("listaTipoPeso", getTipoPeso());
+		model.addAttribute("listaTipo", ProductoManager.tipoProducto());
+		model.addAttribute("listaClasificar", ProductoManager.getClasificar());
+		model.addAttribute("listaTipoPeso", ProductoManager.getTipoPeso());
+		try{
+		if(request.getParameter("producto") != null && !request.getParameter("producto").trim().isEmpty()){
+			Producto prod = ColseviDao.getInstance().getProductoMapper().selectByPrimaryKey(Integer.parseInt(request.getParameter("producto")));
+			if(prod != null && prod.getId_producto() != null){
+				model.addAttribute("prod", prod.getId_producto());
+				model.addAttribute("label", prod.getNombre() + " - " + prod.getReferencia());
+			}
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
 		return new ModelAndView("producto/ProductoAdmin","col",getValoresGenericos(request));
-	}
-	
-	public static List<ClasificarIngrediente> getClasificar(){
-		return ColseviDao.getInstance().getClasificarIngredienteMapper().selectByExample(new ClasificarIngredienteExample());
-	}
-	
-	public static List<UnidadPeso> getTipoPeso(){
-		return ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(new UnidadPesoExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -63,8 +64,9 @@ public class ProductoAdminController extends BaseConfigController {
 		JSONObject opciones = new JSONObject();
 		String Inicio = request.getParameter("Inicio");
 		String Final = request.getParameter("Final");
-		String nombre = request.getParameter("nombreF");
-		String descripcion = request.getParameter("descripcionF");
+		String prod = request.getParameter("prodV");
+		BigDecimal venta = new BigDecimal(request.getParameter("ventaF") != null && !request.getParameter("ventaF").trim().isEmpty() ? request.getParameter("ventaF") : "0");
+		Boolean mayorF = Boolean.valueOf(request.getParameter("mayorF") != null && request.getParameter("mayorF").trim().equals("true") ? "true" : "false");
 		String clasificarF = request.getParameter("clasificarF");
 		
 		ProductoExample prodExample = new ProductoExample();
@@ -73,19 +75,19 @@ public class ProductoAdminController extends BaseConfigController {
 		
 		ProductoExample.Criteria criteria = (ProductoExample.Criteria) prodExample.createCriteria();
 		try{
-			if(nombre != null && !nombre.trim().isEmpty()){
-				criteria.andNombreLike("%" + nombre + "%");   
-			}
-			if(descripcion != null && !descripcion.trim().isEmpty()){
-				criteria.andDescripcionLike("%" + descripcion + "%");   
-			}
-			if(clasificarF != null && !clasificarF.trim().isEmpty() && !clasificarF.trim().equals("0")){
+			if(prod != null && !prod.trim().isEmpty())
+				criteria.andId_productoEqualTo(Integer.parseInt(prod));
+			if(clasificarF != null && !clasificarF.trim().isEmpty() && !clasificarF.trim().equals("0"))
 				criteria.andId_tipo_productoEqualTo(Integer.parseInt(clasificarF));
-			}
+			if(mayorF && venta != null && venta.toBigInteger().intValue() > 0)
+				criteria.andVentaGreaterThanOrEqualTo(venta);
+			else if(venta != null && venta.toBigInteger().intValue() > 0)
+				criteria.andVentaLessThanOrEqualTo(venta);
+				
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getProductoMapper().selectByExample(prodExample)));
 			opciones.put("total", ColseviDao.getInstance().getProductoMapper().countByExample(prodExample));
 		}catch(Exception e){
-			//error
+			opciones.put("error", "Contactar al administrador");
 		}
 
 		response.setContentType("text/html;charset=ISO-8859-1");
@@ -106,6 +108,7 @@ public class ProductoAdminController extends BaseConfigController {
 				try{
 					
 					opciones = new JSONObject();
+					labels = new JSONObject();
 					opciones.put("id_producto", bean.getId_producto());
 					opciones.put("nombre", bean.getNombre());
 					opciones.put("descripcion", bean.getDescripcion());
@@ -114,11 +117,13 @@ public class ProductoAdminController extends BaseConfigController {
 					opciones.put("imagen", bean.getImagen());
 					
 					if(bean.getId_tipo_producto() != null){
-						labels = new JSONObject();
-						labels.put("label",ColseviDao.getInstance().getTipoProductoMapper().selectByPrimaryKey(bean.getId_tipo_producto()).getNombre());
+						labels.put("label", ColseviDao.getInstance().getTipoProductoMapper().selectByPrimaryKey(bean.getId_tipo_producto()).getNombre());
 						labels.put("value", bean.getId_tipo_producto());
-						opciones.put("tipoP", labels);
+					}else{
+						labels.put("label", "");
+						labels.put("value", "0");
 					}
+					opciones.put("tipoP", labels);
 					
 					resultado.add(opciones);
 				
@@ -351,5 +356,22 @@ public class ProductoAdminController extends BaseConfigController {
 			}
 		}
 		return resultado;
+	}
+	
+	@RequestMapping("/Producto/Admin/buscarProd")
+	public void auto(HttpServletRequest request, HttpServletResponse response){
+		try{
+			JSONObject result = new JSONObject();
+			
+			String producto = request.getParameter("campo");
+			result = ProductoManager.AutocompletarProducto(producto);
+
+			if(result != null){
+				result.writeJSONString(response.getWriter());
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 }

@@ -3,6 +3,8 @@ package com.colsevi.dao.pago.map;
 import com.colsevi.dao.pago.model.PagoProveedor;
 import com.colsevi.dao.pago.model.PagoProveedorExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface PagoProveedorMapper {
@@ -93,4 +95,6 @@ public interface PagoProveedorMapper {
      * @mbggenerated Tue Apr 12 16:29:49 COT 2016
      */
     int updateByPrimaryKey(PagoProveedor record);
+    
+    List<Map<String, Object>> deudaCom(Map<String, Object> mapa);
 }

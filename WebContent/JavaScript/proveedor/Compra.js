@@ -5,6 +5,18 @@ jQuery(document).ready(function(){
 });
 
 function Tabla(pagina){
+	
+	if(jQuery('#valorMF').is(':checked')){
+		jQuery('#valorMF').val('true');
+	}else{
+		jQuery('#valorMF').val('false');
+	}
+	if(jQuery('#fechaMF').is(':checked')){
+		jQuery('#fechaMF').val('true');
+	}else{
+		jQuery('#fechaMF').val('false');
+	}
+	
 	HTabla({
 		url: contexto + "/Proveedor/Compra/tabla.html?",
 		Id: "#tabla",
@@ -13,6 +25,7 @@ function Tabla(pagina){
 		clase: clase,
 		boton: boton
 	});
+	jQuery('#com').val('');
 }
 
 function Limpiar(){
@@ -45,8 +58,8 @@ jQuery( "#clasificarIng" ).change(function() {
 	
 	jQuery('#Ing > select, #Ing > label').remove();
 	if(jQuery('#clasificarIng').val() == ""){
-		return;
 		jQuery('#dynamic').hide();
+		return;
 	}
 	
 	jQuery.ajaxQueue({
@@ -58,8 +71,8 @@ jQuery( "#clasificarIng" ).change(function() {
  			data = jQuery.parseJSON(result); 
  		} catch(err){ 
  			console.log("Error ejecutando CargarIngredientes" + err); 
+ 			jQuery('#dynamic').hide();
          	return; 
-         	jQuery('#dynamic').hide();
  		} 
  		
  		var html = '<label>Ingrediente</label>';
@@ -111,8 +124,8 @@ function cargarIng(){
  			data = data['dato'];
  		} catch(err){ 
  			console.log("Error ejecutando CargarIng" + err); 
+ 			jQuery('#dynamic').hide();
          	return; 
-         	jQuery('#dynamic').hide();
  		} 
  		
  		var html = '';
@@ -158,8 +171,8 @@ function validarModificacion(){
  			data = jQuery.parseJSON(result); 
  		} catch(err){ 
  			console.log("Error ejecutando CargarIng" + err); 
+ 			jQuery('#dynamic').hide();
          	return; 
-         	jQuery('#dynamic').hide();
  		} 
  		if(data['error'] != ''){
  			jQuery('#validarModificacion').hide();

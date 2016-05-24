@@ -109,6 +109,9 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      LIMIT ${limit}
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
@@ -315,4 +318,10 @@
       imagen = #{imagen,jdbcType=VARCHAR}
     where id_producto = #{id_producto,jdbcType=INTEGER}
   </update>
+   <select id="SelectAutocomplete" parameterType="java.util.Map" resultType="java.util.HashMap">
+	  SELECT referencia, nombre, descripcion, id_producto
+	  FROM producto
+	  WHERE 1 = 1
+	  AND (referencia LIKE #{producto} OR nombre LIKE #{producto} OR descripcion LIKE #{producto});
+   </select>
 </mapper>
