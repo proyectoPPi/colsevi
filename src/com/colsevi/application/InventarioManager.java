@@ -33,7 +33,10 @@ public class InventarioManager {
 		
 		Object[] obj = new Object[2];
 		
-		if(tipoP.equals(UnidadMedidaE.KILO.getUnidadM())){
+		if(tipoP.equals(tipoH)){
+			obj[0] = cantidad;
+			obj[1] = tipoP;
+		}else if(tipoP.equals(UnidadMedidaE.KILO.getUnidadM())){
 			if(tipoH.equals(UnidadMedidaE.LIBRA.getUnidadM())){
 				obj[0] = cantidad *  2;
 				obj[1] = UnidadMedidaE.LIBRA.getUnidadM();

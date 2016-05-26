@@ -352,6 +352,7 @@ public class CompraController extends BaseConfigController {
 //			listaMP
 			for(int i=0; i<listaMP.size(); i++){
 				listaCXI.get(i).setId_compra(bean.getId_compra());
+				listaMP.get(i).setId_establecimiento(bean.getId_establecimiento());
 				
 				if(listaCXI.get(i).getLote() != null){
 					

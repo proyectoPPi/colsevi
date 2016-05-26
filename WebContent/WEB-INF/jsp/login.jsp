@@ -59,7 +59,7 @@
                   </div>
                   <div class="modal-body">
                       <p>Introduzca su dirección de correo electrónico a continuación para restablecer la contraseña.</p>
-                      <input type="text" name="email" placeholder="Correo" autocomplete="off" class="form-control placeholder-no-fix">
+                      <input type="text" name="email" id="email" placeholder="Correo" class="form-control placeholder-no-fix">
 
                   </div>
                   <div class="modal-footer">

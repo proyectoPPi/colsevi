@@ -15,6 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.EnviarCorreo;
 import com.colsevi.application.SesionUsuario;
+import com.colsevi.dao.general.model.Correo;
+import com.colsevi.dao.general.model.CorreoExample;
+import com.colsevi.dao.usuario.model.Persona;
 import com.colsevi.dao.usuario.model.Usuario;
 import com.colsevi.dao.usuario.model.UsuarioExample;
 
@@ -23,6 +26,7 @@ public class LoginController {
 
 	@RequestMapping("login")
 	public ModelAndView login(HttpServletRequest request, ModelMap model){
+		puerto(request);
 		return new ModelAndView("login");
 	}
 	
@@ -123,8 +127,43 @@ public class LoginController {
 	    return result;
 	}
 	
-	public void recuperar(HttpServletRequest request, HttpServletResponse response){
+	public ModelAndView recuperar(HttpServletRequest request, ModelMap model){
 		
-//		EnviarCorreo.enviar(subject, mensaje, to);
+		Correo cor = new Correo();
+		Persona per = new Persona();
+		String correo = request.getParameter("email");
+		if(correo != null && !correo.trim().isEmpty()){
+
+			CorreoExample CE = new CorreoExample();
+			CE.createCriteria().andCorreoEqualTo(correo);
+			
+			try{
+				cor = ColseviDao.getInstance().getCorreoMapper().selectByExample(CE).get(0);
+				per = ColseviDao.getInstance().getPersonaMapper().selectByPrimaryKey(cor.getId_persona());
+			}catch(Exception e){
+				cor = null;
+				model.addAttribute("error", "No existe un correo en el sistema");
+			}
+			
+			try{
+				if(cor != null){
+					StringBuffer mensaje = new StringBuffer("Hola " + per.getNombre() + "<br/>");
+					mensaje.append("Hemos recibido un pedido para restablecer tu contraseña. <br/>");
+					mensaje.append("Si no has iniciado este pedido, puedes simplemente ignorar este mensaje y ninguna acción será tomada. <br/>");
+					mensaje.append("Para restablecer tu contraseña, haz click en el link abajo: <br/> <br/>");
+					EnviarCorreo.enviar("Resetear tu contraseña", mensaje.toString(), cor.getCorreo());
+				}
+			}catch(Exception e){
+				cor = null;
+				model.addAttribute("error", "Error enviando el correo");
+			}
+		}
+		
+		return login(request, model);
+	}
+	
+	public void puerto(HttpServletRequest request){
+		String url = request.getScheme() + ":"+request.getServerName()+ request.getServerPort() + " "+ request.getContextPath();
+		System.out.println(url);
 	}
 }

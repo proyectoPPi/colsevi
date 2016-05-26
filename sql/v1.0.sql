@@ -356,6 +356,7 @@ CREATE TABLE pedido(
     comentario VARCHAR(2000),
     total DECIMAL(12,2) DEFAULT NULL,
     fecha_pedido  DATETIME NOT NULL,
+    motivo INT DEFAULT NULL,
     pagado BOOLEAN DEFAULT false,
     PRIMARY KEY(id_pedido),
     CONSTRAINT fk_perPed FOREIGN KEY (id_persona) REFERENCES persona(id_persona),

@@ -18,7 +18,7 @@ import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 
 public class PedidoManager {
 	
-	public static Boolean crearPedido(Integer persona, Date fecha, BigDecimal total, Boolean pagado, Integer estado, Integer establecimiento){
+	public static Boolean crearPedido(Integer persona, Date fecha, BigDecimal total, Boolean pagado, Integer estado, Integer establecimiento, Integer motivo){
 		
 		try{
 			Pedido ped = new Pedido();
@@ -29,6 +29,7 @@ public class PedidoManager {
 			ped.setPagado(pagado);
 			ped.setId_estado_pedido(estado);
 			ped.setId_establecimiento(establecimiento);
+			ped.setMotivo(motivo);
 			
 			ColseviDao.getInstance().getPedidoMapper().insertSelective(ped);
 			return true;
@@ -116,11 +117,40 @@ public class PedidoManager {
 		InventarioExample invE = new InventarioExample();
 		invE.createCriteria().andId_productoEqualTo(producto).andId_establecimientoEqualTo(esta);
 		Inventario inv = ColseviDao.getInstance().getInventarioMapper().selectByExample(invE).get(0);
+		Double cantConv = 0d;
+		
+		IngredienteXProductoExample IXPE = new IngredienteXProductoExample();
+		IXPE.createCriteria().andId_productoEqualTo(producto);
+		List<IngredienteXProducto> listaIng = ColseviDao.getInstance().getIngredienteXProductoMapper().selectByExample(IXPE);
+		
+		for(IngredienteXProducto bean: listaIng){
+			bean.setCantidad(bean.getCantidad() * cantidad);
+			
+			InventarioXMateriaExample IXME = new InventarioXMateriaExample();
+			IXME.createCriteria().andId_ingredienteEqualTo(bean.getId_ingrediente()).andId_inventarioEqualTo(inv.getId_inventario());
+			InventarioXMateria invMat = ColseviDao.getInstance().getInventarioXMateriaMapper().selectByExample(IXME).get(0);
+			
+			Object[] result = InventarioManager.ConversionPMayorMenor(bean.getId_unidad_peso(), invMat.getId_unidad_peso(), Double.valueOf(bean.getCantidad()));
+			cantConv = (Double) result[0];
+			
+			if(cantConv <= invMat.getCantidad()){
+				cantConv -= invMat.getCantidad();
+				if(cantConv < 1){
+					result = InventarioManager.conversionEncontrarMayorUnidad(invMat.getId_unidad_peso(), cantConv);
+				}else{
+					result = InventarioManager.conversionMOptima(invMat.getId_unidad_peso(), cantConv);
+				}
+				
+				cantConv = (Double) result[0];
+				invMat.setId_unidad_peso((Integer) result[1]);
+				invMat.setCantidad(cantConv);
+				
+				ColseviDao.getInstance().getInventarioXMateriaMapper().updateByExampleSelective(invMat, IXME);
+			}
+		}
 		
 		inv.setDisponible(inv.getDisponible() - cantidad);
 		inv.setCompromiso(inv.getCompromiso() + cantidad);
 		ColseviDao.getInstance().getInventarioMapper().updateByPrimaryKeySelective(inv);
-
 	}
-	
 }

@@ -34,8 +34,12 @@
 		                                  <h4 class="info-text"> Selección de Cliente</h4>
 		                                  <div class="col-sm-12">
 		                                   <div class="form-group">
-		                                        <label>Interno</label>
-		                                        <input type="checkbox" id="interno"/>
+		                                        <label>Motivo</label>
+		                                        <select class="form-control" id="interno">
+		                                        	<option value="0">general</option>
+		                                        	<option value="1">interno</option>
+		                                        	<option value="2">invitado</option>
+		                                        </select>
 		                                      </div>
 		                                      <div class="form-group">
 		                                        <label>Cliente</label>

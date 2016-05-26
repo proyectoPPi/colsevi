@@ -156,36 +156,24 @@ function terminar(){
 	jQuery('#formterm').submit();
 }
 
-//jQuery("#estab").change(function() {
-//	
-//	jQuery('#Ing > select, #Ing > label').remove();
-//	if(jQuery('#clasificarIng').val() == ""){
-//		jQuery('#dynamic').hide();
-//		return;
-//	}
-//	
-//	jQuery.ajaxQueue({
-//		url: contexto + "/Proveedor/Compra/ClasificarIng.html?",
-//		 data:{clasificar: jQuery('#clasificarIng').val()},
-//	}).done(function(result) {
-//		var data; 
-// 		try{ 
-// 			data = jQuery.parseJSON(result); 
-// 		} catch(err){ 
-// 			console.log("Error ejecutando CargarIngredientes" + err); 
-// 			jQuery('#dynamic').hide();
-//         	return; 
-// 		} 
-// 		
-// 		var html = '<label>Ingrediente</label>';
-// 			html += '<select id="IngSelect" name="IngSelect" class="form-control">';
-// 			html += '<option value="">Seleccione</option>';
-//		for(i in data){
-//			html += '<option value="'+data[i]['id']+'">'+data[i]['nombre']+'</option>';
-//		}
-//		html += '</select>';
-//		jQuery('#Ing').html(html);
-//		jQuery('#dynamic').show();
-//	});
-//	
-//});
+jQuery("#estab").change(function() {
+	
+	jQuery.ajaxQueue({
+	  url: contexto + "/Pedido/Flujo/Adicionar.html?",
+	  data:{persona: jQuery('#CodigoPersona').val(), pedido: jQuery('#pedidosec').val(), establecimiento: jQuery("#estab").val()},
+	}).done(function(result) {
+		try{
+			data = jQuery.parseJSON(result);
+		} catch(err){
+			console.log("Error ejecutando Adicionar" + err);
+        	return;
+		}		
+		if(data['warning'] != undefined){
+	    	jQuery("#mensajeC").html(data.correcto);
+	    	jQuery("#correcto").show();
+		}
+		
+	});
+	
+	
+});

@@ -208,15 +208,15 @@ public class InventarioController extends BaseConfigController {
 					opciones.put("color", true);
 					opciones.put("codUM", map.get("codUM"));
 					opciones.put("id_ingrediente", map.get("id_ingrediente"));
-					opciones.put("cantAsig", map.get("cantAsig"));
-					opciones.put("umAsig", map.get("umAsig"));
+					opciones.put("cantAsig", map.get("cantAsig") == null ? "" : map.get("cantAsig"));
+					opciones.put("umAsig", map.get("umAsig") == null ? "0" : map.get("umAsig"));
 					
 					medida = (Integer) map.get("um");
 					cant = (Double) map.get("cantidad");
 					opciones.put("cantidad", cant);
 					op = cant;
 					
-					Object[] result = InventarioManager.ConversionPMayorMenor(um, medida, cant);
+					Object[] result = InventarioManager.ConversionPMenorMayor(um, medida, cant);
 					op = (Double) result[0];
 					
 					if(op < cantidad){
@@ -280,6 +280,7 @@ public class InventarioController extends BaseConfigController {
 				
 				for(InventarioXMateria beanMateria: listaInv){
 					beanMateria.setId_inventario(bean.getId_inventario());
+					ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(beanMateria);
 					InventarioManager.RegistrarMovimientoMateria(beanMateria.getLote(), beanMateria.getId_unidad_peso(), beanMateria.getCantidad(), bean.getId_establecimiento(), new Date(), MotivoE.ASIGNACION.getMotivoE());
 				}
 			}

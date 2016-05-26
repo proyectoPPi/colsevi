@@ -24,7 +24,6 @@ import com.colsevi.application.GeneralManager;
 import com.colsevi.application.PedidoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.controllers.InicialController;
 import com.colsevi.dao.pedido.model.DetallePedido;
 import com.colsevi.dao.pedido.model.DetallePedidoExample;
 import com.colsevi.dao.pedido.model.Pedido;
@@ -143,17 +142,17 @@ public class PedidoWizardController extends BaseConfigController {
 		Pedido ped = new Pedido();
 		
 		try{
-			Boolean interno = Boolean.valueOf(request.getParameter("interno") != null && request.getParameter("interno").trim().equals("true") ? "true" : "false");
+			Integer interno = Integer.parseInt(request.getParameter("interno"));
 			Integer persona = null;
-			if(interno && getUsuario(request) != null)
+			if(!interno.equals(0) && getUsuario(request) != null){
 				persona = getUsuario(request).getPersona();
-			else
+			}else
 				persona = Integer.parseInt(request.getParameter("persona"));
 			
 			if(request.getParameter("pedido") != null && !request.getParameter("pedido").trim().isEmpty()){
 				PedidoManager.actualizarPedido(Integer.parseInt(request.getParameter("pedido")), persona, PedidoE.BORRADOR.getPedidoE(), false, null);
 			}else{
-				if(!PedidoManager.crearPedido(persona, new Date(), new BigDecimal(0), false, PedidoE.BORRADOR.getPedidoE(),Integer.parseInt(request.getParameter("establecimiento")))){
+				if(!PedidoManager.crearPedido(persona, new Date(), new BigDecimal(0), false, PedidoE.BORRADOR.getPedidoE(),Integer.parseInt(request.getParameter("establecimiento")),interno)){
 					result.put("error", "Ocurrió un error creando el pedido");
 				}else{
 					ped = PedidoManager.obtenerPedido(persona, null);
@@ -189,7 +188,7 @@ public class PedidoWizardController extends BaseConfigController {
 				result.put("error", "Pedido no creado");
 			}
 		}catch(Exception e){
-			result.put("error", "");
+			result.put("error", "Contactar al administrador");
 		}
 		
 		response.setContentType("text/html;charset=ISO-8859-1");
@@ -318,14 +317,46 @@ public class PedidoWizardController extends BaseConfigController {
 				for(DetallePedido det: listaDet){
 					PedidoManager.descontarInventario(ped.getId_pedido(), det.getId_producto(), det.getCantidad(), null);
 				}
-				
 				PedidoManager.actualizarPedido(ped.getId_pedido(), persona, PedidoE.NUEVO.getPedidoE(), pago, comentario);
 			}
 			model.addAttribute("correcto", "Pedido Creado con número: " + ped.getId_pedido());
 		}catch(Exception e){
 			model.addAttribute("error", "Contactar al administrador");
 		}
-		
 		return new ModelAndView("redirect:/Pedido/Visualizar.html", model);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Pedido/Flujo/cambioEstablecimiento")
+	public void cambioEstablecimiento(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
+		
+		try{
+			Integer establecimiento = Integer.parseInt(request.getParameter("establecimiento"));
+			Integer persona = Integer.parseInt(request.getParameter("persona"));
+			String pedido = request.getParameter("pedido");
+			
+			if(pedido != null && !pedido.trim().isEmpty()){
+				DetallePedidoExample DPE = new DetallePedidoExample();
+				DPE.createCriteria().andId_pedidoEqualTo(Integer.parseInt(pedido));
+				Integer total = ColseviDao.getInstance().getDetallePedidoMapper().countByExample(DPE);
+				if(total > 0){
+					Pedido ped = PedidoManager.obtenerPedido(persona, pedido);
+					if(ped != null && ped.getId_pedido() != null){
+						if(!ped.getId_establecimiento().equals(establecimiento)){
+							result.put("warning", "Existen productos asociados a otro establecimiento, al hacer esto se eliminarán los productos previamente configurados.");
+						}
+					}
+				}
+			}
+		}catch(Exception e){
+			result.put("Error", "Contactar al administrador");
+		}
+		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
+		result.writeJSONString(response.getWriter());
+	}
+	
 }

@@ -103,12 +103,6 @@ function validateFirstStep(){
     }else{
 	    if(jQuery('#CodigoPersona').val() != ""){
 			
-	    	if(jQuery('#interno').is(':checked')){
-	    		jQuery('#interno').val('true');
-	    	}else{
-	    		jQuery('#interno').val('false');
-	    	}
-	    	
 			jQuery.ajax({
 			  url: contexto + '/Pedido/Flujo/crearPedido.html?',
 			  data:{persona: jQuery('#CodigoPersona').val(), pedido: jQuery('#pedidosec').val(), interno: jQuery('#interno').val(), establecimiento: jQuery('#estab').val()},
