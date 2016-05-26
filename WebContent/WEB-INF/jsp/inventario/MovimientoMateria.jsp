@@ -74,8 +74,6 @@
 		titulos["cantidad"] = "Cantidad";
 		titulos["esta"] = "Establecimiento";
 		
-		clase = new Array();
-		
 	</script>
 </body>
 </html>

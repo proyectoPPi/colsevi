@@ -28,10 +28,6 @@ function Tabla(pagina){
 	jQuery('#com').val('');
 }
 
-function Limpiar(){
-	HLimpliar();
-}
-
 jQuery('#adicion').click(function(){
 	try{
 		if(jQuery('#IngSelect').val() != "" && jQuery('#tipopeso').val() != "" && parseInt(jQuery('#cantidad').val()) > 0){
@@ -88,7 +84,6 @@ jQuery( "#clasificarIng" ).change(function() {
 	
 });
 
-
 function Limpiar(){
 	jQuery('#IngDynamic > table > tbody > tr').remove();
 	jQuery('#id_compra').val('');
@@ -110,7 +105,7 @@ function CargarFormulario(Id){
 		jQuery("#pagado").prop("checked", true);
 	}
 	jQuery('#motivo').val(BuscarRegistro(Id)['motivo']);
-	validarModificacion();
+//	validarModificacion();
 }
 
 function cargarIng(){

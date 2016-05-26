@@ -50,8 +50,18 @@ public class EnviarCorreo {
 	         // Set Subject: header field
 	         message.setSubject(subject);
 
-	         // Now set the actual message
-	         message.setText(mensaje);
+//	         message.setText(mensaje);
+	         
+	         
+//	         MimeMultipart alternative = new MimeMultipart("alternative");
+//	         MimeBodyPart text = new MimeBodyPart();
+//	         MimeBodyPart html = new MimeBodyPart();
+//	         text.setText(mensaje);
+//	         html.setContent("html content", "text/html");
+//	         alternative.addBodyPart(text);
+//	         alternative.addBodyPart(html);
+//	         Message msg = new MimeMessage(session);
+	         message.setContent(mensaje, "text/html; charset=utf-8");
 
 	         // Send message
 	         Transport.send(message);
