@@ -135,7 +135,10 @@ public class InventarioController extends BaseConfigController {
 		
 		mapa.put("producto",request.getParameter("prod"));
 		opciones.put("datos", Construir(ColseviDao.getInstance().getInventarioMapper().CargarIngProd(mapa), cantidad));
-		
+
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+
 		opciones.writeJSONString(response.getWriter());
 	}
 	
@@ -179,6 +182,9 @@ public class InventarioController extends BaseConfigController {
 		mapa.put("esta", request.getParameter("establecimiento"));
 		opciones.put("datos", ConstruirInv(ColseviDao.getInstance().getInventarioMapper().CargarInv(mapa), cantidad, um));
 		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		opciones.writeJSONString(response.getWriter());
 		
 	}
@@ -202,15 +208,15 @@ public class InventarioController extends BaseConfigController {
 					opciones.put("color", true);
 					opciones.put("codUM", map.get("codUM"));
 					opciones.put("id_ingrediente", map.get("id_ingrediente"));
-					opciones.put("cantAsig", map.get("cantAsig"));
-					opciones.put("umAsig", map.get("umAsig"));
+					opciones.put("cantAsig", map.get("cantAsig") == null ? "" : map.get("cantAsig"));
+					opciones.put("umAsig", map.get("umAsig") == null ? "0" : map.get("umAsig"));
 					
 					medida = (Integer) map.get("um");
 					cant = (Double) map.get("cantidad");
 					opciones.put("cantidad", cant);
 					op = cant;
 					
-					Object[] result = InventarioManager.ConversionPMayorMenor(um, medida, cant);
+					Object[] result = InventarioManager.ConversionPMenorMayor(um, medida, cant);
 					op = (Double) result[0];
 					
 					if(op < cantidad){
@@ -277,7 +283,6 @@ public class InventarioController extends BaseConfigController {
 					ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(beanMateria);
 					InventarioManager.RegistrarMovimientoMateria(beanMateria.getLote(), beanMateria.getId_unidad_peso(), beanMateria.getCantidad(), bean.getId_establecimiento(), new Date(), MotivoE.ASIGNACION.getMotivoE());
 				}
-				
 			}
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");

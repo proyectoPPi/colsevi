@@ -34,7 +34,7 @@ public class BaseConfigController implements Serializable {
 			List<Pagina> listaPag = NU.getPaginasRol(getUsuario(request).getRol());
 			
 			for(Pagina pag: listaPag){
-				if(pag.getPadrePagina() != null && pag.getMenu()){
+				if(pag.getMenu()){
 					menu += "<li>";
 					menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
 					menu += "<i class=\""+pag.getIcono()+"\"></i>";

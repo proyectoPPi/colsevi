@@ -243,11 +243,10 @@ CREATE TABLE movimiento_materia(
 
 CREATE TABLE tipo_producto(
     id_tipo_producto INT AUTO_INCREMENT,
-    padre INT DEFAULT NULL,
+    padre VARCHAR(50) DEFAULT NULL,
 	nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
-    PRIMARY KEY(id_tipo_producto),
-    CONSTRAINT fk_id_tipo_producto FOREIGN KEY (padre) REFERENCES tipo_producto(id_tipo_producto)
+    PRIMARY KEY(id_tipo_producto)
 );
 
 CREATE TABLE producto(
@@ -351,14 +350,18 @@ CREATE TABLE estado_pedido(
 
 CREATE TABLE pedido(
     id_pedido INT AUTO_INCREMENT,
-	id_persona INT,
-    id_estado_pedido INT,
+	id_persona INT NOT NULL,
+    id_estado_pedido INT NOT NULL,
+    id_establecimiento INT NOT NULL,
+    comentario VARCHAR(2000),
     total DECIMAL(12,2) DEFAULT NULL,
-    fecha_pedido  DATETIME,
+    fecha_pedido  DATETIME NOT NULL,
+    motivo INT DEFAULT NULL,
     pagado BOOLEAN DEFAULT false,
     PRIMARY KEY(id_pedido),
     CONSTRAINT fk_perPed FOREIGN KEY (id_persona) REFERENCES persona(id_persona),
-    CONSTRAINT fk_estPed FOREIGN KEY (id_estado_pedido) REFERENCES estado_pedido(id_estado_pedido)
+    CONSTRAINT fk_estPed FOREIGN KEY (id_estado_pedido) REFERENCES estado_pedido(id_estado_pedido),
+    CONSTRAINT fk_estaPed FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento)
 );
 
 CREATE TABLE detalle_pedido(
