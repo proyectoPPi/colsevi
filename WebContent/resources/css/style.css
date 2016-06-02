@@ -6,24 +6,18 @@ Website: http://thevectorlab.net/
 */
 
 /* Import fonts */
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic);
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,400italic,700,700italic);
 
 body {
-    color: #797979;
-    background: #f1f2f7;
-    font-family: 'Open Sans', sans-serif;
+    color: #331d08;
+    background: #f7f6f1;
+    font-family: 'Roboto Condensed', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
-    font-size:13px;
+    font-size:14px;
     text-rendering:optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
-}
-
-#footer {
-    width: 100%;
-    bottom: 0;
-    left: 0;
 }
 
 ul li {
@@ -36,13 +30,24 @@ a, a:hover, a:focus {
 }
 ::selection {
 
-    background: peru;
+    background: #ffb347;
     color: #fff;
 }
 ::-moz-selection {
     background: peru;
     color: #fff;
 }
+
+.recetaD{
+	 content: '';
+	 display: inline-block;
+	 width: 10px;
+	 height: 10px;
+	 -webkit-border-radius: 50%;
+	 -moz-border-radius: 50%;
+	 border-radius: 50%;
+	 margin: 0 5px -1px 0;
+  }
 
 #container {
     width: 100%;
@@ -71,7 +76,7 @@ a, a:hover, a:focus {
     margin: 0;
     padding:20px 15px;
     text-align: center;
-    background: #41cac0;
+    background: #ffb347;
     border-radius: 5px 5px 0 0;
     -webkit-border-radius: 5px 5px 0 0;
     color: #fff;
@@ -181,7 +186,7 @@ a, a:hover, a:focus {
     width: 210px;
     height: 100%;
     position: fixed;
-    background: #2a3542;
+    background: #ffb347;
 }
 
 #sidebar ul li {
@@ -264,7 +269,7 @@ ul.sidebar-menu li ul.sub li a {
 }
 
 ul.sidebar-menu li ul.sub li a:hover, ul.sidebar-menu li ul.sub li.active a {
-    color: #FF6C60;
+    color: white;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
@@ -289,11 +294,11 @@ ul.sidebar-menu li a span{
 }
 
 ul.sidebar-menu li a{
-    color: #aeb2b7;
+    color: #331d08;
     text-decoration: none;
     display: block;
     padding: 15px 0 15px 10px;
-    font-size: 12px;
+    font-size: 16px;
     outline: none;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -303,7 +308,7 @@ ul.sidebar-menu li a{
 }
 
 ul.sidebar-menu li a.active, ul.sidebar-menu li a:hover, ul.sidebar-menu li a:focus {
-    background: #35404d;
+    background: #331d08;
     color: #fff;
     display: block;
     border-radius: 4px;
@@ -323,11 +328,11 @@ ul.sidebar-menu li a i {
 }
 
 ul.sidebar-menu li a:hover i, ul.sidebar-menu li a:focus i {
-    color: #FF6C60;
+    color: white;
 }
 
 ul.sidebar-menu li a.active i {
-    color: #FF6C60;
+    color: white;
 }
 
 
@@ -355,8 +360,8 @@ ul.sidebar-menu li a.active i {
 }
 
 .white-bg {
-    background: #fff;
-    border-bottom: 1px solid #f1f2f7;
+    background: #331d08;
+    border-bottom: 1px solid #331d08;
 }
 
 .wrapper {
@@ -368,7 +373,7 @@ ul.sidebar-menu li a.active i {
 
 a.logo {
     font-size: 21px;
-    color: #2e2e2e;
+    color: #FFB973;
     float: left;
     margin-top: 15px;
     text-transform: uppercase;
@@ -380,7 +385,7 @@ a.logo:hover, a.logo:focus {
 }
 
 a.logo span {
-    color: #FF6C60;
+    color: #FFE;
 }
 
 
@@ -728,6 +733,7 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
     cursor: pointer;
     display: inline-block;
     font-size: 20px;
+    background: #FFB973;
 }
 
 
@@ -1820,7 +1826,7 @@ ul.ft-link li a i {
 /*weather*/
 
 .weather-bg {
-    background: #8175c7;
+	background:  #3F8A24;
     border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
     color: #fff;
@@ -1830,12 +1836,12 @@ ul.ft-link li a i {
 }
 
 .weather-bg i {
-    font-size: 60px;
+    font-size: 30px;
     display: block;
 }
 
 .weather-bg .degree {
-    font-size: 60px;
+    font-size: 20px;
 }
 
 .weather-category {
@@ -1852,7 +1858,7 @@ ul.ft-link li a i {
 
 .weather-category ul li {
     display: inline-block;
-    width: 32%;
+    width: 49%;
     text-align: center;
     border-right:1px solid #e6e6e6 ;
     display: inline-block;
@@ -2211,12 +2217,12 @@ ul.inbox-pagination li {
 
 .modal-header h4.modal-title {
     font-weight: 300;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 .modal-body label {
     font-weight: 400;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 .heading-inbox h4{
@@ -2962,12 +2968,12 @@ ul.amounts li {
 
 .panel-heading .nav {
     border: medium none;
-    font-size: 13px;
+    font-size: 14px;
     margin: -10px -15px -11px;
 }
 
 .tab-bg-dark-navy-blue {
-    background: #7087A3;
+    background: #f7f6f1;
     border-radius: 5px 5px 0 0;
     -webkit-border-radius: 5px 5px 0 0;
     border-bottom: none;
@@ -2980,12 +2986,17 @@ ul.amounts li {
 }
 
 .panel-heading .nav > li > a {
-    color: #fff;
+    color: #331d08;
 }
 
-.panel-heading .nav > li.active > a, .panel-heading .nav > li > a:hover {
+.panel-heading .nav > li.active > a {
+    color: white;
+    background: #331d08;
+}
+
+.panel-heading .nav > li > a:hover {
     color: #47596f;
-    background: #fff;
+    background: #ffb347;
 }
 
 .panel-heading .nav > li:first-child.active > a, .panel-heading .nav > li:first-child > a:hover {
@@ -4745,8 +4756,8 @@ tr.odd.gradeX td.sorting_1, tr.even.gradeX td.sorting_1, table.display tr.even.g
 /*footer*/
 
 .site-footer {
-    background: #5b6e84;
-    color: #fff;
+    background: #331d08;
+    color: #FFB973;
     padding: 10px 0;
 }
 

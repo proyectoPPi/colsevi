@@ -1,5 +1,7 @@
 var dataMap = {};
 var registrosPagina = 10;
+var cantPagina = 16;
+
 /*
  * Método para pintar la tabla
  */
@@ -8,11 +10,15 @@ function HTabla(opciones){
 	var Id = opciones.Id;
 	var id = null;
 	dataMap['url'] = opciones.url;
-	dataMap['clase'] = opciones.clase;
 	dataMap['boton'] = opciones.boton;
+	dataMap['color'] = opciones.color;
+	dataMap['accion'] = opciones.accion;
+	dataMap['campo'] = opciones.campo;
 	
-	if(dataMap['clase'] == undefined) dataMap['clase'] = new Array();
 	if(dataMap['boton'] == undefined) dataMap['boton'] = new Array();
+	if(dataMap['color'] == undefined) dataMap['color'] = new Array();
+	if(dataMap['accion'] == undefined) dataMap['accion'] = new Array();
+	if(dataMap['campo'] == undefined) dataMap['campo'] = new Array();
 	
 	Setlimite(opciones.pagina);
 	
@@ -21,7 +27,12 @@ function HTabla(opciones){
 	jQuery.ajaxQueue({
 		  url: dataMap['url'],
 		}).done(function(result) {
-			data = jQuery.parseJSON( result );
+			try{
+				data = jQuery.parseJSON(result);
+			} catch(err){
+				console.log("Error ejecutando tabla" + err);
+	        	return;
+			}
 			var html = ""; 
 			if(data == "" || data['datos'][0] == undefined ){
 				 jQuery(Id).html("<br/>No hay datos");
@@ -30,15 +41,19 @@ function HTabla(opciones){
 			dataMap["datos"] = data["datos"];
 			dataMap["titulos"] = titulos;
 			dataMap["total"] = data["total"];
-			
-			html='<table class="display table table-bordered table-striped dataTable"><thead><tr>';
+			if(dataMap["datos"].length == 0){
+	 			jQuery('#tabla').html("<br/>No hay datos");
+	         	return;
+	 		}
+			if(data["total"] == 0){
+				organizarPaginacion(1);
+			}
+			html = '<section id="flip-scroll">';
+			html += '<table class="table table-bordered table-striped table-condensed cf"><thead class="cf"><tr>';
 			for(k in titulos){
 				var className = '';
 				if(titulos[k] != "ID"){
-					if(dataMap['clase'][k] != undefined){
-						className = 'class="' + dataMap['clase'][k] + '" ';
-					}
-					html += "<th " + className + ">"+opciones.titulos[k]+"</th>";
+					html += "<th>"+opciones.titulos[k]+"</th>";
 				}else{
 					dataMap['id'] = k;
 				}
@@ -48,7 +63,6 @@ function HTabla(opciones){
 			 html += "<tr>";
 			 var sw = true;
 			 for(k in titulos){
-				 var className = '';
 				 if(titulos[k]=="ID"){
 					 id = data["datos"][i][k];
 				 }else{
@@ -56,14 +70,21 @@ function HTabla(opciones){
 						 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
 						 sw = false;
 					 }else{
-						 if(dataMap['clase'][k] != undefined){
-							className = 'class="' + dataMap['clase'][k] + '" ';
+						 if(dataMap['color'] != undefined && dataMap['color'][k] != undefined){
+							 html += '<td style="background-color: ' + data["datos"][i][k] +'" ' + className + ">";
+						 }else{
+							 html += "<td>";
+						 }		 
+						 if(dataMap['campo'] != undefined && dataMap['campo'][k] != undefined){
+							 html += '<input type="number" value="'+data['datos'][i][k]+'" class="form-control" id="campo'+id+'" name="cantTbl"/>';
 						 }
-						 html += "<td "  + className + ">";
+						 
 						 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
 							 html += data["datos"][i][k]['label'];
 						 }else{
-							 html += data["datos"][i][k];
+							 if(dataMap['color'][k] == undefined && dataMap['campo'][k] == undefined && dataMap['boton'][k] == undefined && dataMap['accion'][k] == undefined){
+								 html += data["datos"][i][k];
+							 }
 							 
 							 if(dataMap['boton'][k] != undefined){
 								for(var key in dataMap['boton'][k]){
@@ -72,9 +93,23 @@ function HTabla(opciones){
 								if(opcion.metodo!=undefined){
 									metodo = opcion.metodo;
 								}
-									html += '<span><a href="#" onclick="'+metodo+'(\''+id+'\');" class="btn btn-xs '+opcion.color+'"><i class="'+opcion.img+'"></i></a></span>';
+									html += '<span><a href="#" onclick="'+metodo+'(\''+id+'\', this);" class="btn '+opcion.color+'"><i class="'+opcion.img+'"></i></a></span>';
 								}
 							}
+							 if(dataMap['accion'][k] != undefined){
+								 html +='<div class="btn-group">';
+								 html +='<button data-toggle="dropdown" class="btn btn-white" aria-pressed="false"><i class="fa fa-ellipsis-v"></i></button>';
+								 html +='<ul role="menu" class="dropdown-menu">';
+								 
+								 for(var key in dataMap['accion'][k]){
+									var opcion = dataMap['accion'][k][key];
+									var metodo = "metodo";
+									if(opcion.metodo != undefined){
+										metodo = opcion.metodo;
+									}
+									html +='<li><a href="#" onclick="'+metodo+'(\''+id+'\');" href="#">'+opcion.label+'</a></li>';
+								}
+							 }
 						 }
 						 
 						 html += "</td>";
@@ -83,7 +118,7 @@ function HTabla(opciones){
 			 }
 			 html += "</tr>";
 		 }
-		 html += "<tbody></table>";
+		 html += "<tbody></table></section>";
 		 
 		 jQuery(Id).html(html);
 		 
@@ -177,6 +212,72 @@ function organizarPaginacion(pagina){
 		jQuery("#paginacion").append('<ul class="dataTables_paginate paging_bootstrap pagination">'+html+'</ul>');
 }
 
+function HiniciarAutocompletar(url,input, update){
+
+	var value = "valor="+jQuery("#"+input).val();
+	dataMap['AutocompletarUrl'] = url;
+	
+	jQuery.ajaxQueue({
+		url: dataMap['AutocompletarUrl'] + value,
+	}).done(function(result) {
+		var data;
+		try{
+			data = jQuery.parseJSON(result);
+		} catch(err){
+			console.log("Error ejecutando HiniciarAutocompletar" + err);
+        	return;
+		}
+		dataMap['autocompletar'] = data['labels'];
+		
+		AuxiliarAutocompletar(input);
+		
+		if(update==true){
+			jQuery("#"+input).keyup(function(e) {
+				if((e.which<37 || e.which>40) && e.which!=13){
+					ActualizarAutocompletar(input);
+				}
+			});
+		}
+	});
+}
+
+function AuxiliarAutocompletar(input){
+
+	jQuery( "#"+input ).autocomplete({
+		source: dataMap['autocompletar'],
+		minLength: 0,
+		open: function( event, ui ) {
+			//jQuery("#"+input).width(jQuery(".ui-autocomplete.ui-menu").width());
+		}
+	});
+
+	jQuery("#"+input).focus(function() {
+		jQuery("#"+input).autocomplete("search");
+	});
+}
+
+function ActualizarAutocompletar(input){
+
+	jQuery.ajaxQueue({
+	  	url: dataMap['AutocompletarUrl'],
+	  	data: {valor: jQuery("#"+input).val()},
+	  	success: function(o) {
+			var data;
+			try{
+				data = jQuery.parseJSON(o);
+			} catch(err){
+				console.log("Error ejecutando ajaxQueue en ActualizarAutocompletar " + err);
+	        	return;
+			}
+			if(data.labels==undefined) data.labels = [];
+			jQuery("#"+input).autocomplete( "option", "source", data.labels );
+			jQuery("#"+input).autocomplete("search", "");
+	  	}
+	});
+}
+
+
+
 function HLimpliar(){
 	
 	for(key in dataMap['keys']){
@@ -205,5 +306,78 @@ function HDatetimePicker(Id, Popup){
 	jQuery('#'+ Id).DateTimePicker({
 		language: "es",
 		isPopup: Popup
+	});
+}
+
+function HColorPicker(Id){
+	jQuery('#' + Id).colorpickerplus();
+}
+
+function HValidador(Id){
+	jQuery('#'+Id).validate({
+		submitHandler: function(form) {
+		    form.submit();
+		  }
+	});
+}
+
+function HiniciarAutocompletar(url,input){
+
+	var value = "campo="+jQuery("#"+input).val();
+	dataMap['AutocompletarUrl'] = url;
+	
+	jQuery.ajaxQueue({
+		url: dataMap['AutocompletarUrl'] + value,
+	}).done(function(result) {
+		var data;
+		try{
+			data = jQuery.parseJSON(result);
+		} catch(err){
+			console.log("Error ejecutando HiniciarAutocompletar" + err);
+        	return;
+		}
+		dataMap['autocompletar'] = data['labels'];
+		
+		AuxiliarAutocompletar(input);
+		
+		jQuery("#"+input).keyup(function(e) {
+			if((e.which<37 || e.which>40) && e.which!=13){
+				ActualizarAutocompletar(input);
+			}
+		});
+	
+	});
+}
+
+function AuxiliarAutocompletar(input){
+
+	jQuery( "#"+input ).autocomplete({
+		source: dataMap['autocompletar'],
+		minLength: 0,
+		open: function( event, ui ) {}
+	});
+
+	jQuery("#"+input).focus(function() {
+		jQuery("#"+input).autocomplete("search");
+	});
+}
+
+function ActualizarAutocompletar(input){
+
+	jQuery.ajaxQueue({
+	  	url: dataMap['AutocompletarUrl'],
+	  	data: {campo: jQuery("#"+input).val()},
+	  	success: function(o) {
+			var data;
+			try{
+				data = jQuery.parseJSON(o);
+			} catch(err){
+				console.log("Error ejecutando ajaxQueue en ActualizarAutocompletar " + err);
+	        	return;
+			}
+			if(data.labels==undefined) data.labels = [];
+			jQuery("#"+input).autocomplete( "option", "source", data.labels );
+			jQuery("#"+input).autocomplete("search", "");
+	  	}
 	});
 }

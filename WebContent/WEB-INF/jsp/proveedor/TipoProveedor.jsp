@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <meta charset="UTF-8" />
+   <meta charset="ISO-8859" />
 	<title>Tipo Proveedor</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 

@@ -108,6 +108,9 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+    	LIMIT ${limit}
+  	</if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     <!--
@@ -300,4 +303,10 @@
       observacion = #{observacion,jdbcType=VARCHAR}
     where id_pago_proveedor = #{id_pago_proveedor,jdbcType=INTEGER}
   </update>
+  <select id="deudaCom" parameterType="java.util.Map" resultType="java.util.HashMap">
+	SELECT com.id_compra, dp.pendiente FROM deuda_proveedor dp
+	INNER JOIN compra com ON com.id_compra = dp.id_compra
+	WHERE com.id_proveedor = #{compra};
+  </select>
+  
 </mapper>

@@ -50,7 +50,29 @@ public class UtilidadManager {
 	}
 	
 	public static String FormatDateDB(Date date){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		
+		try {
+			return sdf.format(date); 
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static String FormatoFechaVista(Date date){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		try {
+			return sdf.format(date); 
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String FormatoFechaVistaO(Object date){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		try {
 			return sdf.format(date); 
@@ -82,37 +104,14 @@ public class UtilidadManager {
 		return decimal;
 	}
 	
-	public static List<ListaGenerica> tipoProducto(){
-		List<ListaGenerica> result = new ArrayList<ListaGenerica>();
-		ListaGenerica lg = new ListaGenerica();
+	public static String retirarCaracteresEspeciales(String valor){
+		valor.replace(",", ".");
+		valor.replace("-", "");
+		valor.replace("+", "");
+		valor.replace("*", "");
+		valor.replace("/", "");
+		valor.replace(" ", "");
 		
-		TipoProductoExample tpExample = new TipoProductoExample();
-		tpExample.createCriteria().andPadreIsNull();
-		List<TipoProducto> listaTipo = ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tpExample);
-		
-		for(TipoProducto bean: listaTipo){
-			lg = new ListaGenerica();
-			lg.setNombre(bean.getNombre());
-			lg.setId(bean.getId_tipo_producto().toString());
-			lg.setSeleccionable(true);
-			
-			result.add(lg);
-			
-			tpExample = new TipoProductoExample();
-			tpExample.createCriteria().andPadreEqualTo(bean.getId_tipo_producto());
-			List<TipoProducto> listaHijo = ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tpExample);
-			
-			for(TipoProducto bh: listaHijo){
-				lg = new ListaGenerica();
-				lg.setNombre(bh.getNombre());
-				lg.setId(bh.getId_tipo_producto().toString());
-				lg.setSeleccionable(false);
-			
-				result.add(lg);
-			}
-		}
-		
-		return result;
+		return valor;
 	}
-	
 }

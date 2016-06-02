@@ -1,6 +1,7 @@
 package com.colsevi.controllers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,57 +28,70 @@ public class BaseConfigController implements Serializable {
 	
 	public String getMenu(HttpServletRequest request){
 		String menu = "";
-		NavegacionUsuario NU = new NavegacionUsuario();
-		List<Pagina> listaPag = NU.getPaginasRol(getUsuario(request).getRol());
-		
-		for(Pagina pag: listaPag){
-			if(pag.getPadrePagina() == null){
-				menu += "<li>";
-				menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
-				menu += "<i class=\""+pag.getIcono()+"\"></i>";
-				menu += "<span>"+pag.getNombre()+"</span>";
-				menu += "</a>";
-				menu += "</li>";
-			}
-		}
-		
-		return menu;
-	}
-	
-	public String SubMenu(HttpServletRequest request){
 
-		String uri = request.getRequestURI().substring(request.getContextPath().length());
-		String menu = "";
-		
-		try{
-			PaginaExample pE = new PaginaExample();
-			pE.createCriteria().andUrlLike(uri);
-			Integer id = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE).get(0).getId_pagina();
+		if(getUsuario(request) != null){
+			NavegacionUsuario NU = new NavegacionUsuario();
+			List<Pagina> listaPag = NU.getPaginasRol(getUsuario(request).getRol());
 			
-			if(id != null){
-				pE = new PaginaExample();
-				pE.createCriteria().andPadrePaginaEqualTo(id);
-				List<Pagina> listaPagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE);
-				
-				for(Pagina pag: listaPagina){
+			for(Pagina pag: listaPag){
+				if(pag.getMenu()){
 					menu += "<li>";
 					menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
+					menu += "<i class=\""+pag.getIcono()+"\"></i>";
 					menu += "<span>"+pag.getNombre()+"</span>";
 					menu += "</a>";
 					menu += "</li>";
 				}
 			}
-
-		}catch(Exception e){
-			
 		}
+		return menu;
+	}
+	
+	public String SubMenu(HttpServletRequest request){
+
+		String menu = "";
+		if(getUsuario(request) != null){
+			String uri = request.getRequestURI().substring(request.getContextPath().length());
 		
+			try{
+			
+				PaginaExample pE = new PaginaExample();
+				pE.createCriteria().andUrlLike(uri);
+				Pagina pagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE).get(0);
+				
+				if(pagina != null && pagina.getPadrePagina() != null){
+					pE = new PaginaExample();
+					String[] padre = pagina.getPadrePagina().split(",");
+					List<Integer> ListaP = new ArrayList<Integer>();
+					for(int i=0; i<padre.length; i++){
+						ListaP.add(Integer.parseInt(padre[i]));
+					}
+					
+					pE.createCriteria().andId_paginaIn(ListaP);
+					List<Pagina> listaPagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE);
+					
+					for(Pagina pag: listaPagina){
+						menu += "<li>";
+						menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
+						menu += pag.getNombre();
+						menu += "</a>";
+						menu += "</li>";
+					}
+				}
+				
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+				
+			}
 		return menu;
 	}
 	
 	public SesionUsuario getUsuario(HttpServletRequest request){
-		return (SesionUsuario) request.getSession().getAttribute("sesion");
-		
+		if(request.getSession() != null && request.getSession().getAttribute("sesion") != null){
+			return (SesionUsuario) request.getSession().getAttribute("sesion");
+		}
+		return null;
 	}
 
 }

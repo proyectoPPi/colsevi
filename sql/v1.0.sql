@@ -34,19 +34,6 @@ CREATE TABLE persona(
     CONSTRAINT fk_tdocPer FOREIGN KEY (tipo_doc) REFERENCES tipo_documento(id_tipo_documento)
 );
 
-CREATE TABLE usuario(
-	id_usuario INT AUTO_INCREMENT,
-    id_persona INT NOT NULL,
-	usuario VARCHAR(40) NOT NULL,
-    clave VARCHAR(80) NOT NULL,
-    estado VARCHAR(1) NOT NULL,
-    correo VARCHAR(50) NOT NULL,
-    primer_login VARCHAR(1) NOT NULL,
-	PRIMARY KEY(id_usuario),
-    UNIQUE (usuario),
-    CONSTRAINT fk_Persona FOREIGN KEY (id_persona) REFERENCES persona(id_persona)
-);
-
 CREATE TABLE rol(
 	id_rol INT AUTO_INCREMENT,
     nombre_rol VARCHAR(40) NOT NULL,
@@ -54,12 +41,18 @@ CREATE TABLE rol(
 	PRIMARY KEY(id_rol)
 );
 
-CREATE TABLE usuario_x_rol(
-	id_rol INT NOT NULL,
-    id_usuario INT NOT NULL,
-	PRIMARY KEY(id_rol, id_usuario),
-    CONSTRAINT fk_rolu FOREIGN KEY (id_rol) REFERENCES rol(id_rol),
-    CONSTRAINT fk_usuarior FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+CREATE TABLE usuario(
+	id_usuario INT AUTO_INCREMENT,
+    id_persona INT NOT NULL,
+	usuario VARCHAR(40) NOT NULL,
+    clave VARCHAR(80) NOT NULL,
+    estado VARCHAR(1) NOT NULL,
+    primer_login VARCHAR(1) NOT NULL,
+    id_rol INT NOT NULL,
+	PRIMARY KEY(id_usuario),
+    UNIQUE (usuario),
+    CONSTRAINT fk_Persona FOREIGN KEY (id_persona) REFERENCES persona(id_persona),
+    CONSTRAINT fk_rolu FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
 );
 
 CREATE TABLE pagina(
@@ -68,9 +61,9 @@ CREATE TABLE pagina(
     url VARCHAR (50) NOT NULL,
     nombre VARCHAR (50) NOT NULL,
     icono VARCHAR (50),
-    padrePagina INT DEFAULT NULL,
-    PRIMARY KEY(id_pagina),
-    CONSTRAINT fk_PagPadre FOREIGN KEY (padrePagina) REFERENCES pagina(id_pagina)
+    padrePagina VARCHAR(60) DEFAULT NULL,
+    menu BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY(id_pagina)
 );
 
 CREATE TABLE pagina_x_rol(
@@ -194,20 +187,35 @@ CREATE TABLE unidad_peso(
     id_unidad_peso INT AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
+    codigo VARCHAR(4) DEFAULT NULL,
     PRIMARY KEY(id_unidad_peso)
 );
 
-CREATE TABLE compra_x_ingrediente(
+CREATE TABLE materia_prima(
 	lote INT AUTO_INCREMENT,
+    id_unidad_peso INT,
+    id_ingrediente INT,
+    id_establecimiento INT,
+    cantidad DOUBLE,
+    fecha_vencimiento DATETIME,
+    PRIMARY KEY(lote),
+    CONSTRAINT fk_ump FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso),
+    CONSTRAINT fk_imp FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
+    CONSTRAINT fk_emp FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento)
+);
+
+CREATE TABLE compra_x_ingrediente(
     id_compra INT,
     id_ingrediente INT,
     id_unidad_peso INT NOT NULL,
+    cantidad DOUBLE NOT NULL,
     fecha_vencimiento DATETIME,
-    cantidad INT NOT NULL,
+    lote INT,
     PRIMARY KEY(lote,id_compra,id_ingrediente),
 	CONSTRAINT fk_cxi FOREIGN KEY (id_compra) REFERENCES compra(id_compra),
     CONSTRAINT fk_icx FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
-    CONSTRAINT fk_ucxi FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso)
+    CONSTRAINT fk_ucxi FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso),
+    CONSTRAINT fk_lcxi FOREIGN KEY (lote) REFERENCES materia_prima(lote)
 );
 
 ALTER TABLE compra_x_ingrediente AUTO_INCREMENT = 1000;
@@ -218,28 +226,27 @@ CREATE TABLE motivo(
     PRIMARY KEY(id_motivo)
 );
 
-CREATE TABLE movimiento_compra(
-	id_momivimiento_compra INT AUTO_INCREMENT,
+CREATE TABLE movimiento_materia(
+	id_movimiento_materia INT AUTO_INCREMENT,
     id_motivo INT NOT NULL,
     lote INT NOT NULL,
     id_unidad_peso INT NOT NULL,
     id_establecimiento INT,
-    cantidad INT,
+    cantidad DOUBLE,
 	fecha_movimiento DATETIME NOT NULL,
-    PRIMARY KEY(id_momivimiento_compra),
+    PRIMARY KEY(id_movimiento_materia),
     CONSTRAINT fk_movcomMotivo FOREIGN KEY (id_motivo) REFERENCES motivo(id_motivo),
-    CONSTRAINT fk_comxIngMov FOREIGN KEY (lote) REFERENCES compra_x_ingrediente(lote),
+    CONSTRAINT fk_matxIngMov FOREIGN KEY (lote) REFERENCES materia_prima(lote),
     CONSTRAINT fk_umc FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso),
     CONSTRAINT fk_movIngEst FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento)
 );
 
 CREATE TABLE tipo_producto(
     id_tipo_producto INT AUTO_INCREMENT,
-    padre INT DEFAULT NULL,
+    padre VARCHAR(50) DEFAULT NULL,
 	nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
-    PRIMARY KEY(id_tipo_producto),
-    CONSTRAINT fk_id_tipo_producto FOREIGN KEY (padre) REFERENCES tipo_producto(id_tipo_producto)
+    PRIMARY KEY(id_tipo_producto)
 );
 
 CREATE TABLE producto(
@@ -266,13 +273,22 @@ CREATE TABLE ingrediente_x_producto(
     CONSTRAINT fk_ingProdUP FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso)
 );
 
+CREATE TABLE dificultad_receta(
+	id_dificultad_receta INT AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(80),
+    icono VARCHAR (15),
+    PRIMARY KEY(id_dificultad_receta)
+);
+
 CREATE TABLE receta(
     id_receta INT AUTO_INCREMENT,
 	id_producto INT,
-    preparacion VARCHAR(2000),
+    id_dificultad_receta INT,
     tiempo VARCHAR(5),
     PRIMARY KEY(id_receta),
-    CONSTRAINT fk_recetaProducto FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
+    CONSTRAINT fk_recetaProducto FOREIGN KEY (id_producto) REFERENCES producto(id_producto),
+    CONSTRAINT fk_recetaDif FOREIGN KEY (id_dificultad_receta) REFERENCES dificultad_receta(id_dificultad_receta)
 );
 
 CREATE TABLE preparacion_receta(
@@ -334,14 +350,18 @@ CREATE TABLE estado_pedido(
 
 CREATE TABLE pedido(
     id_pedido INT AUTO_INCREMENT,
-	id_persona INT,
-    id_estado_pedido INT,
+	id_persona INT NOT NULL,
+    id_estado_pedido INT NOT NULL,
+    id_establecimiento INT NOT NULL,
+    comentario VARCHAR(2000),
     total DECIMAL(12,2) DEFAULT NULL,
-    fecha_pedido  DATETIME,
+    fecha_pedido  DATETIME NOT NULL,
+    motivo INT DEFAULT NULL,
     pagado BOOLEAN DEFAULT false,
     PRIMARY KEY(id_pedido),
     CONSTRAINT fk_perPed FOREIGN KEY (id_persona) REFERENCES persona(id_persona),
-    CONSTRAINT fk_estPed FOREIGN KEY (id_estado_pedido) REFERENCES estado_pedido(id_estado_pedido)
+    CONSTRAINT fk_estPed FOREIGN KEY (id_estado_pedido) REFERENCES estado_pedido(id_estado_pedido),
+    CONSTRAINT fk_estaPed FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento)
 );
 
 CREATE TABLE detalle_pedido(
@@ -391,4 +411,16 @@ CREATE TABLE cobro(
     PRIMARY KEY(id_cobro),
     CONSTRAINT fk_cobroPed FOREIGN KEY (id_deuda) REFERENCES deuda_pedido(id_deuda_pedido),
     CONSTRAINT fk_cobroCat FOREIGN KEY (id_categoria_cobro) REFERENCES categoria_cobro(id_categoria_cobro)
+);
+
+CREATE TABLE inventario_x_materia(
+    id_inventario INT,
+    id_ingrediente INT,
+	lote INT,
+    id_unidad_peso INT,
+    cantidad DOUBLE,
+    CONSTRAINT fk_invCom1 FOREIGN KEY (id_inventario) REFERENCES inventario(id_inventario),
+	CONSTRAINT fk_invCom2 FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
+    CONSTRAINT fk_invCom3 FOREIGN KEY (lote) REFERENCES materia_prima(lote),
+    CONSTRAINT fk_invCom4 FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso)
 );

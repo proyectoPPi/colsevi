@@ -1,14 +1,21 @@
-<div class="alert alert-block alert-danger fade in" id="error" style="display: none;">
+<div class="col-lg-12" id="bread">
+    <ul class="breadcrumb">
+    	${col.SubMenu}
+    </ul>
+    <!--breadcrumbs end -->
+</div>
+
+<div class="alert alert-danger fade in" id="error" style="display: none;">
 	<button data-dismiss="alert" class="close close-sm" type="button">
 		<i class="fa fa-times"></i>
 	</button>
-	<strong>Error! </strong> ${error}
+	<strong>Error! </strong> <div id="mensajeE">${error}</div>
 </div>
 <div class="alert alert-success fade in" id="correcto" style="display: none;">
 	<button data-dismiss="alert" class="close close-sm" type="button">
 		<i class="fa fa-times"></i>
 	</button>
-	<strong>Correcto! </strong> ${correcto}
+	<strong>Correcto! </strong> <div id="mensajeC">${correcto}</div>
 </div>
 <div class="alert alert-info fade in" id="info" style="display: none;">
 	<button data-dismiss="alert" class="close close-sm" type="button">
