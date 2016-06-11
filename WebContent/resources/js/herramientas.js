@@ -6,6 +6,7 @@ var cantPagina = 16;
  * Método para pintar la tabla
  */
 function HTabla(opciones){
+	jQuery("#ModalCargando").modal('show');
 	var titulos = opciones.titulos;
 	var Id = opciones.Id;
 	var id = null;
@@ -31,11 +32,13 @@ function HTabla(opciones){
 				data = jQuery.parseJSON(result);
 			} catch(err){
 				console.log("Error ejecutando tabla" + err);
+				jQuery("#ModalCargando").modal('hide');
 	        	return;
 			}
 			var html = ""; 
 			if(data == "" || data['datos'][0] == undefined ){
 				 jQuery(Id).html("<br/>No hay datos");
+			 		jQuery("#ModalCargando").modal('hide');
 				 return;
 			 }
 			dataMap["datos"] = data["datos"];
@@ -43,6 +46,7 @@ function HTabla(opciones){
 			dataMap["total"] = data["total"];
 			if(dataMap["datos"].length == 0){
 	 			jQuery('#tabla').html("<br/>No hay datos");
+	 	 		jQuery("#ModalCargando").modal('hide');
 	         	return;
 	 		}
 			if(data["total"] == 0){
@@ -111,7 +115,6 @@ function HTabla(opciones){
 								}
 							 }
 						 }
-						 
 						 html += "</td>";
 					 }
 				 }
@@ -134,6 +137,8 @@ function HTabla(opciones){
 					dataMap['keys'].push(key);
 				}
 			}
+			
+			jQuery("#ModalCargando").modal('hide');
 	});
 }
 
@@ -276,8 +281,6 @@ function ActualizarAutocompletar(input){
 	});
 }
 
-
-
 function HLimpliar(){
 	
 	for(key in dataMap['keys']){
@@ -289,6 +292,7 @@ function HLimpliar(){
 		}
 	}
 }
+
 function HEliminar(div, url){
 	jQuery('#' + div).attr('action', url);
 	jQuery('#' + div).submit();
@@ -380,4 +384,33 @@ function ActualizarAutocompletar(input){
 			jQuery("#"+input).autocomplete("search", "");
 	  	}
 	});
+}
+
+function HPreprocesar(opcion){
+	jQuery("#ModalCargando").modal('show');
+	jQuery("#errorDivF").hide();
+	jQuery.ajax({
+		url: opcion.url + jQuery("#" + opcion.formulario).serialize(),
+		async:false,
+	}).done(function(result) {
+		var data; 
+ 		try{ 
+ 			data = jQuery.parseJSON(result); 
+ 		} catch(err){ 
+ 			console.log("Error" + err); 
+         	return; 
+ 		} 
+ 		
+ 		if(data['error'] != undefined){
+ 			jQuery("#mensajeEr").html(data['error']);
+	    	jQuery("#errorDivF").show();
+ 		}else{
+ 			jQuery("#" + opcion.formulario).submit();
+ 		}
+ 		jQuery("#ModalCargando").modal('hide');
+	});
+}
+
+function HMask(Id, mask){
+	jQuery('#' + Id).mask(mask);
 }

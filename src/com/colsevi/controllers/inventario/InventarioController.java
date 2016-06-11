@@ -30,6 +30,7 @@ import com.colsevi.dao.inventario.model.InventarioXMateria;
 import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.dao.inventario.model.MateriaPrimaExample;
+import com.colsevi.dao.inventario.model.MovimientoMateria;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
 import com.colsevi.dao.producto.model.IngredienteXProductoKey;
@@ -194,6 +195,7 @@ public class InventarioController extends BaseConfigController {
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
+		Object[] result = new Object[2];
 		Double cant = 0d;
 		Integer medida = 0;
 		double op = 0;
@@ -202,11 +204,11 @@ public class InventarioController extends BaseConfigController {
 				try{
 					opciones = new JSONObject();
 					
-					opciones.put("nombre", map.get("nombre"));
+					opciones.put("nombre", map.get("nombre") != null ? map.get("nombre") : "");
 					opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatoFechaVista((Date) map.get("fecha_vencimiento")) : "");
 					opciones.put("lote", map.get("lote"));
 					opciones.put("color", true);
-					opciones.put("codUM", map.get("codUM"));
+					opciones.put("codUM", map.get("codUM") != null ? map.get("codUM") : "0");
 					opciones.put("id_ingrediente", map.get("id_ingrediente"));
 					opciones.put("cantAsig", map.get("cantAsig") == null ? "" : map.get("cantAsig"));
 					opciones.put("umAsig", map.get("umAsig") == null ? "0" : map.get("umAsig"));
@@ -214,12 +216,16 @@ public class InventarioController extends BaseConfigController {
 					medida = (Integer) map.get("um");
 					cant = (Double) map.get("cantidad");
 					opciones.put("cantidad", cant);
-					op = cant;
+					if(medida != null && cant != null){
+						op = cant;
 					
-					Object[] result = InventarioManager.ConversionPMenorMayor(um, medida, cant);
-					op = (Double) result[0];
-					
-					if(op < cantidad){
+						result = InventarioManager.ConversionPMenorMayor(um, medida, cant);
+						op = (Double) result[0];
+						
+						if(op < cantidad){
+							opciones.put("color", false);
+						}
+					}else{
 						opciones.put("color", false);
 					}
 					resultado.add(opciones);
@@ -237,26 +243,30 @@ public class InventarioController extends BaseConfigController {
 		
 		try{
 			Inventario bean = new Inventario();
-			Object[] result = validarGuardado(request);
+			List<InventarioXMateria> listaIXM = null;
+			List<MateriaPrima> listaMP = null;
+			List<MovimientoMateria> listamov = null;
+			Object[] result = validarGuardar(request);
 			
 			if(!result[0].toString().isEmpty()){
 				modelo.addAttribute("error", result[0]);
 				return Inventario(request, modelo);
 			}
 
-			bean.setId_inventario(request.getParameter("id_inventario") == null || request.getParameter("id_inventario").trim().isEmpty() ? 0 : Integer.parseInt(request.getParameter("id_inventario")));
+			bean.setId_inventario(request.getParameter("id_inventario") == null || request.getParameter("id_inventario").trim().isEmpty() ? null : Integer.parseInt(request.getParameter("id_inventario")));
 			bean.setCompromiso(0);
 			bean.setDisponible(Integer.parseInt(request.getParameter("cantSolicitada")));
 			bean.setId_establecimiento(Integer.parseInt(request.getParameter("establecimiento")));
 			bean.setId_producto(Integer.parseInt(request.getParameter("id_producto")));
 			
-			List<InventarioXMateria> listaInv = (List<InventarioXMateria>) result[1];
-			List<MateriaPrima> listaMP = (List<MateriaPrima>) result[2];
+			listaIXM = (List<InventarioXMateria>) result[1];
+			listaMP = (List<MateriaPrima>) result[2];
+			listamov = (List<MovimientoMateria>) result[3];
 			
-			if(!bean.getId_inventario().equals(0)){
-			
+			if(bean.getId_inventario() != null){
 				ColseviDao.getInstance().getInventarioMapper().updateByPrimaryKey(bean);
-				modelo.addAttribute("correcto", "Ingrediente Actualizado");
+				registrarInventario(request, listaMP, listaIXM,listamov, bean);
+				modelo.addAttribute("correcto", "Inventario actualizado");
 			}else{
 				ColseviDao.getInstance().getInventarioMapper().insert(bean);
 				
@@ -264,15 +274,24 @@ public class InventarioController extends BaseConfigController {
 				invE.setOrderByClause("id_inventario DESC");
 				bean.setId_inventario(ColseviDao.getInstance().getInventarioMapper().selectByExample(invE).get(0).getId_inventario());
 				
+				registrarInventario(request, listaMP, listaIXM,listamov, bean);
 				modelo.addAttribute("correcto", "Inventario insertado");
 			}
-
-			if(request.getParameter("detalle") != null && !request.getParameter("detalle").trim().isEmpty() && request.getParameter("detalle").trim().equals("1")){
-
-				InventarioXMateriaExample ixm = new InventarioXMateriaExample();
-				ixm.createCriteria().andId_inventarioEqualTo(bean.getId_inventario());
-				ColseviDao.getInstance().getInventarioXMateriaMapper().deleteByExample(ixm);
-
+		}catch (Exception e) {
+			modelo.addAttribute("error", "Contactar al administrador");
+		}
+		return Inventario(request, modelo);
+	}
+	
+	public void registrarInventario(HttpServletRequest request, List<MateriaPrima> listaMP, List<InventarioXMateria> listaInv, List<MovimientoMateria> listaMov, Inventario bean){
+		if(bean.getId_inventario() != null || (request.getParameter("detalle") != null && !request.getParameter("detalle").trim().isEmpty())){
+			if(listaMP != null && listaMP.size() > 0){
+				if(listaInv != null && listaInv.size() > 0){
+					InventarioXMateriaExample ixm = new InventarioXMateriaExample();
+					ixm.createCriteria().andId_inventarioEqualTo(bean.getId_inventario());
+					ColseviDao.getInstance().getInventarioXMateriaMapper().deleteByExample(ixm);
+				}
+	
 				for(MateriaPrima beanMP: listaMP){
 					beanMP.setId_establecimiento(bean.getId_establecimiento());
 					InventarioManager.ActualizarMateriaPrima(beanMP);
@@ -281,104 +300,287 @@ public class InventarioController extends BaseConfigController {
 				for(InventarioXMateria beanMateria: listaInv){
 					beanMateria.setId_inventario(bean.getId_inventario());
 					ColseviDao.getInstance().getInventarioXMateriaMapper().insertSelective(beanMateria);
-					InventarioManager.RegistrarMovimientoMateria(beanMateria.getLote(), beanMateria.getId_unidad_peso(), beanMateria.getCantidad(), bean.getId_establecimiento(), new Date(), MotivoE.ASIGNACION.getMotivoE());
+				}
+				
+				for(MovimientoMateria mov: listaMov){
+					if(mov.getId_motivo() != null)
+						InventarioManager.RegistrarMovimientoMateria(mov.getLote(), mov.getId_unidad_peso(), mov.getCantidad(), bean.getId_establecimiento(), mov.getFecha_movimiento(), mov.getId_motivo());
 				}
 			}
-		}catch (Exception e) {
-			modelo.addAttribute("error", "Contactar al administrador");
 		}
-		return Inventario(request, modelo);
 	}
 	
-	public Object[] validarGuardado(HttpServletRequest request){
-
-		Object[] obj = new Object[5];
-		List<InventarioXMateria> ListaIinv = new ArrayList<InventarioXMateria>();
+	public Object[] validarGuardar(HttpServletRequest request){
+		
+		Object[] result = new Object[5];
+		Object[] managerconversion = new Object[2];
+		Integer id_inventario = null;
+		Integer ingrediente = null;
+		Double totalAsignado = 0d;
+		InventarioXMateria invxmatv = new InventarioXMateria();//vista
+		InventarioXMateria invxmatb = new InventarioXMateria();//base de datos
+		IngredienteXProducto ingProd = new IngredienteXProducto();
+		Ingrediente ing = new Ingrediente();
+		IngredienteXProductoKey keyIXP = new IngredienteXProductoKey();
+		MateriaPrima mp = new MateriaPrima();
+		MateriaPrimaExample cxiE = new MateriaPrimaExample();
+		InventarioXMateriaExample IXME = new InventarioXMateriaExample(); 
+		List<InventarioXMateria> listaIXME = new ArrayList<InventarioXMateria>();
+		List<InventarioXMateria> listaInv = new ArrayList<InventarioXMateria>();
 		List<MateriaPrima> listaMP = new ArrayList<MateriaPrima>();
+		List<MovimientoMateria> listamov = new ArrayList<MovimientoMateria>();
+		MovimientoMateria movmat = new MovimientoMateria();
+		
 		String error = "";
 		String[] sec = request.getParameter("secuencia").split(",");
 		Integer producto = Integer.parseInt(request.getParameter("id_producto"));
 		Integer cantSolicitada = Integer.parseInt(request.getParameter("cantSolicitada"));
-		Integer umVista = 0;
-		Double opcompra = 0d,op = 0d,cantidadVista = 0d, totalAsignado = 0d;
+		ingrediente = Integer.parseInt(request.getParameter("ing" + sec[0]));
 		
 		for(int i = 0; i < sec.length ; i ++){
-			if(request.getParameter("cant" + sec[i]) != null && !request.getParameter("cant" + sec[i]).trim().isEmpty() &&
-					!request.getParameter("um" + sec[i]).trim().equals("0")){
-				cantidadVista = Double.valueOf(UtilidadManager.retirarCaracteresEspeciales(request.getParameter("cant" + sec[i])));	
-				umVista = Integer.parseInt(request.getParameter("um" + sec[i]));
-				
-				if(cantidadVista != null && !cantidadVista.equals(0)){
-					
-					MateriaPrimaExample cxiE = new MateriaPrimaExample();
-					cxiE.createCriteria().andLoteEqualTo(Integer.parseInt(sec[i])).andId_ingredienteEqualTo(Integer.parseInt(request.getParameter("ing" + sec[i])));
-					MateriaPrima MP = ColseviDao.getInstance().getMateriaPrimaMapper().selectByExample(cxiE).get(0);
-					
-					IngredienteXProductoKey keyIXP = new IngredienteXProductoKey();
-					keyIXP.setId_ingrediente(Integer.parseInt(request.getParameter("ing" + sec[i])));
-					keyIXP.setId_producto(producto);
-					IngredienteXProducto ingProd = ColseviDao.getInstance().getIngredienteXProductoMapper().selectByPrimaryKey(keyIXP);
-					
-					Ingrediente ing = ColseviDao.getInstance().getIngredienteMapper().selectByPrimaryKey(Integer.parseInt(request.getParameter("ing" + sec[i])));
-					
-					op = cantidadVista;
-					opcompra = Double.valueOf(MP.getCantidad());
-					
-					ingProd.setCantidad(ingProd.getCantidad() * cantSolicitada);
+			movmat = new MovimientoMateria();
+			invxmatv = new InventarioXMateria();
+			mp = null;
+			cxiE.clear();
+			IXME.clear();
+
+			invxmatv.setId_ingrediente(Integer.parseInt(request.getParameter("ing" + sec[i])));
+			keyIXP.setId_ingrediente(invxmatv.getId_ingrediente());
+			keyIXP.setId_producto(producto);
+			ingProd = ColseviDao.getInstance().getIngredienteXProductoMapper().selectByPrimaryKey(keyIXP);
+			ingProd.setCantidad(ingProd.getCantidad() * cantSolicitada);
 			
-					Object[] result = InventarioManager.ConversionPMayorMenor(umVista, ingProd.getId_unidad_peso(), cantidadVista);
-					op = (Double) result[0];
-					umVista = (Integer) result[1];
+			if(request.getParameter("cant" + sec[i]) != null && !request.getParameter("um" + sec[i]).trim().equals("0")){
+				invxmatv.setCantidad(Double.valueOf(request.getParameter("cant" + sec[i])));
+				invxmatv.setId_unidad_peso(Integer.parseInt(request.getParameter("um" + sec[i])));
+				invxmatv.setLote(Integer.parseInt(sec[i]));
+				
+				if(invxmatv.getCantidad() != null && !invxmatv.getCantidad().equals(0d)){
 					
-					result = InventarioManager.ConversionPMayorMenor(MP.getId_unidad_peso(), umVista, MP.getCantidad());
-					opcompra = (Double) result[0];
+					cxiE.createCriteria().andLoteEqualTo(invxmatv.getLote()).andId_ingredienteEqualTo(invxmatv.getId_ingrediente());
+					mp = ColseviDao.getInstance().getMateriaPrimaMapper().selectByExample(cxiE).get(0);
 					
-					totalAsignado =+ op;
-					if(op <= opcompra && op <= ingProd.getCantidad() && totalAsignado <= ingProd.getCantidad()){
-						InventarioXMateria ixm = new InventarioXMateria();
-						ixm.setId_ingrediente(Integer.parseInt(request.getParameter("ing" + sec[i])));
-						ixm.setCantidad(Double.valueOf(request.getParameter("cant" + sec[i])));
-						ixm.setId_unidad_peso(Integer.parseInt(request.getParameter("um" + sec[i])));
-						ixm.setLote(Integer.parseInt(sec[i]));
-						ListaIinv.add(ixm);
+					managerconversion = InventarioManager.ConversionPMayorMenor(invxmatv.getId_unidad_peso(), ingProd.getId_unidad_peso(), invxmatv.getCantidad());
+					invxmatv.setCantidad((Double) managerconversion[0]);
+					invxmatv.setId_unidad_peso((Integer) managerconversion[1]);
+					
+					if(mp.getCantidad() != null && mp.getCantidad() > 0d){
+						managerconversion = InventarioManager.ConversionPMayorMenor(mp.getId_unidad_peso(), invxmatv.getId_unidad_peso(), mp.getCantidad());
+						mp.setCantidad((Double) managerconversion[0]);
+						mp.setId_unidad_peso((Integer) managerconversion[1]);
+					}else{
+						mp.setCantidad(0d);
+					}
+					
+					if(request.getParameter("id_inventario") != null && !request.getParameter("id_inventario").trim().isEmpty()){
+						id_inventario = Integer.parseInt(request.getParameter("id_inventario"));
+						IXME.createCriteria().andId_inventarioEqualTo(id_inventario).andId_ingredienteEqualTo(invxmatv.getId_ingrediente()).andLoteEqualTo(invxmatv.getLote());
+						listaIXME = ColseviDao.getInstance().getInventarioXMateriaMapper().selectByExample(IXME);
 						
-						opcompra -= op;
-						if(opcompra < 1){
-							result = InventarioManager.conversionEncontrarMayorUnidad(umVista, opcompra);
-							opcompra = (Double) result[0];
-							umVista = (Integer) result[1];
-						}else{
+						if(listaIXME != null && listaIXME.size() > 0){
+							invxmatb = listaIXME.get(0);
+							managerconversion = InventarioManager.ConversionPMayorMenor(invxmatb.getId_unidad_peso(), invxmatv.getId_unidad_peso(), invxmatb.getCantidad());
+							invxmatb.setCantidad((Double) managerconversion[0]);
+							invxmatb.setId_unidad_peso((Integer) managerconversion[1]);
 							
-							result = InventarioManager.conversionMOptima(umVista, opcompra);
-							opcompra = (Double) result[0];
-							umVista = (Integer) result[1];
+							if(!invxmatb.getCantidad().equals(invxmatv.getCantidad()) || (!invxmatb.getId_unidad_peso().equals(invxmatv.getId_unidad_peso()))){
+								managerconversion = InventarioManager.ConversionPMayorMenor(invxmatb.getId_unidad_peso(), invxmatv.getId_unidad_peso(), invxmatb.getCantidad());
+								invxmatb.setCantidad((Double) managerconversion[0]);
+								invxmatb.setId_unidad_peso((Integer) managerconversion[1]);
+								
+								if(mp.getCantidad().equals(0d)){
+									if(invxmatv.getCantidad() > invxmatb.getCantidad()){
+										error += "No hay materia prima disponible<br/>";
+									}else{
+										movmat.setId_motivo(MotivoE.DEVOLUCION.getMotivoE());
+										movmat.setCantidad(invxmatb.getCantidad() - invxmatv.getCantidad());
+										mp.setCantidad(invxmatb.getCantidad() - invxmatv.getCantidad());
+										movmat.setId_unidad_peso(invxmatb.getId_unidad_peso());
+										mp.setId_unidad_peso(invxmatb.getId_unidad_peso());
+									}
+								}else 
+								if((invxmatv.getCantidad() > invxmatb.getCantidad()) || (invxmatv.getId_unidad_peso() > invxmatb.getId_unidad_peso())){
+									if((invxmatv.getCantidad() <= mp.getCantidad()) || (invxmatv.getId_unidad_peso() <= mp.getId_unidad_peso())){
+										//asignar
+										if((invxmatv.getCantidad() - mp.getCantidad()) < 1){
+											mp.setCantidad(mp.getCantidad() - invxmatv.getCantidad() + invxmatb.getCantidad());
+											if((mp.getCantidad() - invxmatv.getCantidad()) < 1)
+												movmat.setCantidad(invxmatv.getCantidad() - mp.getCantidad());
+											else
+											movmat.setCantidad(mp.getCantidad() - invxmatv.getCantidad());
+										}else{
+											mp.setCantidad(invxmatv.getCantidad() - mp.getCantidad() - invxmatb.getCantidad());
+											movmat.setCantidad(invxmatv.getCantidad() - mp.getCantidad());
+										}
+										movmat.setId_motivo(MotivoE.ASIGNACION.getMotivoE());
+										movmat.setId_unidad_peso(invxmatv.getId_unidad_peso());
+									}else{
+										error +="No hay materia prima disponible </br>";
+									}
+								}else if((invxmatv.getCantidad() < invxmatb.getCantidad()) || (invxmatv.getId_unidad_peso() < invxmatb.getId_unidad_peso())){
+									if((invxmatv.getCantidad() <= mp.getCantidad()) || (invxmatv.getId_unidad_peso() <= mp.getId_unidad_peso())){
+										//desasignar
+										mp.setCantidad(mp.getCantidad() + invxmatv.getCantidad());
+										movmat.setId_motivo(MotivoE.DEVOLUCION.getMotivoE());
+										if((invxmatv.getCantidad() - mp.getCantidad()) < 1){
+											movmat.setCantidad(mp.getCantidad() - invxmatv.getCantidad());
+										}else{
+											movmat.setCantidad(invxmatv.getCantidad() - mp.getCantidad());
+										}
+										movmat.setId_unidad_peso(mp.getId_unidad_peso());
+									}else{
+										error +="No hay materia prima disponible </br>";
+									}
+								}	
+							}
+						}else{
+							if((invxmatv.getCantidad() - mp.getCantidad()) < 1){
+								mp.setCantidad(mp.getCantidad() - invxmatv.getCantidad());
+								movmat.setCantidad(mp.getCantidad() - invxmatv.getCantidad());
+							}else{
+								mp.setCantidad(invxmatv.getCantidad() - mp.getCantidad());
+								movmat.setCantidad(invxmatv.getCantidad() - mp.getCantidad());
+							}
+							movmat.setId_motivo(MotivoE.ASIGNACION.getMotivoE());
+							
 						}
+					}else{
+						movmat.setId_motivo(MotivoE.ASIGNACION.getMotivoE());
+						movmat.setCantidad(invxmatv.getCantidad());
+						movmat.setId_unidad_peso(invxmatv.getId_unidad_peso());
 						
-						MateriaPrima mp = new MateriaPrima();
-						mp.setCantidad(opcompra);
-						mp.setId_unidad_peso(umVista);
-						mp.setLote(Integer.parseInt(sec[i]));
+						if((invxmatv.getCantidad() - mp.getCantidad()) < 1)
+							mp.setCantidad(mp.getCantidad() - invxmatv.getCantidad());
+						else
+							mp.setCantidad(invxmatv.getCantidad() - mp.getCantidad());
+					}
+					
+					totalAsignado += invxmatv.getCantidad();
+					
+					if(ingrediente != null && (!ingrediente.equals(invxmatv.getId_ingrediente()) || i == (sec.length - 1))){
+						if(totalAsignado < Double.valueOf(ingProd.getCantidad())){
+							error += "La cantidad ingresada es inferior a la cantidad solicitada <br/>";
+						}else if(totalAsignado > Double.valueOf(ingProd.getCantidad())){
+							error += "La cantidad ingresada supera la cantidad solicitada <br/>";
+						}else{
+							totalAsignado = 0d;					
+						}
+					}
+					
+					if(totalAsignado <= ingProd.getCantidad()){
+						movmat.setFecha_movimiento(new Date());
+						movmat.setLote(invxmatv.getLote());
+						listamov.add(movmat);
+						if(invxmatv.getCantidad() < 1){
+							managerconversion = InventarioManager.conversionEncontrarMayorUnidad(invxmatv.getId_unidad_peso(), invxmatv.getCantidad());
+						}else{
+							managerconversion = InventarioManager.conversionMOptima(invxmatv.getId_unidad_peso(), invxmatv.getCantidad());
+						}
+						invxmatv.setCantidad((Double) managerconversion[0]);
+						invxmatv.setId_unidad_peso((Integer) managerconversion[1]);
+						listaInv.add(invxmatv);
+						
+						if(mp.getCantidad() < 1){
+							if(mp.getId_unidad_peso() != null)
+							managerconversion = InventarioManager.conversionEncontrarMayorUnidad(mp.getId_unidad_peso(), mp.getCantidad());
+						}else{
+							managerconversion = InventarioManager.conversionMOptima(mp.getId_unidad_peso(), mp.getCantidad());
+						}
+						if(mp.getId_unidad_peso() != null){
+							mp.setCantidad((Double) managerconversion[0]);
+							mp.setId_unidad_peso((Integer) managerconversion[1]);
+						}
 						listaMP.add(mp);
-						
 					}else{
 						if(totalAsignado > ingProd.getCantidad()){
 							error += "La cantidad seleccionada supera el numero requerido<br/>";
+						}else if(totalAsignado > mp.getCantidad()){
+							ing = ColseviDao.getInstance().getIngredienteMapper().selectByPrimaryKey(invxmatv.getId_ingrediente());
+							error += "La cantidad seleccionada del ingrediente " + ing.getNombre() + " supera la capacidad de la materia prima<br/>";
 						}
-						if(op > opcompra){
-							error += "La cantidad seleccionada del lote" + sec[i] +  " supera la capacidad disponible<br/>";
+					}
+				}
+			}else{
+				//consultar 
+				if(request.getParameter("id_inventario") != null && !request.getParameter("id_inventario").trim().isEmpty()){
+
+					invxmatv.setLote(Integer.parseInt(sec[i]));
+					invxmatv.setId_ingrediente(Integer.parseInt(request.getParameter("ing" + sec[i])));
+					
+					cxiE.createCriteria().andLoteEqualTo(invxmatv.getLote()).andId_ingredienteEqualTo(invxmatv.getId_ingrediente());
+					mp = ColseviDao.getInstance().getMateriaPrimaMapper().selectByExample(cxiE).get(0);
+					
+					id_inventario = Integer.parseInt(request.getParameter("id_inventario"));
+					IXME.createCriteria().andId_inventarioEqualTo(id_inventario).andId_ingredienteEqualTo(invxmatv.getId_ingrediente()).andLoteEqualTo(invxmatv.getLote());
+					listaIXME = ColseviDao.getInstance().getInventarioXMateriaMapper().selectByExample(IXME);
+					
+					if(listaIXME != null && listaIXME.size() > 0){
+						invxmatb = listaIXME.get(0);
+						if(mp.getCantidad() == null || mp.getCantidad().equals(0d)){
+							mp.setCantidad(invxmatb.getCantidad());
+							mp.setId_unidad_peso(invxmatb.getId_unidad_peso());
+							listaMP.add(mp);
+							
+							movmat.setCantidad(mp.getCantidad());
+							movmat.setId_unidad_peso(mp.getId_unidad_peso());
+							movmat.setId_motivo(MotivoE.DEVOLUCION.getMotivoE());
+							movmat.setFecha_movimiento(new Date());
+							movmat.setLote(invxmatv.getLote());
+							listamov.add(movmat);
+						}else{
+							managerconversion = InventarioManager.ConversionPMayorMenor(invxmatb.getId_unidad_peso(), mp.getId_unidad_peso(), invxmatb.getCantidad());
+							invxmatb.setCantidad((Double) managerconversion[0]);
+							invxmatb.setId_unidad_peso((Integer) managerconversion[1]);
+							
+							mp.setCantidad(invxmatb.getCantidad() + mp.getCantidad());
+							mp.setId_unidad_peso(invxmatb.getId_unidad_peso());
+							listaMP.add(mp);
+							
+							movmat.setCantidad(mp.getCantidad());
+							movmat.setId_unidad_peso(mp.getId_unidad_peso());
+							movmat.setId_motivo(MotivoE.DEVOLUCION.getMotivoE());
+							movmat.setFecha_movimiento(new Date());
+							movmat.setLote(invxmatv.getLote());
+							listamov.add(movmat);
 						}
-						if(op > ingProd.getCantidad()){
-							error += "La cantidad seleccionada del ingrediente " + ing.getNombre() + " supera la capacidad configurada para el producto<br/>";
+						
+						if(ingrediente != null && (!ingrediente.equals(invxmatv.getId_ingrediente()) || i == (sec.length - 1))){
+							if(totalAsignado < Double.valueOf(ingProd.getCantidad())){
+								error += "La cantidad ingresada es inferior a la cantidad solicitada <br/>";
+							}else if(totalAsignado > Double.valueOf(ingProd.getCantidad())){
+								error += "La cantidad ingresada supera la cantidad solicitada <br/>";
+							}else{
+								totalAsignado = 0d;					
+							}
 						}
 					}
 				}
 			}
 		}
-		obj[0] = error;
-		obj[1] = ListaIinv;
-		obj[2] = listaMP;
 		
-		return obj;
+		result[0] = error;
+		result[1] = listaInv;
+		result[2] = listaMP;
+		result[3] = listamov;
+		
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Inventario/Inv/preprocesador")
+	public void preprocesador(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
+		try{
+			Object[] validacion = validarGuardar(request);
+			
+			if(!validacion[0].toString().isEmpty()){
+				result.put("error", validacion[0]);
+			}
+		}catch(Exception e){
+			result.put("error", "Contactar al administrador");
+		}
+		
+		result.writeJSONString(response.getWriter());
 	}
 	
 	@RequestMapping("/Inventario/Inv/buscarProd")

@@ -7,7 +7,6 @@
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 </head>
 <body>
-
 	<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
 	<section id="container" class="">
 		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
@@ -46,7 +45,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 								<label>Fecha Compra</label>
-								<input type="text" class="form-control" id="fechaF" name="filtro"/>
+								<input type="text" class="form-control" id="fechaF" name="filtro" data-field="datetime" data-format="yyyy-MM-dd HH:mm:ss"/>
 								<label>Fecha actual</label> <input type="checkbox" id="fechaMF" name="filtro"/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -86,14 +85,19 @@
 										</div>
 										<div class="modal-body">
 											<div class="row">
-											<input type="hidden" id="id_compra" name="id_compra"/>
-											
+												<div class="alert alert-danger fade in" id="errorDivF" style="display: none;">
+													 <button data-dismiss="alert" class="close close-sm" type="button">
+													 	 <i class="fa fa-times"></i>
+													 </button>
+													 <strong>Error! </strong> <div id="mensajeEr"></div>
+											    </div>
+												<input type="hidden" id="id_compra" name="id_compra"/>
 											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 												<section class="panel">
 							                          <header class="panel-heading tab-bg-dark-navy-blue">
 							                              <ul class="nav nav-tabs">
 							                                  <li class="active">
-							                                      <a data-toggle="tab" href="#producto">Producto</a>
+							                                      <a data-toggle="tab" href="#producto">Compra</a>
 							                                  </li>
 							                                  <li class="">
 							                                      <a data-toggle="tab" href="#ingview" id="carga">Ingredientes</a>
@@ -126,8 +130,8 @@
 																	<input type="text" class="form-control" id="fecha_compra" name="fecha_compra" data-field="datetime" data-format="yyyy-MM-dd HH:mm:ss"/>
 																</div>
 																<div class="col-xs-6 col-sm-3 col-md-3">
-																	<label>*Valor</label>
-																	<input type="text" class="form-control" id="valorsin" name="valorsin"/>
+																	<label>Valor</label>
+																	<input type="text" class="form-control" id="valorsin" name="valorsin" disabled="disabled"/>
 																</div>
 																<div class="col-xs-6 col-sm-3 col-md-3">
 																	<label>Pagado</label> <br/>
@@ -147,14 +151,15 @@
 																</div>	
 																<input type="hidden" value="0" id="count" name="count"/>
 																<div class="col-xs-12 col-sm-12 col-md-12" id="dynamic">
-																	<div class="col-xs-6 col-sm-3 col-md-3">
+																
+																	<div class="col-xs-12 col-sm-2 col-md-2">
 																		<div id="Ing"></div>	
 																	</div>
-																	<div class="col-xs-6 col-sm-3 col-md-3">
+																	<div class="col-xs-12 col-sm-2 col-md-2">
 																		<label>*cantidad</label>
-																		<input type="number" class="form-control" id="cantidad" name="cantidad" min="0"/>
+																		<input type="text" class="form-control" id="cantidad" name="cantidad" min="0"/>
 																	</div>
-																	<div class="col-xs-6 col-sm-3 col-md-3">
+																	<div class="col-xs-12 col-sm-2 col-md-2">
 																		<label>*Tipo peso</label>
 																		<select class="form-control" id="tipopeso">
 																			<option value="">Seleccione</option>
@@ -163,27 +168,32 @@
 																			</c:forEach>
 																		</select>
 																	</div>
-																	<div class="col-xs-6 col-sm-3 col-md-3"><br/>
+																	<div class="col-xs-12 col-sm-2 col-md-2">
+																		<label>*V. Unitario</label>
+																		<input type="text" class="form-control" id="vunit" pattern="[0-9]{3,6}"/> 
+																	</div>
+																	<div class="col-xs-12 col-sm-2 col-md-2">
 																		<button type="button" class="btn btn-primary" id="adicion"> Adicionar</button>
 																	</div>
-																	<div id="IngDynamic" class="col-xs-12 col-sm-12 col-md-12">
-																	<br/>
-																		<table class="display table table-bordered table-striped dataTable">
-																			<thead>
-																				<tr>
-																					<th>Ingrediente</th>
-																					<th>Cantidad</th>
-																					<th class="hidden-xs">Tipo de Peso</th>
-																					<th>Fecha de vencimiento</th>
-																					<th>Acción</th>
-																				</tr>
-																			</thead>
-																			<tbody></tbody>
-																		</table>
-																	</div>
-																	
 																</div>
-																
+																	<div id="IngDynamic" class="col-xs-12 col-sm-12 col-md-12">
+																		<br/>
+																		<section id="flip-scroll">
+																			<table class="table table-bordered table-striped table-condensed cf">
+																				<thead class="cf">
+																					<tr>
+																						<th>Ingrediente</th>
+																						<th>Cantidad</th>
+																						<th>Tipo de Peso</th>
+																						<th>Vence</th>
+																						<th>V. Unitario</th>
+																						<th>Acción</th>
+																					</tr>
+																				</thead>
+																				<tbody></tbody>
+																			</table>
+																		</section>
+																	</div>
 							                                  </div>
 							                              </div>
 							                          </div>
@@ -192,8 +202,8 @@
 											</div>
 										</div>
 										<div class="modal-footer">
-											<button class="btn btn-warning" type="submit" id="validarModificacion">Guardar</button>
-											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();" data-dismiss="modal">Cerrar</button>
+											<button class="btn btn-warning" type="button" id="validarModificacion" onclick="preprocesar();">Guardar</button>
+											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
 										</div>
 									</div>
 								</form>
@@ -248,10 +258,6 @@
 		titulos["establecimiento"] = "establecimiento";
 		titulos["Estado"] = "Estado";
 		titulos["id_compraBoton"] = "Estado";
-		
-		clase = new Array();
-		clase['proveedor'] = 'hidden-xs';
-		clase['Estado'] = 'hidden-xs';
 		
 		boton = new Array();
 		boton['id_compraBoton'] = [

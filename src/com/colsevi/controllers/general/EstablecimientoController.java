@@ -90,14 +90,14 @@ public class EstablecimientoController extends BaseConfigController {
 					opciones.put("id_establecimiento", map.get("id_establecimiento"));
 					opciones.put("nombreEsta", map.get("nombreEsta"));
 					opciones.put("descipEsta", map.get("descipEsta"));	
-					opciones.put("hora_inicio", map.get("hora_inicio"));
-					opciones.put("hora_fin", map.get("hora_fin"));
+					opciones.put("hora_inicio", map.get("hora_inicio") != null ? map.get("hora_inicio") : "");
+					opciones.put("hora_fin", map.get("hora_fin") != null ? map.get("hora_fin") : "");
 					opciones.put("id_direccion", map.get("id_direccion") != null ? map.get("id_direccion") : "");	
 					opciones.put("direccion", map.get("direccion") != null ? map.get("direccion") : "");	
 					opciones.put("barrio", map.get("barrio") != null ? map.get("barrio") : "");
 					opciones.put("descripDir", map.get("descripDir") != null ? map.get("descripDir") : "");
 					opciones.put("id_telefono", map.get("id_telefono") != null ? map.get("id_telefono") : "");
-					opciones.put("telTipo", map.get("telTipo") != null ? map.get("telTipo") : "");
+					opciones.put("telTipo", map.get("telTipo") != null ? map.get("telTipo") : "0");
 					opciones.put("telefono", map.get("telefono") != null ? map.get("telefono") : "");
 					opciones.put("id_correo", map.get("id_correo") != null ? map.get("id_correo") : "");
 					opciones.put("correo", map.get("correo") != null ? map.get("correo") : "");
@@ -127,38 +127,43 @@ public class EstablecimientoController extends BaseConfigController {
 		Correo beanC = (Correo) result[4];
 		
 		try{
-			if(beanD.getId_direccion() != null){
-				ColseviDao.getInstance().getDireccionMapper().updateByPrimaryKeySelective(beanD);
-			}else{
-				ColseviDao.getInstance().getDireccionMapper().insertSelective(beanD);
-				
-				DireccionExample DE = new DireccionExample();
-				DE.setOrderByClause("id_direccion DESC");
-				beanD.setId_direccion(ColseviDao.getInstance().getDireccionMapper().selectByExample(DE).get(0).getId_direccion());
+			if(beanD.getId_direccion() != null || beanD.getDireccion() != null){
+				if(beanD.getId_direccion() != null){
+					ColseviDao.getInstance().getDireccionMapper().updateByPrimaryKeySelective(beanD);
+				}else{
+					ColseviDao.getInstance().getDireccionMapper().insertSelective(beanD);
+					
+					DireccionExample DE = new DireccionExample();
+					DE.setOrderByClause("id_direccion DESC");
+					beanD.setId_direccion(ColseviDao.getInstance().getDireccionMapper().selectByExample(DE).get(0).getId_direccion());
+				}
 			}
 			bean.setId_direccion(beanD.getId_direccion());
 			
-			if(beanT.getId_telefono() != null){
-				ColseviDao.getInstance().getTelefonoMapper().updateByPrimaryKeySelective(beanT);
-			}else{
-				ColseviDao.getInstance().getTelefonoMapper().insertSelective(beanT);
-				
-				TelefonoExample TE = new TelefonoExample();
-				TE.setOrderByClause("id_telefono DESC");
-				beanT.setId_telefono(ColseviDao.getInstance().getTelefonoMapper().selectByExample(TE).get(0).getId_telefono());
+			if(beanT.getId_telefono() != null || beanT.getTelefono() != null){
+				if(beanT.getId_telefono() != null){
+					ColseviDao.getInstance().getTelefonoMapper().updateByPrimaryKeySelective(beanT);
+				}else{
+					ColseviDao.getInstance().getTelefonoMapper().insertSelective(beanT);
+					
+					TelefonoExample TE = new TelefonoExample();
+					TE.setOrderByClause("id_telefono DESC");
+					beanT.setId_telefono(ColseviDao.getInstance().getTelefonoMapper().selectByExample(TE).get(0).getId_telefono());
+				}
 			}
 			bean.setId_telefono(beanT.getId_telefono());
 			
-			if(beanC.getId_correo() != null){
-				ColseviDao.getInstance().getCorreoMapper().updateByPrimaryKeySelective(beanC);
-			}else{
-				ColseviDao.getInstance().getCorreoMapper().insertSelective(beanC);
-				
-				CorreoExample CE = new CorreoExample();
-				CE.setOrderByClause("id_correo DESC");
-				beanC.setId_correo(ColseviDao.getInstance().getCorreoMapper().selectByExample(CE).get(0).getId_correo());
-			}
-			
+			if(beanC.getId_correo() != null || beanC.getCorreo() != null){
+				if(beanC.getId_correo() != null){
+					ColseviDao.getInstance().getCorreoMapper().updateByPrimaryKeySelective(beanC);
+				}else{
+					ColseviDao.getInstance().getCorreoMapper().insertSelective(beanC);
+					
+					CorreoExample CE = new CorreoExample();
+					CE.setOrderByClause("id_correo DESC");
+					beanC.setId_correo(ColseviDao.getInstance().getCorreoMapper().selectByExample(CE).get(0).getId_correo());
+				}
+			} 
 			bean.setId_correo(beanC.getId_correo());
 			
 			if(bean.getId_establecimiento() != null){
@@ -170,6 +175,14 @@ public class EstablecimientoController extends BaseConfigController {
 			}
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
+			if(bean.getId_establecimiento() == null){
+				if(bean.getId_correo() != null)
+				ColseviDao.getInstance().getCorreoMapper().deleteByPrimaryKey(bean.getId_correo());
+				if(bean.getId_direccion() != null)
+					ColseviDao.getInstance().getDireccionMapper().deleteByPrimaryKey(bean.getId_direccion());
+				if(bean.getId_telefono() != null)
+					ColseviDao.getInstance().getTelefonoMapper().deleteByPrimaryKey(bean.getId_telefono());
+			}
 		}
 		return Establecimiento(request, modelo);
 	}
@@ -182,7 +195,6 @@ public class EstablecimientoController extends BaseConfigController {
 		Telefono beanT = new Telefono();
 		Correo beanC = new Correo();
 		String error = "";
-		
 		
 		if(request.getParameter("id_establecimiento") != null && !request.getParameter("id_establecimiento").trim().isEmpty())
 			beanE.setId_establecimiento(Integer.parseInt(request.getParameter("id_establecimiento")));

@@ -32,8 +32,9 @@
       <form class="form-signin" action="${pageContext.request.contextPath}/login/Ingresar.html" method="post">
         <h2 class="form-signin-heading">ColSevi</h2>
         <div class="login-wrap">
-            <input type="text" class="form-control" placeholder="Usuario" autofocus id="usuario" name="usuario" maxlength="20" required/>
-            <input type="password" class="form-control" placeholder="Contraseña" id="clave" name="clave" maxlength="20" required/>
+            <input type="text" class="form-control" placeholder="Usuario" autofocus id="usuario" name="usuario" required  
+            	pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{6,20}$" title="letras y números entre 6 y 20 caracteres"/>
+            <input type="password" class="form-control" placeholder="Contraseña" id="clave" name="clave" required/>
             <label class="checkbox">
                 <span class="pull-right">
                     <a data-toggle="modal" href="#myModal"> Olvidaste tu contraseña</a>

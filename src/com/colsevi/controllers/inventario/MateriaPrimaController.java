@@ -90,11 +90,11 @@ public class MateriaPrimaController extends BaseConfigController{
 				options = new JSONObject();
 				options.put("lote", map.get("lote"));
 				options.put("loteid", map.get("lote"));
-				options.put("cantidad", map.get("cantidad"));
+				options.put("cantidad", map.get("cantidad") == null ? "0" : map.get("cantidad"));
 				options.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatoFechaVistaO(map.get("fecha_vencimiento")) : "");
 				options.put("nombreIng", map.get("nombreIng"));
 				options.put("nombreEsta", map.get("nombreEsta"));
-				options.put("nombreUp", map.get("nombreUp"));
+				options.put("nombreUp", map.get("nombreUp") == null ? "" : map.get("nombreUp"));
 				options.put("id_unidad_peso", map.get("id_unidad_peso"));
 				options.put("id_establecimiento", map.get("id_establecimiento"));
 				
@@ -157,6 +157,10 @@ public class MateriaPrimaController extends BaseConfigController{
 						result = InventarioManager.conversionEncontrarMayorUnidad(MP.getId_unidad_peso(), conv);
 						conv = (Double) result[0];
 						MP.setId_unidad_peso((Integer) result[1]);
+					}else{
+						result = InventarioManager.conversionMOptima(MP.getId_unidad_peso(), conv);
+						conv = (Double) result[0];
+						MP.setId_unidad_peso((Integer) result[1]);
 					}
 				}
 
@@ -166,11 +170,15 @@ public class MateriaPrimaController extends BaseConfigController{
 				materiaV.setId_ingrediente(MP.getId_ingrediente());
 				materiaV.setFecha_vencimiento(MP.getFecha_vencimiento());
 				ColseviDao.getInstance().getMateriaPrimaMapper().insertSelective(materiaV);
+				
 				materiaV.setCantidad(conv);
 				materiaV.setLote(MP.getLote());
 				materiaV.setId_unidad_peso(MP.getId_unidad_peso());
+				materiaV.setId_establecimiento(MP.getId_establecimiento());
 				InventarioManager.ActualizarMateriaPrima(materiaV);
+				
 				InventarioManager.RegistrarMovimientoMateria(MP.getLote(), MP.getId_unidad_peso(), conv, materiaV.getId_establecimiento(), new Date(), motivo);
+				model.addAttribute("correcto", "Movimiento realizado");
 			}else{
 				model.addAttribute("error", "Seleccionar un ingrediente");
 			}

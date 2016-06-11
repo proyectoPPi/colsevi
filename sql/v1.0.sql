@@ -139,6 +139,7 @@ CREATE TABLE compra(
     id_establecimiento INT,
     valor DECIMAL(12,2) NOT NULL,
     fecha_compra DATETIME NOT NULL,
+    iva INTEGER,
     pagado BOOLEAN DEFAULT FALSE,
     motivo VARCHAR(200),
     PRIMARY KEY(id_compra),
@@ -209,9 +210,10 @@ CREATE TABLE compra_x_ingrediente(
     id_ingrediente INT,
     id_unidad_peso INT NOT NULL,
     cantidad DOUBLE NOT NULL,
+    vunitario DECIMAL(12,2),
     fecha_vencimiento DATETIME,
     lote INT,
-    PRIMARY KEY(lote,id_compra,id_ingrediente),
+    PRIMARY KEY(id_compra,id_ingrediente),
 	CONSTRAINT fk_cxi FOREIGN KEY (id_compra) REFERENCES compra(id_compra),
     CONSTRAINT fk_icx FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
     CONSTRAINT fk_ucxi FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso),
@@ -243,7 +245,6 @@ CREATE TABLE movimiento_materia(
 
 CREATE TABLE tipo_producto(
     id_tipo_producto INT AUTO_INCREMENT,
-    padre VARCHAR(50) DEFAULT NULL,
 	nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
     PRIMARY KEY(id_tipo_producto)

@@ -71,7 +71,13 @@
 										</div>
 										<div class="modal-body">
 											<div class="row">
-												
+												<div class="alert alert-danger fade in" id="errorDivF" style="display: none;">
+													<button data-dismiss="alert" class="close close-sm" type="button">
+														<i class="fa fa-times"></i>
+													</button>
+													<strong>Error! </strong> <div id="mensajeEr"></div>
+												</div>
+																								
 												<input type="hidden" id="id_inventario" name="id_inventario"/>
 												<input type="hidden" id="id_producto" name="id_producto"/>
 												<input type="hidden" id="secuencia" name="secuencia"/>
@@ -131,7 +137,7 @@
 											</div>
 										</div>
 										<div class="modal-footer">
-											<button class="btn btn-warning" type="submit">Guardar</button>
+											<button class="btn btn-warning" type="button" id="formGuardar" onclick="preprocesar();">Guardar</button>
 											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
 											<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 										</div>

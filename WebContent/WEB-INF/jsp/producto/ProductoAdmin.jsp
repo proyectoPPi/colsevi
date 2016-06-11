@@ -5,6 +5,18 @@
    <meta charset="UTF-8" />
 	<title>Productos</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
+	<style type="text/css">
+		input[type="file"]{
+			display: block;
+		}
+		.invisibleUpload{
+			display: block;
+			visibility: hidden;
+			width: 0;
+			height: 0;
+		}
+	
+	</style>
 </head>
 <body>
 	<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
@@ -30,12 +42,7 @@
 								<select class="form-control" id="clasificarF" name="filtro">
 									<option value="0">Tipo Producto</option>
 									<c:forEach items="${listaTipo}" var="tipo">
-										<c:if test="${tipo.seleccionable}">
-											<option value="${tipo.id}" disabled>${tipo.nombre}</option>	
-										</c:if>
-										<c:if test="${!tipo.seleccionable}">
-											<option value="${tipo.id}">--- ${tipo.nombre}</option>	
-										</c:if>
+										<option value="${tipo.id_tipo_producto}" disabled>${tipo.nombre}</option>	
 									</c:forEach>
 								</select>
 							</div>
@@ -58,7 +65,7 @@
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog  modal-lg">
 							<div class="modal-content-wrap">
-								<form method="post" action="${pageContext.request.contextPath}/Producto/Admin/Guardar.html?" id="formulario">
+								<form method="post" action="${pageContext.request.contextPath}/Producto/Admin/Guardar.html?" id="formulario" enctype="multipart/form-data" >
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -92,12 +99,7 @@
 																		<select class="form-control" id="tipoP" name="tipoP">
 																			<option value="0">Tipo Producto</option>
 																			<c:forEach items="${listaTipo}" var="tipo">
-																				<c:if test="${tipo.seleccionable}">
-																					<option value="${tipo.id}" disabled>${tipo.nombre}</option>	
-																				</c:if>
-																				<c:if test="${!tipo.seleccionable}">
-																					<option value="${tipo.id}">--- ${tipo.nombre}</option>	
-																				</c:if>
+																				<option value="${tipo.id_tipo_producto}">${tipo.nombre}</option>	
 																			</c:forEach>
 																		</select>
 																	</div>
@@ -115,6 +117,14 @@
 																		<input type="number" class="form-control" id="venta" name="venta" data-bv-notempty="true"/>
 																	</div>
 								                                  
+								                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+																		<label>Imagen</label>
+																		<input type="file" id="fileview" name="fileview" class="invisibleUpload"/> 
+																		<div id="image">
+																			<span class="badge bg-warning" id="localImage">local</span>
+																			<span class="badge bg-warning">web</span>
+																		</div>
+																	</div>
 								                                  </div>
 								                                  <div id="ingview" class="tab-pane">
 								                                  	<div class="col-xs-12 col-sm-6 col-md-6">
@@ -188,7 +198,6 @@
 	<c:import url="/WEB-INF/jsp/plantilla/javascript_genericos.jsp"></c:import>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/producto/productoAdmin.js"></script>
 	<script type="text/javascript">
-	
 		
 		titulos = new Array();
 		titulos["id_producto"] = "ID";
@@ -196,12 +205,7 @@
 		titulos["nombre"] = "Nombre";
 		titulos["descripcion"] = "Descripci&#243;n";
 		titulos["tipoP"] = "Tipo";
-		titulos["venta"] = "Venta";
-		
-		clase = new Array();
-		clase['tipoP'] = 'hidden-xs';
-		clase['descripcion'] = 'hidden-xs';
-		
+		titulos["ventaf"] = "Venta";
 	</script>
 </body>
 </html>

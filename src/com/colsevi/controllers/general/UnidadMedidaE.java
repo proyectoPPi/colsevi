@@ -4,7 +4,8 @@ public enum UnidadMedidaE {
 	KILO(1),
 	LIBRA(2),
 	GRAMO(3),
-	LITRO(4);
+	LITRO(4),
+	MILILITRO(5),;
 	
  private final int unidadM;
 

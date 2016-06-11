@@ -15,6 +15,7 @@ function Tabla(pagina){
 
 function Limpiar(){
 	HLimpliar();
+	jQuery('#telTipo').val('0');
 }
 
 function Eliminar(){
@@ -23,5 +24,4 @@ function Eliminar(){
 
 function CargarFormulario(Id){
 	HCargarFormulario(Id);
-	jQuery('#valorsin').val(BuscarRegistro(Id)['valorsin']);
 }

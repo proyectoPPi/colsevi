@@ -56,24 +56,24 @@
 										</div>
 										<div class="modal-body">
 											<div class="row">
+												<div class="alert alert-danger fade in" id="errorDivF" style="display: none;">
+													 <button data-dismiss="alert" class="close close-sm" type="button">
+													 	 <i class="fa fa-times"></i>
+													 </button>
+													 <strong>Error! </strong> <div id="mensajeEr"></div>
+											    </div>
 												<input type="hidden" id="id_proveedor" name="id_proveedor"/>
 												<input type="hidden" id="id_direccion" name="id_direccion"/>
 												<input type="hidden" id="id_telefono" name="id_telefono"/>
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+												<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 													<label>*Nombre</label>
-													<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
+													<input type="text" class="form-control" id="nombre" name="nombre" maxlength="30"/>
 												</div>
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+												<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 													<label>*Descripci&#243;n</label>
-													<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
+													<input type="text" class="form-control" id="descripcion" name="descripcion" maxlength="50"/>
 												</div>
-												
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>*Direcci&#243;n</label>
-													<input type="text" class="form-control" id="direccion" name="direccion" data-bv-notempty="true"/>
-												</div>
-											
-												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+												<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 													<label>Tipo proveedor</label>
 													<select class="form-control" id="tipoProv" name="tipoProv">
 														<option value="0">Seleccione</option>
@@ -84,45 +84,41 @@
 												</div>
 												
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-													<h4><strong>Teléfono</strong></h4>
-													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-														<label>*Número</label>
-														<input type="text" class="form-control" id="telefono" name="telefono" data-bv-notempty="true"/>
+													<h4><strong>Dirección</strong></h4>
+													<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+														<label>*Direcci&#243;n</label>
+														<input type="text" class="form-control" id="direccion" name="direccion" maxlength="50"/>
 													</div>
-													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-														<label>Tipo teléfono</label>
-														<select class="form-control" id="tipoTel" name="tipoTel">
-															<option value="0">Seleccione</option>
-																<c:forEach items="${listaTipoTel}" var="tipoTel">
-																	<option value="${tipoTel.id_tipo_telefono}">${tipoTel.nombre}</option>
-																</c:forEach>
-														</select>
+													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+														<label>*Barrio</label>
+														<input type="text" class="form-control" id="barrio" name="barrio" maxlength="50"/>
+													</div>
+													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+														<label>*Descipción</label>
+														<input type="text" class="form-control" id="descripDir" name="descripDir" maxlength="100"/>
 													</div>
 												</div>
 												
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-													<h4><strong>Dirección</strong></h4>
-													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+													<h4><strong>Teléfono</strong></h4>
+													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 														<label>*Número</label>
-														<input type="text" class="form-control" id="NDireccion" name="NDireccion" data-bv-notempty="true"/>
+														<input type="text" class="form-control" id="telefono" name="telefono" maxlength="10"/>
 													</div>
-													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-														<label>*Barrio</label>
-														<input type="text" class="form-control" id="barrio" name="barrio" data-bv-notempty="true"/>
+													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+														<label>Tipo teléfono</label>
+														<select class="form-control" id="telTipo" name="telTipo">
+															<option value="0">Seleccione</option>
+															<c:forEach items="${listaTipoTel}" var="tipoTel">
+																<option value="${tipoTel.id_tipo_telefono}">${tipoTel.nombre}</option>
+															</c:forEach>
+														</select>
 													</div>
-													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-														<label>*Descipción</label>
-														<input type="text" class="form-control" id="descripB" name="descripB" data-bv-notempty="true"/>
-													</div>
-													
 												</div>
-												
-												
-												
 											</div>
 										</div>
 										<div class="modal-footer">
-											<button class="btn btn-warning" type="submit">Guardar</button>
+											<button class="btn btn-warning" type="button" onclick="preprocesar();">Guardar</button>
 											<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
 											<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 										</div>

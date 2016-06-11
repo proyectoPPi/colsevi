@@ -14,7 +14,6 @@ function Tabla(pagina){
 		jQuery('#mayorF').val('false');
 	}
 	
-	
 	HTabla({
 		url: contexto + "/Inventario/Inv/tabla.html?",
 		Id: "#tabla",
@@ -32,8 +31,10 @@ function Eliminar(){
 }
 
 function CargarFormulario(Id){
+	jQuery('[href=#producto]').tab('show');
 	HCargarFormulario(Id);
 	jQuery('#cantSolicitada').val(BuscarRegistro(Id)['disponible']);
+	jQuery('#formGuardar').show();
 }
 
 jQuery('#viewData').click(function(e) { 
@@ -43,7 +44,6 @@ jQuery('#viewData').click(function(e) {
 jQuery('#carga').click(function(){
 	
 	jQuery('#viewData').html('');
-	
 	jQuery.ajaxQueue({
 		url: contexto + "/Inventario/Inv/cargarInv.html?",
 		 data:{prod: jQuery('#id_producto').val(), cantidad: jQuery('#cantSolicitada').val()},
@@ -53,8 +53,8 @@ jQuery('#carga').click(function(){
  			data = jQuery.parseJSON(result); 
  		} catch(err){ 
  			console.log("Error" + err); 
+ 			jQuery('#dynamic').hide();
          	return; 
-         	jQuery('#dynamic').hide();
  		} 
  		data = data['datos'];
  		for(i in data){
@@ -67,10 +67,11 @@ jQuery('#carga').click(function(){
 });
 
 function cargarInv(ingrediente,id_unidad_peso, cant){
-
-	jQuery.ajaxQueue({
+	jQuery('#secuencia').val('');
+	jQuery.ajax({
 		url: contexto + "/Inventario/Inv/cargarIng.html?",
 		 data:{ing: ingrediente, um: id_unidad_peso, cantidad: cant, establecimiento: jQuery('#establecimiento').val()},
+		 async:false,
 	}).done(function(result) {
 		var data; 
  		try{ 
@@ -83,9 +84,11 @@ function cargarInv(ingrediente,id_unidad_peso, cant){
  		data = data['datos'];
  		if(data.length == 0){
  			jQuery('<p>No hay materia prima disponible</p>').appendTo('#viewData');
+ 			jQuery('#formGuardar').hide();
+ 			return;
  		}
+ 		var html = '<div class="row">';
  		for(i in data){
- 			var html = '';
 			html += '<div class="col-xs-12 col-md-3">';
 			html += '<section class="panel">';
 			html += '<input type="hidden" value="' + data[i]['id_ingrediente'] + '"  id="ing'+data[i]['lote']+'" name="ing'+data[i]['lote']+'"/> ';
@@ -112,7 +115,7 @@ function cargarInv(ingrediente,id_unidad_peso, cant){
 				html += ' value='+$(this).val()+'>'+$(this).text() + '</option>';
 	        });
 			
-			html += jQuery('#listaUnidad > option') + '</select>';
+			html += '</select>';
 			html += '</div>';
 			html += '</div>';
 			html += '</div>';
@@ -131,9 +134,9 @@ function cargarInv(ingrediente,id_unidad_peso, cant){
 			html += '</footer>';
 			html += '</section>';
 			html += '</div>';
-			jQuery(html).appendTo('#viewData');
 			jQuery('#secuencia').val(jQuery('#secuencia').val() + data[i]['lote'] + ',');
  		}
+ 		jQuery(html).appendTo('#viewData');
 	});
 }
 
@@ -143,3 +146,10 @@ jQuery("#prodF").autocomplete({
 	  jQuery('#prodV').val(ui.item.id_producto);
 	}
 });
+
+function preprocesar(){
+	HPreprocesar({
+		url: contexto + "/Inventario/Inv/preprocesador.html?",
+		formulario: "formulario",
+	});
+}

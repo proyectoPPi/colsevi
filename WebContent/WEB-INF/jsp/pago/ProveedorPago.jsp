@@ -64,11 +64,11 @@
 														<option value="0">Seleccione</option>
 													</select>
 												</div>
-												<div class="col-xs-12 col-sm-6 col-md-12">
+												<div class="col-xs-12 col-sm-6 col-md-6">
 													<label>Pendiente</label>
 													<input type="text" class="form-control" id="pendiente" name="pendiente" readonly/>
 												</div>
-												<div class="col-xs-12 col-sm-6 col-md-12">
+												<div class="col-xs-12 col-sm-6 col-md-6">
 													<label>*Valor a Pagar</label>
 													<input type="text" class="form-control" id="valorP" name="valorP"/>
 												</div>
@@ -90,7 +90,7 @@
 				</div>
 			</section>
 		</section>
-		<c:import url="/WEB-INF/jsp/plantilla/pie_pagina.jsp"></c:import>
+		<c:import url="/WEB-INF/jsp/plantilla/pie_pagina.jsp"></c:import> 
 	</section>
 	<c:import url="/WEB-INF/jsp/plantilla/javascript_genericos.jsp"></c:import>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/pago/ProveedorPago.js"></script>

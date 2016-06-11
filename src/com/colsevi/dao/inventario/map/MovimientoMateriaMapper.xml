@@ -338,7 +338,7 @@
 			AND up.id_unidad_peso = #{um}
 		 </if>
 		
-		ORDER BY lote DESC
+		ORDER BY id_movimiento_materia DESC
 		LIMIT ${limite};
 	</select>
 	

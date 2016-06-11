@@ -22,6 +22,7 @@ import com.colsevi.application.ClienteManager;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.GeneralManager;
 import com.colsevi.application.PedidoManager;
+import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.pedido.model.DetallePedido;
@@ -37,59 +38,9 @@ public class PedidoWizardController extends BaseConfigController {
 
 	@RequestMapping("/Pedido/Flujo")
 	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
-		model.addAttribute("tipoPadre", tipoProducto());
+		model.addAttribute("tipoPadre", ProductoManager.tipoProducto());
 		model.addAttribute("establecimiento", GeneralManager.getEstablecimientos());
 		return new ModelAndView("pedido/WizardPedido", "col", getValoresGenericos(request));
-	}
-	
-	public static List<TipoProducto> tipoProducto(){
-		TipoProductoExample TPE = new TipoProductoExample();
-		TPE.createCriteria().andPadreIsNotNull();
-		return ColseviDao.getInstance().getTipoProductoMapper().selectByExample(TPE);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@RequestMapping("/Pedido/Flujo/hijos")
-	public void hijos(HttpServletRequest request, HttpServletResponse response){
-		
-		try{
-			JSONObject result = new JSONObject();
-			List<Integer> hijosL = new ArrayList<Integer>();
-			Integer padre = Integer.parseInt(request.getParameter("padre"));
-			String[] hijos = ColseviDao.getInstance().getTipoProductoMapper().selectByPrimaryKey(padre).getPadre().split(",");
-			
-			for(int i = 0; i<hijos.length;i++){
-				hijosL.add(Integer.parseInt(hijos[i]));
-			}
-			
-			TipoProductoExample TPE = new TipoProductoExample();
-			TPE.createCriteria().andId_tipo_productoIn(hijosL);
-			
-			result.put("records", jsonWrite(ColseviDao.getInstance().getTipoProductoMapper().selectByExample(TPE)));
-			
-			response.setContentType("text/html;charset=ISO-8859-1");
-			request.setCharacterEncoding("UTF8");
-			
-			result.writeJSONString(response.getWriter());
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public JSONArray jsonWrite(List<TipoProducto> listaProd){
-		
-		JSONArray resultado = new JSONArray();
-		JSONObject opciones = new JSONObject();
-		
-		for(TipoProducto bean: listaProd){
-			opciones = new JSONObject();
-			opciones.put("id", bean.getId_tipo_producto());
-			opciones.put("nombre", bean.getNombre());
-			
-			resultado.add(opciones);
-		}
-		return resultado;
 	}
 	
 	@SuppressWarnings("unchecked")

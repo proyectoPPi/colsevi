@@ -26,7 +26,7 @@ public class InventarioManager {
 		MateriaPrimaExample MPE = new MateriaPrimaExample();
 		MPE.createCriteria().andLoteEqualTo(beanMP.getLote());
 
-		ColseviDao.getInstance().getMateriaPrimaMapper().updateByExampleSelective(beanMP, MPE);
+		ColseviDao.getInstance().getMateriaPrimaMapper().updateByExample(beanMP, MPE);
 	}
 	
 	public static Object[] ConversionPMayorMenor(Integer tipoP, Integer tipoH, Double cantidad){
@@ -60,15 +60,23 @@ public class InventarioManager {
 				obj[0] = (double) (cantidad / 1000);
 				obj[1] = UnidadMedidaE.KILO.getUnidadM();
 			}
+		}else if(tipoP.equals(UnidadMedidaE.LITRO.getUnidadM())){
+			obj[0] = cantidad * 1000;
+			obj[1] = UnidadMedidaE.MILILITRO.getUnidadM();
+		}else if(tipoP.equals(UnidadMedidaE.MILILITRO.getUnidadM())){
+			obj[0] = (double) (cantidad / 1000);
+			obj[1] = UnidadMedidaE.LITRO.getUnidadM();
 		}
 		return obj;
 	}
 	
-public static Object[] ConversionPMenorMayor(Integer tipoP, Integer tipoH, Double cantidad){
+	public static Object[] ConversionPMenorMayor(Integer tipoP, Integer tipoH, Double cantidad){
 		
 		Object[] obj = new Object[2];
-		
-		if(tipoP.equals(UnidadMedidaE.KILO.getUnidadM())){
+		if(tipoP.equals(tipoH)){
+			obj[0] = cantidad;
+			obj[1] = tipoP;
+		}else if(tipoP.equals(UnidadMedidaE.KILO.getUnidadM())){
 			if(tipoH.equals(UnidadMedidaE.LIBRA.getUnidadM())){
 				obj[0] = cantidad * 0.5;
 			}else if(tipoH.equals(UnidadMedidaE.GRAMO.getUnidadM())){
@@ -86,8 +94,13 @@ public static Object[] ConversionPMenorMayor(Integer tipoP, Integer tipoH, Doubl
 			}else if(tipoH.equals(UnidadMedidaE.KILO.getUnidadM())){
 				obj[0] = cantidad * 1000;
 			}
+		}else if(tipoP.equals(UnidadMedidaE.LITRO.getUnidadM())){
+			obj[0] = cantidad * 1000;
+			obj[1] = UnidadMedidaE.MILILITRO.getUnidadM();
+		}else if(tipoP.equals(UnidadMedidaE.MILILITRO.getUnidadM())){
+			obj[0] = (double) (cantidad / 1000);
+			obj[1] = UnidadMedidaE.LITRO.getUnidadM();
 		}
-		
 		return obj;
 	}
 	
@@ -104,27 +117,44 @@ public static Object[] ConversionPMenorMayor(Integer tipoP, Integer tipoH, Doubl
 		}else if(tipoP.equals(UnidadMedidaE.LIBRA.getUnidadM())){
 			obj[0] = cantidad * 500;
 			obj[1] = UnidadMedidaE.GRAMO.getUnidadM();
+		}else if(tipoP.equals(UnidadMedidaE.LITRO.getUnidadM())){
+			obj[0] = cantidad * 1000;
+			obj[1] = UnidadMedidaE.MILILITRO.getUnidadM();
+		}else if(tipoP.equals(UnidadMedidaE.MILILITRO.getUnidadM())){
+			obj[0] = (double) (cantidad / 1000);
+			obj[1] = UnidadMedidaE.LITRO.getUnidadM();
 		}
+
 		return obj;
 	}
 	
 	public static Object[] conversionMOptima(Integer tipoP, Double cantidad){
 		Object[] obj = new Object[2];
 		
-		if(tipoP.equals(UnidadMedidaE.LIBRA.getUnidadM()) && (cantidad  * 0.45359237) > 1){
+		if(tipoP.equals(UnidadMedidaE.KILO.getUnidadM())){
+			obj[0] = cantidad;
+			obj[1] = UnidadMedidaE.KILO.getUnidadM();
+		}else if(tipoP.equals(UnidadMedidaE.LIBRA.getUnidadM()) && (cantidad  * 0.45359237) > 1){
 			obj[0] = cantidad * 0.5;
 			obj[1] = UnidadMedidaE.KILO.getUnidadM();
 		}else if(tipoP.equals(UnidadMedidaE.GRAMO.getUnidadM())){
-			if((cantidad * 0.002) > 1){
+			if((cantidad * 0.002) >= 1){
 				if((cantidad  / 1000) > 1){
 					obj[0] = cantidad / 1000;
-					tipoP = UnidadMedidaE.KILO.getUnidadM();
+					obj[1] = UnidadMedidaE.KILO.getUnidadM();
 				}else{
 					obj[0] = cantidad * 0.002;
 					obj[1] = UnidadMedidaE.LIBRA.getUnidadM();
 				}
+			}else{
+				obj[0] = cantidad;
+				obj[1] = UnidadMedidaE.GRAMO.getUnidadM();	
 			}
+		}else if(tipoP.equals(UnidadMedidaE.MILILITRO.getUnidadM())){
+			obj[0] = (double) (cantidad / 1000);
+			obj[1] = UnidadMedidaE.LITRO.getUnidadM();
 		}
+
 		return obj;
 	}
 }

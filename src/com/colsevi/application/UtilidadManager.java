@@ -27,9 +27,21 @@ public class UtilidadManager {
 		return null;
 	}
 	
-	public static Date FormatDateFormDB(String date){
+	public static String FormatDateView(String date){
 		//retorna Sat Mar 12 13:16:15 COT 2016
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			return sdf.format(formatoDelTexto.parse(date)); 
+		} catch (ParseException ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Date FormatDateFormDB(String date){
+		//retorna Sat Mar 12 13:16:15 COT 2016
+		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		try {
 			return formatoDelTexto.parse(date); 
 		} catch (ParseException ex) {

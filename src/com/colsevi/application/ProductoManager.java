@@ -31,48 +31,8 @@ public class ProductoManager {
 		return ColseviDao.getInstance().getDificultadRecetaMapper().selectByExample(new DificultadRecetaExample());
 	}
 	
-	public static List<ListaGenerica> tipoProducto(){
-		List<ListaGenerica> result = new ArrayList<ListaGenerica>();
-		ListaGenerica lg = new ListaGenerica();
-		
-		TipoProductoExample tpExample = new TipoProductoExample();
-		tpExample.createCriteria().andPadreIsNotNull();
-		List<TipoProducto> listaTipo = ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tpExample);
-		
-		for(TipoProducto bean: listaTipo){
-			lg = new ListaGenerica();
-			lg.setNombre(bean.getNombre());
-			lg.setId(bean.getId_tipo_producto().toString());
-			lg.setSeleccionable(true);
-			
-			result.add(lg);
-
-			String[] padre = bean.getPadre().split(",");
-			List<Integer> listaH = new ArrayList<Integer>();
-			for(int i = 0; i<padre.length; i++){
-				listaH.add(Integer.parseInt(padre[i]));
-			}
-			
-			tpExample = new TipoProductoExample();
-			tpExample.createCriteria().andId_tipo_productoIn(listaH);
-			List<TipoProducto> listaHijo = ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tpExample);
-			
-			if(listaHijo != null && listaHijo.size() < 1){
-				lg.setSeleccionable(false);
-				continue;
-			}
-			
-			for(TipoProducto bh: listaHijo){
-				lg = new ListaGenerica();
-				lg.setNombre(bh.getNombre());
-				lg.setId(bh.getId_tipo_producto().toString());
-				lg.setSeleccionable(false);
-				
-				result.add(lg);
-			}
-		}
-		
-		return result;
+	public static List<TipoProducto> tipoProducto(){
+		return ColseviDao.getInstance().getTipoProductoMapper().selectByExample(new TipoProductoExample());
 	}
 	
 	@SuppressWarnings("unchecked")

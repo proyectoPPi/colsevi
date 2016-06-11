@@ -80,7 +80,7 @@
 		                                              <input type="text" id="hora_fin" name="hora_fin" class="form-control" data-field="time" data-format="HH:mm"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>*Correo</label>
+													<label>Correo</label>
 													<input type="text" class="form-control" id="correo" name="correo" data-bv-notempty="true" maxlength="50"/>
 												</div>
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -91,11 +91,11 @@
 														<input type="text" class="form-control" id="direccion" name="direccion" data-bv-notempty="true" maxlength="50"/>
 													</div>
 													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-														<label>*Barrio</label>
+														<label>Barrio</label>
 														<input type="text" class="form-control" id="barrio" name="barrio" data-bv-notempty="true" maxlength="50"/>
 													</div>
 													<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-														<label>*Descripci&#243;n</label>
+														<label>Descripci&#243;n</label>
 														<input type="text" class="form-control" id="descripDir" name="descripDir" data-bv-notempty="true" maxlength="50"/>
 													</div>
 												</div>
@@ -106,7 +106,7 @@
 														<input type="number" class="form-control" id="telefono" name="telefono" data-bv-notempty="true" maxlength="20"/>
 													</div>
 													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-														<label>Tipo T&eacute;lefono</label>
+														<label>*Tipo T&eacute;lefono</label>
 														<select class="form-control" id="telTipo" name="telTipo">
 															<option value="0">Seleccione</option>
 															<c:forEach items="${tipoTel}" var="tipo">

@@ -2,6 +2,8 @@ package com.colsevi.controllers;
 
 import java.security.MessageDigest;
 import java.util.Formatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,6 +73,12 @@ public class LoginController {
 		String error = "";
 		if(usuario == null || usuario.trim().isEmpty()){
 			error = "Ingrese el usuario<br/>";
+		}else{
+			 Pattern pat = Pattern.compile("^[a-zA-Z][a-zA-Z0-9-_\".]{6,20}$");
+		     Matcher mat = pat.matcher(usuario);
+		     if (!mat.matches()) {
+		         error += "Ingresar un formato válido para poder iniciar sesión<br/>";
+		     }
 		}
 		if(clave == null || clave.trim().isEmpty()){
 			error += "Ingrese la clave";

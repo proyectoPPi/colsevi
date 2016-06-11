@@ -2,6 +2,8 @@ jQuery(document).ready(function(){
 	Tabla();
 	HDatetimePicker('dtBox',false);
 	jQuery('#dynamic').hide();
+	HMask('cantidad', '99');
+	HMask('vunit', '999999');
 });
 
 function Tabla(pagina){
@@ -22,28 +24,42 @@ function Tabla(pagina){
 		Id: "#tabla",
 		titulos: titulos,
 		pagina:pagina,
-		clase: clase,
 		boton: boton
 	});
 	jQuery('#com').val('');
 }
 
+function validarAdd(){
+	var filter = /^[0-9]{1,2}/;
+	var error = '';
+	if(!filter.test(jQuery('#cantidad').val()))
+		error += 'Ingresar una cantidad válida, solo enteros';
+	
+	return error;
+}
+
 jQuery('#adicion').click(function(){
 	try{
-		if(jQuery('#IngSelect').val() != "" && jQuery('#tipopeso').val() != "" && parseInt(jQuery('#cantidad').val()) > 0){
+		jQuery("#errorDivF").hide();
+		var error = validarAdd();
+		alert(error);
+		if(jQuery('#IngSelect').val() != "" && jQuery('#tipopeso').val() != ""){
 			if(!buscarIngrediente()){
 				jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);		
 				var html ='<tr>';
 				html += '<td><input type="text" value="'+jQuery('#IngSelect option:selected').text()+'" class="fieldDynamic" readonly /><input type="hidden" name="idIng'+jQuery('#count').val()+'" value="'+jQuery('#IngSelect').val()+'"/></td>';
 				html += '<td><input type="text" value="'+jQuery('#cantidad').val()+'" class="fieldDynamic" readonly name="cant'+jQuery('#count').val()+'" /></td>';
-				html += '<td class="hidden-xs"><input type="text" value="'+jQuery('#tipopeso option:selected').text()+'" class="fieldDynamic" readonly /><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+jQuery('#tipopeso').val()+'"/></td>';
+				html += '<td><input type="text" value="'+jQuery('#tipopeso option:selected').text()+'" class="fieldDynamic" readonly name="tipotext'+jQuery('#count').val()+'"/><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+jQuery('#tipopeso').val()+'"/></td>';
 				html += '<td><input type="text" name="fecha'+jQuery('#count').val()+'" data-field="date" data-format="yyyy-MM-dd" class="form-control"/></td>';		
+				html += '<td><input type="text" name="vunitario'+jQuery('#count').val()+'" value="'+jQuery('#vunit').val()+'" class="form-control"/> </td>';
 				html += '<td><buttton data-toggle="button" class="btn btn-white" onclick="EliminarDet(this);"><i class="fa fa-remove text-info"></i></button></td>';
 				html += '</tr>';
-				
 			}
 
-			jQuery('#IngDynamic > table > tbody').append(html);
+			jQuery('#IngDynamic > section > table > tbody').append(html);
+		}else{
+			jQuery("#mensajeEr").html('Ingresar todos los valores');
+	    	jQuery("#errorDivF").show();
 		}
 	}catch (e) {
 		alert('error');
@@ -88,6 +104,7 @@ function Limpiar(){
 	jQuery('#IngDynamic > table > tbody > tr').remove();
 	jQuery('#id_compra').val('');
 	jQuery('#count').val('0');
+	jQuery('#validarModificacion').show();
 }
 
 function EliminarDet(option){
@@ -95,18 +112,25 @@ function EliminarDet(option){
 }
 
 function CargarFormulario(Id){
+	jQuery('#validarModificacion').show();
+	jQuery('[href=#producto]').tab('show');
 	HCargarFormulario(Id);
 	jQuery("#pagado").prop("checked", false);
 	jQuery('#IngDynamic > table > tbody > tr').remove();
 	jQuery('#count').val('0');
-	cargarIng();
 	jQuery('#valorsin').val(BuscarRegistro(Id)['valorsin']);
 	if(BuscarRegistro(Id)['pagado'] == "SI"){
 		jQuery("#pagado").prop("checked", true);
 	}
 	jQuery('#motivo').val(BuscarRegistro(Id)['motivo']);
-//	validarModificacion();
+	validarModificacion();
 }
+
+jQuery('#carga').click(function(){
+	cargarIng();
+	jQuery('#IngDynamic > table > tbody > tr').remove();
+	jQuery('#count').val('0');
+});
 
 function cargarIng(){
 	jQuery.ajaxQueue({
@@ -130,12 +154,14 @@ function cargarIng(){
 			html += '<tr>';
 			html += '<td><input type="text" value="'+data[i]['nombreIng']+'" class="fieldDynamic" readonly /><input type="hidden" name="idIng'+jQuery('#count').val()+'" value="'+data[i]['id_ingrediente']+'"/></td>';
 			html += '<td><input type="text" value="'+data[i]['cantidad']+'" class="fieldDynamic" readonly name="cant'+jQuery('#count').val()+'" /><input type="hidden" name="lote'+jQuery('#count').val()+'" value="'+data[i]['lote']+'"/></td>';
-			html += '<td class="hidden-xs"><input type="text" value="'+data[i]['nombreTp']+'" class="fieldDynamic" readonly /><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+data[i]['id_tipo_peso']+'"/></td>';
+			html += '<td><input type="text" value="'+data[i]['nombreTp']+'" class="fieldDynamic" readonly name="tipotext'+jQuery('#count').val()+'"/><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+data[i]['id_tipo_peso']+'"/></td>';
 			html += '<td><input type="text" name="fecha'+jQuery('#count').val()+'" value="'+data[i]['fecha_vencimiento']+'" data-field="date" data-format="yyyy-MM-dd" class="form-control"/></td>';		
+			html += '<td><input type="text" name="vunitario'+jQuery('#count').val()+'" value="'+data[i]['vunitario']+'" class="form-control"/> </td>';
 			html += '<td><buttton data-toggle="button" class="btn btn-white" onclick="EliminarDet(this);"><i class="fa fa-remove text-info"></i></button></td>';
 			html += '</tr>';
 		}
-		jQuery('#IngDynamic > table > tbody').append(html);
+		jQuery('#IngDynamic > section > table > tbody').append(html);
+		jQuery('#IngDynamic').show();
 	});
 }
 
@@ -143,7 +169,10 @@ function buscarIngrediente(){
 	var count = jQuery('#count').val();
 	for(i = 0; i <= count; i++) {
 		if(jQuery( "input[name='idIng"+i+"']" ).val() == jQuery('#IngSelect').val()){
-			jQuery('input[name="cant'+ i+'"]').val(parseInt(jQuery('input[name="cant'+ i+'"]').val()) + parseInt(jQuery('#cantidad').val()));
+			jQuery('input[name="cant'+ i+'"]').val(jQuery('#cantidad').val());
+			jQuery('input[name="tipo'+ i+'"]').val(jQuery('#tipopeso').val());
+			jQuery('input[name="tipotext'+ i+'"]').val(jQuery('#tipopeso option:selected').text());
+			jQuery('input[name="vunitario'+ i+'"]').val(jQuery('#vunit').val());
 			return true;
 		}
 	}
@@ -169,8 +198,15 @@ function validarModificacion(){
  			jQuery('#dynamic').hide();
          	return; 
  		} 
- 		if(data['error'] != ''){
+ 		if(data['error'] != undefined && data['error'] != ''){
  			jQuery('#validarModificacion').hide();
  		}
+	});
+}
+
+function preprocesar(){
+	HPreprocesar({
+		url: contexto + "/Proveedor/Compra/preprocesador.html?",
+		formulario: "formulario",
 	});
 }

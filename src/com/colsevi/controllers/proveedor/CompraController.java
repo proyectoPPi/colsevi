@@ -3,6 +3,7 @@ package com.colsevi.controllers.proveedor;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,6 @@ import com.colsevi.application.ProveedorManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.deuda.model.DeudaProveedorExample;
-import com.colsevi.dao.inventario.model.InventarioXMateria;
 import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.dao.inventario.model.MateriaPrimaExample;
@@ -143,13 +143,15 @@ public class CompraController extends BaseConfigController {
 				opciones.put("fecha_compra", UtilidadManager.FormatDateDB(bean.getFecha_compra()));
 				opciones.put("pagado", bean.getPagado() != null && bean.getPagado().equals(true) ? "SI" : "NO");
 				opciones.put("motivo", bean.getMotivo());
-				
+
+				labels = new JSONObject();
 				if(bean.getId_proveedor() != null){
 					labels.put("label",ColseviDao.getInstance().getProveedorMapper().selectByPrimaryKey(bean.getId_proveedor()).getNombre());
 					labels.put("value", bean.getId_proveedor());
 					opciones.put("proveedor", labels);
 				}
 				
+				labels = new JSONObject();
 				if(bean.getId_establecimiento() != null){
 					labels.put("label",ColseviDao.getInstance().getEstablecimientoMapper().selectByPrimaryKey(bean.getId_establecimiento()).getNombre());
 					labels.put("value", bean.getId_establecimiento());
@@ -183,6 +185,9 @@ public class CompraController extends BaseConfigController {
 		
 		result = ConstruirIngrediente(ColseviDao.getInstance().getIngredienteMapper().selectByExample(ingExample));
 
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		result.writeJSONString(response.getWriter());
 	}
 	
@@ -203,139 +208,74 @@ public class CompraController extends BaseConfigController {
 		return resultado;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Proveedor/Compra/preprocesador")
+	public void preprocesador(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
+		try{
+			Object[] validacion = validarGuardar(request);
+			
+			if(!validacion[0].toString().isEmpty()){
+				result.put("error", validacion[0]);
+			}
+		}catch(Exception e){
+			result.put("error", "Contactar al administrador");
+		}
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
+		result.writeJSONString(response.getWriter());
+	}
+	
+	
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/Proveedor/Compra/Guardar")
 	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
 		
-		List<CompraXIngrediente> listaCXI = new ArrayList<CompraXIngrediente>();
-		List<MateriaPrima> listaMP = new ArrayList<MateriaPrima>();
-		List<Integer> loteList = new ArrayList<Integer>();
-		Compra bean = new Compra();
-		String error = "";
-		bean.setMotivo("");
+		List<CompraXIngrediente> listaCXI = null;
+		CompraXIngredienteExample cie = new CompraXIngredienteExample();
+		List<MateriaPrima> listaMP = null;
+		List<Integer> loteList = null;
+		List<Integer> countDelete = null;
+		Compra bean = null;
 		
-		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty()){
-			bean.setId_compra(Integer.parseInt(request.getParameter("id_compra")));
-			error = validarNoInv(Integer.parseInt(request.getParameter("id_compra")));
-		}
-		if(request.getParameter("proveedor") == null || request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").trim().equals("0"))
-			error += "Seleccionar el proveedor<br/>";
-		else
-			bean.setId_proveedor(Integer.parseInt(request.getParameter("proveedor")));
-		
-		if(request.getParameter("establecimiento") == null || request.getParameter("establecimiento").trim().isEmpty() || request.getParameter("establecimiento").trim().equals("0"))
-			error += "Seleccione un establecimiento <br/>";
-		else
-			bean.setId_establecimiento(Integer.parseInt(request.getParameter("establecimiento")));
-		
-		if(request.getParameter("valorsin") == null || request.getParameter("valorsin").trim().isEmpty())
-			error += "Ingresar el valor de la compra<br/>";
-		else
-			bean.setValor(UtilidadManager.FormatStringBigDecimal(request.getParameter("valorsin")));
-		
-		if(request.getParameter("fecha_compra") == null || request.getParameter("fecha_compra").trim().isEmpty())
-			error += "Ingresar la fecha de la compra<br/>";
-		
-		else{
-			Date fec= new Date();
-			if(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")).getTime() > fec.getTime() ){
-				error += "La fecha no puede ser mayo a la actual<br/>";
-			}else{
-				bean.setFecha_compra(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")));
-			}
-		}
-		
-		if(request.getParameter("pagado") != null)
-			bean.setPagado(request.getParameter("pagado").equals("SI") || request.getParameter("pagado").equals("on") ? true: false);
-		
-		if(!error.isEmpty()){
-			modelo.addAttribute("error", error);
-			return Compra(request, modelo);
-		}
-
-		Integer count = Integer.parseInt(request.getParameter("count"));
-		if(count != null && count > 0){
-			for(int i = 0; i < count; i++){
-				if(request.getParameter("idIng" + (i +1)) != null && !request.getParameter("idIng" + (i +1)).trim().isEmpty()){
-					CompraXIngrediente cxi = new CompraXIngrediente();
-					MateriaPrima mp = new MateriaPrima();
-					
-					cxi.setId_ingrediente(Integer.parseInt(request.getParameter("idIng" + (i +1))));
-					cxi.setCantidad(Double.valueOf(request.getParameter("cant" + (i +1))));
-					cxi.setId_unidad_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
-					mp.setCantidad(Double.valueOf(request.getParameter("cant" + (i +1))));
-					mp.setId_unidad_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
-					mp.setId_ingrediente(Integer.parseInt(request.getParameter("idIng" + (i +1))));
-					
-					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
-						mp.setFecha_vencimiento(UtilidadManager.FormatDateFormDB2(request.getParameter("fecha" + (i +1))));
-						cxi.setFecha_vencimiento(UtilidadManager.FormatDateFormDB2(request.getParameter("fecha" + (i +1))));
-					}
-					if(request.getParameter("lote" + (i +1)) != null && !request.getParameter("lote" + (i +1)).trim().isEmpty()){
-						cxi.setLote(Integer.parseInt(request.getParameter("lote" + (i +1))));
-						mp.setLote(Integer.parseInt(request.getParameter("lote" + (i +1))));
-						loteList.add(mp.getLote());
-					}
-					
-					listaMP.add(mp);
-					listaCXI.add(cxi);
-				}
-			}
-		}else{
-			modelo.addAttribute("error", "No hay detalle seleccionado");
-			return Compra(request, modelo);
-		}
-		
-		if((listaCXI == null || listaCXI.size() < 1) && (listaMP == null || listaMP.size() < 1)){
-			modelo.addAttribute("error", "No hay detalle seleccionado");
-			return Compra(request, modelo);
-		}
-		
-		if(loteList != null && loteList.size() > 0){
-
-			InventarioXMateriaExample ixm = new InventarioXMateriaExample();
-			CompraXIngredienteExample cie = new CompraXIngredienteExample();
-			MateriaPrimaExample mpE = new MateriaPrimaExample();
-			
-			ixm.createCriteria().andLoteNotIn(loteList);
-			cie.createCriteria().andLoteNotIn(loteList).andId_compraEqualTo(bean.getId_compra());
-			mpE.createCriteria().andLoteNotIn(loteList);
-			List<InventarioXMateria> listInvM = ColseviDao.getInstance().getInventarioXMateriaMapper().selectByExample(ixm);
-			if(listInvM != null && listInvM.size() > 0){
-				modelo.addAttribute("error", "No se pueden eliminar ingredientes de las compras ya que están asociados a inventario");
-				return Compra(request, modelo);
-			}else{
-				ColseviDao.getInstance().getCompraXIngredienteMapper().deleteByExample(cie);
-				ColseviDao.getInstance().getMateriaPrimaMapper().deleteByExample(mpE);
-			}
-
-		}else if(bean.getId_compra() != null){
-			loteList = new ArrayList<Integer>();
-			CompraXIngredienteExample cxie = new CompraXIngredienteExample();
-			InventarioXMateriaExample ixmE = new InventarioXMateriaExample();
-			MateriaPrimaExample mpE = new MateriaPrimaExample();
-			CompraXIngredienteExample cie = new CompraXIngredienteExample();
-			
-			cxie.createCriteria().andId_compraEqualTo(bean.getId_compra());
-			List<CompraXIngrediente> listaCompra = ColseviDao.getInstance().getCompraXIngredienteMapper().selectByExample(cxie);
-			if(listaCompra != null && listaCompra.size() > 0){
-				for(CompraXIngrediente cxi:listaCompra){
-					loteList.add(cxi.getLote());
-				}
-				ixmE.createCriteria().andLoteIn(loteList);
-				mpE.createCriteria().andLoteIn(loteList);
-				cie.createCriteria().andLoteIn(loteList);
-				
-				if(ColseviDao.getInstance().getInventarioXMateriaMapper().selectByExample(ixmE).size() > 0){
-					modelo.addAttribute("error", "No se pueden eliminar ingredientes de las compras ya que están asociados a inventario");
-					return Compra(request, modelo);
-				}else{
-					ColseviDao.getInstance().getCompraXIngredienteMapper().deleteByExample(cie);
-					ColseviDao.getInstance().getMateriaPrimaMapper().deleteByExample(mpE);
-				}
-			}
-		}
-
 		try{
+			Object[] result = validarGuardar(request);
+			
+			if(result[0] != null && !result[0].toString().isEmpty()){
+				modelo.addAttribute("error", result[0]);
+				return Compra(request, modelo);
+			}
+	
+			loteList = (List<Integer>) result[1];
+			listaCXI = (List<CompraXIngrediente>) result[2];
+			listaMP = (List<MateriaPrima>) result[3];
+			bean = (Compra) result[4];
+			
+			bean.setMotivo("");
+			
+			if(loteList != null && loteList.size() > 0){
+	
+				MateriaPrimaExample mpe = new MateriaPrimaExample();
+				
+				cie.createCriteria().andLoteNotIn(loteList).andId_compraEqualTo(bean.getId_compra());
+				List<CompraXIngrediente> listCXI = ColseviDao.getInstance().getCompraXIngredienteMapper().selectByExample(cie);
+				
+				countDelete = new ArrayList<Integer>();
+				for(CompraXIngrediente ci: listCXI){
+					loteList.add(ci.getLote());
+					countDelete.add(ci.getLote());
+				}
+	
+				if(countDelete.size() > 0){
+					cie.clear();
+					cie.createCriteria().andLoteIn(countDelete);
+					mpe.createCriteria().andLoteIn(countDelete);
+					ColseviDao.getInstance().getCompraXIngredienteMapper().deleteByExample(cie);
+					ColseviDao.getInstance().getMateriaPrimaMapper().deleteByExample(mpe);
+				}
+			}
+
 			if(bean.getId_compra() != null){
 				ColseviDao.getInstance().getCompraMapper().updateByPrimaryKey(bean);
 				modelo.addAttribute("correcto", "Compra Actualizada");
@@ -348,8 +288,7 @@ public class CompraController extends BaseConfigController {
 				bean.setId_compra(ColseviDao.getInstance().getCompraMapper().selectByExample(exampleC).get(0).getId_compra());
 				modelo.addAttribute("correcto", "Compra insertada");
 			}
-			
-//			listaMP
+
 			for(int i=0; i<listaMP.size(); i++){
 				listaCXI.get(i).setId_compra(bean.getId_compra());
 				listaMP.get(i).setId_establecimiento(bean.getId_establecimiento());
@@ -357,8 +296,6 @@ public class CompraController extends BaseConfigController {
 				if(listaCXI.get(i).getLote() != null){
 					
 					ColseviDao.getInstance().getMateriaPrimaMapper().updateByPrimaryKey(listaMP.get(i));
-					
-					//actualiza
 					CompraXIngredienteExample comIngE = new CompraXIngredienteExample();
 					comIngE.createCriteria().andLoteEqualTo(listaCXI.get(i).getLote());
 					ColseviDao.getInstance().getCompraXIngredienteMapper().updateByExampleSelective(listaCXI.get(i), comIngE);
@@ -368,14 +305,124 @@ public class CompraController extends BaseConfigController {
 					MateriaPrimaExample mpe = new MateriaPrimaExample();
 					mpe.setOrderByClause("lote DESC;");
 					listaCXI.get(i).setLote(ColseviDao.getInstance().getMateriaPrimaMapper().selectByExample(mpe).get(0).getLote());
-					//inserta
 					ColseviDao.getInstance().getCompraXIngredienteMapper().insertSelective(listaCXI.get(i));
 				}
 			}
-		}catch (Exception e) {
+		}catch(Exception e){
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
 		return Compra(request, modelo);
+	}
+	
+	public Object[] validarGuardar(HttpServletRequest request){
+		Object[] result = new Object[5];
+		String error = "";
+		MovimientoMateriaExample MME = new MovimientoMateriaExample();
+		Compra beanC = new Compra();
+		beanC.setValor(new BigDecimal(0));
+		List<CompraXIngrediente> listaCXI = new ArrayList<CompraXIngrediente>();
+		List<MateriaPrima> listaMP = new ArrayList<MateriaPrima>();
+		List<Integer> loteList = new ArrayList<Integer>();
+		Integer count = Integer.parseInt(request.getParameter("count"));
+		
+		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty()){
+			beanC.setId_compra(Integer.parseInt(request.getParameter("id_compra")));
+			error += validarNoInv(beanC.getId_compra());
+		}
+		if(request.getParameter("proveedor") == null || request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").trim().equals("0"))
+			error += "Seleccionar el proveedor<br/>";
+		else
+			beanC.setId_proveedor(Integer.parseInt(request.getParameter("proveedor")));
+		
+		if(request.getParameter("establecimiento") == null || request.getParameter("establecimiento").trim().isEmpty() || request.getParameter("establecimiento").trim().equals("0"))
+			error += "Seleccione un establecimiento <br/>";
+		else
+			beanC.setId_establecimiento(Integer.parseInt(request.getParameter("establecimiento")));
+		
+		if(request.getParameter("fecha_compra") == null || request.getParameter("fecha_compra").trim().isEmpty())
+			error += "Ingresar la fecha de la compra<br/>";
+		else{
+			if(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")).getTime() > new Date().getTime() ){
+				error += "La fecha no puede ser mayo a la actual<br/>";
+			}else{
+				beanC.setFecha_compra(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")));
+			}
+		}
+		
+		if(request.getParameter("pagado") != null)
+			beanC.setPagado(request.getParameter("pagado").equals("SI") || request.getParameter("pagado").equals("on") ? true: false);
+		
+		
+		if(count != null && count > 0){
+			for(int i = 0; i < count; i++){
+				if(request.getParameter("idIng" + (i +1)) != null && !request.getParameter("idIng" + (i +1)).trim().isEmpty()){
+					CompraXIngrediente cxi = new CompraXIngrediente();
+					MateriaPrima mp = new MateriaPrima();
+					
+					cxi.setId_ingrediente(Integer.parseInt(request.getParameter("idIng" + (i +1))));
+					cxi.setCantidad(Double.valueOf(request.getParameter("cant" + (i +1))));
+					cxi.setId_unidad_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
+					
+					if(request.getParameter("vunitario" + (i +1)) != null && !request.getParameter("vunitario" + (i +1)).trim().isEmpty()){
+						cxi.setVunitario(new BigDecimal(request.getParameter("vunitario" + (i +1))));
+						beanC.setValor(beanC.getValor().add(cxi.getVunitario().multiply(new BigDecimal(cxi.getCantidad()))));
+					}else
+						error += "Ingresar el valor unitario</br/>";
+					mp.setCantidad(cxi.getCantidad());
+					mp.setId_unidad_peso(cxi.getId_unidad_peso());
+					mp.setId_ingrediente(cxi.getId_ingrediente());
+					
+					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
+						Date dat = UtilidadManager.FormatDateFormDB2(request.getParameter("fecha" + (i +1)));
+						if(dat.getTime() < new Date(System.currentTimeMillis()).getTime()){
+							Calendar calendar = Calendar.getInstance();
+							calendar.setTime(dat);
+							int year = calendar.get(Calendar.YEAR);
+							int month = calendar.get(Calendar.MONTH);
+							int day = calendar.get(Calendar.DATE);
+							calendar.set(year, month, day, 23, 59, 59);
+							
+							mp.setFecha_vencimiento(calendar.getTime());
+							cxi.setFecha_vencimiento(calendar.getTime());
+						}else{
+							error += "La fecha de la compra debe ser mayor a la actual<br/>";
+						}
+					}
+					if(request.getParameter("lote" + (i +1)) != null && !request.getParameter("lote" + (i +1)).trim().isEmpty()){
+						cxi.setLote(Integer.parseInt(request.getParameter("lote" + (i +1))));
+						mp.setLote(Integer.parseInt(request.getParameter("lote" + (i +1))));
+						loteList.add(mp.getLote());
+					}
+					
+					listaMP.add(mp);
+					listaCXI.add(cxi);
+				}
+			}
+		}else{
+			error += "No hay detalle seleccionado";
+		}
+		
+		if((listaCXI == null || listaCXI.size() < 1) && (listaMP == null || listaMP.size() < 1)){
+			if(beanC.getId_compra() == null){
+				error += "No hay detalle seleccionado";
+			}
+		}
+
+		if(loteList != null && loteList.size() > 0){
+			MME.createCriteria().andLoteIn(loteList);
+			Integer CountInvM = ColseviDao.getInstance().getMovimientoMateriaMapper().countByExample(MME);
+			if(CountInvM != null && CountInvM > 0){
+				error += "No se pueden eliminar ingredientes de las compras ya que están asociados a inventario";
+			}
+		}
+		
+		result[0] = error;
+		result[1] = loteList;
+		result[2] = listaCXI;
+		result[3] = listaMP;
+		result[4] = beanC;
+		
+		return result;
 	}
 	
 	@RequestMapping("/Proveedor/Compra/GuardarMotivo")
@@ -401,13 +448,25 @@ public class CompraController extends BaseConfigController {
 		
 		error = validarNoInv(bean.getId_compra());
 		
-		if(error != null){
+		if(!error.isEmpty()){
 			modelo.addAttribute("error", error);
 			return Compra(request, modelo);
 		}
 		
 		try{
 			ColseviDao.getInstance().getCompraMapper().updateByPrimaryKeySelective(bean);
+			
+			CompraXIngredienteExample CIE = new CompraXIngredienteExample();
+			CIE.createCriteria().andId_compraEqualTo(bean.getId_compra());
+			List<CompraXIngrediente> listaDetalle = ColseviDao.getInstance().getCompraXIngredienteMapper().selectByExample(CIE);
+			Integer lote = null;
+			for(CompraXIngrediente cxi: listaDetalle){
+				lote = cxi.getLote();
+				cxi.setLote(null);
+				ColseviDao.getInstance().getCompraXIngredienteMapper().updateByPrimaryKey(cxi);
+				ColseviDao.getInstance().getMateriaPrimaMapper().deleteByPrimaryKey(lote);
+			}
+			
 			modelo.addAttribute("correcto", "Compra dada de Baja");
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
@@ -422,20 +481,28 @@ public class CompraController extends BaseConfigController {
 		
 		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty()){
 			String error = validarNoInv(Integer.parseInt(request.getParameter("id_compra")));
-			if(error != null)
+			if(!error.isEmpty())
 				result.put("error", error);
 		}else{
 			result.put("error", "Seleccionar compra");
 		}
+		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		result.writeJSONString(response.getWriter());
 	}
 	
 	public String validarNoInv(Integer id){
 		CompraXIngredienteExample cxiE = new CompraXIngredienteExample();
+		MovimientoMateriaExample MME = new MovimientoMateriaExample();
+		PagoProveedorExample PPE = new PagoProveedorExample();
+		InventarioXMateriaExample IME = new InventarioXMateriaExample();
+		
 		cxiE.createCriteria().andId_compraEqualTo(id);
 		List<CompraXIngrediente> listcxi = ColseviDao.getInstance().getCompraXIngredienteMapper().selectByExample(cxiE);
 		
-		PagoProveedorExample PPE = new PagoProveedorExample();
+		
 		PPE.createCriteria().andId_compraEqualTo(id);
 		Integer total = ColseviDao.getInstance().getPagoProveedorMapper().countByExample(PPE);
 		if(total != null && total > 0){
@@ -452,18 +519,23 @@ public class CompraController extends BaseConfigController {
 		if(listcxi != null && listcxi.size() > 0){
 			for (CompraXIngrediente cxi : listcxi) {
 				if(cxi.getLote() != null){
-					MovimientoMateriaExample mmE = new MovimientoMateriaExample();
-					mmE.createCriteria().andLoteEqualTo(cxi.getLote());
-					Integer count = ColseviDao.getInstance().getMovimientoMateriaMapper().countByExample(mmE);
-					if(count > 0){
-						return "No se puede dar de baja a la compra ya que algunos ingredientes se encuentran ya asignados en el inventario<br/>";
-					}
+					IME.clear();
+					IME.createCriteria().andLoteEqualTo(cxi.getLote());
+					total = ColseviDao.getInstance().getInventarioXMateriaMapper().countByExample(IME);
+					if(total != null && total > 0)
+						return "No se puede modificarla compra, ya que algunos ingredientes se encuentran ya asignados en el inventario<br/>";
+					
+					MME.clear();
+					MME.createCriteria().andLoteEqualTo(cxi.getLote());
+					total = ColseviDao.getInstance().getMovimientoMateriaMapper().countByExample(MME);
+					if(total != null && total > 0)
+						return "No se pueden eliminar ingredientes de las compras ya que están asociados a inventario";
 				}
+				
 			}
 		}
-		return null;
+		return "";
 	}
-	
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/Proveedor/Compra/cargarIng")
@@ -478,6 +550,9 @@ public class CompraController extends BaseConfigController {
 		}catch(Exception e){
 			result.put("error", "Contactar al administrador");
 		}
+		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
 		
 		result.writeJSONString(response.getWriter());
 	}
@@ -495,8 +570,10 @@ public class CompraController extends BaseConfigController {
 				opciones.put("id_tipo_peso", map.get("id_unidad_peso"));
 				opciones.put("nombreIng", map.get("nombreIng"));
 				opciones.put("nombreTp", map.get("nombreTp"));
-				opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatDateComplete(map.get("fecha_vencimiento").toString()) : "");
+				opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatDateView(map.get("fecha_vencimiento").toString()) : "");
 				opciones.put("cantidad", map.get("cantidad"));
+				opciones.put("iva", map.get("iva") != null ? map.get("iva") : "");
+				opciones.put("vunitario", map.get("vunitario") != null ? map.get("vunitario") : "");
 				opciones.put("lote", map.get("lote"));
 				
 				resultado.add(opciones);

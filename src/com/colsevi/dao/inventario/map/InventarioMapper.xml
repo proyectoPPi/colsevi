@@ -334,17 +334,17 @@
 		FROM ingrediente ing
 		LEFT JOIN materia_prima mp ON mp.id_ingrediente = ing.id_ingrediente
 		LEFT JOIN unidad_peso up ON up.id_unidad_peso = mp.id_unidad_peso
-	    LEFT JOIN  inventario_x_materia ixm ON mp.id_ingrediente = ing.id_ingrediente
+	    LEFT JOIN  inventario_x_materia ixm ON ixm.id_ingrediente = ing.id_ingrediente AND ixm.lote = mp.lote
 		WHERE 1 = 1
     
 		AND (fecha_vencimiento is null OR fecha_vencimiento > NOW()) 
-		AND mp.cantidad > 0
+		AND (mp.cantidad > 0 OR ixm.cantidad IS NOT NULL)
 		
  		<if test="ing != null">
-			AND ing.id_ingrediente = 1
+			AND ing.id_ingrediente = #{ing}
 		 </if>
 		 <if test="esta != null">
-			 AND mp.id_establecimiento = 1
+			 AND mp.id_establecimiento = #{esta}
 		  </if>
 		  
 		GROUP BY ing.id_ingrediente, mp.lote

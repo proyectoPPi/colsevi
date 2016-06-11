@@ -18,8 +18,7 @@ function Tabla(pagina){
 		url: contexto + "/Producto/Admin/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
-		pagina:pagina,
-		clase: clase
+		pagina:pagina
 	});
 }
 
@@ -100,9 +99,9 @@ function buscarIngrediente(){
 }
 
 function CargarFormulario(Id){
+	jQuery('#count').val('0');
 	HCargarFormulario(Id);
 	jQuery('#IngDynamic > table > tbody > tr').remove();
-	jQuery('#count, #tipoP').val('0');
 	cargarIng();
 }
 
@@ -146,4 +145,9 @@ jQuery("#prodF").autocomplete({
 	  this.value = ui.item.value;
 	  jQuery('#prodV').val(ui.item.id_producto);
 	}
+});
+
+jQuery("#localImage").click(function() {
+	jQuery('#fileview').click();
+
 });

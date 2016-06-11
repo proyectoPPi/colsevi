@@ -13,7 +13,8 @@
     <link href="${pageContext.request.contextPath}/resources/css/slidebars.css" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/resources/css/style-responsive.css" rel="stylesheet" />
-<link href="${pageContext.request.contextPath}/resources/css/table-responsive.css" rel="stylesheet"/>
+	<link href="${pageContext.request.contextPath}/resources/css/table-responsive.css" rel="stylesheet"/>
+	<link href="${pageContext.request.contextPath}/resources/css/sprinner_loadding.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />

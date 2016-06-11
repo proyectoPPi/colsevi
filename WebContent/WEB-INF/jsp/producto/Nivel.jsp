@@ -3,7 +3,7 @@
 <html>
 <head>
    <meta charset="UTF-8" />
-	<title>Clasificar ingrediente</title>
+	<title>Nivel Receta</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 <style>
  .color-fill-icon{display:inline-block;width:16px;height:16px;border:1px solid #000;background-color:#fff;margin: 2px;}
@@ -20,7 +20,7 @@
 				<div class="row">
 				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
 				
-					<h2>Clasificar Ingredientes 
+					<h2>Nivel Receta
 						<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 					</h2>
 					<section class="panel">

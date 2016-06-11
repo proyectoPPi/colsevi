@@ -37,19 +37,25 @@ public class ProductoAdminController extends BaseConfigController {
 
 	private static final long serialVersionUID = 4997906906136000223L;
 
+//	recetas entandarizadas gramos, mililitros
+//	descargos por regla de 3.
+//	Hacer: diferentes salidas de inventario.
+//	
+	
 	@RequestMapping("/Producto/Admin")
 	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipo", ProductoManager.tipoProducto());
 		model.addAttribute("listaClasificar", ProductoManager.getClasificar());
 		model.addAttribute("listaTipoPeso", ProductoManager.getTipoPeso());
+		
 		try{
-		if(request.getParameter("producto") != null && !request.getParameter("producto").trim().isEmpty()){
-			Producto prod = ColseviDao.getInstance().getProductoMapper().selectByPrimaryKey(Integer.parseInt(request.getParameter("producto")));
-			if(prod != null && prod.getId_producto() != null){
-				model.addAttribute("prod", prod.getId_producto());
-				model.addAttribute("label", prod.getNombre() + " - " + prod.getReferencia());
+			if(request.getParameter("producto") != null && !request.getParameter("producto").trim().isEmpty()){
+				Producto prod = ColseviDao.getInstance().getProductoMapper().selectByPrimaryKey(Integer.parseInt(request.getParameter("producto")));
+				if(prod != null && prod.getId_producto() != null){
+					model.addAttribute("prod", prod.getId_producto());
+					model.addAttribute("label", prod.getNombre() + " - " + prod.getReferencia());
+				}
 			}
-		}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -113,6 +119,7 @@ public class ProductoAdminController extends BaseConfigController {
 					opciones.put("nombre", bean.getNombre());
 					opciones.put("descripcion", bean.getDescripcion());
 					opciones.put("referencia", bean.getReferencia());
+					opciones.put("ventaf", UtilidadManager.Currency(bean.getVenta()));
 					opciones.put("venta", bean.getVenta());
 					opciones.put("imagen", bean.getImagen());
 					
@@ -172,7 +179,8 @@ public class ProductoAdminController extends BaseConfigController {
 			}else{
 				error += "Ingresar el venta<br/>";
 			}
-			
+			System.out.println(request.getParameter("fileview"));
+			 
 			if(!error.isEmpty()){
 				modelo.addAttribute("error", error);
 				return Producto(request, modelo);
@@ -296,6 +304,9 @@ public class ProductoAdminController extends BaseConfigController {
 		
 		result = ConstruirIngrediente(ColseviDao.getInstance().getIngredienteMapper().selectByExample(ingExample));
 
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		result.writeJSONString(response.getWriter());
 	}
 	
@@ -331,6 +342,9 @@ public class ProductoAdminController extends BaseConfigController {
 			result.put("error", "Contactar al administrador");
 		}
 		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		result.writeJSONString(response.getWriter());
 	}
 	
@@ -359,19 +373,23 @@ public class ProductoAdminController extends BaseConfigController {
 	}
 	
 	@RequestMapping("/Producto/Admin/buscarProd")
-	public void auto(HttpServletRequest request, HttpServletResponse response){
+	public void auto(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
+
 		try{
-			JSONObject result = new JSONObject();
 			
 			String producto = request.getParameter("campo");
 			result = ProductoManager.AutocompletarProducto(producto);
 
-			if(result != null){
-				result.writeJSONString(response.getWriter());
-			}
-			
+			if(result == null)
+				result = new JSONObject();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
+		result.writeJSONString(response.getWriter());
 	}
 }
