@@ -338,7 +338,7 @@
 			cxi.lote, cxi.cantidad, cxi.iva, cxi.vunitario
 		FROM compra com
 		INNER JOIN compra_x_ingrediente cxi ON cxi.id_compra = com.id_compra
-        INNER JOIN materia_prima mp ON mp.lote = cxi.lote 
+        LEFT JOIN materia_prima mp ON mp.lote = cxi.lote 
 		LEFT JOIN ingrediente ing ON ing.id_ingrediente = cxi.id_ingrediente
 		LEFT JOIN unidad_peso tp ON tp.id_unidad_peso = cxi.id_unidad_peso
 		

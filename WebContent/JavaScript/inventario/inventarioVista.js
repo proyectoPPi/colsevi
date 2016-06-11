@@ -1,6 +1,7 @@
 jQuery(document).ready(function(){
 	Tabla();
 	HiniciarAutocompletar(contexto + '/Inventario/Inv/buscarProd.html?', 'prodF');
+	HiniciarAutocompletar(contexto + '/Inventario/Inv/buscarProd.html?', 'nombreProd');
 });
 
 function Tabla(pagina){

@@ -116,7 +116,7 @@ function CargarFormulario(Id){
 	jQuery('[href=#producto]').tab('show');
 	HCargarFormulario(Id);
 	jQuery("#pagado").prop("checked", false);
-	jQuery('#IngDynamic > table > tbody > tr').remove();
+	jQuery('#IngDynamic > section > table > tbody > tr').remove();
 	jQuery('#count').val('0');
 	jQuery('#valorsin').val(BuscarRegistro(Id)['valorsin']);
 	if(BuscarRegistro(Id)['pagado'] == "SI"){
@@ -128,7 +128,7 @@ function CargarFormulario(Id){
 
 jQuery('#carga').click(function(){
 	cargarIng();
-	jQuery('#IngDynamic > table > tbody > tr').remove();
+	jQuery('#IngDynamic > section > table > tbody > tr').remove();
 	jQuery('#count').val('0');
 });
 

@@ -65,7 +65,7 @@
 					<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog  modal-lg">
 							<div class="modal-content-wrap">
-								<form method="post" action="${pageContext.request.contextPath}/Producto/Admin/Guardar.html?" id="formulario" enctype="multipart/form-data" >
+								<form method="post" action="${pageContext.request.contextPath}/Producto/Admin/Guardar.html?" id="formulario">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -165,7 +165,7 @@
 																				<tr>
 																					<th>Ingrediente</th>
 																					<th>Cantidad</th>
-																					<th class="hidden-xs">TipoPeso</th>
+																					<th >TipoPeso</th>
 																					<th>Acción</th>
 																				</tr>
 																			</thead>
