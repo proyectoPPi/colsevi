@@ -114,7 +114,7 @@
 																	</div>
 																	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 																		<label>*Precio de venta</label>
-																		<input type="number" class="form-control" id="venta" name="venta" data-bv-notempty="true"/>
+																		<input type="text" class="form-control" id="venta" name="venta" data-bv-notempty="true"/>
 																	</div>
 								                                  
 								                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -143,7 +143,7 @@
 																		</div>
 																		<div class="col-xs-6 col-sm-3 col-md-3">
 																			<label>cantidad</label>
-																			<input type="number" class="form-control" id="cantidad" name="cantidad" min="0"/>
+																			<input type="text" class="form-control" id="cantidad" name="cantidad" min="0"/>
 																		</div>
 																		<div class="col-xs-12 col-sm-3 col-md-3">
 																			<label>Tipo peso</label>

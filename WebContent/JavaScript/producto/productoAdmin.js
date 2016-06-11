@@ -1,5 +1,8 @@
 jQuery(document).ready(function(){
 	Tabla();
+	HMask('referencia', '*****');
+	HMask('cantidad', '999');
+	HMask('venta', '99999999');
 	HiniciarAutocompletar(contexto + '/Producto/Admin/buscarProd.html?', 'prodF');
 	jQuery('#dynamic').hide();
 });

@@ -121,18 +121,18 @@ public class DificultadRecetaController extends BaseConfigController {
 		return error;
 	}
 
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "unused" })
 	@RequestMapping("/Receta/Nivel/Eliminar")
 	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
 		
-		Integer id = Integer.parseInt(request.getParameter("id_clasificar_ingrediente"));
+		Integer id = Integer.parseInt(request.getParameter("id_dificultad_receta"));
 		if(id != null){
 			
 			RecetaExample RExample = new RecetaExample();
 			RExample.createCriteria().andId_dificultad_recetaEqualTo(id);
-			List<Receta> listaReceta = ColseviDao.getInstance().getRecetaMapper().selectByExample(RExample);
+			Integer CReceta = ColseviDao.getInstance().getRecetaMapper().countByExample(RExample);
 
-			if(listaReceta != null || listaReceta.size() > 0){
+			if(CReceta != null && CReceta > 0){
 				modelo.addAttribute("error", "Dificultad No Eliminada, Asociada a receta");
 			}else{
 				ColseviDao.getInstance().getDificultadRecetaMapper().deleteByPrimaryKey(id);
