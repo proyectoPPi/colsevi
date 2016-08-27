@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://127.0.0.1:3306/COLSEVI" />
+				<property name="username" value="root" />
+				<property name="password" value="root" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/colsevi/dao/general/map/DireccionMapper.xml" />
+		<mapper resource="com/colsevi/dao/general/map/TipoTelefonoMapper.xml" />
+		<mapper resource="com/colsevi/dao/general/map/TelefonoMapper.xml" />
+		<mapper resource="com/colsevi/dao/general/map/CorreoMapper.xml" />
+		<mapper resource="com/colsevi/dao/general/map/EstablecimientoMapper.xml" />
+		<mapper resource="com/colsevi/dao/general/map/UnidadPesoMapper.xml" />
+		<mapper resource="com/colsevi/dao/general/map/MotivoMapper.xml" />
+		<mapper resource="com/colsevi/dao/pedido/map/EstadoPedidoMapper.xml" />
+		<mapper resource="com/colsevi/dao/pedido/map/PedidoMapper.xml" />
+		<mapper resource="com/colsevi/dao/pedido/map/DetallePedidoMapper.xml" />
+		<mapper resource="com/colsevi/dao/pedido/map/CategoriaCobroMapper.xml" />
+		<mapper resource="com/colsevi/dao/pedido/map/CobroMapper.xml" />
+		<mapper resource="com/colsevi/dao/proveedor/map/TipoProveedorMapper.xml" />
+		<mapper resource="com/colsevi/dao/proveedor/map/ProveedorMapper.xml" />
+		<mapper resource="com/colsevi/dao/proveedor/map/CompraXIngredienteMapper.xml" />
+		<mapper resource="com/colsevi/dao/pago/map/PagoPedidoMapper.xml" />
+		<mapper resource="com/colsevi/dao/pago/map/PagoProveedorMapper.xml" />
+		<mapper resource="com/colsevi/dao/deuda/map/DeudaPedidoMapper.xml" />
+		<mapper resource="com/colsevi/dao/deuda/map/DeudaProveedorMapper.xml" />
+		<mapper resource="com/colsevi/dao/inventario/map/InventarioMapper.xml" />
+		<mapper resource="com/colsevi/dao/inventario/map/MovimientoInventarioMapper.xml" />
+		<mapper resource="com/colsevi/dao/inventario/map/MovimientoMateriaMapper.xml" />
+		<mapper resource="com/colsevi/dao/inventario/map/InventarioXMateriaMapper.xml" />	
+		<mapper resource="com/colsevi/dao/inventario/map/MateriaPrimaMapper.xml" />
+		<mapper resource="com/colsevi/dao/producto/map/ClasificarIngredienteMapper.xml" />
+		<mapper resource="com/colsevi/dao/producto/map/IngredienteMapper.xml" />
+		<mapper resource="com/colsevi/dao/producto/map/TipoProductoMapper.xml" />
+		<mapper resource="com/colsevi/dao/producto/map/ProductoMapper.xml" />
+		<mapper resource="com/colsevi/dao/producto/map/IngredienteXProductoMapper.xml" />
+		<mapper resource="com/colsevi/dao/producto/map/RecetaMapper.xml" />
+		<mapper resource="com/colsevi/dao/producto/map/DificultadRecetaMapper.xml" />
+		<mapper resource="com/colsevi/dao/producto/map/PreparacionRecetaMapper.xml" />
+		<mapper resource="com/colsevi/dao/catalogo/map/CatalogoMapper.xml" />
+		<mapper resource="com/colsevi/dao/catalogo/map/CatalogoXProductoMapper.xml" />
+		<mapper resource="com/colsevi/dao/usuario/map/PersonaMapper.xml" />	
+		<mapper resource="com/colsevi/dao/usuario/map/UsuarioMapper.xml" />	
+		<mapper resource="com/colsevi/dao/usuario/map/RolMapper.xml" />	
+		<mapper resource="com/colsevi/dao/usuario/map/PaginaXRolMapper.xml" />	
+		<mapper resource="com/colsevi/dao/usuario/map/TipoDocumentoMapper.xml" />
+		<mapper resource="com/colsevi/dao/caja/map/CierreCajaMapper.xml"/>
+						
+	</mappers>
+</configuration>

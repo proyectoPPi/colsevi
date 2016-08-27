@@ -2,7 +2,6 @@ DROP DATABASE IF EXISTS COLSEVI;
 
 CREATE DATABASE COLSEVI;
 
-
 CREATE TABLE establecimiento(
 	id_establecimiento INT AUTO_INCREMENT,
     id_direccion INT,
@@ -424,4 +423,10 @@ CREATE TABLE inventario_x_materia(
 	CONSTRAINT fk_invCom2 FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
     CONSTRAINT fk_invCom3 FOREIGN KEY (lote) REFERENCES materia_prima(lote),
     CONSTRAINT fk_invCom4 FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso)
+);
+
+CREATE TABLE plato(
+	id_plato INT AUTO_INCREMENT,
+	PRIMARY KEY(id_plato),
+	 CONSTRAINT fk_invCom1 FOREIGN KEY (id_inventario) REFERENCES inventario(id_inventario),
 );

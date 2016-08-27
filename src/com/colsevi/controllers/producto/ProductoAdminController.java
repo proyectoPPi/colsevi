@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.ibatis.session.SqlSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
@@ -37,12 +39,6 @@ public class ProductoAdminController extends BaseConfigController {
 
 	private static final long serialVersionUID = 4997906906136000223L;
 
-//	recetas entandarizadas gramos, mililitros
-//	descargos por regla de 3.
-//	Hacer: diferentes salidas de inventario.
-//	
-	
-	@RequestMapping("/Producto/Admin")
 	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipo", ProductoManager.tipoProducto());
 		model.addAttribute("listaClasificar", ProductoManager.getClasificar());
@@ -138,18 +134,18 @@ public class ProductoAdminController extends BaseConfigController {
 					continue;
 				}
 			}
-			
 		}
 		return resultado;
 	}
 	
-	@RequestMapping("/Producto/Admin/Guardar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
+	public Object[] validarGuardar(HttpServletRequest request){
 		
-		Producto bean = new Producto();
+		Object[] obj = new Object[3];
 		List<IngredienteXProducto> ixp = new ArrayList<IngredienteXProducto>();
+		IngredienteXProducto ixpB = null;
+		Producto bean = new Producto();
 		String error = "";
-
+		
 		try{
 			if(request.getParameter("id_producto") != null && !request.getParameter("id_producto").trim().isEmpty()){
 				bean.setId_producto(Integer.parseInt(request.getParameter("id_producto")));
@@ -179,19 +175,13 @@ public class ProductoAdminController extends BaseConfigController {
 			}else{
 				error += "Ingresar el venta<br/>";
 			}
-			System.out.println(request.getParameter("fileview"));
-			 
-			if(!error.isEmpty()){
-				modelo.addAttribute("error", error);
-				return Producto(request, modelo);
-			}
 			
 			Integer count = Integer.parseInt(request.getParameter("count"));
 			
 			if(count != null && count > 0){
 				for(int i = 0; i < count; i++){
 					if(request.getParameter("idIng" + (i +1)) != null && !request.getParameter("idIng" + (i +1)).trim().isEmpty()){
-						IngredienteXProducto ixpB = new IngredienteXProducto();
+						ixpB = new IngredienteXProducto();
 						ixpB.setId_ingrediente(Integer.parseInt(request.getParameter("idIng" + (i +1))));
 						ixpB.setCantidad(Integer.parseInt(request.getParameter("cant" + (i +1))));
 						ixpB.setId_unidad_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
@@ -200,41 +190,64 @@ public class ProductoAdminController extends BaseConfigController {
 						ixp.add(ixpB);
 					}
 				}
-			}else{
-				modelo.addAttribute("error", "No hay detalle seleccionado");
+			}else
+				error += "No hay detalle seleccionado";
+			
+			if(ixp != null && ixp.size() < 1)
+				error = "No hay detalle seleccionado";
+			
+				
+		}catch(Exception e){
+			error += "Contactar al administrador";
+		}
+		
+		obj[0] = error;
+		obj[1] = bean;
+		obj[2] = ixp;
+		
+		return obj;
+		
+	}
+	@RequestMapping("/Producto/Admin/Guardar")
+	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
+		
+		SqlSession sesion = ColseviDaoTransaccion.getInstance();
+		Producto bean = null;
+		List<IngredienteXProducto> listaIngProd = null;
+		Object[] obj = validarGuardar(request);
+		try{
+			 
+			if(obj[0] != null && !obj[0].toString().isEmpty()){
+				modelo.addAttribute("error", obj[0]);
 				return Producto(request, modelo);
 			}
+			bean = (Producto) obj[1];
+			listaIngProd = (List<IngredienteXProducto>) obj[2];
 			
 			if(bean.getId_producto() != null){
-				ColseviDao.getInstance().getProductoMapper().updateByPrimaryKeySelective(bean);
+				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.producto.map.ProductoMapper.updateByPrimaryKeySelective", bean);
 				modelo.addAttribute("correcto", "Producto Actualizado");
 			}else{
-				ColseviDao.getInstance().getProductoMapper().insertSelective(bean);
-				
-				ProductoExample pExample = new ProductoExample();
-				pExample.setOrderByClause("id_producto DESC");
-				pExample.setLimit("1");
-				bean.setId_producto(ColseviDao.getInstance().getProductoMapper().selectByExample(pExample).get(0).getId_producto());
-				
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.producto.map.ProductoMapper.insertSelective", bean);
 				modelo.addAttribute("correcto", "Producto Insertado");
 			}
 			
-			if(ixp == null || ixp.size() < 1){
-				modelo.addAttribute("error", "No hay detalle seleccionado");
-				return Producto(request, modelo);
-			}else{
-				IngredienteXProductoExample IPK = new IngredienteXProductoExample();
-				IPK.createCriteria().andId_productoEqualTo(bean.getId_producto());
-				ColseviDao.getInstance().getIngredienteXProductoMapper().deleteByExample(IPK);
-				
-				for(IngredienteXProducto ingP : ixp){
-					ingP.setId_producto(bean.getId_producto());
-					ColseviDao.getInstance().getIngredienteXProductoMapper().insertSelective(ingP);
-				}
+			IngredienteXProductoExample ingProdE = new IngredienteXProductoExample();
+			ingProdE.createCriteria().andId_productoEqualTo(bean.getId_producto());
+			ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.producto.map.IngredienteXProductoMapper.deleteByExample", ingProdE);
+			
+			for(IngredienteXProducto ingProd : listaIngProd){
+				ingProd.setId_producto(bean.getId_producto());
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.producto.map.IngredienteXProductoMapper.insertSelective", ingProd);
 			}
+		
+			ColseviDaoTransaccion.RealizarCommit(sesion);
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
+			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
+		
+		ColseviDaoTransaccion.CerrarSesion(sesion);
 		return Producto(request, modelo);
 	}
 	
@@ -283,9 +296,8 @@ public class ProductoAdminController extends BaseConfigController {
 			modelo.addAttribute("correcto", "Producto Eliminado");
 			
 		}catch(Exception e){
-			
+			e.getCause();
 		}
-
 		return Producto(request, modelo);
 	}
 	

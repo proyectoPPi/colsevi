@@ -74,6 +74,7 @@ public class TipoProveedorController extends BaseConfigController{
 				opciones = new JSONObject();
 				opciones.put("id_tipo_proveedor", bean.getId_tipo_proveedor());
 				opciones.put("nombre", bean.getNombre());
+				opciones.put("descripcion", bean.getDescripcion());
 
 				resultado.add(opciones);
 			}
@@ -120,7 +121,7 @@ public class TipoProveedorController extends BaseConfigController{
 			if(id != null){
 				
 				ProveedorExample Prov = new ProveedorExample();
-				Prov.createCriteria().andId_proveedorEqualTo(id);
+				Prov.createCriteria().andId_tipo_proveedorEqualTo(id);
 				Integer dataCruce = ColseviDao.getInstance().getProveedorMapper().countByExample(Prov);
 				if(dataCruce != null && dataCruce > 0){
 					modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociada a un proveedor");

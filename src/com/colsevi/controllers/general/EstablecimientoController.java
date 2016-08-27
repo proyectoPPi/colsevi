@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.ibatis.session.SqlSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.general.model.Correo;
@@ -27,6 +29,7 @@ import com.colsevi.dao.general.model.Telefono;
 import com.colsevi.dao.general.model.TelefonoExample;
 import com.colsevi.dao.general.model.TipoTelefono;
 import com.colsevi.dao.general.model.TipoTelefonoExample;
+import com.colsevi.dao.usuario.model.TipoDocumento;
 
 @Controller
 public class EstablecimientoController extends BaseConfigController {
@@ -126,64 +129,53 @@ public class EstablecimientoController extends BaseConfigController {
 		Telefono beanT = (Telefono) result[3];
 		Correo beanC = (Correo) result[4];
 		
+		SqlSession sesion = ColseviDaoTransaccion.getInstance();
+
 		try{
 			if(beanD.getId_direccion() != null || beanD.getDireccion() != null){
 				if(beanD.getId_direccion() != null){
-					ColseviDao.getInstance().getDireccionMapper().updateByPrimaryKeySelective(beanD);
+					ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.general.map.DireccionMapper.updateByPrimaryKeySelective", beanD);
 				}else{
-					ColseviDao.getInstance().getDireccionMapper().insertSelective(beanD);
-					
-					DireccionExample DE = new DireccionExample();
-					DE.setOrderByClause("id_direccion DESC");
-					beanD.setId_direccion(ColseviDao.getInstance().getDireccionMapper().selectByExample(DE).get(0).getId_direccion());
+					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.general.map.DireccionMapper.insertSelective", beanD);
 				}
 			}
 			bean.setId_direccion(beanD.getId_direccion());
 			
 			if(beanT.getId_telefono() != null || beanT.getTelefono() != null){
 				if(beanT.getId_telefono() != null){
-					ColseviDao.getInstance().getTelefonoMapper().updateByPrimaryKeySelective(beanT);
+					ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.general.map.TelefonoMapper.updateByPrimaryKeySelective", beanT);
 				}else{
-					ColseviDao.getInstance().getTelefonoMapper().insertSelective(beanT);
-					
-					TelefonoExample TE = new TelefonoExample();
-					TE.setOrderByClause("id_telefono DESC");
-					beanT.setId_telefono(ColseviDao.getInstance().getTelefonoMapper().selectByExample(TE).get(0).getId_telefono());
+					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.general.map.TelefonoMapper.insertSelective", beanT);
 				}
 			}
 			bean.setId_telefono(beanT.getId_telefono());
 			
 			if(beanC.getId_correo() != null || beanC.getCorreo() != null){
 				if(beanC.getId_correo() != null){
-					ColseviDao.getInstance().getCorreoMapper().updateByPrimaryKeySelective(beanC);
+					ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.general.map.CorreoMapper.updateByPrimaryKeySelective", beanC);
 				}else{
-					ColseviDao.getInstance().getCorreoMapper().insertSelective(beanC);
-					
-					CorreoExample CE = new CorreoExample();
-					CE.setOrderByClause("id_correo DESC");
-					beanC.setId_correo(ColseviDao.getInstance().getCorreoMapper().selectByExample(CE).get(0).getId_correo());
+					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.general.map.CorreoMapper.insertSelective", beanC);
 				}
 			} 
 			bean.setId_correo(beanC.getId_correo());
 			
 			if(bean.getId_establecimiento() != null){
-				ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKey(bean);
+				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.general.map.EstablecimientoMapper.updateByPrimaryKeySelective", bean);
 				modelo.addAttribute("correcto", "Establecimiento Actualizado");
 			}else{
-				ColseviDao.getInstance().getEstablecimientoMapper().insert(bean);
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.general.map.EstablecimientoMapper.insertSelective", bean);
 				modelo.addAttribute("correcto", "Establecimiento insertado");
 			}
+
+			ColseviDaoTransaccion.RealizarCommit(sesion);
+			
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
-			if(bean.getId_establecimiento() == null){
-				if(bean.getId_correo() != null)
-				ColseviDao.getInstance().getCorreoMapper().deleteByPrimaryKey(bean.getId_correo());
-				if(bean.getId_direccion() != null)
-					ColseviDao.getInstance().getDireccionMapper().deleteByPrimaryKey(bean.getId_direccion());
-				if(bean.getId_telefono() != null)
-					ColseviDao.getInstance().getTelefonoMapper().deleteByPrimaryKey(bean.getId_telefono());
-			}
+			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
+		
+		ColseviDaoTransaccion.CerrarSesion(sesion);
+		
 		return Establecimiento(request, modelo);
 	}
 	

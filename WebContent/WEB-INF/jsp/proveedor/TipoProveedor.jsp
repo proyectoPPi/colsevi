@@ -52,7 +52,11 @@
 												<input type="hidden" id="id_tipo_proveedor" name="id_tipo_proveedor"/>
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 													<label>*Nombre</label>
-													<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
+													<input type="text" class="form-control" id="nombre" name="nombre"/>
+												</div>
+												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+													<label>*Descripción</label>
+													<input type="text" class="form-control" id="descripcion" name="descripcion"/>
 												</div>
 											</div>
 										</div>
@@ -78,6 +82,7 @@
 		titulos = new Array();
 		titulos["id_tipo_proveedor"] = "ID";
 		titulos["nombre"] = "Nombre";
+		titulos["descripcion"] = "Descripción";
 		
 	</script>
 </body>
