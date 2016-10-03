@@ -15,6 +15,17 @@ function Limpiar(){
 	HLimpliar();
 }
 
+function CargarFormulario(Id){
+	HCargarFormulario(Id);
+}
+
 function Eliminar(){
 	HEliminar("formulario", contexto + "/Usuario/TipoDocumento/EliminarTipoDocumento.html?");
+}
+
+function preprocesar(){
+	HPreprocesar({
+		url: contexto + "/Usuario/TipoDocumento/preprocesador.html?",
+		formulario: "formulario",
+	});
 }
