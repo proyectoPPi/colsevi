@@ -73,12 +73,6 @@ public class LoginController {
 		String error = "";
 		if(usuario == null || usuario.trim().isEmpty()){
 			error = "Ingrese el usuario<br/>";
-		}else{
-			 Pattern pat = Pattern.compile("^[a-zA-Z][a-zA-Z0-9-_\".]{6,20}$");
-		     Matcher mat = pat.matcher(usuario);
-		     if (!mat.matches()) {
-		         error += "Ingresar un formato válido para poder iniciar sesión<br/>";
-		     }
 		}
 		if(clave == null || clave.trim().isEmpty()){
 			error += "Ingrese la clave";

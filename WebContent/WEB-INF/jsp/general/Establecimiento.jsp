@@ -103,7 +103,7 @@
 													<h4><strong>TEL&Eacute;FONO</strong></h4>
 													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 														<label>*Tel&eacute;fono</label>
-														<input type="number" class="form-control" id="telefono" name="telefono" data-bv-notempty="true" maxlength="20"/>
+														<input type="text" class="form-control" id="telefono" name="telefono"/>
 													</div>
 													<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 														<label>*Tipo T&eacute;lefono</label>

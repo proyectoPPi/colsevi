@@ -39,6 +39,7 @@ public class ProductoAdminController extends BaseConfigController {
 
 	private static final long serialVersionUID = 4997906906136000223L;
 
+	@RequestMapping("/Producto/Admin")
 	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipo", ProductoManager.tipoProducto());
 		model.addAttribute("listaClasificar", ProductoManager.getClasificar());

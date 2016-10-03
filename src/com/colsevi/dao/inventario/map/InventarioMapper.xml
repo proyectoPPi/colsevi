@@ -289,8 +289,8 @@
   <select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
 		SELECT inv.id_inventario, prod.id_producto, prod.nombre AS nombreProd, prod.referencia, inv.id_establecimiento,
 			esta.nombre AS nombreEsta, inv.disponible, inv.compromiso
-		FROM producto prod
-		LEFT JOIN inventario inv on inv.id_producto = prod.id_producto
+		FROM inventario inv
+		LEFT JOIN producto prod on inv.id_producto = prod.id_producto
 		LEFT JOIN catalogo_x_producto cxp ON cxp.id_producto = prod.id_producto
 		LEFT JOIN catalogo cat ON cat.id_catalogo = cxp.id_catalogo
 		LEFT JOIN establecimiento esta ON esta.id_establecimiento = inv.id_establecimiento

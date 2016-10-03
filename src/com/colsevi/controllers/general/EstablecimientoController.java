@@ -21,15 +21,11 @@ import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.general.model.Correo;
-import com.colsevi.dao.general.model.CorreoExample;
 import com.colsevi.dao.general.model.Direccion;
-import com.colsevi.dao.general.model.DireccionExample;
 import com.colsevi.dao.general.model.Establecimiento;
 import com.colsevi.dao.general.model.Telefono;
-import com.colsevi.dao.general.model.TelefonoExample;
 import com.colsevi.dao.general.model.TipoTelefono;
 import com.colsevi.dao.general.model.TipoTelefonoExample;
-import com.colsevi.dao.usuario.model.TipoDocumento;
 
 @Controller
 public class EstablecimientoController extends BaseConfigController {
