@@ -43,7 +43,7 @@
             <button class="btn btn-lg btn-login btn-block" type="submit">Ingresar</button>
             <div class="registration">
                     ¿No tienes cuenta todavía?
-                <a class="" href="#">
+                <a class="" href="${pageContext.request.contextPath}/Usuario/ClienteRegistro.html">
                     Crear cuenta
                 </a>
             </div>

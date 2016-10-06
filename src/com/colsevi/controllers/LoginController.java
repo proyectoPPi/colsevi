@@ -1,10 +1,5 @@
 package com.colsevi.controllers;
 
-import java.security.MessageDigest;
-import java.util.Formatter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.EnviarCorreo;
+import com.colsevi.application.GeneralManager;
 import com.colsevi.application.SesionUsuario;
 import com.colsevi.dao.general.model.Correo;
 import com.colsevi.dao.general.model.CorreoExample;
@@ -28,7 +24,6 @@ public class LoginController {
 
 	@RequestMapping("login")
 	public ModelAndView login(HttpServletRequest request, ModelMap model){
-		puerto(request);
 		return new ModelAndView("login");
 	}
 	
@@ -82,18 +77,13 @@ public class LoginController {
 
 	public SesionUsuario getUsuario(String usuario,String clave, ModelMap model){
 		SesionUsuario U = new SesionUsuario();
-		String sha1 = "";
-		try{
-			MessageDigest encrypt = MessageDigest.getInstance("SHA-1");
-			encrypt.reset();
-			encrypt.update(clave.getBytes("UTF-8"));
-			sha1 = byteToHex(encrypt.digest());
-		}catch(Exception e){
-			e.printStackTrace();
+		String sha = GeneralManager.byteToHex(clave);
+		if(sha == null){
+			model.addAttribute("error", "Contactar al administrador");
+			return null;
 		}
-         
 		UsuarioExample UsuarioExample = new UsuarioExample();
-		UsuarioExample.createCriteria().andUsuarioEqualTo(usuario).andClaveEqualTo(sha1);
+		UsuarioExample.createCriteria().andUsuarioEqualTo(usuario).andClaveEqualTo(sha);
 		Usuario usu = new Usuario();
 		
 		try{
@@ -116,17 +106,6 @@ public class LoginController {
 		U.setRol(usu.getId_rol());
 		
 		return U;
-	}
-	
-	private static String byteToHex(final byte[] hash)
-	{
-	    Formatter formatter = new Formatter();
-	    for (byte b : hash){
-	        formatter.format("%02x", b);
-	    }
-	    String result = formatter.toString();
-	    formatter.close();
-	    return result;
 	}
 	
 	public ModelAndView recuperar(HttpServletRequest request, ModelMap model){
@@ -162,10 +141,5 @@ public class LoginController {
 		}
 		
 		return login(request, model);
-	}
-	
-	public void puerto(HttpServletRequest request){
-		String url = request.getScheme() + ":"+request.getServerName()+ request.getServerPort() + " "+ request.getContextPath();
-		System.out.println(url);
 	}
 }
