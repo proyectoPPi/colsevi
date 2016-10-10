@@ -68,7 +68,7 @@
 											<h4 class="modal-title">Administrar catálogo</h4>
 										</div>
 										<div class="modal-body">
-											<input type="hidden" id="id_dificultad_receta" name="id_dificultad_receta"/>
+											<input type="hidden" id="id_catalogo" name="id_catalogo"/>
 											<div class="form-group">
 												<label>*Nombre</label>
 												<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>

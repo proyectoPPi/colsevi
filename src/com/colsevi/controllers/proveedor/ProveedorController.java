@@ -260,7 +260,7 @@ public class ProveedorController extends BaseConfigController {
 					modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociado a una compra");
 				}else{
 					ColseviDao.getInstance().getProveedorMapper().deleteByPrimaryKey(id);
-					modelo.addAttribute("correcto", "Establecimiento Eliminado");
+					modelo.addAttribute("correcto", "Proveedor Eliminado");
 				}
 			}
 		}catch(Exception e){

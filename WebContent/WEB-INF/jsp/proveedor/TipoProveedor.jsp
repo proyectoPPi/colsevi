@@ -49,7 +49,7 @@
 										</div>
 										<div class="modal-body">
 											<div class="row">
-												<input type="hidden" id="id_tipo_proveedor" name="id_tipo_proveedor"/>
+												<input type="hidden" id="id_TipoProveedor" name="id_TipoProveedor"/>
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 													<label>*Nombre</label>
 													<input type="text" class="form-control" id="nombre" name="nombre"/>
@@ -80,7 +80,7 @@
 	<script type="text/javascript">
 		
 		titulos = new Array();
-		titulos["id_tipo_proveedor"] = "ID";
+		titulos["id_TipoProveedor"] = "ID";
 		titulos["nombre"] = "Nombre";
 		titulos["descripcion"] = "Descripción";
 		

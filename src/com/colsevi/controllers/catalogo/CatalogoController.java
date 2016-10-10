@@ -94,7 +94,7 @@ public class CatalogoController extends BaseConfigController{
 				opciones.put("nombre", bean.getNombre());
 				opciones.put("descripcion", bean.getDescripcion());
 				if(bean.getId_establecimiento() != null){
-					labels.put("label",ColseviDao.getInstance().getTipoProveedorMapper().selectByPrimaryKey(bean.getId_establecimiento()).getNombre());
+					labels.put("label",ColseviDao.getInstance().getEstablecimientoMapper().selectByPrimaryKey(bean.getId_establecimiento()).getNombre());
 					labels.put("value", bean.getId_establecimiento());
 					opciones.put("est", labels);
 				}

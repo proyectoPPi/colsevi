@@ -36,10 +36,3 @@ function preprocesar(){
 	});
 }
 
-jQuery('#telefono').click(function(){
-	if(jQuery('#telefono').val() == "1"){
-		jQuery('#telefono').mask('9999999');
-	}else{
-		jQuery('#telefono').mask('9999999999');
-	}
-});

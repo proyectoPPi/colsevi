@@ -42,7 +42,7 @@
 								<select class="form-control" id="clasificarF" name="filtro">
 									<option value="0">Tipo Producto</option>
 									<c:forEach items="${listaTipo}" var="tipo">
-										<option value="${tipo.id_tipo_producto}" disabled>${tipo.nombre}</option>	
+										<option value="${tipo.id_tipo_producto}" >${tipo.nombre}</option>	
 									</c:forEach>
 								</select>
 							</div>
@@ -92,7 +92,7 @@
 								                                  <div id="producto" class="tab-pane active">
 								                                  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 																		<label>*Referencia</label>
-																		<input type="text" class="form-control" id="referencia" name="referencia" data-bv-notempty="true"/>
+																		<input type="text" class="form-control" id="referencia" name="referencia" data-bv-notempty="true" maxlength="8"/>
 																	</div>
 																	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 																		<label>Clasificar</label>
@@ -114,7 +114,7 @@
 																	</div>
 																	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 																		<label>*Precio de venta</label>
-																		<input type="text" class="form-control" id="venta" name="venta" data-bv-notempty="true"/>
+																		<input type="text" class="form-control" id="venta" name="venta" data-bv-notempty="true" maxlength="12"/>
 																	</div>
 								                                  
 								                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -143,7 +143,7 @@
 																		</div>
 																		<div class="col-xs-6 col-sm-3 col-md-3">
 																			<label>cantidad</label>
-																			<input type="text" class="form-control" id="cantidad" name="cantidad" min="0"/>
+																			<input type="text" class="form-control" id="cantidad" name="cantidad" min="0" maxlength="3"/>
 																		</div>
 																		<div class="col-xs-12 col-sm-3 col-md-3">
 																			<label>Tipo peso</label>

@@ -1,6 +1,5 @@
 jQuery(document).ready(function(){
 	Tabla();
-	HColorPicker('color');
 });
 
 function Tabla(pagina){
@@ -8,8 +7,7 @@ function Tabla(pagina){
 		url: contexto + "/Catalogo/Cat/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
-		pagina:pagina,
-		color: color
+		pagina:pagina
 	});
 }
 
