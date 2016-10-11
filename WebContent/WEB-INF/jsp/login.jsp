@@ -4,74 +4,66 @@
 
 <head>
     <meta charset="ISO-8859-1"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Brayan">
-    <meta name="keyword" content="sevillana, Colonial, Pedidos, Domicilios">
-    <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/favicon.html">
-
     <title>Ingresar</title>
-
-    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/resources/css/bootstrap-reset.css" type="text/css" media="screen" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/resources/css/style-responsive.css" rel="stylesheet" />
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
-    <!--[if lt IE 9]>
-    <script src="js/html5shiv.js"></script>
-    <script src="js/respond.min.js"></script>
-    <![endif]-->
+	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 </head>
 
-  <body class="login-body">
-
-    <div class="container">
-    <c:import url="plantilla/alertas.jsp"></c:import>
-
-      <form class="form-signin" action="${pageContext.request.contextPath}/login/Ingresar.html" method="post">
-        <h2 class="form-signin-heading">ColSevi</h2>
-        <div class="login-wrap">
-            <input type="text" class="form-control" placeholder="Usuario" autofocus id="usuario" name="usuario" required/>
-            <input type="password" class="form-control" placeholder="Contraseña" id="clave" name="clave" required/>
-            <label class="checkbox">
-                <span class="pull-right">
-                    <a data-toggle="modal" href="#myModal"> Olvidaste tu contraseña</a>
-                </span>
-                <br/>
-            </label>
-            <button class="btn btn-lg btn-login btn-block" type="submit">Ingresar</button>
-            <div class="registration">
-                    ¿No tienes cuenta todavía?
-                <a class="" href="${pageContext.request.contextPath}/Usuario/ClienteRegistro.html">
-                    Crear cuenta
-                </a>
-            </div>
-        </div>
-      </form>
-
-      <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title">Recuperar contraseña</h4>
-                  </div>
-                  <div class="modal-body">
-                      <p>Introduzca su dirección de correo electrónico a continuación para restablecer la contraseña.</p>
-                      <input type="text" name="email" id="email" placeholder="Correo" class="form-control placeholder-no-fix">
-
-                  </div>
-                  <div class="modal-footer">
-                      <button data-dismiss="modal" class="btn btn-default" type="button">Cancelar</button>
-                      <button class="btn btn-success" type="button">Enviar</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-
-    </div>
-
+  <body>
+	<section class="page-wrapper">
+	    <div class="container">
+		    <c:import url="plantilla/alertas.jsp"></c:import>
+	
+			<div class="form-block center-block p-30 light-gray-bg border-clear">
+				<h2 class="title text-left">Login</h2>
+				<form class="form-horizontal text-left" action="${pageContext.request.contextPath}/login/Ingresar.html" method="post">
+					<div class="form-group has-feedback">
+						<label for="inputUserName" class="col-sm-3 control-label">Usuario</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario" required>
+							<i class="fa fa-user form-control-feedback"></i>
+						</div>
+					</div>
+					<div class="form-group has-feedback">
+						<label for="inputPassword" class="col-sm-3 control-label">Contraseña</label>
+						<div class="col-sm-8">
+							<input type="password" class="form-control" id="clave" name="clave" placeholder="Contraseña" required>
+							<i class="fa fa-lock form-control-feedback"></i>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-3 col-sm-8">
+							<button type="submit" class="btn btn-group btn-default btn-animated">Ingresar <i class="fa fa-user"></i></button>
+							<ul class="space-top">
+								<li><a href="#">Olvidaste tu contraseña?</a></li>
+							</ul>
+						</div>
+					</div>
+				</form>
+				<p>¿No tienes cuenta todavía? <a href="${pageContext.request.contextPath}/Usuario/ClienteRegistro.html">Crear cuenta</a></p>
+			</div>
+	
+			<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			                <h4 class="modal-title">Recuperar contraseña</h4>
+			            </div>
+			            <div class="modal-body">
+			                <p>Introduzca su dirección de correo electrónico a continuación para restablecer la contraseña.</p>
+			                <input type="text" name="email" id="email" placeholder="Correo" class="form-control placeholder-no-fix">
+			
+			            </div>
+			            <div class="modal-footer">
+			                <button data-dismiss="modal" class="btn btn-default" type="button">Cancelar</button>
+			                <button class="btn btn-success" type="button">Enviar</button>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+	
+	    </div>
+	</section>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 	<script type="text/javascript">

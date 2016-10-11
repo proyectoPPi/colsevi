@@ -44,6 +44,8 @@ public class ProductoManager {
 			if(producto != null && !producto.trim().isEmpty() && producto.trim().length() > 0){
 				mapa.put("producto", "%" + producto + "%");
 				result.put("labels", JsonAutocompletarProd(ColseviDao.getInstance().getProductoMapper().SelectAutocomplete(mapa)));
+			}else{
+				result.put("labels", new JSONArray());
 			}
 			
 			return result;

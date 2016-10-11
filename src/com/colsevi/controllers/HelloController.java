@@ -19,7 +19,7 @@ public class HelloController extends BaseConfigController{
 		if(getUsuario(request) != null && getUsuario(request).getPersona() != null){
 			model = new ModelAndView("producto/ProductoAdmin");
 		}else{
-			return new ModelAndView("redirect:/login.html");
+			return new ModelAndView("front/index");
 		}
 		
 		return model;

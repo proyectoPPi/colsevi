@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.controllers.producto.ProductoAdminController;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.general.model.Correo;
 import com.colsevi.dao.general.model.Direccion;
@@ -31,6 +33,7 @@ import com.colsevi.dao.general.model.TipoTelefonoExample;
 public class EstablecimientoController extends BaseConfigController {
 	
 	private static final long serialVersionUID = 1944372690226154900L;
+	private static Logger logger = Logger.getLogger(EstablecimientoController.class);
 	
 	@RequestMapping("/General/Establecimiento")
 	public ModelAndView Establecimiento(HttpServletRequest request,ModelMap model){
@@ -67,9 +70,13 @@ public class EstablecimientoController extends BaseConfigController {
 			mapa.put("direccion","%" + descripcion + "%");   
 		}
 		
-		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().SelectDataView(mapa)));
-		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().CountDataView(mapa));
-
+		try{
+			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().SelectDataView(mapa)));
+			opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().CountDataView(mapa));
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
 		response.setContentType("text/html;charset=ISO-8859-1");
 		request.setCharacterEncoding("UTF8");
 		
@@ -166,6 +173,7 @@ public class EstablecimientoController extends BaseConfigController {
 			ColseviDaoTransaccion.RealizarCommit(sesion);
 			
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			modelo.addAttribute("error", "Contactar al administrador");
 			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
@@ -274,6 +282,7 @@ public class EstablecimientoController extends BaseConfigController {
 				}
 				
 			} catch (Exception e) {
+				logger.error(e.getMessage());
 				modelo.addAttribute("error", "Ocurrió un error, contacte al administrador");
 			}
 			

@@ -15,16 +15,12 @@
 	</c:if>
 </head>
 <body>
-	<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
-	<section id="container">
+	<section class="page-wrapper">
+		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
 		<c:if test="${init != 'T'}">
-			<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
-			<section id="main-content">
+			<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
 		</c:if>
-		<c:if test="${init == 'T'}">
-			<section id="">
-		</c:if>
-			<section class="wrapper">
+			<section class="container">
 				<div class="row">
 					<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
 					<form method="post" action="${pageContext.request.contextPath}/Usuario/ClienteRegistro/Grabar.html?" id="formulario">
@@ -32,6 +28,7 @@
 	                   		<h2 style="text-align: center;">
 								<strong>REGISTRO DE CLIENTES</strong>
 							</h2>
+							<div class="separator-2"></div>
 	                   		<div class="f1-steps">
 	                   			<div class="f1-progress">
 	                   				<c:if test="${init != 'T'}">
@@ -177,7 +174,6 @@
 	                   	</div>
                    	</form>
 				</div>
-			</section>
 		</section>
 		<c:import url="/WEB-INF/jsp/plantilla/pie_pagina.jsp"></c:import>
 	</section>

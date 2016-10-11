@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,7 @@ public class InventarioController extends BaseConfigController {
 
 
 	private static final long serialVersionUID = -1900570445397410663L;
+	private static Logger logger = Logger.getLogger(InventarioController.class);
 
 	@RequestMapping("/Inventario/Inv")
 	public ModelAndView Inventario(HttpServletRequest request,ModelMap model){
@@ -78,7 +80,7 @@ public class InventarioController extends BaseConfigController {
 			opciones.put("total", ColseviDao.getInstance().getInventarioMapper().CountDataView(mapa));
 
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		response.setContentType("text/html;charset=ISO-8859-1");
@@ -118,6 +120,7 @@ public class InventarioController extends BaseConfigController {
 					resultado.add(opciones);
 				
 				}catch(Exception e){
+					logger.error(e.getMessage());
 					continue;
 				}
 			}
@@ -162,6 +165,7 @@ public class InventarioController extends BaseConfigController {
 					
 					resultado.add(opciones);
 				}catch(Exception e){
+					logger.error(e.getMessage());
 					continue;
 				}
 			}
@@ -230,6 +234,7 @@ public class InventarioController extends BaseConfigController {
 					}
 					resultado.add(opciones);
 				}catch(Exception e){
+					logger.error(e.getMessage());
 					continue;
 				}
 			}
@@ -278,6 +283,7 @@ public class InventarioController extends BaseConfigController {
 				modelo.addAttribute("correcto", "Inventario insertado");
 			}
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
 		return Inventario(request, modelo);
@@ -577,6 +583,7 @@ public class InventarioController extends BaseConfigController {
 				result.put("error", validacion[0]);
 			}
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			result.put("error", "Contactar al administrador");
 		}
 		
@@ -596,7 +603,7 @@ public class InventarioController extends BaseConfigController {
 			}
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 }

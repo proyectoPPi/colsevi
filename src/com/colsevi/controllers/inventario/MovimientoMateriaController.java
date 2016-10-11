@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -20,15 +21,12 @@ import com.colsevi.application.GeneralManager;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.dao.general.model.Establecimiento;
-import com.colsevi.dao.general.model.EstablecimientoExample;
-import com.colsevi.dao.general.model.UnidadPeso;
-import com.colsevi.dao.general.model.UnidadPesoExample;
 
 @Controller
 public class MovimientoMateriaController extends BaseConfigController{
 
 	private static final long serialVersionUID = 8419735704984053475L;
+	private static Logger logger = Logger.getLogger(MovimientoMateriaController.class);
 
 	@RequestMapping("/Inventario/MovimientoMateria")
 	public ModelAndView MovimientoMateria(HttpServletRequest request, ModelMap model){
@@ -69,7 +67,7 @@ public class MovimientoMateriaController extends BaseConfigController{
 			options.put("datos", ConstruirJSON(ColseviDao.getInstance().getMovimientoMateriaMapper().SelectDataView(mapa)));
 			options.put("total", ColseviDao.getInstance().getMovimientoMateriaMapper().CountDataView(mapa));
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		response.setContentType("text/html;charset=ISO-8859-1");
@@ -96,6 +94,7 @@ public class MovimientoMateriaController extends BaseConfigController{
 				
 				result.add(options);
 			}catch(Exception e){
+				logger.error(e.getMessage());
 				continue;
 			}
 		}

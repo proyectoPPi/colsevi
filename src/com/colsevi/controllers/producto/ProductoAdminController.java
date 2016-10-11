@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.controllers.LoginController;
 import com.colsevi.dao.producto.model.ProductoExample;
 import com.colsevi.dao.producto.model.RecetaExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoExample;
@@ -38,7 +40,8 @@ import com.colsevi.dao.producto.model.Producto;
 public class ProductoAdminController extends BaseConfigController {
 
 	private static final long serialVersionUID = 4997906906136000223L;
-
+	private static Logger logger = Logger.getLogger(ProductoAdminController.class);
+	
 	@RequestMapping("/Producto/Admin")
 	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipo", ProductoManager.tipoProducto());
@@ -54,7 +57,7 @@ public class ProductoAdminController extends BaseConfigController {
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		return new ModelAndView("producto/ProductoAdmin","col",getValoresGenericos(request));
@@ -90,6 +93,7 @@ public class ProductoAdminController extends BaseConfigController {
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getProductoMapper().selectByExample(prodExample)));
 			opciones.put("total", ColseviDao.getInstance().getProductoMapper().countByExample(prodExample));
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			opciones.put("error", "Contactar al administrador");
 		}
 
@@ -199,6 +203,7 @@ public class ProductoAdminController extends BaseConfigController {
 			
 				
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			error += "Contactar al administrador";
 		}
 		
@@ -244,6 +249,7 @@ public class ProductoAdminController extends BaseConfigController {
 		
 			ColseviDaoTransaccion.RealizarCommit(sesion);
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			modelo.addAttribute("error", "Contactar al administrador");
 			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
@@ -297,7 +303,7 @@ public class ProductoAdminController extends BaseConfigController {
 			modelo.addAttribute("correcto", "Producto Eliminado");
 			
 		}catch(Exception e){
-			e.getCause();
+			logger.error(e.getMessage());
 		}
 		return Producto(request, modelo);
 	}
@@ -352,6 +358,7 @@ public class ProductoAdminController extends BaseConfigController {
 			mapa.put("producto", request.getParameter("producto"));
 			result.put("dato", subIng(ColseviDao.getInstance().getIngredienteXProductoMapper().SelectDataView(mapa)));
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			result.put("error", "Contactar al administrador");
 		}
 		
@@ -397,7 +404,7 @@ public class ProductoAdminController extends BaseConfigController {
 			if(result == null)
 				result = new JSONObject();
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		response.setContentType("text/html;charset=ISO-8859-1");

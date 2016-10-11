@@ -9,17 +9,16 @@
 </head>
 <body>
 
-	<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
-	<section id="container" class="">
+	<section class="page-wrapper">
 		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
-		<section id="main-content">
-			<section class="wrapper">
+		<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
+			<section class="container">
 				<div class="row">
-				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
-				
-					<h2>TipoDocumento
+					<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
+					<h2 class="titulo">TipoDocumento
 						<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 					</h2>
+					<div class="separator-2"></div>
 					<section class="panel">
 						<div class="panel-body">
 							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -81,11 +80,11 @@
 					</div>
 				</div>
 			</section>
-		</section>
 		<c:import url="/WEB-INF/jsp/plantilla/pie_pagina.jsp"></c:import>
 	</section>
 	<c:import url="/WEB-INF/jsp/plantilla/javascript_genericos.jsp"></c:import>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/usuario/TipoDocumento.js"></script>
+	
 	<script type="text/javascript">
 		
 		titulos = new Array();

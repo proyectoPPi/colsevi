@@ -882,8 +882,7 @@ body .ui-tooltip {
 
 .ui-widget-content {
 	border: 1px solid #ddd;
-	background: #eee url(images/ui-bg_highlight-soft_100_eeeeee_1x100.png)
-		50% top repeat-x;
+	background: white;
 	color: #333
 }
 
@@ -1731,23 +1730,6 @@ body .ui-tooltip {
 
 .ui-icon-grip-diagonal-se {
 	background-position: -80px -224px
-}
-
-.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
-	border-top-left-radius: 4px
-}
-
-.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
-	border-top-right-radius: 4px
-}
-
-.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
-	border-bottom-left-radius: 4px
-}
-
-.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
-	border-bottom-right-radius: 4px;
-	z-index: 10000;
 }
 
 .ui-widget-overlay {
