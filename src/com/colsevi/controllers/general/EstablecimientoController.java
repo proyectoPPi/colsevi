@@ -274,7 +274,7 @@ public class EstablecimientoController extends BaseConfigController {
 				example.createCriteria().andId_establecimientoEqualTo(Integer.parseInt(id));
 				Integer contCatalogo = ColseviDao.getInstance().getCatalogoMapper().countByExample(example);
 				
-				if(contCatalogo == null && contCatalogo > 0){
+				if(contCatalogo == 0){
 					ColseviDao.getInstance().getEstablecimientoMapper().deleteByPrimaryKey(Integer.parseInt(id));
 					modelo.addAttribute("correcto", "Establecimiento Eliminado");
 				}else{

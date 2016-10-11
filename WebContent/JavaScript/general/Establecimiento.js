@@ -1,6 +1,5 @@
 jQuery(document).ready(function(){
 	Tabla();
-	HMask('telefono', '9999999');
 	HDatetimePicker('dtBox',false);
 });
 

@@ -240,7 +240,7 @@ public class ProductoAdminController extends BaseConfigController {
 			
 			IngredienteXProductoExample ingProdE = new IngredienteXProductoExample();
 			ingProdE.createCriteria().andId_productoEqualTo(bean.getId_producto());
-			ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.producto.map.IngredienteXProductoMapper.deleteByExample", ingProdE);
+			ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.producto.map.IngredienteXProductoMapper.deleteByExample", ingProdE);
 			
 			for(IngredienteXProducto ingProd : listaIngProd){
 				ingProd.setId_producto(bean.getId_producto());
