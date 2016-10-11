@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ProveedorManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.controllers.producto.ProductoAdminController;
 import com.colsevi.dao.caja.model.CierreCaja;
 import com.colsevi.dao.caja.model.CierreCajaExample;
 import com.colsevi.dao.deuda.model.DeudaProveedor;
@@ -36,6 +38,7 @@ import com.colsevi.dao.usuario.model.Persona;
 public class CierreCajaController extends BaseConfigController{
 
 	private static final long serialVersionUID = 2407344590292431117L;
+	private static Logger logger = Logger.getLogger(CierreCajaController.class);
 
 	@RequestMapping("/Caja/CierreCaja")
 	public ModelAndView cierre(HttpServletRequest request, ModelMap model){
@@ -55,7 +58,7 @@ public class CierreCajaController extends BaseConfigController{
 			result.put("total", 0);
 		
 		}catch(Exception e){
-			
+			logger.error(e.getMessage());
 		}
 		
 		response.setContentType("text/html;charset=ISO-8859-1");
@@ -82,6 +85,7 @@ public class CierreCajaController extends BaseConfigController{
 				
 				resultado.add(opciones);
 			}catch(Exception e){
+				logger.error(e.getMessage());
 				continue;
 			}
 		}

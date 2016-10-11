@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -23,11 +24,13 @@ import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.controllers.producto.ProductoAdminController;
 
 @Controller
 public class MateriaPrimaController extends BaseConfigController{
 
 	private static final long serialVersionUID = 55977124238424730L;
+	private static Logger logger = Logger.getLogger(MateriaPrimaController.class);
 
 	@RequestMapping("/Inventario/MateriaPrima")
 	public ModelAndView MateriaPrima(HttpServletRequest request, ModelMap model){
@@ -71,7 +74,7 @@ public class MateriaPrimaController extends BaseConfigController{
 			options.put("datos", ConstruirJSON(ColseviDao.getInstance().getMateriaPrimaMapper().SelectDataView(mapa)));
 			options.put("total", ColseviDao.getInstance().getMateriaPrimaMapper().CountDataView(mapa));
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		response.setContentType("text/html;charset=ISO-8859-1");
@@ -100,6 +103,7 @@ public class MateriaPrimaController extends BaseConfigController{
 				
 				result.add(options);
 			}catch(Exception e){
+				logger.error(e.getMessage());
 				continue;
 			}
 		}
@@ -183,6 +187,7 @@ public class MateriaPrimaController extends BaseConfigController{
 				model.addAttribute("error", "Seleccionar un ingrediente");
 			}
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			model.addAttribute("error", "Contactar al administrador");
 		}
 		return MateriaPrima(request, model);
@@ -215,6 +220,7 @@ public class MateriaPrimaController extends BaseConfigController{
 			else
 				error += "Seleccionar un establecimiento</br>";
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			error = "Contactar al administrador";
 		}
 		

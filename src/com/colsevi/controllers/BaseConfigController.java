@@ -22,7 +22,8 @@ public class BaseConfigController implements Serializable {
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("menu", getMenu(request));
 		mapa.put("SubMenu", SubMenu(request));
-		
+		mapa.put("sesion", getUsuario(request) != null ? 'T' : 'F');
+
 		return mapa;
 	}
 	
@@ -35,11 +36,31 @@ public class BaseConfigController implements Serializable {
 			
 			for(Pagina pag: listaPag){
 				if(pag.getMenu()){
-					menu += "<li>";
-					menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
-					menu += "<i class=\""+pag.getIcono()+"\"></i>";
-					menu += "<span>"+pag.getNombre()+"</span>";
-					menu += "</a>";
+					if(pag.getPadrePagina() != null){
+						menu += "<li class=\"dropdown\">";
+					}else{
+						menu += "<li>";
+					}
+					menu += "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\""+request.getContextPath()+pag.getUrl()+"\">"+
+							pag.getNombre()+"</a>";
+					
+					if(pag.getPadrePagina() != null){
+						String[] Padre = pag.getPadrePagina().split(",");
+						List<Integer> list = new ArrayList<Integer>();
+						for(int i = 0; i<Padre.length; i++){
+							list.add(Integer.parseInt(Padre[i]));
+						}
+						PaginaExample PE = new PaginaExample();
+						PE.createCriteria().andId_paginaIn(list);
+						List<Pagina> listaPadre = ColseviDao.getInstance().getPaginaMapper().selectByExample(PE);
+						menu += "<ul class=\"dropdown-menu\">";
+						for(Pagina Ppag: listaPadre){
+							menu += "<li>"+"<a href=\""+request.getContextPath()+Ppag.getUrl()+"\"><i class=\""+Ppag.getIcono()+"\"></i>"
+									+Ppag.getNombre()+"</a></li>";
+						}
+						menu += "</ul>";
+					}
+					
 					menu += "</li>";
 				}
 			}

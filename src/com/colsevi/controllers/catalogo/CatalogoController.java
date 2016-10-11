@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -16,21 +17,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.dao.catalogo.model.Catalogo;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.controllers.producto.ProductoAdminController;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
-import com.colsevi.dao.general.model.Direccion;
 import com.colsevi.dao.general.model.Establecimiento;
 import com.colsevi.dao.general.model.EstablecimientoExample;
-import com.colsevi.dao.general.model.Telefono;
-import com.colsevi.dao.general.model.TipoTelefono;
-import com.colsevi.dao.general.model.TipoTelefonoExample;
-import com.colsevi.dao.proveedor.model.CompraExample;
-import com.colsevi.dao.proveedor.model.Proveedor;
-import com.colsevi.dao.proveedor.model.ProveedorExample;
-import com.sun.org.apache.xml.internal.resolver.Catalog;
+
 @Controller
 public class CatalogoController extends BaseConfigController{
 
 	private static final long serialVersionUID = 4577401405301562904L;
+	private static Logger logger = Logger.getLogger(CatalogoController.class);	
 	
 	@RequestMapping("/Catalogo/Cat")
 	public ModelAndView Catalogo(HttpServletRequest request,ModelMap model){
@@ -70,7 +66,7 @@ public class CatalogoController extends BaseConfigController{
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getCatalogoMapper().selectByExample(CatExample)));
 			opciones.put("total", ColseviDao.getInstance().getCatalogoMapper().countByExample(CatExample));
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		response.setContentType("text/html;charset=ISO-8859-1");
@@ -148,6 +144,7 @@ public class CatalogoController extends BaseConfigController{
 				modelo.addAttribute("correcto", "Proveedor insertado");
 			}
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
 		return Catalogo(request, modelo);
@@ -172,6 +169,7 @@ public class CatalogoController extends BaseConfigController{
 //				}
 			}
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			modelo.addAttribute("error", "Contacte al Administrador");
 		}
 		

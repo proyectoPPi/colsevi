@@ -53,7 +53,7 @@ function HTabla(opciones){
 				organizarPaginacion(1);
 			}
 			html = '<section id="flip-scroll">';
-			html += '<table class="table table-bordered table-striped table-condensed cf"><thead class="cf"><tr>';
+			html += '<table class="table table-bordered table-striped cf"><thead class="cf"><tr>';
 			for(k in titulos){
 				var className = '';
 				if(titulos[k] != "ID"){
@@ -215,35 +215,6 @@ function organizarPaginacion(pagina){
 			html += '<li><a href="javascript:void(Tabla('+NPaginas+'));">&raquo;</a></li>';
 		}
 		jQuery("#paginacion").append('<ul class="dataTables_paginate paging_bootstrap pagination">'+html+'</ul>');
-}
-
-function HiniciarAutocompletar(url,input, update){
-
-	var value = "valor="+jQuery("#"+input).val();
-	dataMap['AutocompletarUrl'] = url;
-	
-	jQuery.ajaxQueue({
-		url: dataMap['AutocompletarUrl'] + value,
-	}).done(function(result) {
-		var data;
-		try{
-			data = jQuery.parseJSON(result);
-		} catch(err){
-			console.log("Error ejecutando HiniciarAutocompletar" + err);
-        	return;
-		}
-		dataMap['autocompletar'] = data['labels'];
-		
-		AuxiliarAutocompletar(input);
-		
-		if(update==true){
-			jQuery("#"+input).keyup(function(e) {
-				if((e.which<37 || e.which>40) && e.which!=13){
-					ActualizarAutocompletar(input);
-				}
-			});
-		}
-	});
 }
 
 function AuxiliarAutocompletar(input){
