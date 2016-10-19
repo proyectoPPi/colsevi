@@ -21,7 +21,7 @@ import com.colsevi.dao.general.model.Direccion;
 import com.colsevi.dao.general.model.DireccionExample;
 import com.colsevi.dao.general.model.Telefono;
 import com.colsevi.dao.general.model.TelefonoExample;
-import com.colsevi.dao.proveedor.model.CompraExample;
+import com.colsevi.dao.proveedor.model.CompraProveedorExample;
 import com.colsevi.dao.proveedor.model.Proveedor;
 import com.colsevi.dao.proveedor.model.ProveedorExample;
 
@@ -253,9 +253,9 @@ public class ProveedorController extends BaseConfigController {
 			Integer id = Integer.parseInt(request.getParameter("id_proveedor"));
 			if(id != null){
 				
-				CompraExample compra = new CompraExample();
+				CompraProveedorExample compra = new CompraProveedorExample();
 				compra.createCriteria().andId_proveedorEqualTo(id);
-				Integer dataCruce = ColseviDao.getInstance().getCompraMapper().countByExample(compra);
+				Integer dataCruce = ColseviDao.getInstance().getCompraProveedorMapper().countByExample(compra);
 				if(dataCruce != null && dataCruce > 0){
 					modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociado a una compra");
 				}else{

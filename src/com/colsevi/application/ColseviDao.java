@@ -36,7 +36,7 @@ import com.colsevi.dao.producto.map.PreparacionRecetaMapper;
 import com.colsevi.dao.producto.map.ProductoMapper;
 import com.colsevi.dao.producto.map.RecetaMapper;
 import com.colsevi.dao.producto.map.TipoProductoMapper;
-import com.colsevi.dao.proveedor.map.CompraMapper;
+import com.colsevi.dao.proveedor.map.CompraProveedorMapper;
 import com.colsevi.dao.proveedor.map.CompraXIngredienteMapper;
 import com.colsevi.dao.proveedor.map.ProveedorMapper;
 import com.colsevi.dao.proveedor.map.TipoProveedorMapper;
@@ -63,7 +63,7 @@ public class ColseviDao {
 	private CobroMapper cobroMapper;
 	private TipoProveedorMapper tipoProveedorMapper;
 	private ProveedorMapper proveedorMapper;
-	private CompraMapper compraMapper;
+	private CompraProveedorMapper compraProveedorMapper;
 	private CompraXIngredienteMapper compraXIngredienteMapper;
 	private PagoPedidoMapper pagoPedidoMapper;
 	private PagoProveedorMapper pagoProveedorMapper;
@@ -133,7 +133,7 @@ public class ColseviDao {
 		cobroMapper = (CobroMapper) beanFactoryMyBatis.getBean("cobroMapper");
 		tipoProveedorMapper = (TipoProveedorMapper) beanFactoryMyBatis.getBean("tipoProveedorMapper");
 		proveedorMapper = (ProveedorMapper) beanFactoryMyBatis.getBean("proveedorMapper");
-		compraMapper = (CompraMapper) beanFactoryMyBatis.getBean("compraMapper");
+		compraProveedorMapper = (CompraProveedorMapper) beanFactoryMyBatis.getBean("compraProveedorMapper");
 		compraXIngredienteMapper = (CompraXIngredienteMapper) beanFactoryMyBatis.getBean("compraXIngredienteMapper");
 		pagoPedidoMapper = (PagoPedidoMapper) beanFactoryMyBatis.getBean("pagoPedidoMapper");
 		pagoProveedorMapper = (PagoProveedorMapper) beanFactoryMyBatis.getBean("pagoProveedorMapper");
@@ -281,14 +281,6 @@ public class ColseviDao {
 
 	public void setProveedorMapper(ProveedorMapper proveedorMapper) {
 		this.proveedorMapper = proveedorMapper;
-	}
-
-	public CompraMapper getCompraMapper() {
-		return compraMapper;
-	}
-
-	public void setCompraMapper(CompraMapper compraMapper) {
-		this.compraMapper = compraMapper;
 	}
 
 	public CompraXIngredienteMapper getCompraXIngredienteMapper() {
@@ -498,6 +490,13 @@ public class ColseviDao {
 	public void setMateriaPrimaMapper(MateriaPrimaMapper materiaPrimaMapper) {
 		this.materiaPrimaMapper = materiaPrimaMapper;
 	}
-	
 
+	public CompraProveedorMapper getCompraProveedorMapper() {
+		return compraProveedorMapper;
+	}
+
+	public void setCompraProveedorMapper(CompraProveedorMapper compraProveedorMapper) {
+		this.compraProveedorMapper = compraProveedorMapper;
+	}
+	
 }

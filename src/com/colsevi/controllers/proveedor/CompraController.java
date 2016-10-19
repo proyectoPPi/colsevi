@@ -33,8 +33,8 @@ import com.colsevi.dao.inventario.model.MovimientoMateriaExample;
 import com.colsevi.dao.pago.model.PagoProveedorExample;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteExample;
-import com.colsevi.dao.proveedor.model.Compra;
-import com.colsevi.dao.proveedor.model.CompraExample;
+import com.colsevi.dao.proveedor.model.CompraProveedor;
+import com.colsevi.dao.proveedor.model.CompraProveedorExample;
 import com.colsevi.dao.proveedor.model.CompraXIngrediente;
 import com.colsevi.dao.proveedor.model.CompraXIngredienteExample;
 
@@ -74,14 +74,14 @@ public class CompraController extends BaseConfigController {
 		String valorMF = request.getParameter("valorMF");
 		String estaF = request.getParameter("estaF");
 		
-		CompraExample compraExample = new CompraExample();
+		CompraProveedorExample compraExample = new CompraProveedorExample();
 		compraExample.setLimit(Inicio + ", " + Final);
-		compraExample.setOrderByClause("id_compra DESC");
+		compraExample.setOrderByClause("id_compra_proveedor DESC");
 		
-		CompraExample.Criteria criteria = (CompraExample.Criteria) compraExample.createCriteria();
+		CompraProveedorExample.Criteria criteria = (CompraProveedorExample.Criteria) compraExample.createCriteria();
 		
 		if(com != null && !com.trim().isEmpty()){
-			criteria.andId_compraEqualTo(Integer.parseInt(com));
+			criteria.andId_compra_proveedorEqualTo(Integer.parseInt(com));
 		}
 		if(pagadoF != null && !pagadoF.trim().isEmpty() && !pagadoF.trim().equals("0")){
 			if(pagadoF.trim().equals("1")){
@@ -117,8 +117,8 @@ public class CompraController extends BaseConfigController {
 				criteria.andFecha_compraLessThanOrEqualTo(UtilidadManager.FormatDateFormDB2(fechaF));
 			}
 		}
-		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getCompraMapper().selectByExample(compraExample)));
-		opciones.put("total", ColseviDao.getInstance().getCompraMapper().countByExample(compraExample));
+		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getCompraProveedorMapper().selectByExample(compraExample)));
+		opciones.put("total", ColseviDao.getInstance().getCompraProveedorMapper().countByExample(compraExample));
 
 		response.setContentType("text/html;charset=ISO-8859-1");
 		request.setCharacterEncoding("UTF8");
@@ -127,16 +127,16 @@ public class CompraController extends BaseConfigController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public JSONArray ConstruirJson(List<Compra> listaCompra){
+	public JSONArray ConstruirJson(List<CompraProveedor> listaCompra){
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject(), labels = new JSONObject();
 		
 		if(listaCompra != null && listaCompra.size() >0){
-			for (Compra bean : listaCompra) {
+			for (CompraProveedor bean : listaCompra) {
 				opciones = new JSONObject();
 				labels = new JSONObject();
-				opciones.put("id_compra", bean.getId_compra().toString());
+				opciones.put("id_compra", bean.getId_compra_proveedor().toString());
 				opciones.put("id_compraBoton", "");
 				opciones.put("valor", UtilidadManager.Currency(bean.getValor()));
 				opciones.put("valorsin", bean.getValor().intValue());
@@ -237,7 +237,7 @@ public class CompraController extends BaseConfigController {
 		List<MateriaPrima> listaMP = null;
 		List<Integer> loteList = null;
 		List<Integer> countDelete = null;
-		Compra bean = null;
+		CompraProveedor bean = null;
 		
 		try{
 			Object[] result = validarGuardar(request);
@@ -250,7 +250,7 @@ public class CompraController extends BaseConfigController {
 			loteList = (List<Integer>) result[1];
 			listaCXI = (List<CompraXIngrediente>) result[2];
 			listaMP = (List<MateriaPrima>) result[3];
-			bean = (Compra) result[4];
+			bean = (CompraProveedor) result[4];
 			
 			bean.setMotivo("");
 			
@@ -258,7 +258,7 @@ public class CompraController extends BaseConfigController {
 	
 				MateriaPrimaExample mpe = new MateriaPrimaExample();
 				
-				cie.createCriteria().andLoteNotIn(loteList).andId_compraEqualTo(bean.getId_compra());
+				cie.createCriteria().andLoteNotIn(loteList).andId_compraEqualTo(bean.getId_compra_proveedor());
 				List<CompraXIngrediente> listCXI = ColseviDao.getInstance().getCompraXIngredienteMapper().selectByExample(cie);
 				
 				countDelete = new ArrayList<Integer>();
@@ -276,21 +276,21 @@ public class CompraController extends BaseConfigController {
 				}
 			}
 
-			if(bean.getId_compra() != null){
-				ColseviDao.getInstance().getCompraMapper().updateByPrimaryKey(bean);
+			if(bean.getId_compra_proveedor() != null){
+				ColseviDao.getInstance().getCompraProveedorMapper().updateByPrimaryKey(bean);
 				modelo.addAttribute("correcto", "Compra Actualizada");
 			}else{
-				ColseviDao.getInstance().getCompraMapper().insert(bean);
+				ColseviDao.getInstance().getCompraProveedorMapper().insert(bean);
 				
-				CompraExample exampleC = new CompraExample();
+				CompraProveedorExample exampleC = new CompraProveedorExample();
 				exampleC.setLimit("1");
-				exampleC.setOrderByClause("id_compra DESC");
-				bean.setId_compra(ColseviDao.getInstance().getCompraMapper().selectByExample(exampleC).get(0).getId_compra());
+				exampleC.setOrderByClause("id_compra_proveedor DESC");
+				bean.setId_compra_proveedor(ColseviDao.getInstance().getCompraProveedorMapper().selectByExample(exampleC).get(0).getId_compra_proveedor());
 				modelo.addAttribute("correcto", "Compra insertada");
 			}
 
 			for(int i=0; i<listaMP.size(); i++){
-				listaCXI.get(i).setId_compra(bean.getId_compra());
+				listaCXI.get(i).setId_compra(bean.getId_compra_proveedor());
 				listaMP.get(i).setId_establecimiento(bean.getId_establecimiento());
 				
 				if(listaCXI.get(i).getLote() != null){
@@ -318,7 +318,7 @@ public class CompraController extends BaseConfigController {
 		Object[] result = new Object[5];
 		String error = "";
 		MovimientoMateriaExample MME = new MovimientoMateriaExample();
-		Compra beanC = new Compra();
+		CompraProveedor beanC = new CompraProveedor();
 		beanC.setValor(new BigDecimal(0));
 		List<CompraXIngrediente> listaCXI = new ArrayList<CompraXIngrediente>();
 		List<MateriaPrima> listaMP = new ArrayList<MateriaPrima>();
@@ -326,8 +326,8 @@ public class CompraController extends BaseConfigController {
 		Integer count = Integer.parseInt(request.getParameter("count"));
 		
 		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty()){
-			beanC.setId_compra(Integer.parseInt(request.getParameter("id_compra")));
-			error += validarNoInv(beanC.getId_compra());
+			beanC.setId_compra_proveedor(Integer.parseInt(request.getParameter("id_compra")));
+			error += validarNoInv(beanC.getId_compra_proveedor());
 		}
 		if(request.getParameter("proveedor") == null || request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").trim().equals("0"))
 			error += "Seleccionar el proveedor<br/>";
@@ -403,7 +403,7 @@ public class CompraController extends BaseConfigController {
 		}
 		
 		if((listaCXI == null || listaCXI.size() < 1) && (listaMP == null || listaMP.size() < 1)){
-			if(beanC.getId_compra() == null){
+			if(beanC.getId_compra_proveedor() == null){
 				error += "No hay detalle seleccionado";
 			}
 		}
@@ -428,11 +428,11 @@ public class CompraController extends BaseConfigController {
 	@RequestMapping("/Proveedor/Compra/GuardarMotivo")
 	public ModelAndView GuardarMotivo(HttpServletRequest request, ModelMap modelo){
 		
-		Compra bean = new Compra();
+		CompraProveedor bean = new CompraProveedor();
 		String error = "";
 		
 		if(request.getParameter("id_compraMotiv") != null && !request.getParameter("id_compraMotiv").trim().isEmpty())
-			bean.setId_compra(Integer.parseInt(request.getParameter("id_compraMotiv")));
+			bean.setId_compra_proveedor(Integer.parseInt(request.getParameter("id_compraMotiv")));
 		else
 			error += "Seleccionar una compra";
 		
@@ -446,7 +446,7 @@ public class CompraController extends BaseConfigController {
 			return Compra(request, modelo);
 		}
 		
-		error = validarNoInv(bean.getId_compra());
+		error = validarNoInv(bean.getId_compra_proveedor());
 		
 		if(!error.isEmpty()){
 			modelo.addAttribute("error", error);
@@ -454,10 +454,10 @@ public class CompraController extends BaseConfigController {
 		}
 		
 		try{
-			ColseviDao.getInstance().getCompraMapper().updateByPrimaryKeySelective(bean);
+			ColseviDao.getInstance().getCompraProveedorMapper().updateByPrimaryKeySelective(bean);
 			
 			CompraXIngredienteExample CIE = new CompraXIngredienteExample();
-			CIE.createCriteria().andId_compraEqualTo(bean.getId_compra());
+			CIE.createCriteria().andId_compraEqualTo(bean.getId_compra_proveedor());
 			List<CompraXIngrediente> listaDetalle = ColseviDao.getInstance().getCompraXIngredienteMapper().selectByExample(CIE);
 			Integer lote = null;
 			for(CompraXIngrediente cxi: listaDetalle){

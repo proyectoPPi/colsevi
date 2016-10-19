@@ -29,6 +29,7 @@
 		<mapper resource="com/colsevi/dao/proveedor/map/TipoProveedorMapper.xml" />
 		<mapper resource="com/colsevi/dao/proveedor/map/ProveedorMapper.xml" />
 		<mapper resource="com/colsevi/dao/proveedor/map/CompraXIngredienteMapper.xml" />
+		<mapper resource="com/colsevi/dao/proveedor/map/CompraProveedorMapper.xml" />
 		<mapper resource="com/colsevi/dao/pago/map/PagoPedidoMapper.xml" />
 		<mapper resource="com/colsevi/dao/pago/map/PagoProveedorMapper.xml" />
 		<mapper resource="com/colsevi/dao/deuda/map/DeudaPedidoMapper.xml" />

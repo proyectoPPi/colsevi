@@ -30,8 +30,8 @@ import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
 import com.colsevi.dao.pago.model.PagoProveedor;
 import com.colsevi.dao.pedido.model.Pedido;
 import com.colsevi.dao.pedido.model.PedidoExample;
-import com.colsevi.dao.proveedor.model.Compra;
-import com.colsevi.dao.proveedor.model.CompraExample;
+import com.colsevi.dao.proveedor.model.CompraProveedor;
+import com.colsevi.dao.proveedor.model.CompraProveedorExample;
 import com.colsevi.dao.usuario.model.Persona;
 
 @Controller
@@ -99,25 +99,25 @@ public class CierreCajaController extends BaseConfigController{
 		PagoProveedor pp = new PagoProveedor();
 		DeudaProveedor dp = new DeudaProveedor();
 		CierreCaja cc = new CierreCaja();
-		List<Compra> listaC = new ArrayList<Compra>();
+		List<CompraProveedor> listaC = new ArrayList<CompraProveedor>();
 		List<Pedido> listaP = new ArrayList<Pedido>();
-		CompraExample CE = new CompraExample();
+		CompraProveedorExample CE = new CompraProveedorExample();
 		PedidoExample PE = new PedidoExample();
 		Date inicio = getStartOfDay(new Date(System.currentTimeMillis()));
 		Date fin = getEndOfDay(new Date(System.currentTimeMillis()));
 		
 		
 		CE.createCriteria().andFecha_compraBetween(inicio, fin);
-		listaC = ColseviDao.getInstance().getCompraMapper().selectByExample(CE);
+		listaC = ColseviDao.getInstance().getCompraProveedorMapper().selectByExample(CE);
 		
-		for(Compra bean: listaC){
+		for(CompraProveedor bean: listaC){
 			if(bean.getPagado()){
 
-				ProveedorManager.InsertarPago(bean.getId_compra(), new Date(), new  BigDecimal(0), bean.getValor(), "Pago completo al proveedor");
+				ProveedorManager.InsertarPago(bean.getId_compra_proveedor(), new Date(), new  BigDecimal(0), bean.getValor(), "Pago completo al proveedor");
 			
 			}else{
 				dp = new DeudaProveedor();
-				dp.setId_compra(bean.getId_compra());
+				dp.setId_compra(bean.getId_compra_proveedor());
 				dp.setFecha_deuda(new Date());
 				dp.setPendiente(bean.getValor());
 				dp.setObservacion("Deuda de la compra al proveedor");

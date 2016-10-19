@@ -18,7 +18,12 @@
 	
 	</style>
 </head>
-<body>
+<body class="no-trans page-loader-3">
+
+	<div class="scrollToTop circle">
+		<i class="fa fa-angle-up"></i>
+	</div>
+		
 	<section class="page-wrapper">
 		<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
 		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
@@ -30,8 +35,10 @@
 					<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 				</h2>
 				<div class="separator-2"></div>
-				<section class="panel">
-					<div class="panel-body">
+				
+				<a class="btn btn-gray collapsed btn-animated" data-toggle="collapse" href="#collapseContent" aria-expanded="false" aria-controls="collapseContent">Filtros<i class="fa fa-plus"></i></a>
+				<div class="collapse" id="collapseContent">
+					<div class="row">
 						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 							<label>Producto</label>
 							<input type="text" class="form-control" id="prodF" name="prodF" value="${prod}"/>
@@ -54,8 +61,10 @@
 						<div class="col-xs-12 col-md-12 col-lg-12"><br/>
 							<button class="btn btn-button" onclick="Tabla(1);">Filtrar</button>
 						</div>	
-					</div>	
-				</section>
+						
+					</div>
+				</div>
+	
 			
 				<div class=" col-xs-12 col-md-12 col-lg-12">
 					<div id="tabla"></div>

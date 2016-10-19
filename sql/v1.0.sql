@@ -132,8 +132,8 @@ CREATE TABLE proveedor (
     CONSTRAINT fk_telprop FOREIGN KEY (id_telefono) REFERENCES telefono(id_telefono)
 );
 
-CREATE TABLE compra(
-	id_compra INT AUTO_INCREMENT,
+CREATE TABLE compra_proveedor(
+	id_compra_proveedor INT AUTO_INCREMENT,
     id_proveedor INT NOT NULL,
     id_establecimiento INT,
     valor DECIMAL(12,2) NOT NULL,
@@ -141,7 +141,9 @@ CREATE TABLE compra(
     iva INTEGER,
     pagado BOOLEAN DEFAULT FALSE,
     motivo VARCHAR(200),
-    PRIMARY KEY(id_compra),
+    pendiente DECIMAL(12,2),
+    observacion VARCHAR(500),
+    PRIMARY KEY(id_compra_proveedor),
     CONSTRAINT fk_comprae FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento),
 	CONSTRAINT fk_comprap FOREIGN KEY (id_proveedor) REFERENCES proveedor(id_proveedor)
 );
@@ -155,16 +157,6 @@ CREATE TABLE pago_proveedor(
     observacion VARCHAR(150),
     PRIMARY KEY(id_pago_proveedor),
 	CONSTRAINT fk_PagoProv FOREIGN KEY (id_compra) REFERENCES compra(id_compra)
-);
-
-CREATE TABLE deuda_proveedor(
-	id_deuda_proveedor INT AUTO_INCREMENT,
-    id_compra INT NOT NULL,
-    pendiente DECIMAL(12,2),
-    fecha_deuda DATETIME,
-    observacion VARCHAR(150),
-    PRIMARY KEY(id_deuda_proveedor),
-	CONSTRAINT fk_DeudaProv FOREIGN KEY (id_compra) REFERENCES compra(id_compra)
 );
 
 CREATE TABLE clasificar_ingrediente(

@@ -6,7 +6,6 @@ var cantPagina = 16;
  * Método para pintar la tabla
  */
 function HTabla(opciones){
-	jQuery("#ModalCargando").modal('show');
 	var titulos = opciones.titulos;
 	var Id = opciones.Id;
 	var id = null;

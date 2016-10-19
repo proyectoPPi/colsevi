@@ -76,8 +76,8 @@
 		<property value="com.colsevi.dao.proveedor.map.ProveedorMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	<bean id="compraMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property value="com.colsevi.dao.proveedor.map.CompraMapper" name="mapperInterface" />
+	<bean id="compraProveedorMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.proveedor.map.CompraProveedorMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	<bean id="compraXIngredienteMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
