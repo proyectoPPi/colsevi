@@ -25,7 +25,6 @@ import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.controllers.producto.ProductoAdminController;
 import com.colsevi.dao.caja.model.CierreCaja;
 import com.colsevi.dao.caja.model.CierreCajaExample;
-import com.colsevi.dao.deuda.model.DeudaProveedor;
 import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
 import com.colsevi.dao.pago.model.PagoProveedor;
 import com.colsevi.dao.pedido.model.Pedido;
@@ -93,60 +92,59 @@ public class CierreCajaController extends BaseConfigController{
 		return resultado;
 	}
 	
-	
-	public void ejecutarCierre(HttpServletRequest request, ModelMap model){
-		
-		PagoProveedor pp = new PagoProveedor();
-		DeudaProveedor dp = new DeudaProveedor();
-		CierreCaja cc = new CierreCaja();
-		List<CompraProveedor> listaC = new ArrayList<CompraProveedor>();
-		List<Pedido> listaP = new ArrayList<Pedido>();
-		CompraProveedorExample CE = new CompraProveedorExample();
-		PedidoExample PE = new PedidoExample();
-		Date inicio = getStartOfDay(new Date(System.currentTimeMillis()));
-		Date fin = getEndOfDay(new Date(System.currentTimeMillis()));
-		
-		
-		CE.createCriteria().andFecha_compraBetween(inicio, fin);
-		listaC = ColseviDao.getInstance().getCompraProveedorMapper().selectByExample(CE);
-		
-		for(CompraProveedor bean: listaC){
-			if(bean.getPagado()){
-
-				ProveedorManager.InsertarPago(bean.getId_compra_proveedor(), new Date(), new  BigDecimal(0), bean.getValor(), "Pago completo al proveedor");
-			
-			}else{
-				dp = new DeudaProveedor();
-				dp.setId_compra(bean.getId_compra_proveedor());
-				dp.setFecha_deuda(new Date());
-				dp.setPendiente(bean.getValor());
-				dp.setObservacion("Deuda de la compra al proveedor");
-				
-				ColseviDao.getInstance().getDeudaProveedorMapper().insertSelective(dp);
-			}
-		}
-		
-		ColseviDao.getInstance().getInventarioXMateriaMapper().deleteByExample(new InventarioXMateriaExample());
-		
-		List<Integer> estados = new ArrayList<Integer>();
-		estados.add(2);
-		PE.createCriteria().andId_estado_pedidoNotIn(estados).andFecha_pedidoBetween(inicio, fin);
-		listaP = ColseviDao.getInstance().getPedidoMapper().selectByExample(PE);
-		
-		for(Pedido ped: listaP){
-			ped.setId_estado_pedido(1);
-			ColseviDao.getInstance().getPedidoMapper().updateByPrimaryKey(ped);
-		}
-		
-		cc.setFecha_cierre(new Date(System.currentTimeMillis()));
-		cc.setFecha_ejecucion(new Date());
-		cc.setId_persona(getUsuario(request).getPersona());
-		cc.setMensaje(request.getParameter("mensaje"));
-		
-		ColseviDao.getInstance().getCierreCajaMapper().insertSelective(cc);
-		
-	}
-	
+//	
+//	public void ejecutarCierre(HttpServletRequest request, ModelMap model){
+//		
+//		PagoProveedor pp = new PagoProveedor();
+//		CierreCaja cc = new CierreCaja();
+//		List<CompraProveedor> listaC = new ArrayList<CompraProveedor>();
+//		List<Pedido> listaP = new ArrayList<Pedido>();
+//		CompraProveedorExample CE = new CompraProveedorExample();
+//		PedidoExample PE = new PedidoExample();
+//		Date inicio = getStartOfDay(new Date(System.currentTimeMillis()));
+//		Date fin = getEndOfDay(new Date(System.currentTimeMillis()));
+//		
+//		
+//		CE.createCriteria().andFecha_compraBetween(inicio, fin);
+//		listaC = ColseviDao.getInstance().getCompraProveedorMapper().selectByExample(CE);
+//		
+//		for(CompraProveedor bean: listaC){
+//			if(bean.getPagado()){
+//
+//				ProveedorManager.InsertarPago(bean.getId_compra_proveedor(), new Date(), new  BigDecimal(0), bean.getValor(), "Pago completo al proveedor");
+//			
+//			}else{
+//				dp = new DeudaProveedor();
+//				dp.setId_compra(bean.getId_compra_proveedor());
+//				dp.setFecha_deuda(new Date());
+//				dp.setPendiente(bean.getValor());
+//				dp.setObservacion("Deuda de la compra al proveedor");
+//				
+//				ColseviDao.getInstance().getDeudaProveedorMapper().insertSelective(dp);
+//			}
+//		}
+//		
+//		ColseviDao.getInstance().getInventarioXMateriaMapper().deleteByExample(new InventarioXMateriaExample());
+//		
+//		List<Integer> estados = new ArrayList<Integer>();
+//		estados.add(2);
+//		PE.createCriteria().andId_estado_pedidoNotIn(estados).andFecha_pedidoBetween(inicio, fin);
+//		listaP = ColseviDao.getInstance().getPedidoMapper().selectByExample(PE);
+//		
+//		for(Pedido ped: listaP){
+//			ped.setId_estado_pedido(1);
+//			ColseviDao.getInstance().getPedidoMapper().updateByPrimaryKey(ped);
+//		}
+//		
+//		cc.setFecha_cierre(new Date(System.currentTimeMillis()));
+//		cc.setFecha_ejecucion(new Date());
+//		cc.setId_persona(getUsuario(request).getPersona());
+//		cc.setMensaje(request.getParameter("mensaje"));
+//		
+//		ColseviDao.getInstance().getCierreCajaMapper().insertSelective(cc);
+//		
+//	}
+//	
 	 private Date getStartOfDay(Date date) {
 		    Calendar calendar = Calendar.getInstance();
 		    calendar.setTime(date);

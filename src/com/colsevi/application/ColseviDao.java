@@ -1,6 +1,6 @@
 package com.colsevi.application;
 
-import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactory;	
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -8,7 +8,6 @@ import com.colsevi.dao.caja.map.CierreCajaMapper;
 import com.colsevi.dao.catalogo.map.CatalogoMapper;
 import com.colsevi.dao.catalogo.map.CatalogoXProductoMapper;
 import com.colsevi.dao.deuda.map.DeudaPedidoMapper;
-import com.colsevi.dao.deuda.map.DeudaProveedorMapper;
 import com.colsevi.dao.general.map.CorreoMapper;
 import com.colsevi.dao.general.map.DireccionMapper;
 import com.colsevi.dao.general.map.EstablecimientoMapper;
@@ -68,7 +67,6 @@ public class ColseviDao {
 	private PagoPedidoMapper pagoPedidoMapper;
 	private PagoProveedorMapper pagoProveedorMapper;
 	private DeudaPedidoMapper deudaPedidoMapper;
-	private DeudaProveedorMapper deudaProveedorMapper;
 	private InventarioMapper inventarioMapper;
 	private MovimientoInventarioMapper movimientoInventarioMapper;
 	private MovimientoMateriaMapper movimientoMateriaMapper;
@@ -138,7 +136,6 @@ public class ColseviDao {
 		pagoPedidoMapper = (PagoPedidoMapper) beanFactoryMyBatis.getBean("pagoPedidoMapper");
 		pagoProveedorMapper = (PagoProveedorMapper) beanFactoryMyBatis.getBean("pagoProveedorMapper");
 		deudaPedidoMapper = (DeudaPedidoMapper) beanFactoryMyBatis.getBean("deudaPedidoMapper");
-		deudaProveedorMapper = (DeudaProveedorMapper) beanFactoryMyBatis.getBean("deudaProveedorMapper");
 		inventarioMapper = (InventarioMapper) beanFactoryMyBatis.getBean("inventarioMapper");
 		movimientoInventarioMapper = (MovimientoInventarioMapper) beanFactoryMyBatis.getBean("movimientoInventarioMapper");
 		movimientoMateriaMapper = (MovimientoMateriaMapper) beanFactoryMyBatis.getBean("movimientoMateriaMapper");
@@ -313,14 +310,6 @@ public class ColseviDao {
 
 	public void setDeudaPedidoMapper(DeudaPedidoMapper deudaPedidoMapper) {
 		this.deudaPedidoMapper = deudaPedidoMapper;
-	}
-
-	public DeudaProveedorMapper getDeudaProveedorMapper() {
-		return deudaProveedorMapper;
-	}
-
-	public void setDeudaProveedorMapper(DeudaProveedorMapper deudaProveedorMapper) {
-		this.deudaProveedorMapper = deudaProveedorMapper;
 	}
 
 	public InventarioMapper getInventarioMapper() {

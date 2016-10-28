@@ -7,8 +7,7 @@ function Tabla(pagina){
 		url: contexto + "/Inventario/MateriaPrima/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
-		pagina:pagina,
-		clase: clase
+		pagina:pagina
 	});
 }
 

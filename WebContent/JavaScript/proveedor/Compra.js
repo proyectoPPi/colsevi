@@ -1,10 +1,75 @@
 jQuery(document).ready(function(){
 	Tabla();
-	HDatetimePicker('dtBox',false);
-	jQuery('#dynamic').hide();
-	HMask('cantidad', '99');
-	HMask('vunit', '999999');
 });
+
+function construirSelectTipoPeso(){
+	var html = '';
+	for(i in LPeso){
+		html += '<option value='+LPeso[i]['id']+'>'+LPeso[i]['nombre']+'</option>';
+	}
+	return html;
+}
+
+jQuery('#adicion').click(function(){
+	jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);
+	construirTbl();
+});
+function inicialTabla(){
+	jQuery('#count').val(1);
+	construirTbl();
+}
+
+function construirTbl(data){
+	var count = jQuery('#count').val();
+	var html ='<tr>';
+	html += '<td>';
+		html += '<input type="text" class="form-control" id="ingredienteText" sec="idIng' + count + '"/>';
+		html += '<input type="hidden" name="idIng' + count + '" id="idIng' + count + '" />';
+	html += '</td>';
+	html += '<td>';
+		html += '<input type="text" class="form-control" name="cant' + count + '" />';
+		html += '<input type="hidden" name="lote' + count + '" />';
+	html += '</td>';
+	html += '<td>';
+		html += '<select name="tipo' + count + '" class="form-control">' + construirSelectTipoPeso() + '</select>';
+	html += '</td>';
+	html += '<td>';
+		html += '<input type="text" name="fecha' + count + '" data-field="date" data-format="yyyy-MM-dd" class="form-control"/>';
+	html += '</td>';
+	html += '<td>';
+		html += '<input type="text" name="vunitario' + count + '" class="form-control"/>';
+	html += '</td>';
+	html += '<td>';
+		html += '<a href="#" onclick="EliminarDet(this);"><i class="fa fa-times-circle fa-2x"></i></a>';
+	html += '</td>';
+	html += '</tr>';
+	
+	jQuery('#IngDynamic > section > table > tbody').append(html);
+	
+	if(data !== undefined){
+		data['nombreIng'];
+		jQuery( "input[sec*='idIng" + count+ "']" ).val(data['nombreIng']);
+		jQuery( "input[name*='idIng" + count+ "']" ).val(data['id_ingrediente']);
+		jQuery( "input[name*='cant" + count+ "']" ).val(data['cantidad']);
+		jQuery( "input[name*='lote" + count+ "']" ).val(data['lote']);
+		jQuery( "select[name*='tipo" + count+ "']" ).val(data['id_tipo_peso']);
+		jQuery( "input[name*='fecha" + count+ "']" ).val(data['fecha_vencimiento']);
+		jQuery( "input[name*='vunitario" + count+ "']" ).val(data['vunitario']);
+	}
+	
+	HiniciarAutocompletar(contexto + '/Proveedor/Compra/autocompletar.html?', 'ingredienteText');
+	
+	jQuery( "input[id=ingredienteText]" ).autocomplete({
+		  select: function(e, ui) {
+		  this.value = ui.item.value;
+		  jQuery('#' + this.getAttribute('sec')).val(ui.item.id_ingrediente);
+		}
+	});
+}
+
+function EliminarDet(option){
+	option.parentNode.parentNode.remove();
+}
 
 function Tabla(pagina){
 	
@@ -26,110 +91,33 @@ function Tabla(pagina){
 		pagina:pagina,
 		boton: boton
 	});
+	
 	jQuery('#com').val('');
 }
 
-function validarAdd(){
-	var filter = /^[0-9]{1,2}/;
-	var error = '';
-	if(!filter.test(jQuery('#cantidad').val()))
-		error += 'Ingresar una cantidad válida, solo enteros';
-	
-	return error;
-}
-
-jQuery('#adicion').click(function(){
-	try{
-		jQuery("#errorDivF").hide();
-		var error = validarAdd();
-		alert(error);
-		if(jQuery('#IngSelect').val() != "" && jQuery('#tipopeso').val() != ""){
-			if(!buscarIngrediente()){
-				jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);		
-				var html ='<tr>';
-				html += '<td><input type="text" value="'+jQuery('#IngSelect option:selected').text()+'" class="fieldDynamic" readonly /><input type="hidden" name="idIng'+jQuery('#count').val()+'" value="'+jQuery('#IngSelect').val()+'"/></td>';
-				html += '<td><input type="text" value="'+jQuery('#cantidad').val()+'" class="fieldDynamic" readonly name="cant'+jQuery('#count').val()+'" /></td>';
-				html += '<td><input type="text" value="'+jQuery('#tipopeso option:selected').text()+'" class="fieldDynamic" readonly name="tipotext'+jQuery('#count').val()+'"/><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+jQuery('#tipopeso').val()+'"/></td>';
-				html += '<td><input type="text" name="fecha'+jQuery('#count').val()+'" data-field="date" data-format="yyyy-MM-dd" class="form-control"/></td>';		
-				html += '<td><input type="text" name="vunitario'+jQuery('#count').val()+'" value="'+jQuery('#vunit').val()+'" class="form-control"/> </td>';
-				html += '<td><buttton data-toggle="button" class="btn btn-white" onclick="EliminarDet(this);"><i class="fa fa-remove text-info"></i></button></td>';
-				html += '</tr>';
-			}
-
-			jQuery('#IngDynamic > section > table > tbody').append(html);
-		}else{
-			jQuery("#mensajeEr").html('Ingresar todos los valores');
-	    	jQuery("#errorDivF").show();
-		}
-	}catch (e) {
-		alert('error');
-	}
-});
-
-jQuery( "#clasificarIng" ).change(function() {
-	
-	jQuery('#Ing > select, #Ing > label').remove();
-	if(jQuery('#clasificarIng').val() == ""){
-		jQuery('#dynamic').hide();
-		return;
-	}
-	
-	jQuery.ajaxQueue({
-		url: contexto + "/Proveedor/Compra/ClasificarIng.html?",
-		 data:{clasificar: jQuery('#clasificarIng').val()},
-	}).done(function(result) {
-		var data; 
- 		try{ 
- 			data = jQuery.parseJSON(result); 
- 		} catch(err){ 
- 			console.log("Error ejecutando CargarIngredientes" + err); 
- 			jQuery('#dynamic').hide();
-         	return; 
- 		} 
- 		
- 		var html = '<label>Ingrediente</label>';
- 			html += '<select id="IngSelect" name="IngSelect" class="form-control">';
- 			html += '<option value="">Seleccione</option>';
-		for(i in data){
-			html += '<option value="'+data[i]['id']+'">'+data[i]['nombre']+'</option>';
-		}
-		html += '</select>';
-		jQuery('#Ing').html(html);
-		jQuery('#dynamic').show();
-	});
-	
-});
-
 function Limpiar(){
-	jQuery('#IngDynamic > table > tbody > tr').remove();
+	jQuery('#IngDynamic > section > table > tbody > tr').remove();
 	jQuery('#id_compra').val('');
 	jQuery('#count').val('0');
 	jQuery('#validarModificacion').show();
 }
 
-function EliminarDet(option){
-	option.parentNode.parentNode.remove();
-}
-
 function CargarFormulario(Id){
 	jQuery('#validarModificacion').show();
 	jQuery('[href=#producto]').tab('show');
-	HCargarFormulario(Id);
-	jQuery("#pagado").prop("checked", false);
-	jQuery('#IngDynamic > section > table > tbody > tr').remove();
+	jQuery("#pagado").prop("checked", BuscarRegistro(Id)['pagado'] == "SI" ? true : false);
+	jQuery('#motivo').val(BuscarRegistro(Id)['motivo']);	
 	jQuery('#count').val('0');
-	jQuery('#valorsin').val(BuscarRegistro(Id)['valorsin']);
-	if(BuscarRegistro(Id)['pagado'] == "SI"){
-		jQuery("#pagado").prop("checked", true);
-	}
-	jQuery('#motivo').val(BuscarRegistro(Id)['motivo']);
+	jQuery('#IngDynamic > section > table > tbody > tr').remove();
 	validarModificacion();
+	HCargarFormulario(Id);
+//	jQuery('#valorsin').val(BuscarRegistro(Id)['valorsin']);
 }
 
 jQuery('#carga').click(function(){
-	cargarIng();
 	jQuery('#IngDynamic > section > table > tbody > tr').remove();
 	jQuery('#count').val('0');
+	cargarIng();
 });
 
 function cargarIng(){
@@ -150,39 +138,15 @@ function cargarIng(){
  		var html = '';
 		for(i in data){
 			jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);		
-			
-			html += '<tr>';
-			html += '<td><input type="text" value="'+data[i]['nombreIng']+'" class="fieldDynamic" readonly /><input type="hidden" name="idIng'+jQuery('#count').val()+'" value="'+data[i]['id_ingrediente']+'"/></td>';
-			html += '<td><input type="text" value="'+data[i]['cantidad']+'" class="fieldDynamic" readonly name="cant'+jQuery('#count').val()+'" /><input type="hidden" name="lote'+jQuery('#count').val()+'" value="'+data[i]['lote']+'"/></td>';
-			html += '<td><input type="text" value="'+data[i]['nombreTp']+'" class="fieldDynamic" readonly name="tipotext'+jQuery('#count').val()+'"/><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+data[i]['id_tipo_peso']+'"/></td>';
-			html += '<td><input type="text" name="fecha'+jQuery('#count').val()+'" value="'+data[i]['fecha_vencimiento']+'" data-field="date" data-format="yyyy-MM-dd" class="form-control"/></td>';		
-			html += '<td><input type="text" name="vunitario'+jQuery('#count').val()+'" value="'+data[i]['vunitario']+'" class="form-control"/> </td>';
-			html += '<td><buttton data-toggle="button" class="btn btn-white" onclick="EliminarDet(this);"><i class="fa fa-remove text-info"></i></button></td>';
-			html += '</tr>';
+			construirTbl(data[i]);
 		}
-		jQuery('#IngDynamic > section > table > tbody').append(html);
-		jQuery('#IngDynamic').show();
 	});
-}
-
-function buscarIngrediente(){
-	var count = jQuery('#count').val();
-	for(i = 0; i <= count; i++) {
-		if(jQuery( "input[name='idIng"+i+"']" ).val() == jQuery('#IngSelect').val()){
-			jQuery('input[name="cant'+ i+'"]').val(jQuery('#cantidad').val());
-			jQuery('input[name="tipo'+ i+'"]').val(jQuery('#tipopeso').val());
-			jQuery('input[name="tipotext'+ i+'"]').val(jQuery('#tipopeso option:selected').text());
-			jQuery('input[name="vunitario'+ i+'"]').val(jQuery('#vunit').val());
-			return true;
-		}
-	}
-	return false;
 }
 
 function MotivoModal(value){
 	jQuery('#id_compraMotiv').val(value);
 	jQuery("#ModalMotivo").modal('show');
-	jQuert('#motivo').val(BuscarRegistro(Id)['motivo']);
+	jQuery('#motivo').val(BuscarRegistro(value)['motivo']);
 }
 
 function validarModificacion(){
@@ -194,7 +158,7 @@ function validarModificacion(){
  		try{ 
  			data = jQuery.parseJSON(result); 
  		} catch(err){ 
- 			console.log("Error ejecutando CargarIng" + err); 
+ 			console.log("Error ejecutando validarModificacion" + err); 
  			jQuery('#dynamic').hide();
          	return; 
  		} 

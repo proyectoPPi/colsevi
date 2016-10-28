@@ -304,9 +304,14 @@
     where id_pago_proveedor = #{id_pago_proveedor,jdbcType=INTEGER}
   </update>
   <select id="deudaCom" parameterType="java.util.Map" resultType="java.util.HashMap">
-	SELECT com.id_compra, dp.pendiente FROM deuda_proveedor dp
-	INNER JOIN compra com ON com.id_compra = dp.id_compra
-	WHERE com.id_proveedor = #{compra};
+	SELECT compra.id_compra_proveedor, compra.valor, 
+		IF( compra.pendiente IS NOT NULL, compra.pendiente, compra.valor) as pendiente,
+	    IF( compra.pendiente IS NOT NULL, (compra.valor - compra.pendiente), compra.valor) as diferencia
+ 	FROM compra_proveedor compra
+	LEFT JOIN pago_proveedor pago ON pago.id_compra = compra.id_compra_proveedor
+ 	WHERE compra.id_proveedor = #{compra}
+ 	AND (compra.pendiente > 0 OR compra.pendiente IS NULL)	
+    GROUP BY compra.id_compra_proveedor;
   </select>
   
 </mapper>

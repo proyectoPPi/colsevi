@@ -303,4 +303,13 @@
       descripcion = #{descripcion,jdbcType=VARCHAR}
     where id_proveedor = #{id_proveedor,jdbcType=INTEGER}
   </update>
+  <select id="SelectAutocomplete" parameterType="java.util.Map" resultType="java.util.HashMap">
+  	SELECT prov.id_proveedor, prov.nombre, prov.descripcion
+  	FROM proveedor prov
+  	WHERE 1= 1 
+  	<if test="proveedor != null">
+        AND(prov.nombre LIKE #{proveedor} OR prov.descripcion LIKE #{proveedor})
+    </if>
+    
+  </select>
 </mapper>

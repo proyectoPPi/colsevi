@@ -3,7 +3,7 @@
 <html>
 <head>
    <meta charset="UTF-8" />
-	<title>TipoDocumento</title>
+	<title>Inicial</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 </head>
 <body>

@@ -16,6 +16,7 @@
 				<h2>Pago Proveedores
 					<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 				</h2>
+				<div class="separator-2"></div>
 				<section class="panel">
 					<div class="panel-body">
 						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -50,12 +51,8 @@
 										<div class="row">
 											<div class="col-md-12">
 												<label>*Proveedor</label>
-												<select class="form-control" id="prov" name="prov">
-													<option value="">Seleccione</option>
-													<c:forEach items="${proveedorLista}" var="proveedor">
-														<option value="${proveedor.id_proveedor}">${proveedor.nombre}</option>
-													</c:forEach>
-												</select>
+												<input type="text" class="form-control" id="proveedorText"/>
+												<input type="hidden" id="prov" name="prov"/>
 											</div>
 											<div class="col-xs-12 col-md-12">
 												<label>*Compra</label>
@@ -66,6 +63,7 @@
 											<div class="col-xs-12 col-sm-6 col-md-6">
 												<label>Pendiente</label>
 												<input type="text" class="form-control" id="pendiente" name="pendiente" readonly/>
+												<input type="hidden" id="ValPend" name="ValPend">
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-6">
 												<label>*Valor a Pagar</label>
@@ -101,11 +99,11 @@
 		titulos["valor_pagado"] = "Valor Pagado";
 		titulos["compra"] = "Acciones";
 		
-		accion = new Array();
-		accion["compra"] = [
+		boton = new Array();
+		boton["compra"] = [
    			{
            		metodo: "verCompra",
-           		label: "compra"
+           		img: 'fa fa-shopping-bag fa-2x'
     		}
     	];
 	</script>

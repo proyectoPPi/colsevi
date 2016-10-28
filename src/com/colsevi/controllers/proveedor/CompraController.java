@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -24,15 +25,13 @@ import com.colsevi.application.GeneralManager;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.application.ProveedorManager;
 import com.colsevi.application.UtilidadManager;
+import com.colsevi.application.ingredienteManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.dao.deuda.model.DeudaProveedorExample;
 import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.dao.inventario.model.MateriaPrimaExample;
 import com.colsevi.dao.inventario.model.MovimientoMateriaExample;
 import com.colsevi.dao.pago.model.PagoProveedorExample;
-import com.colsevi.dao.producto.model.Ingrediente;
-import com.colsevi.dao.producto.model.IngredienteExample;
 import com.colsevi.dao.proveedor.model.CompraProveedor;
 import com.colsevi.dao.proveedor.model.CompraProveedorExample;
 import com.colsevi.dao.proveedor.model.CompraXIngrediente;
@@ -42,15 +41,15 @@ import com.colsevi.dao.proveedor.model.CompraXIngredienteExample;
 public class CompraController extends BaseConfigController {
 
 	private static final long serialVersionUID = 7006733943938315447L;
+	private static Logger logger = Logger.getLogger(CompraController.class);
 
 	@RequestMapping("/Proveedor/Compra")
 	public ModelAndView Compra(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaProveedores", ProveedorManager.getProveedores());
-		model.addAttribute("listaClasificar", ProductoManager.getClasificar());
 		model.addAttribute("listaTipoPeso", ProductoManager.getTipoPeso());
 		model.addAttribute("listaEstablecimiento", GeneralManager.getEstablecimientos());
 		
-		if(request.getParameter("Compra") != null && !request.getParameter("Compra").trim().isEmpty()){
+		if(request.getParameter("Compra") != null){
 			model.addAttribute("com", request.getParameter("Compra"));
 		}
 		
@@ -74,52 +73,50 @@ public class CompraController extends BaseConfigController {
 		String valorMF = request.getParameter("valorMF");
 		String estaF = request.getParameter("estaF");
 		
-		CompraProveedorExample compraExample = new CompraProveedorExample();
-		compraExample.setLimit(Inicio + ", " + Final);
-		compraExample.setOrderByClause("id_compra_proveedor DESC");
-		
-		CompraProveedorExample.Criteria criteria = (CompraProveedorExample.Criteria) compraExample.createCriteria();
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		mapa.put("limit", Inicio + ", " + Final);
 		
 		if(com != null && !com.trim().isEmpty()){
-			criteria.andId_compra_proveedorEqualTo(Integer.parseInt(com));
+			mapa.put("compra", com);
 		}
 		if(pagadoF != null && !pagadoF.trim().isEmpty() && !pagadoF.trim().equals("0")){
 			if(pagadoF.trim().equals("1")){
-				criteria.andPagadoEqualTo(true);
+				mapa.put("pagadoT", "");
 			}else{
-				criteria.andPagadoEqualTo(false);
-			}
-		}
-		if(estadoF != null && !estadoF.trim().isEmpty() && !estadoF.trim().equals("0")){
-			if(estadoF.trim().equals("2")){
-				criteria.andMotivoIsNotNull();
-			}else{
-				criteria.andMotivoIsNull();
+				mapa.put("pagadoF", "");
 			}
 		}
 		if(provF != null && !provF.trim().isEmpty() && !provF.trim().equals("0")){
-			criteria.andId_proveedorEqualTo(Integer.parseInt(provF));
+			mapa.put("prov", provF);
 		}
 		if(estaF != null && !estaF.trim().isEmpty() && !estaF.trim().equals("0")){
-			criteria.andId_establecimientoEqualTo(Integer.parseInt(estaF));
+			mapa.put("estab", estaF);
 		}
 		if(valorF != null && !valorF.trim().isEmpty()){
 			if(valorMF != null && valorMF.trim().equals("true")){
-				criteria.andValorGreaterThanOrEqualTo(new BigDecimal(valorF));
+				mapa.put("valorMayor", valorF);
 			}else{
-				criteria.andValorLessThanOrEqualTo(new BigDecimal(valorF));
+				mapa.put("valorMenor", valorF);
 			}
 		}
 		if(fechaF != null && !fechaF.trim().isEmpty()){
-			if(fechaMF != null && fechaMF.trim().equals("true")){
-				criteria.andFecha_compraGreaterThanOrEqualTo(UtilidadManager.FormatDateFormDB2(fechaF));
+			mapa.put("fecha", UtilidadManager.FormatDateFormDB2(fechaF));
+		}
+		if(estadoF != null && !estadoF.trim().isEmpty() && !estadoF.trim().equals("0")){
+			if(estadoF.trim().equals("2")){
+				mapa.put("estadoBaja", "");
 			}else{
-				criteria.andFecha_compraLessThanOrEqualTo(UtilidadManager.FormatDateFormDB2(fechaF));
+				mapa.put("estadoAlta", "");
 			}
 		}
-		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getCompraProveedorMapper().selectByExample(compraExample)));
-		opciones.put("total", ColseviDao.getInstance().getCompraProveedorMapper().countByExample(compraExample));
-
+		
+		try{
+			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getCompraProveedorMapper().TablaCompras(mapa)));
+			opciones.put("total", ColseviDao.getInstance().getCompraProveedorMapper().CountTablaCompras(mapa));
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
 		response.setContentType("text/html;charset=ISO-8859-1");
 		request.setCharacterEncoding("UTF8");
 		
@@ -127,42 +124,33 @@ public class CompraController extends BaseConfigController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public JSONArray ConstruirJson(List<CompraProveedor> listaCompra){
+	public JSONArray ConstruirJson(List<Map<String,Object>> listaCompra){
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject(), labels = new JSONObject();
 		
 		if(listaCompra != null && listaCompra.size() >0){
-			for (CompraProveedor bean : listaCompra) {
+			for (Map<String,Object> bean : listaCompra) {
 				opciones = new JSONObject();
 				labels = new JSONObject();
-				opciones.put("id_compra", bean.getId_compra_proveedor().toString());
-				opciones.put("id_compraBoton", "");
-				opciones.put("valor", UtilidadManager.Currency(bean.getValor()));
-				opciones.put("valorsin", bean.getValor().intValue());
-				opciones.put("fecha_compra", UtilidadManager.FormatDateDB(bean.getFecha_compra()));
-				opciones.put("pagado", bean.getPagado() != null && bean.getPagado().equals(true) ? "SI" : "NO");
-				opciones.put("motivo", bean.getMotivo());
+				opciones.put("id_compra", bean.get("id_compra"));
+				opciones.put("compra", bean.get("id_compra"));
+				opciones.put("valor", bean.get("valor"));
+				opciones.put("valorsin", bean.get("valor"));
+				opciones.put("fecha_compra", UtilidadManager.FormatDateComplete(bean.get("fecha_compra").toString()));
+				opciones.put("pagado", bean.get("pagado"));
+				opciones.put("motivo", bean.get("motivo"));
+				opciones.put("Estado", bean.get("estado"));
 
 				labels = new JSONObject();
-				if(bean.getId_proveedor() != null){
-					labels.put("label",ColseviDao.getInstance().getProveedorMapper().selectByPrimaryKey(bean.getId_proveedor()).getNombre());
-					labels.put("value", bean.getId_proveedor());
-					opciones.put("proveedor", labels);
-				}
-				
+				labels.put("label", bean.get("nombreProv"));
+				labels.put("value", bean.get(""));
+				opciones.put("proveedor", labels);
+					
 				labels = new JSONObject();
-				if(bean.getId_establecimiento() != null){
-					labels.put("label",ColseviDao.getInstance().getEstablecimientoMapper().selectByPrimaryKey(bean.getId_establecimiento()).getNombre());
-					labels.put("value", bean.getId_establecimiento());
-					opciones.put("establecimiento", labels);
-				}
-				
-				if( bean.getMotivo() == null || bean.getMotivo().equals("")){
-					opciones.put("Estado", "Alta");
-				}else{
-					opciones.put("Estado", "Baja");
-				}
+				labels.put("label", bean.get("nombreEstab"));
+				labels.put("value", bean.get("id_establecimiento"));
+				opciones.put("establecimiento", labels);
 				
 				resultado.add(opciones);
 			}
@@ -170,42 +158,23 @@ public class CompraController extends BaseConfigController {
 		return resultado;
 	}
 	
-	@RequestMapping("/Proveedor/Compra/ClasificarIng")
-	public void ClasificarIng(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		
-		JSONArray result = new JSONArray();
-		Integer id = 0;
+	@RequestMapping("/Proveedor/Compra/autocompletar")
+	public void auto(HttpServletRequest request, HttpServletResponse response){
 		try{
-			id = Integer.parseInt(request.getParameter("clasificar"));
-		}catch(Exception e){
-			return;
-		}
-		IngredienteExample ingExample = new IngredienteExample();
-		ingExample.createCriteria().andId_clasificar_ingredienteEqualTo(id);
-		
-		result = ConstruirIngrediente(ColseviDao.getInstance().getIngredienteMapper().selectByExample(ingExample));
-
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		result.writeJSONString(response.getWriter());
-	}
-	
-	@SuppressWarnings("unchecked")
-	public JSONArray ConstruirIngrediente(List<Ingrediente> listaIng){
-
-		JSONArray resultado = new JSONArray();
-		JSONObject opciones = new JSONObject();
-		
-		if(listaIng != null && listaIng.size() >0){
-			for (Ingrediente bean : listaIng) {
-				opciones = new JSONObject();
-				opciones.put("id", bean.getId_ingrediente());
-				opciones.put("nombre", bean.getNombre());
-				resultado.add(opciones);
+			JSONObject result = new JSONObject();
+			
+			String ing = request.getParameter("campo");
+			result = ingredienteManager.AutocompletarIngrediente(ing);
+			
+			if(result != null){
+				response.setContentType("text/html;charset=ISO-8859-1");
+				request.setCharacterEncoding("UTF8");
+				
+				result.writeJSONString(response.getWriter());
 			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
 		}
-		return resultado;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -280,12 +249,7 @@ public class CompraController extends BaseConfigController {
 				ColseviDao.getInstance().getCompraProveedorMapper().updateByPrimaryKey(bean);
 				modelo.addAttribute("correcto", "Compra Actualizada");
 			}else{
-				ColseviDao.getInstance().getCompraProveedorMapper().insert(bean);
-				
-				CompraProveedorExample exampleC = new CompraProveedorExample();
-				exampleC.setLimit("1");
-				exampleC.setOrderByClause("id_compra_proveedor DESC");
-				bean.setId_compra_proveedor(ColseviDao.getInstance().getCompraProveedorMapper().selectByExample(exampleC).get(0).getId_compra_proveedor());
+				ColseviDao.getInstance().getCompraProveedorMapper().insertSelective(bean);
 				modelo.addAttribute("correcto", "Compra insertada");
 			}
 
@@ -300,11 +264,7 @@ public class CompraController extends BaseConfigController {
 					comIngE.createCriteria().andLoteEqualTo(listaCXI.get(i).getLote());
 					ColseviDao.getInstance().getCompraXIngredienteMapper().updateByExampleSelective(listaCXI.get(i), comIngE);
 				}else{
-					ColseviDao.getInstance().getMateriaPrimaMapper().insertSelective(listaMP.get(i));
-					
-					MateriaPrimaExample mpe = new MateriaPrimaExample();
-					mpe.setOrderByClause("lote DESC;");
-					listaCXI.get(i).setLote(ColseviDao.getInstance().getMateriaPrimaMapper().selectByExample(mpe).get(0).getLote());
+					listaCXI.get(i).setLote(ColseviDao.getInstance().getMateriaPrimaMapper().insertSelective(listaMP.get(i)));
 					ColseviDao.getInstance().getCompraXIngredienteMapper().insertSelective(listaCXI.get(i));
 				}
 			}
@@ -479,12 +439,14 @@ public class CompraController extends BaseConfigController {
 	public void validarModificarCompra(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject result = new JSONObject();
 		
-		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty()){
-			String error = validarNoInv(Integer.parseInt(request.getParameter("id_compra")));
-			if(!error.isEmpty())
-				result.put("error", error);
-		}else{
-			result.put("error", "Seleccionar compra");
+		try{
+			if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty()){
+				String error = validarNoInv(Integer.parseInt(request.getParameter("id_compra")));
+				if(!error.isEmpty())
+					result.put("error", error);
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
 		}
 		
 		response.setContentType("text/html;charset=ISO-8859-1");
@@ -494,46 +456,17 @@ public class CompraController extends BaseConfigController {
 	}
 	
 	public String validarNoInv(Integer id){
-		CompraXIngredienteExample cxiE = new CompraXIngredienteExample();
-		MovimientoMateriaExample MME = new MovimientoMateriaExample();
-		PagoProveedorExample PPE = new PagoProveedorExample();
-		InventarioXMateriaExample IME = new InventarioXMateriaExample();
-		
-		cxiE.createCriteria().andId_compraEqualTo(id);
-		List<CompraXIngrediente> listcxi = ColseviDao.getInstance().getCompraXIngredienteMapper().selectByExample(cxiE);
-		
-		
-		PPE.createCriteria().andId_compraEqualTo(id);
-		Integer total = ColseviDao.getInstance().getPagoProveedorMapper().countByExample(PPE);
-		if(total != null && total > 0){
-			return "La compra ya tiene asociada un pago<br/>";
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		CompraProveedor compraProv = ColseviDao.getInstance().getCompraProveedorMapper().selectByPrimaryKey(id);
+		if(compraProv != null && compraProv.getPendiente() != null){
+			return "La compra ya tiene asociado un pago y/o una deuda<br/>";
 		}
 		
-		DeudaProveedorExample DPE = new DeudaProveedorExample();
-		DPE.createCriteria().andId_compraEqualTo(id);
-		total = ColseviDao.getInstance().getDeudaProveedorMapper().countByExample(DPE);
-		if(total != null && total > 0){
-			return "La compra ya tiene asociada una deuda</br>";
+		mapa.put("compra", id);
+		if(ColseviDao.getInstance().getCompraProveedorMapper().countCambiosDetalleCompra(mapa) > 0){
+			return "La compra ya tiene movimientos asociados<br/>";
 		}
 		
-		if(listcxi != null && listcxi.size() > 0){
-			for (CompraXIngrediente cxi : listcxi) {
-				if(cxi.getLote() != null){
-					IME.clear();
-					IME.createCriteria().andLoteEqualTo(cxi.getLote());
-					total = ColseviDao.getInstance().getInventarioXMateriaMapper().countByExample(IME);
-					if(total != null && total > 0)
-						return "No se puede modificarla compra, ya que algunos ingredientes se encuentran ya asignados en el inventario<br/>";
-					
-					MME.clear();
-					MME.createCriteria().andLoteEqualTo(cxi.getLote());
-					total = ColseviDao.getInstance().getMovimientoMateriaMapper().countByExample(MME);
-					if(total != null && total > 0)
-						return "No se pueden eliminar ingredientes de las compras ya que están asociados a inventario";
-				}
-				
-			}
-		}
 		return "";
 	}
 	

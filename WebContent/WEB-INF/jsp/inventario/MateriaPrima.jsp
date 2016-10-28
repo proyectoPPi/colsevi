@@ -14,8 +14,8 @@
 			<section class="container">
 				<div class="row">
 				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
-				
 					<h2>Materia Prima</h2>
+					<div class="separator-2"></div>
 					<section class="panel">
 						<div class="panel-body">
 							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -43,6 +43,14 @@
 										<option value="${esta.id_establecimiento}">${esta.nombre}</option>
 									</c:forEach>
 								</select>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+								<label>Fecha de vencimiento</label>
+								<input type="text" id="vencimiento" name="filtro" class="form-control" />
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+								<label>Compra</label>
+								<input type="text" id="compra" name="filtro" class="form-control" />
 							</div>
 							<div class="col-xs-12 col-md-12 col-lg-12"><br/>
 								<button class="btn btn-button" onclick="Tabla(1);">Filtrar</button>
@@ -152,15 +160,12 @@
 		titulos = new Array();
 		titulos["lote"] = "ID";
 		titulos["loteid"] = "Lote";
+		titulos["id_compra"] = "Compra";
+		titulos["nombreEsta"] = "Establecimiento";
 		titulos["nombreIng"] = "Ingrediente";
 		titulos["cantidad"] = "Cantidad";
 		titulos["nombreUp"] = "Unidad de Medida";
 		titulos["fecha_vencimiento"] = "Fecha Vencimiento";
-		titulos["nombreEsta"] = "Establecimiento";
-		
-		clase = new Array();
-		clase['fecha_vencimiento'] = 'hidden-xs';
-		clase['nombreEsta'] = 'hidden-xs';
 		
 	</script>
 </body>

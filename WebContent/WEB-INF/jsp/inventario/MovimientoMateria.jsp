@@ -7,7 +7,7 @@
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 
 </head>
-<body>
+<body class="page-loader-1 wide pace-done">
 
 	<section class="page-wrapper">
 		<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
@@ -15,8 +15,8 @@
 			<section class="container">
 				<div class="row">
 				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
-				
 					<h2>Movimiento materia</h2>
+					<div class="separator-2"></div>
 					<section class="panel">
 						<div class="panel-body">
 							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
@@ -43,6 +43,21 @@
 									<c:forEach items="${ListaE}" var="esta">
 										<option value="${esta.id_establecimiento}">${esta.nombre}</option>
 									</c:forEach>
+								</select>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+								<label>Fecha de movimiento</label>
+								<input type="text" id="fechaMov" name="filtro" class="form-control" />
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+								<label>Compra</label>
+								<input type="text" id="compra" name="filtro" class="form-control" />
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+								<label>Motivo</label>
+								<select class="form-control" id="motivoMov" name="filtro">
+									<option value="3">Prestamo</option>
+									<option value="4">Pago</option>
 								</select>
 							</div>
 							<div class="col-xs-12 col-md-12 col-lg-12"><br/>

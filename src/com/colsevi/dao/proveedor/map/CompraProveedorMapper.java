@@ -3,6 +3,8 @@ package com.colsevi.dao.proveedor.map;
 import com.colsevi.dao.proveedor.model.CompraProveedor;
 import com.colsevi.dao.proveedor.model.CompraProveedorExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface CompraProveedorMapper {
@@ -73,4 +75,11 @@ public interface CompraProveedorMapper {
 	 * @mbggenerated  Tue Oct 18 21:53:49 COT 2016
 	 */
 	int updateByPrimaryKey(CompraProveedor record);
+	
+	int countCambiosDetalleCompra(Map<String, Object> mapa);
+	
+    List<Map<String, Object>> TablaCompras(Map<String, Object> mapa);
+    int CountTablaCompras(Map<String, Object> mapa);
+    
+	
 }

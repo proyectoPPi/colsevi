@@ -1,3 +1,4 @@
+#331d08
 body.canvas-sliding,
 body.canvas-slid {
   overflow-x: hidden;
@@ -76,6 +77,10 @@ tbody {
   background-color: #ffffff;
 }
 
+td > span > a{
+	padding: 0;
+	margin: 0;
+}
 .table > thead > tr > th,
 .table > tbody > tr > th,
 .table > tfoot > tr > th,
@@ -2607,7 +2612,7 @@ fieldset[disabled] .btn-default {
   padding: 7px 20px;
   font-size: 14px;
   line-height: 1.4666666667;
-  border-radius: 3px;
+  border-radius: 1px;
   margin: 10px 0;
 }
 
@@ -3841,9 +3846,9 @@ textarea {
 }
 
 .form-control {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  border-radius: 1px;
   background: #ffffff;
   height: 40px;
   padding-right: 30px;

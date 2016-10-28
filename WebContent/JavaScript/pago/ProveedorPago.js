@@ -1,37 +1,21 @@
 var data;
 jQuery(document).ready(function(){
+	HiniciarAutocompletar(contexto + '/pago/Proveedor/autocompletar.html?', 'proveedorText');
 	Tabla();
 });
 
-function Tabla(pagina){
-	
-	HTabla({
-		url: contexto + "/pago/Proveedor/tabla.html?",
-		Id: "#tabla",
-		titulos: titulos,
-		accion: accion,
-		pagina:pagina
-	});
-}
+jQuery('#proveedorText').autocomplete({
+	  select: function(e, ui) {
+	  this.value = ui.item.value;
+	  jQuery('#prov').val(ui.item.id_proveedor);
+	  cargarDeuda(ui.item.id_proveedor);
+	}
+});
 
-function Limpiar(){
-	HLimpliar();
-}
-
-function CargarFormulario(Id){
-	jQuery('#compra').val('');
-	jQuery('#compra').html('<option value="0">Seleccione</option>');
-	HCargarFormulario(Id);
-}
-
-function verCompra(Id){
-	window.location.href = contexto + "/Proveedor/Compra.html?Compra=" + BuscarRegistro(Id)['id_compra'];
-}
-
-jQuery('#prov').change(function(e) { 
+function cargarDeuda(value){
 	jQuery.ajaxQueue({
 		url: contexto + "/pago/Proveedor/cargarDeuda.html?",
-		 data:{prov: jQuery('#prov').val()},
+		 data:{prov: value},
 	}).done(function(result) {
  		try{ 
  			data = jQuery.parseJSON(result); 
@@ -39,26 +23,50 @@ jQuery('#prov').change(function(e) {
  		} catch(err){ 
          	return; 
  		} 
- 		
+ 		Limpiar();
 		for(i in data){
 			var html = '';
-			html += '<option value="'+data[i]['id']+'">'+data[i]['id']+'</option>';
+			html += '<option value="'+data[i]['id_compra_proveedor']+'">'+data[i]['id_compra_proveedor']+'</option>';
 			jQuery('#compra').append(html);
 		}
 	});
-	
-});
+}
 
 jQuery("#compra").change(function(){
-	if(jQuery('#compra').val() != "" && jQuery('#compra').val() != "0"){
+	if(this.value != "" && this.value != "0"){
 		for(i in data){
-			if(data[i]['id'] == parseInt(jQuery('#compra').val())){
+			if(data[i]['id_compra_proveedor'] == parseInt(this.value)){
 				jQuery('#pendiente').val(data[i]['pendiente']);
+				jQuery('#ValPend').val(data[i]['pendiente']);
 				jQuery('#valp').val(data[i]['pendiente']);
 			}
 		}
 	}
 });
+
+function Limpiar(){
+	HLimpiar();
+	jQuery('#compra, #pendiente,#ValPend').val('');
+	jQuery('#compra').html('<option value="0">Seleccione</option>');
+}
+
+function Tabla(pagina){
+	HTabla({
+		url: contexto + "/pago/Proveedor/tabla.html?",
+		Id: "#tabla",
+		titulos: titulos,
+		boton: boton,
+		pagina:pagina
+	});
+}
+
+function CargarFormulario(Id){
+	HCargarFormulario(Id);
+}
+
+function verCompra(Id){
+	window.location.href = contexto + "/Proveedor/Compra.html?Compra=" + BuscarRegistro(Id)['id_compra'];
+}
 
 jQuery("#valorP").keyup(function(){
 	if(jQuery('#valorP').val() != "0" && jQuery('#valorP').val() != "" && jQuery('#valorP').val() != " "){

@@ -6,6 +6,7 @@ var cantPagina = 16;
  * Método para pintar la tabla
  */
 function HTabla(opciones){
+	jQuery("#ModalCargando").modal('show');
 	var titulos = opciones.titulos;
 	var Id = opciones.Id;
 	var id = null;
@@ -14,6 +15,7 @@ function HTabla(opciones){
 	dataMap['color'] = opciones.color;
 	dataMap['accion'] = opciones.accion;
 	dataMap['campo'] = opciones.campo;
+	dataMap['link'] = opciones.link;
 	
 	if(dataMap['boton'] == undefined) dataMap['boton'] = new Array();
 	if(dataMap['color'] == undefined) dataMap['color'] = new Array();
@@ -21,7 +23,6 @@ function HTabla(opciones){
 	if(dataMap['campo'] == undefined) dataMap['campo'] = new Array();
 	
 	Setlimite(opciones.pagina);
-	
 	SetFiltros();
 	
 	jQuery.ajaxQueue({
@@ -70,7 +71,10 @@ function HTabla(opciones){
 					 id = data["datos"][i][k];
 				 }else{
 					 if(sw){
-						 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
+						 if(dataMap['link'] !== undefined)
+							 html += '<td><span>'+data["datos"][i][k]+'</span></td>';
+						 else
+							 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
 						 sw = false;
 					 }else{
 						 if(dataMap['color'] != undefined && dataMap['color'][k] != undefined){
@@ -96,7 +100,7 @@ function HTabla(opciones){
 								if(opcion.metodo!=undefined){
 									metodo = opcion.metodo;
 								}
-									html += '<span><a href="#" onclick="'+metodo+'(\''+id+'\', this);" class="btn '+opcion.color+'"><i class="'+opcion.img+'"></i></a></span>';
+									html += '<a href="#" onclick="'+metodo+'(\''+id+'\', this);"><i class="'+opcion.img+'"></i></a>';
 								}
 							}
 							 if(dataMap['accion'][k] != undefined){
@@ -251,7 +255,7 @@ function ActualizarAutocompletar(input){
 	});
 }
 
-function HLimpliar(){
+function HLimpiar(id){
 	
 	for(key in dataMap['keys']){
 		var valor = dataMap['keys'][key];
@@ -314,7 +318,7 @@ function HiniciarAutocompletar(url,input){
 		
 		AuxiliarAutocompletar(input);
 		
-		jQuery("#"+input).keyup(function(e) {
+		jQuery( "input[id="+ input +"]" ).keyup(function(e) {
 			if((e.which<37 || e.which>40) && e.which!=13){
 				ActualizarAutocompletar(input);
 			}
@@ -325,14 +329,14 @@ function HiniciarAutocompletar(url,input){
 
 function AuxiliarAutocompletar(input){
 
-	jQuery( "#"+input ).autocomplete({
+	jQuery( "input[id="+ input +"]" ).autocomplete({
 		source: dataMap['autocompletar'],
 		minLength: 0,
 		open: function( event, ui ) {}
 	});
 
-	jQuery("#"+input).focus(function() {
-		jQuery("#"+input).autocomplete("search");
+	jQuery( "input[id="+ input +"]" ).focus(function() {
+		jQuery( "input[id="+ input +"]" ).autocomplete("search");
 	});
 }
 
@@ -350,8 +354,8 @@ function ActualizarAutocompletar(input){
 	        	return;
 			}
 			if(data.labels==undefined) data.labels = [];
-			jQuery("#"+input).autocomplete( "option", "source", data.labels );
-			jQuery("#"+input).autocomplete("search", "");
+			jQuery( "input[id="+ input +"]" ).autocomplete( "option", "source", data.labels );
+			jQuery( "input[id="+ input +"]" ).autocomplete("search", "");
 	  	}
 	});
 }

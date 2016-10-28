@@ -5,7 +5,7 @@
 <meta name="keyword" content="sevillana, Colonial, Pedidos, Domicilios">
 <link rel="shortcut icon" href="${pageContext.request.contextPath}resources/img/favicon.html">
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
 <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet"/>
 <link href="${pageContext.request.contextPath}/resources/css/table-responsive.css" rel="stylesheet"/>

@@ -51,9 +51,9 @@
 							<label>Fecha actual</label> <input type="checkbox" id="fechaMF" name="filtro"/>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-							<label>valor</label>
+							<label>valor menor</label>
 							<input type="number" class="form-control" id="valorF" name="filtro"/>
-							<label>Mayor valor</label> <input type="checkbox" id="valorMF" name="filtro"/>
+							<label>valor mayor</label> <input type="checkbox" id="valorMF" name="filtro"/>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 							<label>Establecimiento</label>
@@ -142,60 +142,28 @@
 						                                  	
 						                                  </div>
 						                                  <div id="ingview" class="tab-pane">
-						                    	              <div class="col-xs-12 col-sm-6 col-md-6">
-																<label>*Clasificación Ingrediente</label>
-																<select class="form-control" id="clasificarIng">
-																	<option value="">Seleccione</option>
-																	<c:forEach items="${listaClasificar}" var="ing">
-																		<option value="${ing.id_clasificar_ingrediente}">${ing.nombre}</option>
-																	</c:forEach>
-																</select>
-															</div>	
 															<input type="hidden" value="0" id="count" name="count"/>
-															<div class="col-xs-12 col-sm-12 col-md-12" id="dynamic">
-															
-																<div class="col-xs-12 col-sm-2 col-md-2">
-																	<div id="Ing"></div>	
-																</div>
-																<div class="col-xs-12 col-sm-2 col-md-2">
-																	<label>*cantidad</label>
-																	<input type="text" class="form-control" id="cantidad" name="cantidad" min="0"/>
-																</div>
-																<div class="col-xs-12 col-sm-2 col-md-2">
-																	<label>*Tipo peso</label>
-																	<select class="form-control" id="tipopeso">
-																		<option value="">Seleccione</option>
-																		<c:forEach items="${listaTipoPeso}" var="tipo">
-																			<option value="${tipo.id_unidad_peso}">${tipo.nombre}</option>
-																		</c:forEach>
-																	</select>
-																</div>
-																<div class="col-xs-12 col-sm-2 col-md-2">
-																	<label>*V. Unitario</label>
-																	<input type="text" class="form-control" id="vunit" pattern="[0-9]{3,6}"/> 
-																</div>
-																<div class="col-xs-12 col-sm-2 col-md-2">
-																	<button type="button" class="btn btn-primary" id="adicion"> Adicionar</button>
-																</div>
+															<div class="col-lg-12" style="text-align: right;">
+																<button type="button" class="btn btn-primary" id="adicion"> Adicionar</button>
 															</div>
-																<div id="IngDynamic" class="col-xs-12 col-sm-12 col-md-12">
-																	<br/>
-																	<section id="flip-scroll">
-																		<table class="table table-bordered table-striped table-condensed cf">
-																			<thead class="cf">
-																				<tr>
-																					<th>Ingrediente</th>
-																					<th>Cantidad</th>
-																					<th>Tipo de Peso</th>
-																					<th>Vence</th>
-																					<th>V. Unitario</th>
-																					<th>Acción</th>
-																				</tr>
-																			</thead>
-																			<tbody></tbody>
-																		</table>
-																	</section>
-																</div>
+															<div id="IngDynamic" class="col-xs-12 col-sm-12 col-md-12">
+																<br/>
+																<section id="flip-scroll">
+																	<table class="table table-bordered table-striped table-condensed cf">
+																		<thead class="cf">
+																			<tr>
+																				<th>Ingrediente</th>
+																				<th>Cantidad</th>
+																				<th>Tipo de Peso</th>
+																				<th>Vence</th>
+																				<th>V. Unitario</th>
+																				<th></th>
+																			</tr>
+																		</thead>
+																		<tbody></tbody>
+																	</table>
+																</section>
+															</div>
 						                                  </div>
 						                              </div>
 						                          </div>
@@ -205,7 +173,7 @@
 									</div>
 									<div class="modal-footer">
 										<button class="btn btn-warning" type="button" id="validarModificacion" onclick="preprocesar();">Guardar</button>
-										<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
+										<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpiar();">Cerrar</button>
 									</div>
 								</div>
 							</form>
@@ -248,22 +216,32 @@
 	<c:import url="/WEB-INF/jsp/plantilla/javascript_genericos.jsp"></c:import>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/proveedor/Compra.js"></script>
 	<script type="text/javascript">
+	
+		var LPeso = [];
+		<c:forEach var="tipo" items="${listaTipoPeso}" varStatus="status">
 		
+			var unidad = {
+			    "id": '${tipo.id_unidad_peso}',
+			    "nombre": '${tipo.nombre}' 
+			};
+			LPeso.push(unidad);
+		</c:forEach>
+
 		titulos = new Array();
 		titulos["id_compra"] = "ID";
+		titulos["compra"] = "Secuencia compra";
 		titulos["fecha_compra"] = "Fecha compra";
 		titulos["valor"] = "valor";
 		titulos["proveedor"] = "Proveedor";
 		titulos["pagado"] = "Pagado";
 		titulos["establecimiento"] = "establecimiento";
 		titulos["Estado"] = "Estado";
-		titulos["id_compraBoton"] = "Estado";
+		titulos["id_compraBoton"] = "";
 		
 		boton = new Array();
 		boton['id_compraBoton'] = [
    			{
-   				color: "btn-primary",
-          		img: 'fa fa-sort-desc',
+          		img: 'fa fa-times-circle fa-2x',
           		metodo: "MotivoModal"
    			}
    		];

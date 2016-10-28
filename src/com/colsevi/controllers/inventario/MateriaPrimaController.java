@@ -51,17 +51,18 @@ public class MateriaPrimaController extends BaseConfigController{
 		String loteF = request.getParameter("loteF");
 		String cantidadF = request.getParameter("cantidadF");
 		String unidadMF = request.getParameter("unidadMF");
-		Boolean mayorF = Boolean.valueOf(request.getParameter("mayorF") != null && request.getParameter("mayorF").trim().equals("true") ? "true" : "false");
+		String compra = request.getParameter("compra");
 		String establecimientoF = request.getParameter("establecimientoF");
 		mapa.put("limite", Inicio + "," + Final);
 		
 		if(loteF != null && !loteF.trim().isEmpty()){
 			mapa.put("lote", loteF);
 		}
-		if(mayorF && cantidadF != null && !cantidadF.trim().isEmpty()){
-			mapa.put("cant", ">" + cantidadF);
-		}else if(cantidadF != null && !cantidadF.trim().isEmpty()){
-			mapa.put("cant", "<" + cantidadF);
+		if(compra != null && !compra.trim().isEmpty()){
+			mapa.put("compra", compra);
+		}
+		if(cantidadF != null && !cantidadF.trim().isEmpty()){
+			mapa.put("cant", cantidadF);
 		}
 		if(unidadMF != null && !unidadMF.trim().isEmpty() && !unidadMF.trim().equals("0")){
 			mapa.put("um", unidadMF);
@@ -100,6 +101,7 @@ public class MateriaPrimaController extends BaseConfigController{
 				options.put("nombreUp", map.get("nombreUp") == null ? "" : map.get("nombreUp"));
 				options.put("id_unidad_peso", map.get("id_unidad_peso"));
 				options.put("id_establecimiento", map.get("id_establecimiento"));
+				options.put("id_compra", map.get("id_compra"));
 				
 				result.add(options);
 			}catch(Exception e){
@@ -137,16 +139,17 @@ public class MateriaPrimaController extends BaseConfigController{
 				}
 				
 				if(materiaV.getId_unidad_peso().equals(MP.getId_unidad_peso())){
-					conv = MP.getCantidad() - materiaV.getCantidad();
+					if(materiaV.getCantidad() > MP.getCantidad()){
+						model.addAttribute("error", "La cantidad ingresada no puede ser mayor a la del sistema.");
+						return MateriaPrima(request, model);
+					}
 					
+					conv = MP.getCantidad() - materiaV.getCantidad();
 					if(conv < 1){
 						result = InventarioManager.conversionEncontrarMayorUnidad(MP.getId_unidad_peso(), conv);
 						conv = (Double) result[0];
 						MP.setId_unidad_peso((Integer) result[1]);
 					}
-					
-					if(materiaV.getCantidad() > MP.getCantidad())
-						model.addAttribute("error", "La cantidad seleccionada supera la disponible");
 				}else{
 					result = InventarioManager.ConversionPMayorMenor(materiaV.getId_unidad_peso(), MP.getId_unidad_peso(), materiaV.getCantidad());
 					conv = (Double) result[0];
@@ -205,10 +208,10 @@ public class MateriaPrimaController extends BaseConfigController{
 			else
 				error += "Seleccionar un ingrediente</br>";
 			
-			if(request.getParameter("cantMov") != null && !request.getParameter("cantMov").trim().isEmpty())
+			if(request.getParameter("cantMov") != null && !request.getParameter("cantMov").trim().isEmpty() && Double.valueOf(request.getParameter("cantMov")) > 0)
 				MP.setCantidad(Double.valueOf(request.getParameter("cantMov")));
 			else
-				error += "Ingresar una cantidad</br>";
+				error += "Ingresar una cantidad válida</br>";
 			
 			if(request.getParameter("unidadMov") != null && !request.getParameter("unidadMov").trim().isEmpty() && !request.getParameter("unidadMov").trim().equals("0"))
 				MP.setId_unidad_peso(Integer.valueOf(request.getParameter("unidadMov")));

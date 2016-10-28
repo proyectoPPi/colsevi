@@ -1,6 +1,6 @@
 package com.colsevi.controllers.pago;
 
-import java.io.IOException;
+import java.io.IOException;	
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -21,20 +22,38 @@ import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ProveedorManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.dao.deuda.model.DeudaProveedor;
-import com.colsevi.dao.deuda.model.DeudaProveedorExample;
 import com.colsevi.dao.pago.model.PagoProveedor;
 import com.colsevi.dao.pago.model.PagoProveedorExample;
+import com.colsevi.dao.proveedor.model.CompraProveedor;
 
 @Controller
 public class PagoProveedorController extends BaseConfigController{
 
 	private static final long serialVersionUID = -3396874236142724754L;
-
+	private static Logger logger = Logger.getLogger(PagoProveedorController.class);
+	
 	@RequestMapping("/pago/Proveedor")
 	public ModelAndView PagoProv (HttpServletRequest request, ModelMap model){
-		model.addAttribute("proveedorLista", ProveedorManager.getProveedores());
 		return new ModelAndView("/pago/ProveedorPago", "col", getValoresGenericos(request));
+	}
+	
+	@RequestMapping("/pago/Proveedor/autocompletar")
+	public void auto(HttpServletRequest request, HttpServletResponse response){
+		try{
+			JSONObject result = new JSONObject();
+			
+			String proveedor = request.getParameter("campo");
+			result = ProveedorManager.AutocompletarProveedor(proveedor);
+			
+			if(result != null){
+				response.setContentType("text/html;charset=ISO-8859-1");
+				request.setCharacterEncoding("UTF8");
+				
+				result.writeJSONString(response.getWriter());
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -43,7 +62,6 @@ public class PagoProveedorController extends BaseConfigController{
 		JSONObject result = new JSONObject();
 		
 		PagoProveedorExample PPE = new PagoProveedorExample();
-		PagoProveedorExample.Criteria criteria = (PagoProveedorExample.Criteria) PPE.createCriteria();
 		
 		try{		
 			String Inicio = request.getParameter("Inicio");
@@ -53,7 +71,7 @@ public class PagoProveedorController extends BaseConfigController{
 			result.put("datos", ConstruirJson(ColseviDao.getInstance().getPagoProveedorMapper().selectByExample(PPE)));
 			result.put("total", ColseviDao.getInstance().getPagoProveedorMapper().countByExample(PPE));
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		response.setContentType("text/html;charset=ISO-8859-1");
@@ -81,6 +99,7 @@ public class PagoProveedorController extends BaseConfigController{
 				
 				result.add(options);
 			}catch(Exception e ){
+				logger.error(e.getMessage());
 				continue;
 			}
 		}
@@ -93,16 +112,20 @@ public class PagoProveedorController extends BaseConfigController{
 		
 		JSONObject result = new JSONObject();
 		Map<String, Object> mapa = new HashMap<String, Object>();
-		
-		Integer prov = Integer.parseInt(request.getParameter("prov"));
-		if(prov != null && !prov.equals(0)){
-			mapa.put("compra", prov);
-			result.put("datos", ConstruirDeuda(ColseviDao.getInstance().getPagoProveedorMapper().deudaCom(mapa)));
-		}else{
-			result.put("datos", "");
+		try{
+			Integer prov = Integer.parseInt(request.getParameter("prov"));
+			if(prov != null && !prov.equals(0)){
+				mapa.put("compra", prov);
+				result.put("datos", ConstruirDeuda(ColseviDao.getInstance().getPagoProveedorMapper().deudaCom(mapa)));
+			}else{
+				result.put("datos", "");
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
 		}
+
 		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
+		request.setCharacterEncoding("UTF8");	
 		
 		result.writeJSONString(response.getWriter());
 	}
@@ -116,10 +139,14 @@ public class PagoProveedorController extends BaseConfigController{
 			try{
 				options = new JSONObject();
 				
-				options.put("id", map.get("id_compra"));
+				options.put("id_compra_proveedor", map.get("id_compra_proveedor"));
 				options.put("pendiente", new BigDecimal(map.get("pendiente").toString()).intValue());
+				options.put("valor", new BigDecimal(map.get("valor").toString()).intValue());
+				options.put("diferencia", new BigDecimal(map.get("diferencia").toString()).intValue());
+				
 				result.add(options);
 			}catch(Exception e){
+				logger.error(e.getMessage());
 				continue;
 			}
 		}
@@ -132,8 +159,6 @@ public class PagoProveedorController extends BaseConfigController{
 		Integer compra = 0;
 		BigDecimal pendiente = new BigDecimal(0);
 		BigDecimal valorP = new BigDecimal(0);
-		DeudaProveedorExample DPE = new DeudaProveedorExample();
-		DeudaProveedor dp = new DeudaProveedor();
 		String obs = request.getParameter("observacion") != null && !request.getParameter("observacion").trim().isEmpty() ? request.getParameter("observacion") : "";
 		String error = "";
 		
@@ -155,9 +180,11 @@ public class PagoProveedorController extends BaseConfigController{
 		}
 		
 		try{
-			DPE.createCriteria().andId_compraEqualTo(compra);
-			dp = ColseviDao.getInstance().getDeudaProveedorMapper().selectByExample(DPE).get(0);
-			pendiente = dp.getPendiente();
+			pendiente = new BigDecimal(request.getParameter("ValPend"));
+		}catch(Exception e){
+			error += "Ingresar un valor a pagar<br/>";
+		}
+		try{
 			
 			if((pendiente.doubleValue() - valorP.doubleValue()) < 0)
 				error += "El valor pagado no puede superar el valor pendiente<br/>";
@@ -166,20 +193,20 @@ public class PagoProveedorController extends BaseConfigController{
 		}catch(Exception e){
 			error += "Ingresar una compra válida<br/>";
 		}
-		if(error.isEmpty())
+		if(!error.isEmpty())
 			model.addAttribute("error", error);
 		else{
 			try{
-				DeudaProveedor deudaprov = new DeudaProveedor();
-				deudaprov.setPendiente(pendiente);
-				deudaprov.setId_deuda_proveedor(dp.getId_deuda_proveedor());
-				deudaprov.setId_compra(dp.getId_compra());
-				ColseviDao.getInstance().getDeudaProveedorMapper().updateByPrimaryKeySelective(deudaprov);
+				CompraProveedor compraProv = new CompraProveedor();
+				compraProv.setId_compra_proveedor(compra);
+				compraProv.setPendiente(pendiente);
+				ColseviDao.getInstance().getCompraProveedorMapper().updateByPrimaryKeySelective(compraProv);
 				
 				ProveedorManager.InsertarPago(compra, new Date(), pendiente, valorP, obs);
 				
 				model.addAttribute("correcto", "Pago creado");
 			}catch(Exception e){
+				logger.error(e.getMessage());
 				error += "Contactar al administrador<br/>";
 			}
 		}
