@@ -56,6 +56,7 @@
 							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
 								<label>Motivo</label>
 								<select class="form-control" id="motivoMov" name="filtro">
+									<option value="0">Seleccione</option>
 									<option value="3">Prestamo</option>
 									<option value="4">Pago</option>
 								</select>

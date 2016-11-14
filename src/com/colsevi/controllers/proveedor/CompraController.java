@@ -27,13 +27,10 @@ import com.colsevi.application.ProveedorManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.application.ingredienteManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.dao.inventario.model.MateriaPrimaExample;
 import com.colsevi.dao.inventario.model.MovimientoMateriaExample;
-import com.colsevi.dao.pago.model.PagoProveedorExample;
 import com.colsevi.dao.proveedor.model.CompraProveedor;
-import com.colsevi.dao.proveedor.model.CompraProveedorExample;
 import com.colsevi.dao.proveedor.model.CompraXIngrediente;
 import com.colsevi.dao.proveedor.model.CompraXIngredienteExample;
 
@@ -68,7 +65,6 @@ public class CompraController extends BaseConfigController {
 		String estadoF = request.getParameter("estadoF");
 		String provF = request.getParameter("provF");
 		String fechaF = request.getParameter("fechaF");
-		String fechaMF = request.getParameter("fechaMF");
 		String valorF = request.getParameter("valorF");
 		String valorMF = request.getParameter("valorMF");
 		String estaF = request.getParameter("estaF");
@@ -76,41 +72,43 @@ public class CompraController extends BaseConfigController {
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("limit", Inicio + ", " + Final);
 		
-		if(com != null && !com.trim().isEmpty()){
-			mapa.put("compra", com);
-		}
-		if(pagadoF != null && !pagadoF.trim().isEmpty() && !pagadoF.trim().equals("0")){
-			if(pagadoF.trim().equals("1")){
-				mapa.put("pagadoT", "");
-			}else{
-				mapa.put("pagadoF", "");
-			}
-		}
-		if(provF != null && !provF.trim().isEmpty() && !provF.trim().equals("0")){
-			mapa.put("prov", provF);
-		}
-		if(estaF != null && !estaF.trim().isEmpty() && !estaF.trim().equals("0")){
-			mapa.put("estab", estaF);
-		}
-		if(valorF != null && !valorF.trim().isEmpty()){
-			if(valorMF != null && valorMF.trim().equals("true")){
-				mapa.put("valorMayor", valorF);
-			}else{
-				mapa.put("valorMenor", valorF);
-			}
-		}
-		if(fechaF != null && !fechaF.trim().isEmpty()){
-			mapa.put("fecha", UtilidadManager.FormatDateFormDB2(fechaF));
-		}
-		if(estadoF != null && !estadoF.trim().isEmpty() && !estadoF.trim().equals("0")){
-			if(estadoF.trim().equals("2")){
-				mapa.put("estadoBaja", "");
-			}else{
-				mapa.put("estadoAlta", "");
-			}
-		}
-		
 		try{
+			if(com != null && !com.trim().isEmpty()){
+				mapa.put("compra", com);
+			}
+			if(pagadoF != null && !pagadoF.trim().isEmpty() && !pagadoF.trim().equals("0")){
+				if(pagadoF.trim().equals("1")){
+					mapa.put("pagadoT", "");
+				}else{
+					mapa.put("pagadoF", "");
+				}
+			}
+			if(provF != null && !provF.trim().isEmpty() && !provF.trim().equals("0")){
+				mapa.put("prov", provF);
+			}
+			if(estaF != null && !estaF.trim().isEmpty() && !estaF.trim().equals("0")){
+				mapa.put("estab", estaF);
+			}
+			if(valorF != null && !valorF.trim().isEmpty()){
+				if(valorMF != null && valorMF.trim().equals("true")){
+					mapa.put("valorMayor", valorF);
+				}else{
+					mapa.put("valorMenor", valorF);
+				}
+			}
+			if(fechaF != null && !fechaF.trim().isEmpty()){
+				Object[] obj = UtilidadManager.FechaInicioFin(UtilidadManager.FechaStringConHora_BD(fechaF));
+				mapa.put("fechaI", obj[0]);
+				mapa.put("fechaF", obj[1]);
+			}
+			if(estadoF != null && !estadoF.trim().isEmpty() && !estadoF.trim().equals("0")){
+				if(estadoF.trim().equals("2")){
+					mapa.put("estadoBaja", "");
+				}else{
+					mapa.put("estadoAlta", "");
+				}
+			}
+			
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getCompraProveedorMapper().TablaCompras(mapa)));
 			opciones.put("total", ColseviDao.getInstance().getCompraProveedorMapper().CountTablaCompras(mapa));
 		}catch(Exception e){
@@ -137,7 +135,7 @@ public class CompraController extends BaseConfigController {
 				opciones.put("compra", bean.get("id_compra"));
 				opciones.put("valor", bean.get("valor"));
 				opciones.put("valorsin", bean.get("valor"));
-				opciones.put("fecha_compra", UtilidadManager.FormatDateComplete(bean.get("fecha_compra").toString()));
+				opciones.put("fecha_compra", UtilidadManager.FechaStringConHora_Vista(bean.get("fecha_compra").toString(), true));
 				opciones.put("pagado", bean.get("pagado"));
 				opciones.put("motivo", bean.get("motivo"));
 				opciones.put("Estado", bean.get("estado"));
@@ -302,10 +300,10 @@ public class CompraController extends BaseConfigController {
 		if(request.getParameter("fecha_compra") == null || request.getParameter("fecha_compra").trim().isEmpty())
 			error += "Ingresar la fecha de la compra<br/>";
 		else{
-			if(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")).getTime() > new Date().getTime() ){
+			if(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true).getTime() > new Date().getTime() ){
 				error += "La fecha no puede ser mayo a la actual<br/>";
 			}else{
-				beanC.setFecha_compra(UtilidadManager.FormatDateFormDB(request.getParameter("fecha_compra")));
+				beanC.setFecha_compra(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true));
 			}
 		}
 		
@@ -333,7 +331,7 @@ public class CompraController extends BaseConfigController {
 					mp.setId_ingrediente(cxi.getId_ingrediente());
 					
 					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
-						Date dat = UtilidadManager.FormatDateFormDB2(request.getParameter("fecha" + (i +1)));
+						Date dat = UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha" + (i +1)), true);
 						if(dat.getTime() < new Date(System.currentTimeMillis()).getTime()){
 							Calendar calendar = Calendar.getInstance();
 							calendar.setTime(dat);
@@ -503,7 +501,7 @@ public class CompraController extends BaseConfigController {
 				opciones.put("id_tipo_peso", map.get("id_unidad_peso"));
 				opciones.put("nombreIng", map.get("nombreIng"));
 				opciones.put("nombreTp", map.get("nombreTp"));
-				opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatDateView(map.get("fecha_vencimiento").toString()) : "");
+				opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FechaStringConHora_Vista(map.get("fecha_vencimiento").toString()) : "");
 				opciones.put("cantidad", map.get("cantidad"));
 				opciones.put("iva", map.get("iva") != null ? map.get("iva") : "");
 				opciones.put("vunitario", map.get("vunitario") != null ? map.get("vunitario") : "");

@@ -207,7 +207,7 @@ public class PedidoWizardController extends BaseConfigController {
 				options.put("ref", map.get("referencia"));
 				options.put("nombre", map.get("referencia") + " " + map.get("nombre"));
 				options.put("cantidad", map.get("cantidad"));
-				options.put("sub_total",UtilidadManager.Currency(new BigDecimal(map.get("sub_total").toString())));
+				options.put("sub_total",UtilidadManager.MonedaVista((BigDecimal) map.get("sub_total")));
 				
 				result.add(options);
 			}catch(Exception e){

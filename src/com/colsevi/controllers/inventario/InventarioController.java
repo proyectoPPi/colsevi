@@ -38,7 +38,9 @@ import com.colsevi.dao.producto.model.IngredienteXProductoKey;
 
 @Controller
 public class InventarioController extends BaseConfigController {
-
+/*
+ * Cambiar carga de ingredientes a que sea por una sola consulta que devuelva toda la data, JSON ingrediente, SUBJSON MATERIA PRIMA
+ * */
 
 	private static final long serialVersionUID = -1900570445397410663L;
 	private static Logger logger = Logger.getLogger(InventarioController.class);
@@ -62,20 +64,13 @@ public class InventarioController extends BaseConfigController {
 			String Final = request.getParameter("Final");
 			String prodV = request.getParameter("prodV");
 			String estaF = request.getParameter("estaF");
-			String disF = request.getParameter("disF");
-			Boolean mayorF = Boolean.valueOf(request.getParameter("mayorF") != null && request.getParameter("mayorF").trim().equals("true") ? "true" : "false");
 			
 			mapa.put("limit",Inicio + ", " + Final);
-			if(prodV != null && !prodV.trim().isEmpty())
+			if(!prodV.trim().isEmpty())
 				mapa.put("prodV", prodV);
-			if(estaF != null && !estaF.trim().isEmpty() && !estaF.trim().equals("0"))
+			if(!estaF.trim().equals("0"))
 				mapa.put("estaF", estaF);
-			if(disF != null && !disF.trim().isEmpty()){
-				if(mayorF)
-					mapa.put("dis", ">=" + disF);
-				else
-					mapa.put("dis", "<=" + disF);
-			}
+
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getInventarioMapper().SelectDataView(mapa)));
 			opciones.put("total", ColseviDao.getInstance().getInventarioMapper().CountDataView(mapa));
 
@@ -137,9 +132,15 @@ public class InventarioController extends BaseConfigController {
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		Integer cantidad = Integer.parseInt(request.getParameter("cantidad"));
 		
-		mapa.put("producto",request.getParameter("prod"));
-		opciones.put("datos", Construir(ColseviDao.getInstance().getInventarioMapper().CargarIngProd(mapa), cantidad));
-
+		mapa.put("producto", request.getParameter("prod"));
+		mapa.put("cantidad", cantidad);
+		
+		try{
+			opciones.put("datos", Construir(ColseviDao.getInstance().getInventarioMapper().CargarIngProd(mapa), request.getParameter("establecimiento")));
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
 		response.setContentType("text/html;charset=ISO-8859-1");
 		request.setCharacterEncoding("UTF8");
 
@@ -147,7 +148,7 @@ public class InventarioController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public JSONArray Construir(List<Map<String, Object>> listData, Integer cantidad){
+	public JSONArray Construir(List<Map<String, Object>> listData, String establecimiento){
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
@@ -158,10 +159,15 @@ public class InventarioController extends BaseConfigController {
 					opciones = new JSONObject();
 					opciones.put("id_ingrediente", map.get("id_ingrediente"));
 					opciones.put("nombreIng", map.get("nombreIng"));
-					opciones.put("cantidadProd", (Integer) map.get("cantidadProd")  * cantidad);
+					opciones.put("cantidadProd", map.get("cantidadProd"));
 					opciones.put("nombreIngU", map.get("nombreIngU"));
 					opciones.put("codUM", map.get("codUM"));
 					opciones.put("id_unidad_peso", map.get("id_unidad_peso"));
+					
+					JSONArray detalle = cargarIng((Long) map.get("cantidadProd"), (Integer) map.get("id_unidad_peso"), map.get("id_ingrediente").toString(), establecimiento);
+					if(detalle != null){
+						opciones.put("detalle", detalle);
+					}
 					
 					resultado.add(opciones);
 				}catch(Exception e){
@@ -173,29 +179,20 @@ public class InventarioController extends BaseConfigController {
 		return resultado;
 	}
 
-	@SuppressWarnings("unchecked")
-	@RequestMapping("/Inventario/Inv/cargarIng")
-	public void cargarIng(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		
-		JSONObject opciones = new JSONObject();
+	public JSONArray cargarIng(Long cantidad, Integer um, String ing, String establecimiento) throws IOException{
 		Map<String, Object> mapa = new HashMap<String, Object>();
-		Integer cantidad = Integer.parseInt(request.getParameter("cantidad"));
-
-		Integer um = Integer.parseInt(request.getParameter("um"));
-		
-		mapa.put("ing",request.getParameter("ing"));
-		mapa.put("esta", request.getParameter("establecimiento"));
-		opciones.put("datos", ConstruirInv(ColseviDao.getInstance().getInventarioMapper().CargarInv(mapa), cantidad, um));
-		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		opciones.writeJSONString(response.getWriter());
-		
+		mapa.put("ing", ing);
+		mapa.put("esta", establecimiento);
+		try{
+			return ConstruirInv(ColseviDao.getInstance().getInventarioMapper().CargarInv(mapa), cantidad, um);
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public JSONArray ConstruirInv(List<Map<String, Object>> listData, Integer cantidad, Integer um){
+	public JSONArray ConstruirInv(List<Map<String, Object>> listData, Long cantidad, Integer um){
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
@@ -209,7 +206,7 @@ public class InventarioController extends BaseConfigController {
 					opciones = new JSONObject();
 					
 					opciones.put("nombre", map.get("nombre") != null ? map.get("nombre") : "");
-					opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatoFechaVista((Date) map.get("fecha_vencimiento")) : "");
+					opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FechaDateConHora_Vista((Date) map.get("fecha_vencimiento")) : "");
 					opciones.put("lote", map.get("lote"));
 					opciones.put("color", true);
 					opciones.put("codUM", map.get("codUM") != null ? map.get("codUM") : "0");
@@ -338,10 +335,13 @@ public class InventarioController extends BaseConfigController {
 		MovimientoMateria movmat = new MovimientoMateria();
 		
 		String error = "";
-		String[] sec = request.getParameter("secuencia").split(",");
+		String[] sec = request.getParameterValues("lote");
+		String[] ingArray = request.getParameterValues("ing");
+		String[] umArray = request.getParameterValues("um");
+		String[] cantArray = request.getParameterValues("cant");
 		Integer producto = Integer.parseInt(request.getParameter("id_producto"));
 		Integer cantSolicitada = Integer.parseInt(request.getParameter("cantSolicitada"));
-		ingrediente = Integer.parseInt(request.getParameter("ing" + sec[0]));
+		ingrediente = Integer.parseInt(ingArray[0]);
 		
 		for(int i = 0; i < sec.length ; i ++){
 			movmat = new MovimientoMateria();
@@ -350,15 +350,15 @@ public class InventarioController extends BaseConfigController {
 			cxiE.clear();
 			IXME.clear();
 
-			invxmatv.setId_ingrediente(Integer.parseInt(request.getParameter("ing" + sec[i])));
+			invxmatv.setId_ingrediente(Integer.parseInt(ingArray[i]));
 			keyIXP.setId_ingrediente(invxmatv.getId_ingrediente());
 			keyIXP.setId_producto(producto);
 			ingProd = ColseviDao.getInstance().getIngredienteXProductoMapper().selectByPrimaryKey(keyIXP);
 			ingProd.setCantidad(ingProd.getCantidad() * cantSolicitada);
 			
-			if(request.getParameter("cant" + sec[i]) != null && !request.getParameter("um" + sec[i]).trim().equals("0")){
-				invxmatv.setCantidad(Double.valueOf(request.getParameter("cant" + sec[i])));
-				invxmatv.setId_unidad_peso(Integer.parseInt(request.getParameter("um" + sec[i])));
+			if(cantArray[i] != null && !umArray[i].trim().equals("0")){
+				invxmatv.setCantidad(Double.valueOf(cantArray[i]));
+				invxmatv.setId_unidad_peso(Integer.parseInt(umArray[i]));
 				invxmatv.setLote(Integer.parseInt(sec[i]));
 				
 				if(invxmatv.getCantidad() != null && !invxmatv.getCantidad().equals(0d)){
@@ -511,7 +511,7 @@ public class InventarioController extends BaseConfigController {
 				if(request.getParameter("id_inventario") != null && !request.getParameter("id_inventario").trim().isEmpty()){
 
 					invxmatv.setLote(Integer.parseInt(sec[i]));
-					invxmatv.setId_ingrediente(Integer.parseInt(request.getParameter("ing" + sec[i])));
+					invxmatv.setId_ingrediente(Integer.parseInt(ingArray[i]));
 					
 					cxiE.createCriteria().andLoteEqualTo(invxmatv.getLote()).andId_ingredienteEqualTo(invxmatv.getId_ingrediente());
 					mp = ColseviDao.getInstance().getMateriaPrimaMapper().selectByExample(cxiE).get(0);

@@ -46,7 +46,7 @@
 							<form method="post" action="${pageContext.request.contextPath}/Producto/Tipo/Guardar.html?" id="formulario">
 								<div class="modal-content">
 									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
 										<h4 class="modal-title">Tipo Producto...</h4>
 									</div>
 									<div class="modal-body">
@@ -62,7 +62,7 @@
 									</div>
 									<div class="modal-footer">
 										<button class="btn btn-warning" type="submit">Guardar</button>
-										<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
+										<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpliar();">Cerrar</button>
 										<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 									</div>
 								</div>

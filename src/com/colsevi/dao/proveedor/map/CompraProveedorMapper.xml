@@ -406,8 +406,8 @@
 		<if test="valorMenor != null">
 			AND valor &lt;= #{valorMenor}
 		</if>
-		<if test="fecha != null">
-			AND fecha = #{fecha}
+		<if test="fechaI != null">
+			AND fecha_compra Between #{fechaI} AND #{fechaF} 
 		</if>
 		ORDER BY id_compra_proveedor DESC
 		LIMIT ${limit};
@@ -445,8 +445,8 @@
 		<if test="valorMenor != null">
 			AND valor &lt;= #{valorMenor}
 		</if>
-		<if test="fecha != null">
-			AND fecha = #{fecha}
+		<if test="fechaI != null">
+			AND fecha_compra Between #{fechaI} AND #{fechaF} 
 		</if>
   </select>
   <select id="countCambiosDetalleCompra" parameterType="java.util.Map" resultType="java.lang.Integer">

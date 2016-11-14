@@ -5,7 +5,6 @@
     
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 	<script src="http://htmlcoder.me/preview/the_project/v.1.3/template/plugins/modernizr.js"></script>
-	<script src="http://htmlcoder.me/preview/the_project/v.1.3/template/plugins/jquery.browser.js"></script>
 	<script src="http://htmlcoder.me/preview/the_project/v.1.3/template/plugins/SmoothScroll.js"></script>
 	<script src="http://htmlcoder.me/preview/the_project/v.1.3/template/plugins/waypoints/jquery.waypoints.min.js"></script>
 	<script src="http://htmlcoder.me/preview/the_project/v.1.3/template/plugins/pace/pace.min.js"></script>

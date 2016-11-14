@@ -24,7 +24,6 @@ import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.controllers.producto.ProductoAdminController;
 
 @Controller
 public class MateriaPrimaController extends BaseConfigController{
@@ -46,26 +45,30 @@ public class MateriaPrimaController extends BaseConfigController{
 		JSONObject options = new JSONObject();
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		
-		String Inicio = request.getParameter("Inicio");
-		String Final = request.getParameter("Final");
 		String loteF = request.getParameter("loteF");
 		String cantidadF = request.getParameter("cantidadF");
 		String unidadMF = request.getParameter("unidadMF");
 		String compra = request.getParameter("compra");
 		String establecimientoF = request.getParameter("establecimientoF");
+		
+		String Inicio = request.getParameter("Inicio");
+		String Final = request.getParameter("Final");
+		String vencimiento = request.getParameter("vencimiento");
+		
 		mapa.put("limite", Inicio + "," + Final);
 		
-		if(loteF != null && !loteF.trim().isEmpty()){
+		if(loteF != null && !loteF.trim().isEmpty())
 			mapa.put("lote", loteF);
-		}
-		if(compra != null && !compra.trim().isEmpty()){
+		if(compra != null && !compra.trim().isEmpty())
 			mapa.put("compra", compra);
-		}
-		if(cantidadF != null && !cantidadF.trim().isEmpty()){
+		if(cantidadF != null && !cantidadF.trim().isEmpty())
 			mapa.put("cant", cantidadF);
-		}
-		if(unidadMF != null && !unidadMF.trim().isEmpty() && !unidadMF.trim().equals("0")){
+		if(unidadMF != null && !unidadMF.trim().isEmpty() && !unidadMF.trim().equals("0"))
 			mapa.put("um", unidadMF);
+		if(vencimiento != null && !vencimiento.trim().isEmpty()){
+			Object[] obj = UtilidadManager.FechaInicioFin(UtilidadManager.FechaStringConHora_BD(vencimiento));
+			mapa.put("fechaI", obj[0]);
+			mapa.put("fechaF", obj[1]);
 		}
 		if(establecimientoF != null && !establecimientoF.trim().isEmpty() && !establecimientoF.trim().equals("0")){
 			mapa.put("esta", establecimientoF);
@@ -95,7 +98,7 @@ public class MateriaPrimaController extends BaseConfigController{
 				options.put("lote", map.get("lote"));
 				options.put("loteid", map.get("lote"));
 				options.put("cantidad", map.get("cantidad") == null ? "0" : map.get("cantidad"));
-				options.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FormatoFechaVistaO(map.get("fecha_vencimiento")) : "");
+				options.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FechaDateConHora_Vista((Date) map.get("fecha_vencimiento")) : "");
 				options.put("nombreIng", map.get("nombreIng"));
 				options.put("nombreEsta", map.get("nombreEsta"));
 				options.put("nombreUp", map.get("nombreUp") == null ? "" : map.get("nombreUp"));

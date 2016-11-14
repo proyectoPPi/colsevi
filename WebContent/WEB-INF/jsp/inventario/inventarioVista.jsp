@@ -5,14 +5,6 @@
    <meta charset="UTF-8" />
 	<title>Inventario</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
-	<style>
-		.success {
-	    	background:  #3F8A24;
-	    }
-	    .error {
-	    	background:  #ff6c60;
-	    }
-	</style>
 </head>
 <body>
 
@@ -21,11 +13,11 @@
 		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
 		<section class="container">
 			<div class="row">
-			<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
+				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
 				<h2>Inventario 
 					<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 				</h2>
-				
+				<div class="separator-2"></div>
 				<section class="panel">
 					<div class="panel-body">
 						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -42,30 +34,23 @@
 								</c:forEach>
 							</select>
 						</div>
-						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-							<label>Disponible</label>
-							<input type="number" class="form-control" id="disF" name="filtro"/>
-							<label>Cantidad Mayor </label> <input type="checkbox" id="mayorF" name="filtro"/>
-						</div>
 						<div class="col-xs-12 col-md-12 col-lg-12"><br/>
 							<button class="btn btn-button" onclick="Tabla(1);">Filtrar</button>
 						</div>	
 					</div>	
 				</section>
-				<!-- <div id="paginacion" class="col-md-12"></div> -->
-				
 				<div class=" col-xs-12 col-md-12 col-lg-12">
 					<div id="tabla"></div>
 					<div id="paginacion" class="col-md-12"></div>
 				</div>
-				<div id="dtBox"></div>
+				
 				<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog modal-lg">
 						<div class="modal-content-wrap">
 							<form method="post" action="${pageContext.request.contextPath}/Inventario/Inv/Guardar.html?" id="formulario">
 								<div class="modal-content">
 									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
 										<h4 class="modal-title">Inventario...</h4>
 									</div>
 									<div class="modal-body">
@@ -125,8 +110,8 @@
 							                                  
 							                                  </div>
 							                                  <div id="ingview" class="tab-pane">
-							                                  	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							                                  		<div id="viewData"></div>
+							                                  	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="dataTables">
+<!-- 							                                  		<div id="dataTables"></div> -->
 																</div>
 							                                  </div>
 							                              </div>
@@ -137,7 +122,7 @@
 									</div>
 									<div class="modal-footer">
 										<button class="btn btn-warning" type="button" id="formGuardar" onclick="preprocesar();">Guardar</button>
-										<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
+										<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 										<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 									</div>
 								</div>
@@ -159,10 +144,14 @@
 		titulos["disponible"] = "disponible";
 		titulos["compromiso"] = "compromiso";
 		
-		clase = new Array();
-		clase['descipEsta'] = 'hidden-xs';
-		clase['hora_inicio'] = 'hidden-xs hidden-sm';
-		clase['hora_fin'] = 'hidden-xs  hidden-sm';
+		var LPeso = [];
+		<c:forEach var="tipo" items="${listaUnidad}" varStatus="status">
+			var unidad = {
+			    "id": '${tipo.id_unidad_peso}',
+			    "nombre": '${tipo.nombre}' 
+			};
+			LPeso.push(unidad);
+		</c:forEach>
 	</script>
 </body>
 </html>

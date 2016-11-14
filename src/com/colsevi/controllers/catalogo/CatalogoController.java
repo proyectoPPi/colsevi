@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.dao.catalogo.model.Catalogo;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.controllers.producto.ProductoAdminController;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.general.model.Establecimiento;
 import com.colsevi.dao.general.model.EstablecimientoExample;
@@ -103,8 +102,6 @@ public class CatalogoController extends BaseConfigController{
 	@RequestMapping("/Catalogo/Cat/Guardar")
 	public ModelAndView GuardarCatalogo(HttpServletRequest request, ModelMap modelo, Catalogo bean){
 		String error = "";
-		Catalogo beanC = new Catalogo();
-		
 		try{
 			
 			if(request.getParameter("id_catalogo") != null && !request.getParameter("id_catalogo").trim().isEmpty())

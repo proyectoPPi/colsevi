@@ -37,25 +37,6 @@ public class PagoProveedorController extends BaseConfigController{
 		return new ModelAndView("/pago/ProveedorPago", "col", getValoresGenericos(request));
 	}
 	
-	@RequestMapping("/pago/Proveedor/autocompletar")
-	public void auto(HttpServletRequest request, HttpServletResponse response){
-		try{
-			JSONObject result = new JSONObject();
-			
-			String proveedor = request.getParameter("campo");
-			result = ProveedorManager.AutocompletarProveedor(proveedor);
-			
-			if(result != null){
-				response.setContentType("text/html;charset=ISO-8859-1");
-				request.setCharacterEncoding("UTF8");
-				
-				result.writeJSONString(response.getWriter());
-			}
-		}catch(Exception e){
-			logger.error(e.getMessage());
-		}
-	}
-	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/pago/Proveedor/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
@@ -92,10 +73,10 @@ public class PagoProveedorController extends BaseConfigController{
 				options.put("id_pago_proveedor", bean.getId_pago_proveedor());
 				options.put("id_compra", bean.getId_compra());
 				options.put("compra", "");
-				options.put("fecha_pago", UtilidadManager.FormatoFechaVistaO(bean.getFecha_pago()));
+				options.put("fecha_pago", UtilidadManager.FechaDateConHora_Vista(bean.getFecha_pago()));
 				options.put("observacion", bean.getObservacion());
-				options.put("pendiente", UtilidadManager.Currency(bean.getPendiente()));
-				options.put("valor_pagado", UtilidadManager.Currency(bean.getValor_pagado()));
+				options.put("pendiente", UtilidadManager.MonedaVista(bean.getPendiente()));
+				options.put("valor_pagado", UtilidadManager.MonedaVista(bean.getValor_pagado()));
 				
 				result.add(options);
 			}catch(Exception e ){
@@ -210,8 +191,26 @@ public class PagoProveedorController extends BaseConfigController{
 				error += "Contactar al administrador<br/>";
 			}
 		}
-		
 		return PagoProv(request, model);
+	}
+	
+	@RequestMapping("/pago/Proveedor/autocompletar")
+	public void auto(HttpServletRequest request, HttpServletResponse response){
+		try{
+			JSONObject result = new JSONObject();
+			
+			String proveedor = request.getParameter("campo");
+			result = ProveedorManager.AutocompletarProveedor(proveedor);
+			
+			if(result != null){
+				response.setContentType("text/html;charset=ISO-8859-1");
+				request.setCharacterEncoding("UTF8");
+				
+				result.writeJSONString(response.getWriter());
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
 	}
 	
 }

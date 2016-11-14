@@ -318,11 +318,13 @@
   </update>
   
   <select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
-		SELECT mm.id_movimiento_materia, mov.nombre AS motivo, lote, up.nombre AS um, esta.nombre AS esta, cantidad, mm.fecha_movimiento
+		SELECT mm.id_movimiento_materia, mov.nombre AS motivo, mm.lote, up.nombre AS um, esta.nombre AS esta, mm.cantidad,
+			mm.fecha_movimiento, cxi.id_compra
 		FROM movimiento_materia mm
 		LEFT JOIN motivo mov ON mov.id_motivo = mm.id_motivo
 		LEFT JOIN unidad_peso up ON up.id_unidad_peso = mm.id_unidad_peso
 		LEFT JOIN establecimiento esta ON esta.id_establecimiento = mm.id_establecimiento
+		LEFT JOIN compra_x_ingrediente cxi ON cxi.lote = mm.lote
 		WHERE 1 = 1
 		
 		 <if test="lote != null">
@@ -337,6 +339,15 @@
 		 <if test="um != null">
 			AND up.id_unidad_peso = #{um}
 		 </if>
+		 <if test="compra != null">
+			AND cxi.id_compra = #{compra}
+		 </if>
+		 <if test="motivo != null">
+			AND mm.id_motivo = #{motivo}
+		 </if>
+		 <if test="fechaI != null">
+			AND mm.fecha_movimiento Between #{fechaI} AND #{fechaF} 
+		</if>
 		
 		ORDER BY id_movimiento_materia DESC
 		LIMIT ${limite};
@@ -348,6 +359,7 @@
 		LEFT JOIN motivo mov ON mov.id_motivo = mm.id_motivo
 		LEFT JOIN unidad_peso up ON up.id_unidad_peso = mm.id_unidad_peso
 		LEFT JOIN establecimiento esta ON esta.id_establecimiento = mm.id_establecimiento
+		LEFT JOIN compra_x_ingrediente cxi ON cxi.lote = mm.lote
 		WHERE 1 = 1
 		
 		 <if test="lote != null">
@@ -362,6 +374,15 @@
 		 <if test="um != null">
 			AND up.id_unidad_peso = #{um}
 		 </if>
+		  <if test="compra != null">
+			AND cxi.id_compra = #{compra}
+		 </if>
+		 <if test="motivo != null">
+			AND mm.id_motivo = #{motivo}
+		 </if>
+		 <if test="fechaI != null">
+			AND mm.fecha_movimiento Between #{fechaI} AND #{fechaF} 
+		</if>
 		;
 	</select>
   

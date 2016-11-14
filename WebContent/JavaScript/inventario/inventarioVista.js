@@ -24,7 +24,7 @@ function Tabla(pagina){
 }
 
 function Limpiar(){
-	HLimpliar();
+	HLimpiar();
 }
 
 function Eliminar(){
@@ -38,16 +38,15 @@ function CargarFormulario(Id){
 	jQuery('#formGuardar').show();
 }
 
-jQuery('#viewData').click(function(e) { 
+jQuery('#dataTables').click(function(e) { 
 	jQuery('#detalle').val("1");
 });
 
 jQuery('#carga').click(function(){
-	
-	jQuery('#viewData').html('');
+	jQuery('#dataTables, #secuencia').html('');
 	jQuery.ajaxQueue({
 		url: contexto + "/Inventario/Inv/cargarInv.html?",
-		 data:{prod: jQuery('#id_producto').val(), cantidad: jQuery('#cantSolicitada').val()},
+		 data:{prod: jQuery('#id_producto').val(), cantidad: jQuery('#cantSolicitada').val(), establecimiento: jQuery('#establecimiento').val()},
 	}).done(function(result) {
 		var data; 
  		try{ 
@@ -58,87 +57,51 @@ jQuery('#carga').click(function(){
          	return; 
  		} 
  		data = data['datos'];
+ 		var html = '';
  		for(i in data){
- 			var html = '';
- 			html += '<h3><strong>' + data[i]['nombreIng'] + '</strong>: ' + data[i]['cantidadProd'] + ' ' + data[i]['codUM'] + '</h3><hr/>';
- 			jQuery(html).appendTo('#viewData');
- 			cargarInv(data[i]['id_ingrediente'],data[i]['id_unidad_peso'], data[i]['cantidadProd']);
+ 			html = '<h3><strong>' + data[i]['nombreIng'] + '</strong>: ' + data[i]['cantidadProd'] + ' ' + data[i]['codUM'] + '</h3><hr/>';
+ 			if(data[i]['detalle'] !== undefined){
+ 				html += cargarInv(data[i]['detalle']);	
+ 			}
+ 			jQuery('#dataTables').append(html);
  		}
 	});
 });
 
-function cargarInv(ingrediente,id_unidad_peso, cant){
-	jQuery('#secuencia').val('');
-	jQuery.ajax({
-		url: contexto + "/Inventario/Inv/cargarIng.html?",
-		 data:{ing: ingrediente, um: id_unidad_peso, cantidad: cant, establecimiento: jQuery('#establecimiento').val()},
-		 async:false,
-	}).done(function(result) {
-		var data; 
- 		try{ 
- 			data = jQuery.parseJSON(result); 
- 		} catch(err){ 
- 			console.log("Error" + err); 
-         	return; 
-         	jQuery('#dynamic').hide();
- 		} 
- 		data = data['datos'];
- 		if(data.length == 0){
- 			jQuery('<p>No hay materia prima disponible</p>').appendTo('#viewData');
- 			jQuery('#formGuardar').hide();
- 			return;
- 		}
- 		var html = '<div class="row">';
- 		for(i in data){
-			html += '<div class="col-xs-12 col-md-3">';
-			html += '<section class="panel">';
-			html += '<input type="hidden" value="' + data[i]['id_ingrediente'] + '"  id="ing'+data[i]['lote']+'" name="ing'+data[i]['lote']+'"/> ';
+function cargarInv(detalle){
+	var html = '<table class="table table-bordered table-striped"><thead><tr>';
+		html += '<th>Cantidad</th><th>Medida</th><th>F. Vencimiento</th><th>Lote</th>';
+		html += '</tr></thead><tbody>';
+		for(i in detalle){
+			html += '<tr>';
+			html += '<td>';
+			html += '<input name="cant" type="text" class="form-control" value="'+detalle[i]['cantAsig']+'"/>';
+			html += '<input type="hidden" value="'+detalle[i]['id_ingrediente']+'" name="ing"/> ';
+			html += '</td>';
+			html += '<td>';
+			html += '<select class="form-control" name="um" value="' + detalle[i]['umAsig'] + '">' + construirSelectTipoPeso() + '</select>';
+			html += '</td>';
+			html += '<td>';
+			html += '<label class="form-control" value="'+ detalle[i]['fecha_vencimiento'] + '"></label>';
+			html += '</td>';
+			html += '<td>';
+			html += '<input type="text" class="form-control" value="'+ detalle[i]['lote'] + '" name="lote"/>';
+			html += '</td>';
+			jQuery('#secuencia').val(jQuery('#secuencia').val() + detalle[i]['lote'] + ',');
+//			html += data[i]['cantidad'] + ' ' + data[i]['codUM'];
 			
-			if(data[i]['color'] == true ){
-				html += '<div class="weather-bg success">';
-			}else{
-				html += '<div class="weather-bg error">';
-			}
-			html += '<div class="panel-body">';
-			html += '<div class="row">';
-			html += '<div class="col-xs-12">';
-			html += data[i]['cantidad'] + ' ' + data[i]['codUM'];
-			html += '<input type="text" class="form-control" id="cant'+data[i]['lote']+'" id="cant'+data[i]['lote']+'" name="cant'+data[i]['lote']+'" value="'+data[i]['cantAsig']+'"/>';
-			html += '</div>';
-			html += '<div class="col-xs-12"><br/>';
-			html += '<select class="form-control" id="um'+data[i]['lote']+'" name="um'+data[i]['lote']+'">';
-			
-			jQuery('#listaUnidad > option').each(function(){
-				html += '<option';
-				if($(this).val() == data[i]['umAsig']){
-					html += ' selected="selected"';
-				}
-				html += ' value='+$(this).val()+'>'+$(this).text() + '</option>';
-	        });
-			
-			html += '</select>';
-			html += '</div>';
-			html += '</div>';
-			html += '</div>';
-			html += '</div>';
-			html += '<footer class="weather-category">';
-			html += '<ul>';
-			html += '<li class="active">';
-			html += ' <h5>Lote</h5>';
-			html += data[i]['lote'];
-			html += '</li>';
-			html += '<li>';
-			html += '<h5>vence</h5>';
-			html += data[i]['fecha_vencimiento'];
-			html += '</li>';
-			html += '</ul>';
-			html += '</footer>';
-			html += '</section>';
-			html += '</div>';
-			jQuery('#secuencia').val(jQuery('#secuencia').val() + data[i]['lote'] + ',');
- 		}
- 		jQuery(html).appendTo('#viewData');
-	});
+			html += '</tr>';
+		}
+		html += '</tbody></table>';
+		return html;
+}
+
+function construirSelectTipoPeso(){
+	var html = '';
+	for(j in LPeso){
+		html += '<option value='+LPeso[j]['id']+'>'+LPeso[j]['nombre']+'</option>';
+	}
+	return html;
 }
 
 jQuery("#prodF").autocomplete({

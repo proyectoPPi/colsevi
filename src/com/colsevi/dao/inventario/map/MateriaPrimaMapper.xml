@@ -329,6 +329,9 @@
 		<if test="compra != null">
 			AND cxi.id_compra = #{compra}
 		 </if>
+		 <if test="fechaI != null">
+			AND mp.fecha_vencimiento Between #{fechaI} AND #{fechaF} 
+		</if>
 		
 		ORDER BY lote DESC
 		LIMIT ${limite};
@@ -358,6 +361,9 @@
 		 <if test="compra != null">
 			AND cxi.id_compra = #{compra}
 		 </if>
+		 <if test="fechaI != null">
+			AND mp.fecha_vencimiento Between #{fechaI} AND #{fechaF} 
+		</if>
 		;
 	</select>
   

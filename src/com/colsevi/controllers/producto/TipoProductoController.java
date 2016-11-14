@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import com.colsevi.dao.producto.model.TipoProductoExample;
 public class TipoProductoController extends BaseConfigController {
 
 	private static final long serialVersionUID = -8489159548975806696L;
+	private static Logger logger = Logger.getLogger(TipoProductoController.class);
 
 	@RequestMapping("/Producto/Tipo")
 	public ModelAndView Clasificar(HttpServletRequest request,ModelMap model){
@@ -39,22 +41,25 @@ public class TipoProductoController extends BaseConfigController {
 		String nombre = request.getParameter("nombreF");
 		String descripcion = request.getParameter("descripcionF");
 		
-		TipoProductoExample tipoExample = new TipoProductoExample();
-		tipoExample.setLimit(Inicio + ", " + Final);
-		tipoExample.setOrderByClause("id_tipo_producto DESC");
-		
-		TipoProductoExample.Criteria criteria = (TipoProductoExample.Criteria) tipoExample.createCriteria();
-		
-		if(nombre != null && !nombre.trim().isEmpty()){
-			criteria.andNombreLike("%" + nombre + "%");   
+		try{
+			TipoProductoExample tipoExample = new TipoProductoExample();
+			tipoExample.setLimit(Inicio + ", " + Final);
+			tipoExample.setOrderByClause("id_tipo_producto DESC");
+			
+			TipoProductoExample.Criteria criteria = (TipoProductoExample.Criteria) tipoExample.createCriteria();
+			
+			if(nombre != null && !nombre.trim().isEmpty()){
+				criteria.andNombreLike("%" + nombre + "%");   
+			}
+			if(descripcion != null && !descripcion.trim().isEmpty()){
+				criteria.andDescripcionLike("%" + descripcion + "%");   
+			}
+			
+			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tipoExample)));
+			opciones.put("total", ColseviDao.getInstance().getTipoProductoMapper().countByExample(tipoExample));
+		}catch(Exception e){
+			logger.error(e.getMessage());
 		}
-		if(descripcion != null && !descripcion.trim().isEmpty()){
-			criteria.andDescripcionLike("%" + descripcion + "%");   
-		}
-		
-		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getTipoProductoMapper().selectByExample(tipoExample)));
-		opciones.put("total", ColseviDao.getInstance().getTipoProductoMapper().countByExample(tipoExample));
-
 		response.setContentType("text/html;charset=ISO-8859-1");
 		request.setCharacterEncoding("UTF8");
 		
@@ -69,10 +74,15 @@ public class TipoProductoController extends BaseConfigController {
 	
 		for (TipoProducto bean : listaTipoProd) {
 			opciones = new JSONObject();
-			opciones.put("id_tipo_producto", bean.getId_tipo_producto());
-			opciones.put("nombre", bean.getNombre());
-			opciones.put("descripcion", bean.getDescripcion());								
-			resultado.add(opciones);
+			try{
+				opciones.put("id_tipo_producto", bean.getId_tipo_producto());
+				opciones.put("nombre", bean.getNombre());
+				opciones.put("descripcion", bean.getDescripcion());								
+				resultado.add(opciones);
+			}catch(Exception e){
+				logger.error(e.getMessage());
+				continue;
+			}
 		}
 			
 		return resultado;
@@ -95,6 +105,7 @@ public class TipoProductoController extends BaseConfigController {
 				modelo.addAttribute("correcto", "Tipo de producto Insertada");
 			}
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
 		return Clasificar(request, modelo);
@@ -114,19 +125,23 @@ public class TipoProductoController extends BaseConfigController {
 	@RequestMapping("/Producto/Tipo/Eliminar")
 	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
 		
-		Integer id = Integer.parseInt(request.getParameter("id_tipo_producto"));
-		if(id != null){
-			
-			ProductoExample ProdExample = new ProductoExample();
-			ProdExample.createCriteria().andId_tipo_productoEqualTo(id);
-			Integer countProd = ColseviDao.getInstance().getProductoMapper().countByExample(ProdExample);
-
-			if(countProd != null && countProd > 0){
-				modelo.addAttribute("error", "El tipo de producto no puede ser eliminado ya que se encuentra asociado a " + countProd + " producto(s)");
-			}else{
-				ColseviDao.getInstance().getTipoProductoMapper().deleteByPrimaryKey(id);
-				modelo.addAttribute("correcto", "Tipo de producto Eliminada");
+		try{
+			Integer id = Integer.parseInt(request.getParameter("id_tipo_producto"));
+			if(id != null){
+				
+				ProductoExample ProdExample = new ProductoExample();
+				ProdExample.createCriteria().andId_tipo_productoEqualTo(id);
+				Integer countProd = ColseviDao.getInstance().getProductoMapper().countByExample(ProdExample);
+	
+				if(countProd != null && countProd > 0){
+					modelo.addAttribute("error", "El tipo de producto no puede ser eliminado ya que se encuentra asociado a " + countProd + " producto(s)");
+				}else{
+					ColseviDao.getInstance().getTipoProductoMapper().deleteByPrimaryKey(id);
+					modelo.addAttribute("correcto", "Tipo de producto Eliminada");
+				}
 			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
 		}
 		return Clasificar(request, modelo);
 	}

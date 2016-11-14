@@ -62,11 +62,17 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") ||  path.endsWith("map") ||
 			path.startsWith("/Caja/CierreCaja")|| //suspendido
 			path.startsWith("/Usuario/ClienteRegistro") || //terminado
-			path.startsWith("/Proveedor/Compra") || // filtro fecha no obtenga la hora para obtener las compras por fecha(dia)
+			path.startsWith("/Proveedor/Compra") || // OK
 			path.startsWith("/Usuario/TipoDocumento") || // OK
-			path.startsWith("/Inventario/MateriaPrima") || // filtro fecha no obtenga la hora para obtener las compras por fecha(dia)
-			path.startsWith("/Inventario/MovimientoMateria") || // filtro fecha, compra, motivo, PAGINACION
-			path.startsWith("/pago/Proveedor") ||
+			path.startsWith("/Inventario/MateriaPrima") || // OK
+			path.startsWith("/Inventario/MovimientoMateria") || // OK
+			path.startsWith("/pago/Proveedor") ||// filtros
+			path.startsWith("/Producto/Tipo") || // OK
+			path.startsWith("/Producto/Admin") || // Pendiente
+			path.startsWith("/Inventario/Inv") || // OK
+			path.startsWith("/Catalogo/Cat") || // OK
+			path.startsWith("/Pedido/Visualizar") ||
+			path.startsWith("/Pedido/Flujo") ||
 			
 			path.startsWith("/front/index") ||
 			path.startsWith(LOGIN)

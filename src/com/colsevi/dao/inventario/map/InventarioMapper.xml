@@ -353,7 +353,7 @@
 	</select>
 	
 	<select id="CargarIngProd" parameterType="java.util.Map" resultType="java.util.HashMap">
-		SELECT ixp.id_ingrediente, ixp.cantidad AS cantidadProd, up.nombre As nombreIngU, ing.nombre as nombreIng,
+		SELECT ixp.id_ingrediente, ixp.cantidad*#{cantidad} AS cantidadProd, up.nombre As nombreIngU, ing.nombre as nombreIng,
 			up.id_unidad_peso, up.codigo AS codUM, ixm.cantidad AS cantAsig, ixm.id_unidad_peso As umAsig
 		FROM producto prod
 		LEFT JOIN ingrediente_x_producto ixp ON ixp.id_producto = prod.id_producto

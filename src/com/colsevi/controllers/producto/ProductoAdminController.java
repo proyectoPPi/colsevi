@@ -24,7 +24,6 @@ import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.controllers.LoginController;
 import com.colsevi.dao.producto.model.ProductoExample;
 import com.colsevi.dao.producto.model.RecetaExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoExample;
@@ -120,7 +119,7 @@ public class ProductoAdminController extends BaseConfigController {
 					opciones.put("nombre", bean.getNombre());
 					opciones.put("descripcion", bean.getDescripcion());
 					opciones.put("referencia", bean.getReferencia());
-					opciones.put("ventaf", UtilidadManager.Currency(bean.getVenta()));
+					opciones.put("ventaf", UtilidadManager.MonedaVista(bean.getVenta()));
 					opciones.put("venta", bean.getVenta());
 					opciones.put("imagen", bean.getImagen());
 					
@@ -176,7 +175,7 @@ public class ProductoAdminController extends BaseConfigController {
 				error += "Seleccionar un tipo de producto<br/>";
 			}
 			if(request.getParameter("venta") != null && !request.getParameter("venta").trim().isEmpty()){
-				bean.setVenta(UtilidadManager.FormatStringBigDecimal(request.getParameter("venta")));
+				bean.setVenta(UtilidadManager.MonedaBD(request.getParameter("venta")));
 			}else{
 				error += "Ingresar el venta<br/>";
 			}
@@ -214,6 +213,7 @@ public class ProductoAdminController extends BaseConfigController {
 		return obj;
 		
 	}
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/Producto/Admin/Guardar")
 	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
 		

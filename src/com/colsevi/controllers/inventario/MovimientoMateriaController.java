@@ -1,6 +1,7 @@
 package com.colsevi.controllers.inventario;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,19 +49,28 @@ public class MovimientoMateriaController extends BaseConfigController{
 		String cantidadF = request.getParameter("cantidadF");
 		String unidadMF = request.getParameter("unidadMF");
 		String establecimientoF = request.getParameter("establecimientoF");
+		String compra = request.getParameter("compra");
+		String motivoMov = request.getParameter("motivoMov");
+		String fechaMov = request.getParameter("fechaMov");
+		
 		mapa.put("limite", Inicio + "," + Final);
 		
-		if(loteF != null && !loteF.trim().isEmpty()){
+		if(!loteF.trim().isEmpty())
 			mapa.put("lote", loteF);
-		}
-		if(cantidadF != null && !cantidadF.trim().isEmpty()){
+		if(!cantidadF.trim().isEmpty())
 			mapa.put("cant", cantidadF);
-		}
-		if(unidadMF != null && !unidadMF.trim().isEmpty() && !unidadMF.trim().equals("0")){
+		if(!unidadMF.trim().equals("0"))
 			mapa.put("um", unidadMF);
-		}
-		if(establecimientoF != null && !establecimientoF.trim().isEmpty() && !establecimientoF.trim().equals("0")){
+		if(!establecimientoF.trim().equals("0"))
 			mapa.put("esta", establecimientoF);
+		if(!compra.trim().isEmpty())
+			mapa.put("compra", compra);
+		if(!motivoMov.trim().equals("0"))
+			mapa.put("motivo", motivoMov);
+		if(!fechaMov.trim().isEmpty()){
+			Object[] obj = UtilidadManager.FechaInicioFin(UtilidadManager.FechaStringConHora_BD(fechaMov));
+			mapa.put("fechaI", obj[0]);
+			mapa.put("fechaF", obj[1]);
 		}
 		
 		try{
@@ -87,7 +97,7 @@ public class MovimientoMateriaController extends BaseConfigController{
 				options.put("id_movimiento_materia", map.get("id_movimiento_materia"));
 				options.put("lote", map.get("lote"));
 				options.put("motivo", map.get("motivo"));
-				options.put("fecha_movimiento", map.get("fecha_movimiento") != null ? UtilidadManager.FormatoFechaVistaO(map.get("fecha_movimiento")) : "");
+				options.put("fecha_movimiento", map.get("fecha_movimiento") != null ? UtilidadManager.FechaDateConHora_Vista((Date) map.get("fecha_movimiento")) : "");
 				options.put("um", map.get("um"));
 				options.put("cantidad", map.get("cantidad"));
 				options.put("esta", map.get("esta"));
