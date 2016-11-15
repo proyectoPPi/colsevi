@@ -1,15 +1,24 @@
 jQuery(document).ready(function(){
 	Tabla();
+	HiniciarAutocompletar(contexto + '/Producto/Admin/buscarProd.html?', 'prodF');
 	jQuery('#dynamic').hide();
 });
 
 function Tabla(pagina){
+	if(jQuery('#prodF').val() == ""){
+		jQuery('#prodV').val('');
+	}
+	if(jQuery('#mayorF').is(':checked')){
+		jQuery('#mayorF').val('true');
+	}else{
+		jQuery('#mayorF').val('false');
+	}
+	
 	HTabla({
 		url: contexto + "/Producto/Admin/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
-		pagina:pagina,
-		clase: clase
+		pagina:pagina
 	});
 }
 
@@ -27,8 +36,8 @@ jQuery( "#clasificarIng" ).change(function() {
 	
 	jQuery('#Ing > select, #Ing > label').remove();
 	if(jQuery('#clasificarIng').val() == ""){
-		return;
 		jQuery('#dynamic').hide();
+		return;
 	}
 	
 	jQuery.ajaxQueue({
@@ -90,9 +99,9 @@ function buscarIngrediente(){
 }
 
 function CargarFormulario(Id){
+	jQuery('#count').val('0');
 	HCargarFormulario(Id);
 	jQuery('#IngDynamic > table > tbody > tr').remove();
-	jQuery('#count, #tipoP').val('0');
 	cargarIng();
 }
 
@@ -130,3 +139,15 @@ function cargarIng(){
 function EliminarDet(option){
 	option.parentNode.parentNode.remove();
 }
+
+jQuery("#prodF").autocomplete({
+	  select: function(e, ui) {
+	  this.value = ui.item.value;
+	  jQuery('#prodV').val(ui.item.id_producto);
+	}
+});
+
+jQuery("#localImage").click(function() {
+	jQuery('#fileview').click();
+
+});

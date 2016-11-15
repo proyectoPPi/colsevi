@@ -1,28 +1,27 @@
 package com.colsevi.controllers;
 
-import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.coyote.http11.Http11AprProcessor;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.colsevi.application.ColseviDao;
-
 @Controller
-public class HelloController {
+public class HelloController extends BaseConfigController{
 
-	
-	
+	private static final long serialVersionUID = -9194726703842278303L;
+
 	@RequestMapping("/")
-	public ModelAndView profile(){
-		ModelAndView model = new ModelAndView("producto/ProductoAdmin");
+	public ModelAndView profile(HttpServletRequest request){
+		ModelAndView model = null;
+		
+		if(getUsuario(request) != null && getUsuario(request).getPersona() != null){
+			model = new ModelAndView("producto/ProductoAdmin");
+		}else{
+			return new ModelAndView("front/index");
+		}
+		
 		return model;
 	}
 

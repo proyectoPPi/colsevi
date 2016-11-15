@@ -3,6 +3,8 @@ package com.colsevi.dao.proveedor.map;
 import com.colsevi.dao.proveedor.model.Proveedor;
 import com.colsevi.dao.proveedor.model.ProveedorExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface ProveedorMapper {
@@ -74,4 +76,5 @@ public interface ProveedorMapper {
 	 * @mbggenerated  Tue Apr 12 16:29:08 COT 2016
 	 */
 	int updateByPrimaryKey(Proveedor record);
+	List<Map<String, Object>> SelectAutocomplete(Map<String, Object> map);
 }

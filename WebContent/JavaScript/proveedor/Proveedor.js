@@ -14,7 +14,9 @@ function Tabla(pagina){
 
 function Limpiar(){
 	HLimpliar();
-	jQuery('#tipoProv').val(0);
+	jQuery('#tipoProv, #telTipo').val(0);
+	jQuery('#barrio, #descripDir').val('');
+
 }
 
 function Eliminar(){
@@ -22,5 +24,15 @@ function Eliminar(){
 }
 
 function CargarFormulario(Id){
+	jQuery('#barrio, #descripDir').val('');
+	jQuery('#tipoProv, #telTipo').val(0);
 	HCargarFormulario(Id);
 }
+
+function preprocesar(){
+	HPreprocesar({
+		url: contexto + "/Proveedor/Prov/preprocesador.html?",
+		formulario: "formulario",
+	});
+}
+

@@ -108,6 +108,9 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+    	LIMIT ${limit}
+  	</if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     <!--
@@ -300,4 +303,15 @@
       observacion = #{observacion,jdbcType=VARCHAR}
     where id_pago_proveedor = #{id_pago_proveedor,jdbcType=INTEGER}
   </update>
+  <select id="deudaCom" parameterType="java.util.Map" resultType="java.util.HashMap">
+	SELECT compra.id_compra_proveedor, compra.valor, 
+		IF( compra.pendiente IS NOT NULL, compra.pendiente, compra.valor) as pendiente,
+	    IF( compra.pendiente IS NOT NULL, (compra.valor - compra.pendiente), compra.valor) as diferencia
+ 	FROM compra_proveedor compra
+	LEFT JOIN pago_proveedor pago ON pago.id_compra = compra.id_compra_proveedor
+ 	WHERE compra.id_proveedor = #{compra}
+ 	AND (compra.pendiente > 0 OR compra.pendiente IS NULL)	
+    GROUP BY compra.id_compra_proveedor;
+  </select>
+  
 </mapper>

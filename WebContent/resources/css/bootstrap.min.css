@@ -1343,16 +1343,6 @@ button, input, select, textarea {
 	line-height: inherit
 }
 
-a {
-	color: #337ab7;
-	text-decoration: none
-}
-
-a:focus, a:hover {
-	color: #23527c;
-	text-decoration: underline
-}
-
 a:focus {
 	outline: thin dotted;
 	outline: 5px auto -webkit-focus-ring-color;
@@ -1562,7 +1552,7 @@ a.text-success:hover {
 }
 
 .text-info {
-	color: #31708f
+	color: #331d08
 }
 
 a.text-info:hover {
@@ -2580,14 +2570,9 @@ th {
 
 .table>thead>tr>th {
 	vertical-align: bottom;
-	border-bottom: 2px solid #ddd
-}
-
-.table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th,
-	.table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th,
-	.table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th
-	{
-	border-top: 0
+	border-bottom: 1px solid #eaeaea !important;
+	background: #eaeaea;
+	color: #333333;
 }
 
 .table>tbody+tbody {
@@ -2611,7 +2596,8 @@ th {
 .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th,
 	.table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th,
 	.table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
-	border: 1px solid #ddd
+	border: 1px solid #ddd;
+	border-color: #f3f3f3;
 }
 
 .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
@@ -3709,7 +3695,7 @@ tbody.collapse.in {
 	clear: both;
 	font-weight: 400;
 	line-height: 1.42857143;
-	color: #333;
+	color: #ffb347;
 	white-space: nowrap
 }
 
@@ -4447,6 +4433,12 @@ select[multiple].input-group-sm>.form-control, select[multiple].input-group-sm>.
 	max-height: 340px
 }
 
+@media screen and (max-width: 950px){
+	.open>.dropdown-menu{
+		right: 0;
+		left: auto;
+	}
+}
 @media ( max-device-width :480px) and (orientation:landscape) {
 	.navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse
 		{
@@ -5323,7 +5315,6 @@ a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover {
 	padding: 15px;
 	margin-bottom: 20px;
 	border: 1px solid transparent;
-	border-radius: 4px
 }
 
 .alert h4 {
@@ -5355,9 +5346,9 @@ a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover {
 }
 
 .alert-success {
-	color: #3c763d;
-	background-color: #dff0d8;
-	border-color: #d6e9c6
+	color: #fff;
+	background-color: #3F8A24;
+	border-color: #3F8A24;
 }
 
 .alert-success hr {
@@ -5794,7 +5785,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:focus,
 
 .panel {
 	margin-bottom: 20px;
-	background-color: #fff;
+	background-color: white;
 	border: 1px solid transparent;
 	border-radius: 4px;
 	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
@@ -6312,7 +6303,7 @@ button.close {
 	background-clip: padding-box;
 	border: 1px solid #999;
 	border: 1px solid rgba(0, 0, 0, .2);
-	border-radius: 6px;
+	border-radius: 1px;
 	outline: 0;
 	-webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
 	box-shadow: 0 3px 9px rgba(0, 0, 0, .5)
@@ -6385,7 +6376,7 @@ button.close {
 
 @media ( min-width :768px) {
 	.modal-dialog {
-		width: 600px;
+		width: 750px;
 		margin: 30px auto
 	}
 	.modal-content {
@@ -6399,7 +6390,7 @@ button.close {
 
 @media ( min-width :992px) {
 	.modal-lg {
-		width: 900px
+		width: 1300px
 	}
 }
 

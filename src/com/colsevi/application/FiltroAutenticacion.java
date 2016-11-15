@@ -1,15 +1,12 @@
 package com.colsevi.application;
  
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -22,8 +19,6 @@ public class FiltroAutenticacion implements Filter, Serializable{
 	private static final long serialVersionUID = -130687285287276931L;
 	public static final String LOGIN = "/login";
 	
-
-
 	public void destroy() { }
 
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
@@ -34,7 +29,6 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			if (httpServletRequest.getQueryString() != null){
 				url += "?"+httpServletRequest.getQueryString();
 			}
-			
 			
 			boolean ExcluirVerficacion= isExcluirVerficacion(uri);
 			if(ExcluirVerficacion){
@@ -56,9 +50,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			}
 			
 		}catch (Throwable e) {
-
 			e.printStackTrace();
-
 			((HttpServletRequest)servletRequest).setAttribute("ERROR", "ERROR EN EL SISTEMA");
 			((HttpServletRequest)servletRequest).getRequestDispatcher(LOGIN).forward(servletRequest, servletResponse);
 		}
@@ -68,9 +60,22 @@ public class FiltroAutenticacion implements Filter, Serializable{
 
 		if (path.endsWith("jpg")  || path.endsWith("png")  || path.endsWith("gif") ||
 			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") ||  path.endsWith("map") ||
+			path.startsWith("/Caja/CierreCaja")|| //suspendido
+			path.startsWith("/Usuario/ClienteRegistro") || //terminado
+			path.startsWith("/Proveedor/Compra") || // OK
+			path.startsWith("/Usuario/TipoDocumento") || // OK
+			path.startsWith("/Inventario/MateriaPrima") || // OK
+			path.startsWith("/Inventario/MovimientoMateria") || // OK
+			path.startsWith("/pago/Proveedor") ||// filtros
+			path.startsWith("/Producto/Tipo") || // OK
+			path.startsWith("/Producto/Admin") || // Pendiente
+			path.startsWith("/Inventario/Inv") || // OK
+			path.startsWith("/Catalogo/Cat") || // OK
+			path.startsWith("/Pedido/Visualizar") ||
+			path.startsWith("/Pedido/Flujo") ||
 			
+			path.startsWith("/front/index") ||
 			path.startsWith(LOGIN)
-			
 			){
 			return true;
 		}else{		
@@ -84,7 +89,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 		}
 		
 		NavegacionUsuario iniciar = new NavegacionUsuario();
-		List<Pagina> ListaPaginas = iniciar.getPaginasRol(1);
+		List<Pagina> ListaPaginas = iniciar.getPaginasRol(user.getRol());
 		for (Pagina bean : ListaPaginas) {
 			if(bean.getUrl().endsWith(".html")){
 				String[] urlSplit = bean.getUrl().split(".html");
@@ -93,11 +98,9 @@ public class FiltroAutenticacion implements Filter, Serializable{
 				}
 			}
 		}
-		
 		return false;
 	}
 	
-	public void init(FilterConfig arg0) throws ServletException {
-	}
+	public void init(FilterConfig arg0) throws ServletException {}
 
 }

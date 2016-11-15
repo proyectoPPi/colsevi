@@ -1,6 +1,7 @@
 package com.colsevi.controllers.pedido;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,9 @@ public class PedidoController extends BaseConfigController {
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getPedidoMapper().SelectDataView(mapa)));
 		opciones.put("total", 0);
 
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		opciones.writeJSONString(response.getWriter());
 	}
 
@@ -80,7 +84,7 @@ public class PedidoController extends BaseConfigController {
 				opciones.put("documento", map.get("documento"));
 				opciones.put("nombreCompleto", map.get("nombre").toString() + " " + map.get("apellido"));
 				opciones.put("estado", map.get("estado"));
-				opciones.put("fecha_pedido", UtilidadManager.FormatDateComplete(map.get("fecha_pedido").toString()));
+				opciones.put("fecha_pedido", UtilidadManager.FechaDateConHora_Vista((Date)map.get("fecha_pedido")));
 				opciones.put("total", map.get("total"));
 				opciones.put("pagado", Boolean.parseBoolean(map.get("pagado").toString()) ? "SI" : "NO");
 				

@@ -3,6 +3,8 @@ package com.colsevi.dao.producto.map;
 import com.colsevi.dao.producto.model.Producto;
 import com.colsevi.dao.producto.model.ProductoExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface ProductoMapper {
@@ -74,4 +76,6 @@ public interface ProductoMapper {
 	 * @mbggenerated  Tue Apr 12 16:33:50 COT 2016
 	 */
 	int updateByPrimaryKey(Producto record);
+	
+	List<Map<String, Object>> SelectAutocomplete(Map<String, Object> map);
 }

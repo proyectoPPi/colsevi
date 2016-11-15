@@ -1,6 +1,7 @@
 package com.colsevi.controllers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,63 +22,101 @@ public class BaseConfigController implements Serializable {
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("menu", getMenu(request));
 		mapa.put("SubMenu", SubMenu(request));
-		
+		mapa.put("sesion", getUsuario(request) != null ? 'T' : 'F');
+
 		return mapa;
 	}
 	
 	public String getMenu(HttpServletRequest request){
 		String menu = "";
-		NavegacionUsuario NU = new NavegacionUsuario();
-		List<Pagina> listaPag = NU.getPaginasRol(getUsuario(request).getRol());
-		
-		for(Pagina pag: listaPag){
-			if(pag.getPadrePagina() == null){
-				menu += "<li>";
-				menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
-				menu += "<i class=\""+pag.getIcono()+"\"></i>";
-				menu += "<span>"+pag.getNombre()+"</span>";
-				menu += "</a>";
-				menu += "</li>";
+
+		if(getUsuario(request) != null){
+			NavegacionUsuario NU = new NavegacionUsuario();
+			List<Pagina> listaPag = NU.getPaginasRol(getUsuario(request).getRol());
+			
+			for(Pagina pag: listaPag){
+				if(pag.getMenu()){
+					if(pag.getPadrePagina() != null){
+						menu += "<li class=\"dropdown\">";
+					}else{
+						menu += "<li>";
+					}
+					menu += "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\""+request.getContextPath()+pag.getUrl()+"\">"+
+							pag.getNombre()+"</a>";
+					
+					if(pag.getPadrePagina() != null){
+						String[] Padre = pag.getPadrePagina().split(",");
+						List<Integer> list = new ArrayList<Integer>();
+						for(int i = 0; i<Padre.length; i++){
+							list.add(Integer.parseInt(Padre[i]));
+						}
+						PaginaExample PE = new PaginaExample();
+						PE.createCriteria().andId_paginaIn(list);
+						List<Pagina> listaPadre = ColseviDao.getInstance().getPaginaMapper().selectByExample(PE);
+						menu += "<ul class=\"dropdown-menu\">";
+						for(Pagina Ppag: listaPadre){
+							menu += "<li>"+"<a href=\""+request.getContextPath()+Ppag.getUrl()+"\"><i class=\""+Ppag.getIcono()+"\"></i>"
+									+Ppag.getNombre()+"</a></li>";
+						}
+						menu += "</ul>";
+					}
+					
+					menu += "</li>";
+				}
 			}
 		}
-		
 		return menu;
 	}
 	
 	public String SubMenu(HttpServletRequest request){
 
-		String uri = request.getRequestURI().substring(request.getContextPath().length());
 		String menu = "";
+		if(getUsuario(request) != null){
+			String uri = request.getRequestURI().substring(request.getContextPath().length());
 		
-		try{
 			PaginaExample pE = new PaginaExample();
 			pE.createCriteria().andUrlLike(uri);
-			Integer id = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE).get(0).getId_pagina();
-			
-			if(id != null){
-				pE = new PaginaExample();
-				pE.createCriteria().andPadrePaginaEqualTo(id);
-				List<Pagina> listaPagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE);
-				
-				for(Pagina pag: listaPagina){
-					menu += "<li>";
-					menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
-					menu += "<span>"+pag.getNombre()+"</span>";
-					menu += "</a>";
-					menu += "</li>";
-				}
+			Pagina pagina = null;
+			try{
+				pagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE).get(0);
+			}catch(Exception e){
+				return menu;
 			}
-
-		}catch(Exception e){
 			
-		}
-		
+			try{
+				if(pagina != null && pagina.getPadrePagina() != null){
+					pE = new PaginaExample();
+					String[] padre = pagina.getPadrePagina().split(",");
+					List<Integer> ListaP = new ArrayList<Integer>();
+					for(int i=0; i<padre.length; i++){
+						ListaP.add(Integer.parseInt(padre[i]));
+					}
+					
+					pE.createCriteria().andId_paginaIn(ListaP);
+					List<Pagina> listaPagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE);
+					
+					for(Pagina pag: listaPagina){
+						menu += "<li>";
+						menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
+						menu += pag.getNombre();
+						menu += "</a>";
+						menu += "</li>";
+					}
+				}
+				
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+				
+			}
 		return menu;
 	}
 	
 	public SesionUsuario getUsuario(HttpServletRequest request){
-		return (SesionUsuario) request.getSession().getAttribute("sesion");
-		
+		if(request.getSession() != null && request.getSession().getAttribute("sesion") != null){
+			return (SesionUsuario) request.getSession().getAttribute("sesion");
+		}
+		return null;
 	}
 
 }

@@ -1,6 +1,8 @@
 package com.colsevi.dao.producto.map;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.colsevi.dao.producto.model.Ingrediente;
@@ -75,4 +77,6 @@ public interface IngredienteMapper {
 	 * @mbggenerated  Tue Apr 12 16:33:50 COT 2016
 	 */
 	int updateByPrimaryKey(Ingrediente record);
+	
+	List<Map<String, Object>> SelectAutocomplete(Map<String, Object> map);
 }

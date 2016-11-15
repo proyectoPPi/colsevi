@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -16,15 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.controllers.producto.ProductoAdminController;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.general.model.Correo;
-import com.colsevi.dao.general.model.CorreoExample;
 import com.colsevi.dao.general.model.Direccion;
-import com.colsevi.dao.general.model.DireccionExample;
 import com.colsevi.dao.general.model.Establecimiento;
 import com.colsevi.dao.general.model.Telefono;
-import com.colsevi.dao.general.model.TelefonoExample;
 import com.colsevi.dao.general.model.TipoTelefono;
 import com.colsevi.dao.general.model.TipoTelefonoExample;
 
@@ -32,6 +33,7 @@ import com.colsevi.dao.general.model.TipoTelefonoExample;
 public class EstablecimientoController extends BaseConfigController {
 	
 	private static final long serialVersionUID = 1944372690226154900L;
+	private static Logger logger = Logger.getLogger(EstablecimientoController.class);
 	
 	@RequestMapping("/General/Establecimiento")
 	public ModelAndView Establecimiento(HttpServletRequest request,ModelMap model){
@@ -68,9 +70,16 @@ public class EstablecimientoController extends BaseConfigController {
 			mapa.put("direccion","%" + descripcion + "%");   
 		}
 		
-		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().SelectDataView(mapa)));
-		opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().CountDataView(mapa));
-
+		try{
+			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getEstablecimientoMapper().SelectDataView(mapa)));
+			opciones.put("total", ColseviDao.getInstance().getEstablecimientoMapper().CountDataView(mapa));
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		opciones.writeJSONString(response.getWriter());
 	}
 
@@ -87,14 +96,14 @@ public class EstablecimientoController extends BaseConfigController {
 					opciones.put("id_establecimiento", map.get("id_establecimiento"));
 					opciones.put("nombreEsta", map.get("nombreEsta"));
 					opciones.put("descipEsta", map.get("descipEsta"));	
-					opciones.put("hora_inicio", map.get("hora_inicio"));
-					opciones.put("hora_fin", map.get("hora_fin"));
+					opciones.put("hora_inicio", map.get("hora_inicio") != null ? map.get("hora_inicio") : "");
+					opciones.put("hora_fin", map.get("hora_fin") != null ? map.get("hora_fin") : "");
 					opciones.put("id_direccion", map.get("id_direccion") != null ? map.get("id_direccion") : "");	
 					opciones.put("direccion", map.get("direccion") != null ? map.get("direccion") : "");	
 					opciones.put("barrio", map.get("barrio") != null ? map.get("barrio") : "");
 					opciones.put("descripDir", map.get("descripDir") != null ? map.get("descripDir") : "");
 					opciones.put("id_telefono", map.get("id_telefono") != null ? map.get("id_telefono") : "");
-					opciones.put("telTipo", map.get("telTipo") != null ? map.get("telTipo") : "");
+					opciones.put("telTipo", map.get("telTipo") != null ? map.get("telTipo") : "0");
 					opciones.put("telefono", map.get("telefono") != null ? map.get("telefono") : "");
 					opciones.put("id_correo", map.get("id_correo") != null ? map.get("id_correo") : "");
 					opciones.put("correo", map.get("correo") != null ? map.get("correo") : "");
@@ -123,51 +132,54 @@ public class EstablecimientoController extends BaseConfigController {
 		Telefono beanT = (Telefono) result[3];
 		Correo beanC = (Correo) result[4];
 		
+		SqlSession sesion = ColseviDaoTransaccion.getInstance();
+
 		try{
-			if(beanD.getId_direccion() != null){
-				ColseviDao.getInstance().getDireccionMapper().updateByPrimaryKeySelective(beanD);
-			}else{
-				ColseviDao.getInstance().getDireccionMapper().insertSelective(beanD);
-				
-				DireccionExample DE = new DireccionExample();
-				DE.setOrderByClause("id_direccion DESC");
-				beanD.setId_direccion(ColseviDao.getInstance().getDireccionMapper().selectByExample(DE).get(0).getId_direccion());
+			if(beanD.getId_direccion() != null || beanD.getDireccion() != null){
+				if(beanD.getId_direccion() != null){
+					ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.general.map.DireccionMapper.updateByPrimaryKeySelective", beanD);
+				}else{
+					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.general.map.DireccionMapper.insertSelective", beanD);
+				}
 			}
 			bean.setId_direccion(beanD.getId_direccion());
 			
-			if(beanT.getId_telefono() != null){
-				ColseviDao.getInstance().getTelefonoMapper().updateByPrimaryKeySelective(beanT);
-			}else{
-				ColseviDao.getInstance().getTelefonoMapper().insertSelective(beanT);
-				
-				TelefonoExample TE = new TelefonoExample();
-				TE.setOrderByClause("id_telefono DESC");
-				beanT.setId_telefono(ColseviDao.getInstance().getTelefonoMapper().selectByExample(TE).get(0).getId_telefono());
+			if(beanT.getId_telefono() != null || beanT.getTelefono() != null){
+				if(beanT.getId_telefono() != null){
+					ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.general.map.TelefonoMapper.updateByPrimaryKeySelective", beanT);
+				}else{
+					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.general.map.TelefonoMapper.insertSelective", beanT);
+				}
 			}
 			bean.setId_telefono(beanT.getId_telefono());
 			
-			if(beanC.getId_correo() != null){
-				ColseviDao.getInstance().getCorreoMapper().updateByPrimaryKeySelective(beanC);
-			}else{
-				ColseviDao.getInstance().getCorreoMapper().insertSelective(beanC);
-				
-				CorreoExample CE = new CorreoExample();
-				CE.setOrderByClause("id_correo DESC");
-				beanC.setId_correo(ColseviDao.getInstance().getCorreoMapper().selectByExample(CE).get(0).getId_correo());
-			}
-			
+			if(beanC.getId_correo() != null || beanC.getCorreo() != null){
+				if(beanC.getId_correo() != null){
+					ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.general.map.CorreoMapper.updateByPrimaryKeySelective", beanC);
+				}else{
+					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.general.map.CorreoMapper.insertSelective", beanC);
+				}
+			} 
 			bean.setId_correo(beanC.getId_correo());
 			
 			if(bean.getId_establecimiento() != null){
-				ColseviDao.getInstance().getEstablecimientoMapper().updateByPrimaryKey(bean);
+				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.general.map.EstablecimientoMapper.updateByPrimaryKeySelective", bean);
 				modelo.addAttribute("correcto", "Establecimiento Actualizado");
 			}else{
-				ColseviDao.getInstance().getEstablecimientoMapper().insert(bean);
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.general.map.EstablecimientoMapper.insertSelective", bean);
 				modelo.addAttribute("correcto", "Establecimiento insertado");
 			}
+
+			ColseviDaoTransaccion.RealizarCommit(sesion);
+			
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			modelo.addAttribute("error", "Contactar al administrador");
+			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
+		
+		ColseviDaoTransaccion.CerrarSesion(sesion);
+		
 		return Establecimiento(request, modelo);
 	}
 	
@@ -179,7 +191,6 @@ public class EstablecimientoController extends BaseConfigController {
 		Telefono beanT = new Telefono();
 		Correo beanC = new Correo();
 		String error = "";
-		
 		
 		if(request.getParameter("id_establecimiento") != null && !request.getParameter("id_establecimiento").trim().isEmpty())
 			beanE.setId_establecimiento(Integer.parseInt(request.getParameter("id_establecimiento")));
@@ -263,7 +274,7 @@ public class EstablecimientoController extends BaseConfigController {
 				example.createCriteria().andId_establecimientoEqualTo(Integer.parseInt(id));
 				Integer contCatalogo = ColseviDao.getInstance().getCatalogoMapper().countByExample(example);
 				
-				if(contCatalogo == null && contCatalogo > 0){
+				if(contCatalogo == 0){
 					ColseviDao.getInstance().getEstablecimientoMapper().deleteByPrimaryKey(Integer.parseInt(id));
 					modelo.addAttribute("correcto", "Establecimiento Eliminado");
 				}else{
@@ -271,6 +282,7 @@ public class EstablecimientoController extends BaseConfigController {
 				}
 				
 			} catch (Exception e) {
+				logger.error(e.getMessage());
 				modelo.addAttribute("error", "Ocurrió un error, contacte al administrador");
 			}
 			

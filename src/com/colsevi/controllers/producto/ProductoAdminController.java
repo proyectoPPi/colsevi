@@ -1,6 +1,7 @@
 package com.colsevi.controllers.producto;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -17,15 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.ColseviDaoTransaccion;
+import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.producto.model.ProductoExample;
 import com.colsevi.dao.producto.model.RecetaExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoExample;
-import com.colsevi.dao.producto.model.ClasificarIngrediente;
-import com.colsevi.dao.producto.model.ClasificarIngredienteExample;
-import com.colsevi.dao.general.model.UnidadPeso;
-import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.inventario.model.InventarioExample;
 import com.colsevi.dao.pedido.model.DetallePedidoExample;
 import com.colsevi.dao.producto.model.Ingrediente;
@@ -38,22 +39,27 @@ import com.colsevi.dao.producto.model.Producto;
 public class ProductoAdminController extends BaseConfigController {
 
 	private static final long serialVersionUID = 4997906906136000223L;
-
+	private static Logger logger = Logger.getLogger(ProductoAdminController.class);
+	
 	@RequestMapping("/Producto/Admin")
 	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
-		model.addAttribute("listaTipo", UtilidadManager.tipoProducto());
-		model.addAttribute("listaClasificar", getClasificar());
-		model.addAttribute("listaTipoPeso", getTipoPeso());
+		model.addAttribute("listaTipo", ProductoManager.tipoProducto());
+		model.addAttribute("listaClasificar", ProductoManager.getClasificar());
+		model.addAttribute("listaTipoPeso", ProductoManager.getTipoPeso());
+		
+		try{
+			if(request.getParameter("producto") != null && !request.getParameter("producto").trim().isEmpty()){
+				Producto prod = ColseviDao.getInstance().getProductoMapper().selectByPrimaryKey(Integer.parseInt(request.getParameter("producto")));
+				if(prod != null && prod.getId_producto() != null){
+					model.addAttribute("prod", prod.getId_producto());
+					model.addAttribute("label", prod.getNombre() + " - " + prod.getReferencia());
+				}
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
 		
 		return new ModelAndView("producto/ProductoAdmin","col",getValoresGenericos(request));
-	}
-	
-	public static List<ClasificarIngrediente> getClasificar(){
-		return ColseviDao.getInstance().getClasificarIngredienteMapper().selectByExample(new ClasificarIngredienteExample());
-	}
-	
-	public static List<UnidadPeso> getTipoPeso(){
-		return ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(new UnidadPesoExample());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -63,8 +69,9 @@ public class ProductoAdminController extends BaseConfigController {
 		JSONObject opciones = new JSONObject();
 		String Inicio = request.getParameter("Inicio");
 		String Final = request.getParameter("Final");
-		String nombre = request.getParameter("nombreF");
-		String descripcion = request.getParameter("descripcionF");
+		String prod = request.getParameter("prodV");
+		BigDecimal venta = new BigDecimal(request.getParameter("ventaF") != null && !request.getParameter("ventaF").trim().isEmpty() ? request.getParameter("ventaF") : "0");
+		Boolean mayorF = Boolean.valueOf(request.getParameter("mayorF") != null && request.getParameter("mayorF").trim().equals("true") ? "true" : "false");
 		String clasificarF = request.getParameter("clasificarF");
 		
 		ProductoExample prodExample = new ProductoExample();
@@ -73,21 +80,25 @@ public class ProductoAdminController extends BaseConfigController {
 		
 		ProductoExample.Criteria criteria = (ProductoExample.Criteria) prodExample.createCriteria();
 		try{
-			if(nombre != null && !nombre.trim().isEmpty()){
-				criteria.andNombreLike("%" + nombre + "%");   
-			}
-			if(descripcion != null && !descripcion.trim().isEmpty()){
-				criteria.andDescripcionLike("%" + descripcion + "%");   
-			}
-			if(clasificarF != null && !clasificarF.trim().isEmpty() && !clasificarF.trim().equals("0")){
+			if(prod != null && !prod.trim().isEmpty())
+				criteria.andId_productoEqualTo(Integer.parseInt(prod));
+			if(clasificarF != null && !clasificarF.trim().isEmpty() && !clasificarF.trim().equals("0"))
 				criteria.andId_tipo_productoEqualTo(Integer.parseInt(clasificarF));
-			}
+			if(mayorF && venta != null && venta.toBigInteger().intValue() > 0)
+				criteria.andVentaGreaterThanOrEqualTo(venta);
+			else if(venta != null && venta.toBigInteger().intValue() > 0)
+				criteria.andVentaLessThanOrEqualTo(venta);
+				
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getProductoMapper().selectByExample(prodExample)));
 			opciones.put("total", ColseviDao.getInstance().getProductoMapper().countByExample(prodExample));
 		}catch(Exception e){
-			//error
+			logger.error(e.getMessage());
+			opciones.put("error", "Contactar al administrador");
 		}
 
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		opciones.writeJSONString(response.getWriter());
 	}
 
@@ -103,19 +114,23 @@ public class ProductoAdminController extends BaseConfigController {
 				try{
 					
 					opciones = new JSONObject();
+					labels = new JSONObject();
 					opciones.put("id_producto", bean.getId_producto());
 					opciones.put("nombre", bean.getNombre());
 					opciones.put("descripcion", bean.getDescripcion());
 					opciones.put("referencia", bean.getReferencia());
+					opciones.put("ventaf", UtilidadManager.MonedaVista(bean.getVenta()));
 					opciones.put("venta", bean.getVenta());
 					opciones.put("imagen", bean.getImagen());
 					
 					if(bean.getId_tipo_producto() != null){
-						labels = new JSONObject();
-						labels.put("label",ColseviDao.getInstance().getTipoProductoMapper().selectByPrimaryKey(bean.getId_tipo_producto()).getNombre());
+						labels.put("label", ColseviDao.getInstance().getTipoProductoMapper().selectByPrimaryKey(bean.getId_tipo_producto()).getNombre());
 						labels.put("value", bean.getId_tipo_producto());
-						opciones.put("tipoP", labels);
+					}else{
+						labels.put("label", "");
+						labels.put("value", "0");
 					}
+					opciones.put("tipoP", labels);
 					
 					resultado.add(opciones);
 				
@@ -123,18 +138,18 @@ public class ProductoAdminController extends BaseConfigController {
 					continue;
 				}
 			}
-			
 		}
 		return resultado;
 	}
 	
-	@RequestMapping("/Producto/Admin/Guardar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
+	public Object[] validarGuardar(HttpServletRequest request){
 		
-		Producto bean = new Producto();
+		Object[] obj = new Object[3];
 		List<IngredienteXProducto> ixp = new ArrayList<IngredienteXProducto>();
+		IngredienteXProducto ixpB = null;
+		Producto bean = new Producto();
 		String error = "";
-
+		
 		try{
 			if(request.getParameter("id_producto") != null && !request.getParameter("id_producto").trim().isEmpty()){
 				bean.setId_producto(Integer.parseInt(request.getParameter("id_producto")));
@@ -160,14 +175,9 @@ public class ProductoAdminController extends BaseConfigController {
 				error += "Seleccionar un tipo de producto<br/>";
 			}
 			if(request.getParameter("venta") != null && !request.getParameter("venta").trim().isEmpty()){
-				bean.setVenta(UtilidadManager.FormatStringBigDecimal(request.getParameter("venta")));
+				bean.setVenta(UtilidadManager.MonedaBD(request.getParameter("venta")));
 			}else{
 				error += "Ingresar el venta<br/>";
-			}
-			
-			if(!error.isEmpty()){
-				modelo.addAttribute("error", error);
-				return Producto(request, modelo);
 			}
 			
 			Integer count = Integer.parseInt(request.getParameter("count"));
@@ -175,7 +185,7 @@ public class ProductoAdminController extends BaseConfigController {
 			if(count != null && count > 0){
 				for(int i = 0; i < count; i++){
 					if(request.getParameter("idIng" + (i +1)) != null && !request.getParameter("idIng" + (i +1)).trim().isEmpty()){
-						IngredienteXProducto ixpB = new IngredienteXProducto();
+						ixpB = new IngredienteXProducto();
 						ixpB.setId_ingrediente(Integer.parseInt(request.getParameter("idIng" + (i +1))));
 						ixpB.setCantidad(Integer.parseInt(request.getParameter("cant" + (i +1))));
 						ixpB.setId_unidad_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
@@ -184,41 +194,67 @@ public class ProductoAdminController extends BaseConfigController {
 						ixp.add(ixpB);
 					}
 				}
-			}else{
-				modelo.addAttribute("error", "No hay detalle seleccionado");
+			}else
+				error += "No hay detalle seleccionado";
+			
+			if(ixp != null && ixp.size() < 1)
+				error = "No hay detalle seleccionado";
+			
+				
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			error += "Contactar al administrador";
+		}
+		
+		obj[0] = error;
+		obj[1] = bean;
+		obj[2] = ixp;
+		
+		return obj;
+		
+	}
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Producto/Admin/Guardar")
+	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
+		
+		SqlSession sesion = ColseviDaoTransaccion.getInstance();
+		Producto bean = null;
+		List<IngredienteXProducto> listaIngProd = null;
+		Object[] obj = validarGuardar(request);
+		try{
+			 
+			if(obj[0] != null && !obj[0].toString().isEmpty()){
+				modelo.addAttribute("error", obj[0]);
 				return Producto(request, modelo);
 			}
+			bean = (Producto) obj[1];
+			listaIngProd = (List<IngredienteXProducto>) obj[2];
 			
 			if(bean.getId_producto() != null){
-				ColseviDao.getInstance().getProductoMapper().updateByPrimaryKeySelective(bean);
+				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.producto.map.ProductoMapper.updateByPrimaryKeySelective", bean);
 				modelo.addAttribute("correcto", "Producto Actualizado");
 			}else{
-				ColseviDao.getInstance().getProductoMapper().insertSelective(bean);
-				
-				ProductoExample pExample = new ProductoExample();
-				pExample.setOrderByClause("id_producto DESC");
-				pExample.setLimit("1");
-				bean.setId_producto(ColseviDao.getInstance().getProductoMapper().selectByExample(pExample).get(0).getId_producto());
-				
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.producto.map.ProductoMapper.insertSelective", bean);
 				modelo.addAttribute("correcto", "Producto Insertado");
 			}
 			
-			if(ixp == null || ixp.size() < 1){
-				modelo.addAttribute("error", "No hay detalle seleccionado");
-				return Producto(request, modelo);
-			}else{
-				IngredienteXProductoExample IPK = new IngredienteXProductoExample();
-				IPK.createCriteria().andId_productoEqualTo(bean.getId_producto());
-				ColseviDao.getInstance().getIngredienteXProductoMapper().deleteByExample(IPK);
-				
-				for(IngredienteXProducto ingP : ixp){
-					ingP.setId_producto(bean.getId_producto());
-					ColseviDao.getInstance().getIngredienteXProductoMapper().insertSelective(ingP);
-				}
+			IngredienteXProductoExample ingProdE = new IngredienteXProductoExample();
+			ingProdE.createCriteria().andId_productoEqualTo(bean.getId_producto());
+			ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.producto.map.IngredienteXProductoMapper.deleteByExample", ingProdE);
+			
+			for(IngredienteXProducto ingProd : listaIngProd){
+				ingProd.setId_producto(bean.getId_producto());
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.producto.map.IngredienteXProductoMapper.insertSelective", ingProd);
 			}
+		
+			ColseviDaoTransaccion.RealizarCommit(sesion);
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			modelo.addAttribute("error", "Contactar al administrador");
+			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
+		
+		ColseviDaoTransaccion.CerrarSesion(sesion);
 		return Producto(request, modelo);
 	}
 	
@@ -267,9 +303,8 @@ public class ProductoAdminController extends BaseConfigController {
 			modelo.addAttribute("correcto", "Producto Eliminado");
 			
 		}catch(Exception e){
-			
+			logger.error(e.getMessage());
 		}
-
 		return Producto(request, modelo);
 	}
 	
@@ -288,6 +323,9 @@ public class ProductoAdminController extends BaseConfigController {
 		
 		result = ConstruirIngrediente(ColseviDao.getInstance().getIngredienteMapper().selectByExample(ingExample));
 
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
 		result.writeJSONString(response.getWriter());
 	}
 	
@@ -320,8 +358,12 @@ public class ProductoAdminController extends BaseConfigController {
 			mapa.put("producto", request.getParameter("producto"));
 			result.put("dato", subIng(ColseviDao.getInstance().getIngredienteXProductoMapper().SelectDataView(mapa)));
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			result.put("error", "Contactar al administrador");
 		}
+		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
 		
 		result.writeJSONString(response.getWriter());
 	}
@@ -348,5 +390,26 @@ public class ProductoAdminController extends BaseConfigController {
 			}
 		}
 		return resultado;
+	}
+	
+	@RequestMapping("/Producto/Admin/buscarProd")
+	public void auto(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
+
+		try{
+			
+			String producto = request.getParameter("campo");
+			result = ProductoManager.AutocompletarProducto(producto);
+
+			if(result == null)
+				result = new JSONObject();
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
+		result.writeJSONString(response.getWriter());
 	}
 }
