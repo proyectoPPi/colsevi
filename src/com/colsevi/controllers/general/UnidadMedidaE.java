@@ -5,7 +5,7 @@ public enum UnidadMedidaE {
 	LIBRA(2),
 	GRAMO(3),
 	LITRO(4),
-	MILILITRO(5),;
+	MILILITRO(5);
 	
  private final int unidadM;
 

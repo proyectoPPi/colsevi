@@ -249,6 +249,7 @@ CREATE TABLE producto(
     descripcion VARCHAR(120) DEFAULT NULL,
     venta DECIMAL(12,2),
     imagen VARCHAR (50) DEFAULT 'imagenFotoProducto.jpg',
+    cantidadMin INT NOT NULL,
     PRIMARY KEY(id_producto),
     UNIQUE (referencia),
     CONSTRAINT fk_tipo_producto_Producto FOREIGN KEY (id_tipo_producto) REFERENCES tipo_producto(id_tipo_producto)

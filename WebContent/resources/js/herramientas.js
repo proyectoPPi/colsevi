@@ -195,64 +195,29 @@ function SetFiltros(){
 }
 
 function organizarPaginacion(pagina){
-		jQuery("#paginacion").html('');
-		var n = dataMap["total"];
-		var NPaginas = Math.ceil(n/registrosPagina);
-		if(NPaginas == 0){
-			NPaginas = 1;
-		}
-		
-		var Inicio = (pagina-4) <= 0 ? 1 : pagina - 4;
-		var Final = (pagina+4) >= NPaginas ? NPaginas : pagina + 4;
-		
-		var html = '';
-		if(pagina>1){
-			html += '<li><a href="javascript:void(Tabla(1));">&laquo;</a></li>';
-			html += '<li><a href="javascript:void(Tabla('+parseInt(pagina-1)+'));">&lsaquo;</a></li>';
-		}
-		for(var i=Inicio; i<=Final; i++){
-			html += i==pagina ? '<li class="active"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>':'<li class="hidden-xs"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>';
-		}
-		if(pagina<NPaginas){
-			html += '<li><a href="javascript:void(Tabla('+parseInt(pagina+1)+'));">&rsaquo;</a></li>';
-			html += '<li><a href="javascript:void(Tabla('+NPaginas+'));">&raquo;</a></li>';
-		}
-		jQuery("#paginacion").append('<ul class="dataTables_paginate paging_bootstrap pagination">'+html+'</ul>');
-}
-
-function AuxiliarAutocompletar(input){
-
-	jQuery( "#"+input ).autocomplete({
-		source: dataMap['autocompletar'],
-		minLength: 0,
-		open: function( event, ui ) {
-			//jQuery("#"+input).width(jQuery(".ui-autocomplete.ui-menu").width());
-		}
-	});
-
-	jQuery("#"+input).focus(function() {
-		jQuery("#"+input).autocomplete("search");
-	});
-}
-
-function ActualizarAutocompletar(input){
-
-	jQuery.ajaxQueue({
-	  	url: dataMap['AutocompletarUrl'],
-	  	data: {valor: jQuery("#"+input).val()},
-	  	success: function(o) {
-			var data;
-			try{
-				data = jQuery.parseJSON(o);
-			} catch(err){
-				console.log("Error ejecutando ajaxQueue en ActualizarAutocompletar " + err);
-	        	return;
-			}
-			if(data.labels==undefined) data.labels = [];
-			jQuery("#"+input).autocomplete( "option", "source", data.labels );
-			jQuery("#"+input).autocomplete("search", "");
-	  	}
-	});
+	jQuery("#paginacion").html('');
+	var n = dataMap["total"];
+	var NPaginas = Math.ceil(n/registrosPagina);
+	if(NPaginas == 0){
+		NPaginas = 1;
+	}
+	
+	var Inicio = (pagina-4) <= 0 ? 1 : pagina - 4;
+	var Final = (pagina+4) >= NPaginas ? NPaginas : pagina + 4;
+	
+	var html = '';
+	if(pagina>1){
+		html += '<li><a href="javascript:void(Tabla(1));">&laquo;</a></li>';
+		html += '<li><a href="javascript:void(Tabla('+parseInt(pagina-1)+'));">&lsaquo;</a></li>';
+	}
+	for(var i=Inicio; i<=Final; i++){
+		html += i==pagina ? '<li class="active"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>':'<li class="hidden-xs"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>';
+	}
+	if(pagina<NPaginas){
+		html += '<li><a href="javascript:void(Tabla('+parseInt(pagina+1)+'));">&rsaquo;</a></li>';
+		html += '<li><a href="javascript:void(Tabla('+NPaginas+'));">&raquo;</a></li>';
+	}
+	jQuery("#paginacion").append('<ul class="dataTables_paginate paging_bootstrap pagination">'+html+'</ul>');
 }
 
 function HLimpiar(id){
@@ -270,33 +235,6 @@ function HLimpiar(id){
 function HEliminar(div, url){
 	jQuery('#' + div).attr('action', url);
 	jQuery('#' + div).submit();
-}
-
-/*
- @Id id del campo de texto que servirá para desplegar el selector
- @Popup Si es true se muestra en un popup, de lo contrario se mostrará como un Dropdown
- */
-function HDatetimePicker(Id, Popup){
-	if(Popup == undefined){
-		Popup = true;
-	}
-	
-	jQuery('#'+ Id).DateTimePicker({
-		language: "es",
-		isPopup: Popup
-	});
-}
-
-function HColorPicker(Id){
-	jQuery('#' + Id).colorpickerplus();
-}
-
-function HValidador(Id){
-	jQuery('#'+Id).validate({
-		submitHandler: function(form) {
-		    form.submit();
-		  }
-	});
 }
 
 function HiniciarAutocompletar(url,input){
@@ -320,15 +258,13 @@ function HiniciarAutocompletar(url,input){
 		
 		jQuery( "input[id="+ input +"]" ).keyup(function(e) {
 			if((e.which<37 || e.which>40) && e.which!=13){
-				ActualizarAutocompletar(input);
+				ActualizarAutocompletar(this);
 			}
 		});
-	
 	});
 }
 
 function AuxiliarAutocompletar(input){
-
 	jQuery( "input[id="+ input +"]" ).autocomplete({
 		source: dataMap['autocompletar'],
 		minLength: 0,
@@ -336,15 +272,14 @@ function AuxiliarAutocompletar(input){
 	});
 
 	jQuery( "input[id="+ input +"]" ).focus(function() {
-		jQuery( "input[id="+ input +"]" ).autocomplete("search");
+		$(this).autocomplete("search");
 	});
 }
 
 function ActualizarAutocompletar(input){
-
 	jQuery.ajaxQueue({
 	  	url: dataMap['AutocompletarUrl'],
-	  	data: {campo: jQuery("#"+input).val()},
+	  	data: {campo: input.value},
 	  	success: function(o) {
 			var data;
 			try{
@@ -354,8 +289,8 @@ function ActualizarAutocompletar(input){
 	        	return;
 			}
 			if(data.labels==undefined) data.labels = [];
-			jQuery( "input[id="+ input +"]" ).autocomplete( "option", "source", data.labels );
-			jQuery( "input[id="+ input +"]" ).autocomplete("search", "");
+			jQuery(input).autocomplete( "option", "source", data.labels );
+			jQuery(input).autocomplete("search", "");
 	  	}
 	});
 }
@@ -385,6 +320,45 @@ function HPreprocesar(opcion){
 	});
 }
 
-function HMask(Id, mask){
-	jQuery('#' + Id).mask(mask);
+function HAjax(opciones){
+	jQuery.ajaxQueue({
+		url: opciones.url,
+		data:opciones.data,
+		async:opciones.async,
+	}).done(function(result) {
+ 		try{ 
+ 			eval(opciones.method + '(' + result + ');');
+ 		} catch(err){ 
+ 			console.log("Error ejecutando HAjax" + err); 
+ 			eval(opciones.method + '();');
+ 		} 
+	});
 }
+
+function HValidador(Id){
+	jQuery('#'+Id).validate({
+		submitHandler: function(form) {
+		    form.submit();
+		  }
+	});
+}
+
+/*
+@Id id del campo de texto que servirá para desplegar el selector
+@Popup Si es true se muestra en un popup, de lo contrario se mostrará como un Dropdown
+*/
+function HDatetimePicker(Id, Popup){
+	if(Popup == undefined){
+		Popup = true;
+	}
+	
+	jQuery('#'+ Id).DateTimePicker({
+		language: "es",
+		isPopup: Popup
+	});
+}
+
+function HColorPicker(Id){
+	jQuery('#' + Id).colorpickerplus();
+}
+

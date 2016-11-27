@@ -135,7 +135,6 @@ function cargarIng(){
          	return; 
  		} 
  		
- 		var html = '';
 		for(i in data){
 			jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);		
 			construirTbl(data[i]);

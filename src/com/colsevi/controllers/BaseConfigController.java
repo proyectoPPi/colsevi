@@ -1,12 +1,18 @@
 package com.colsevi.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.NavegacionUsuario;
@@ -117,6 +123,20 @@ public class BaseConfigController implements Serializable {
 			return (SesionUsuario) request.getSession().getAttribute("sesion");
 		}
 		return null;
+	}
+	
+	public void ResponseJson(HttpServletRequest request, HttpServletResponse response, JSONObject result) throws IOException{
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
+		result.writeJSONString(response.getWriter());
+	}
+	
+	public void ResponseArray(HttpServletRequest request, HttpServletResponse response, JSONArray result) throws IOException{
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
+		result.writeJSONString(response.getWriter());
 	}
 
 }

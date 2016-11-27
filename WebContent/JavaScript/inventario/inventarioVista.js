@@ -44,34 +44,50 @@ jQuery('#dataTables').click(function(e) {
 
 jQuery('#carga').click(function(){
 	jQuery('#dataTables, #secuencia').html('');
-	jQuery.ajaxQueue({
+	HAjax({
 		url: contexto + "/Inventario/Inv/cargarInv.html?",
-		 data:{prod: jQuery('#id_producto').val(), cantidad: jQuery('#cantSolicitada').val(), establecimiento: jQuery('#establecimiento').val()},
-	}).done(function(result) {
-		var data; 
- 		try{ 
- 			data = jQuery.parseJSON(result); 
- 		} catch(err){ 
- 			console.log("Error" + err); 
- 			jQuery('#dynamic').hide();
-         	return; 
- 		} 
- 		data = data['datos'];
- 		var html = '';
- 		for(i in data){
- 			html = '<h3><strong>' + data[i]['nombreIng'] + '</strong>: ' + data[i]['cantidadProd'] + ' ' + data[i]['codUM'] + '</h3><hr/>';
- 			if(data[i]['detalle'] !== undefined){
- 				html += cargarInv(data[i]['detalle']);	
- 			}
- 			jQuery('#dataTables').append(html);
- 		}
+		data: {prod: jQuery('#id_producto').val(), cantidad: jQuery('#cantSolicitada').val(), establecimiento: jQuery('#establecimiento').val()},
+		async: false,
+		posicion: 'datos',
+		method: 'ingredienteRequerido'
 	});
 });
 
-function cargarInv(detalle){
+function ingredienteRequerido(data){
+	data = data['datos'];
+		var html = '';
+		for(i in data){
+			html = '<h3><strong>' + data[i]['nombreIng'] + '</strong>: ' + data[i]['cantidadProd'] + ' ' + data[i]['codUM'] + '</h3><hr/>';
+			html += iniciarTabla();
+			if(data[i]['detalle'] !== undefined){
+				html += cargarInv(data[i]['detalle']);	
+			}else{
+				html += TablaVacia();
+			}
+			
+			jQuery('#dataTables').append(html);
+		}
+}
+
+function iniciarTabla(){
 	var html = '<table class="table table-bordered table-striped"><thead><tr>';
-		html += '<th>Cantidad</th><th>Medida</th><th>F. Vencimiento</th><th>Lote</th>';
-		html += '</tr></thead><tbody>';
+	html += '<th>Cantidad</th><th>Medida</th><th>F. Vencimiento</th><th>Lote</th>';
+	html += '</tr></thead><tbody>';
+	return html;
+}
+
+function TablaVacia(){
+	var html = '';
+	html += '<tr>';
+	html += '<td colspan="4" style="text-align:center;font-weight: bold;">NO HAY DATOS</td>';
+	html += '</tr>';
+	html += '</tbody></table>';
+	
+	return html;
+}
+
+function cargarInv(detalle){
+	var html = '';
 		for(i in detalle){
 			html += '<tr>';
 			html += '<td>';
@@ -88,7 +104,6 @@ function cargarInv(detalle){
 			html += '<input type="text" class="form-control" value="'+ detalle[i]['lote'] + '" name="lote"/>';
 			html += '</td>';
 			jQuery('#secuencia').val(jQuery('#secuencia').val() + detalle[i]['lote'] + ',');
-//			html += data[i]['cantidad'] + ' ' + data[i]['codUM'];
 			
 			html += '</tr>';
 		}

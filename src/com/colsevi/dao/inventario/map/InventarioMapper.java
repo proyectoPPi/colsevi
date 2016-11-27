@@ -98,6 +98,6 @@ public interface InventarioMapper {
     
     List<Map<String, Object>> SelectDataView(Map<String, Object> map);
     List<Map<String, Object>> CargarInv(Map<String, Object> map);
-    List<Map<String, Object>> CargarIngProd(Map<String, Object> map);
+    List<Map<String, Object>> CargarInvIngrediente(Map<String, Object> map);
     int CountDataView(Map<String, Object> map);
 }
