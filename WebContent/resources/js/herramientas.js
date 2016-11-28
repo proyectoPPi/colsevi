@@ -26,122 +26,122 @@ function HTabla(opciones){
 	SetFiltros();
 	
 	jQuery.ajaxQueue({
-		  url: dataMap['url'],
-		}).done(function(result) {
-			try{
-				data = jQuery.parseJSON(result);
-			} catch(err){
-				console.log("Error ejecutando tabla" + err);
-				jQuery("#ModalCargando").modal('hide');
-	        	return;
+	  url: dataMap['url'],
+	}).done(function(result) {
+		try{
+			data = jQuery.parseJSON(result);
+		} catch(err){
+			console.log("Error ejecutando tabla" + err);
+			jQuery("#ModalCargando").modal('hide');
+        	return;
+		}
+		var html = ""; 
+		html = '<section id="flip-scroll">';
+		html += '<table class="table table-bordered table-striped cf"><thead class="cf"><tr>';
+		var count = 0;
+		for(k in titulos){
+			count ++;
+			var className = '';
+			if(titulos[k] != "ID"){
+				html += "<th>"+opciones.titulos[k]+"</th>";
+			}else{
+				dataMap['id'] = k;
 			}
-			var html = ""; 
-			if(data == "" || data['datos'] === undefined || data['datos'][0] == undefined ){
-				 jQuery(Id).html("<br/>No hay datos");
-			 		jQuery("#ModalCargando").modal('hide');
-				 return;
-			 }
+		 }
+		html += "</tr></thead><tbody>";
+		
+		
+		if(data == "" || data['datos'] === undefined || data['datos'][0] == undefined ){
+			html += '<tr>';
+			html += '<td colspan="'+count+'" style="text-align:center;font-weight: bold;">NO HAY DATOS</td>';
+			html += '</tr>';
+	 		jQuery("#ModalCargando").modal('hide');
+		 }else{
 			dataMap["datos"] = data["datos"];
 			dataMap["titulos"] = titulos;
 			dataMap["total"] = data["total"];
-			if(dataMap["datos"].length == 0){
-	 			jQuery('#tabla').html("<br/>No hay datos");
-	 	 		jQuery("#ModalCargando").modal('hide');
-	         	return;
-	 		}
-			if(data["total"] == 0){
-				organizarPaginacion(1);
-			}
-			html = '<section id="flip-scroll">';
-			html += '<table class="table table-bordered table-striped cf"><thead class="cf"><tr>';
-			for(k in titulos){
-				var className = '';
-				if(titulos[k] != "ID"){
-					html += "<th>"+opciones.titulos[k]+"</th>";
-				}else{
-					dataMap['id'] = k;
-				}
-			 }
-			html += "</tr></thead><tbody>";
-		 for(i in data["datos"]){
-			 html += "<tr>";
-			 var sw = true;
-			 for(k in titulos){
-				 if(titulos[k]=="ID"){
-					 id = data["datos"][i][k];
-				 }else{
-					 if(sw){
-						 if(dataMap['link'] !== undefined)
-							 html += '<td><span>'+data["datos"][i][k]+'</span></td>';
-						 else
-							 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
-						 sw = false;
+
+			 for(i in data["datos"]){
+				 html += "<tr>";
+				 var sw = true;
+				 for(k in titulos){
+					 if(titulos[k]=="ID"){
+						 id = data["datos"][i][k];
 					 }else{
-						 if(dataMap['color'] != undefined && dataMap['color'][k] != undefined){
-							 html += '<td style="background-color: ' + data["datos"][i][k] +'" ' + className + ">";
+						 if(sw){
+							 if(dataMap['link'] !== undefined)
+								 html += '<td><span>'+data["datos"][i][k]+'</span></td>';
+							 else
+								 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
+							 sw = false;
 						 }else{
-							 html += "<td>";
-						 }		 
-						 if(dataMap['campo'] != undefined && dataMap['campo'][k] != undefined){
-							 html += '<input type="number" value="'+data['datos'][i][k]+'" class="form-control" id="campo'+id+'" name="cantTbl"/>';
-						 }
-						 
-						 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
-							 html += data["datos"][i][k]['label'];
-						 }else{
-							 if(dataMap['color'][k] == undefined && dataMap['campo'][k] == undefined && dataMap['boton'][k] == undefined && dataMap['accion'][k] == undefined){
-								 html += data["datos"][i][k];
+							 if(dataMap['color'] != undefined && dataMap['color'][k] != undefined){
+								 html += '<td style="background-color: ' + data["datos"][i][k] +'" ' + className + ">";
+							 }else{
+								 html += "<td>";
+							 }		 
+							 if(dataMap['campo'] != undefined && dataMap['campo'][k] != undefined){
+								 html += '<input type="number" value="'+data['datos'][i][k]+'" class="form-control" id="campo'+id+'" name="cantTbl"/>';
 							 }
 							 
-							 if(dataMap['boton'][k] != undefined){
-								for(var key in dataMap['boton'][k]){
-								var opcion = dataMap['boton'][k][key];
-								var metodo = "metodo";
-								if(opcion.metodo!=undefined){
-									metodo = opcion.metodo;
-								}
-									html += '<a href="#" onclick="'+metodo+'(\''+id+'\', this);"><i class="'+opcion.img+'"></i></a>';
-								}
-							}
-							 if(dataMap['accion'][k] != undefined){
-								 html +='<div class="btn-group">';
-								 html +='<button data-toggle="dropdown" class="btn btn-white" aria-pressed="false"><i class="fa fa-ellipsis-v"></i></button>';
-								 html +='<ul role="menu" class="dropdown-menu">';
+							 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
+								 html += data["datos"][i][k]['label'];
+							 }else{
+								 if(dataMap['color'][k] == undefined && dataMap['campo'][k] == undefined && dataMap['boton'][k] == undefined && dataMap['accion'][k] == undefined){
+									 html += data["datos"][i][k];
+								 }
 								 
-								 for(var key in dataMap['accion'][k]){
-									var opcion = dataMap['accion'][k][key];
+								 if(dataMap['boton'][k] != undefined){
+									for(var key in dataMap['boton'][k]){
+									var opcion = dataMap['boton'][k][key];
 									var metodo = "metodo";
-									if(opcion.metodo != undefined){
+									if(opcion.metodo!=undefined){
 										metodo = opcion.metodo;
 									}
-									html +='<li><a href="#" onclick="'+metodo+'(\''+id+'\');" href="#">'+opcion.label+'</a></li>';
+										html += '<a href="#" onclick="'+metodo+'(\''+id+'\', this);"><i class="'+opcion.img+'"></i></a>';
+									}
 								}
+								 if(dataMap['accion'][k] != undefined){
+									 html +='<div class="btn-group">';
+									 html +='<button data-toggle="dropdown" class="btn btn-white" aria-pressed="false"><i class="fa fa-ellipsis-v"></i></button>';
+									 html +='<ul role="menu" class="dropdown-menu">';
+									 
+									 for(var key in dataMap['accion'][k]){
+										var opcion = dataMap['accion'][k][key];
+										var metodo = "metodo";
+										if(opcion.metodo != undefined){
+											metodo = opcion.metodo;
+										}
+										html +='<li><a href="#" onclick="'+metodo+'(\''+id+'\');" href="#">'+opcion.label+'</a></li>';
+									}
+								 }
 							 }
+							 html += "</td>";
 						 }
-						 html += "</td>";
 					 }
 				 }
+				 html += "</tr>";
 			 }
-			 html += "</tr>";
-		 }
-		 html += "<tbody></table></section>";
-		 
-		 jQuery(Id).html(html);
-		 
-		 if(opciones.pagina == undefined){
-			 opciones.pagina = 1;
-		 }
-		 organizarPaginacion(opciones.pagina);
-		 
-		 dataMap['keys'] = [];
+			 
+			dataMap['keys'] = [];
 			var registro = dataMap["datos"][0];
 			if(registro != undefined){
 				for(key in registro){
 					dataMap['keys'].push(key);
 				}
 			}
-			
-			jQuery("#ModalCargando").modal('hide');
+		 }
+		 html += "<tbody></table></section>";
+		 
+		 jQuery(Id).html(html);
+		 
+		 if(opciones.pagina == undefined){
+			 dataMap["total"] = 0;
+			 opciones.pagina = 1;
+		 }
+		 organizarPaginacion(opciones.pagina);
+		 
+		jQuery("#ModalCargando").modal('hide');
 	});
 }
 

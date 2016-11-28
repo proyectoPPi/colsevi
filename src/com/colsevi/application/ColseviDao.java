@@ -14,6 +14,7 @@ import com.colsevi.dao.general.map.EstablecimientoMapper;
 import com.colsevi.dao.general.map.MotivoMapper;
 import com.colsevi.dao.general.map.TelefonoMapper;
 import com.colsevi.dao.general.map.TipoTelefonoMapper;
+import com.colsevi.dao.general.map.UnidadMedidaMapper;
 import com.colsevi.dao.general.map.UnidadPesoMapper;
 import com.colsevi.dao.producto.map.ClasificarIngredienteMapper;
 import com.colsevi.dao.producto.map.DificultadRecetaMapper;
@@ -89,6 +90,7 @@ public class ColseviDao {
 	private TipoDocumentoMapper tipoDocumentoMapper;
 	private InventarioXMateriaMapper inventarioXMateriaMapper;
 	private CierreCajaMapper cierreCajaMapper;
+	private UnidadMedidaMapper unidadMedidaMapper;
 
 	
 	private static ColseviDao current = null;
@@ -158,6 +160,7 @@ public class ColseviDao {
 		tipoDocumentoMapper = (TipoDocumentoMapper) beanFactoryMyBatis.getBean("tipoDocumentoMapper");
 		inventarioXMateriaMapper = (InventarioXMateriaMapper) beanFactoryMyBatis.getBean("inventarioXMateriaMapper");
 		cierreCajaMapper = (CierreCajaMapper) beanFactoryMyBatis.getBean("cierreCajaMapper");
+		unidadMedidaMapper = (UnidadMedidaMapper) beanFactoryMyBatis.getBean("unidadMedidaMapper");
 	}
 
 	public CierreCajaMapper getCierreCajaMapper() {
@@ -486,6 +489,14 @@ public class ColseviDao {
 
 	public void setCompraProveedorMapper(CompraProveedorMapper compraProveedorMapper) {
 		this.compraProveedorMapper = compraProveedorMapper;
+	}
+
+	public UnidadMedidaMapper getUnidadMedidaMapper() {
+		return unidadMedidaMapper;
+	}
+
+	public void setUnidadMedidaMapper(UnidadMedidaMapper unidadMedidaMapper) {
+		this.unidadMedidaMapper = unidadMedidaMapper;
 	}
 	
 }

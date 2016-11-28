@@ -1,6 +1,5 @@
 jQuery(document).ready(function(){
 	Tabla();
-	HDatetimePicker('dtBox',false);
 });
 
 function Tabla(pagina){
@@ -8,8 +7,7 @@ function Tabla(pagina){
 		url: contexto + "/General/Establecimiento/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
-		pagina:pagina,
-		clase: clase
+		pagina:pagina
 	});
 }
 

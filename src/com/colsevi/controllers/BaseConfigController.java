@@ -2,7 +2,6 @@ package com.colsevi.controllers;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -114,7 +113,7 @@ public class BaseConfigController implements Serializable {
 				e.printStackTrace();
 			}
 				
-			}
+		}
 		return menu;
 	}
 	

@@ -1,6 +1,6 @@
 package com.colsevi.controllers.general;
 
-public enum UnidadMedidaE {
+public enum UnidadPesoE {
 	KILO(1),
 	LIBRA(2),
 	GRAMO(3),
@@ -9,7 +9,7 @@ public enum UnidadMedidaE {
 	
  private final int unidadM;
 
-    private UnidadMedidaE(int unidadM) {
+    private UnidadPesoE(int unidadM) {
         this.unidadM = unidadM;
     }
     

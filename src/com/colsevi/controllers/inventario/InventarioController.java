@@ -39,9 +39,6 @@ import com.colsevi.dao.producto.model.Producto;
 
 @Controller
 public class InventarioController extends BaseConfigController {
-/*
- * Cambiar carga de ingredientes a que sea por una sola consulta que devuelva toda la data, JSON ingrediente, SUBJSON MATERIA PRIMA
- * */
 
 	private static final long serialVersionUID = -1900570445397410663L;
 	private static Logger logger = Logger.getLogger(InventarioController.class);
