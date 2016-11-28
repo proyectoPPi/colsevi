@@ -3,6 +3,9 @@ INSERT INTO persona(id_persona, tipo_doc, documento, genero, nombre, apellido) V
 INSERT INTO usuario(id_usuario, id_persona, usuario, clave, estado, primer_login, id_rol) VALUES(1, 1, 'admincol', '', 'T', 'F', 1);
 INSERT INTO tipo_documento(id_tipo_documento,nombr, descripcion) VALUES(1, 'CÈdula', 'CÈdula de ciudadanÌa');
 
+INSERT INTO unidad_medida (id_unidad_medida, nombre, codigo) VALUES (1, 'Masa', '');
+INSERT INTO unidad_medida (id_unidad_medida, nombre, codigo) VALUES (2, 'Volumen', 'Vol');
+  
 INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(1,"Cereales","son las semillas de las plantas gram√≠neas: trigo, avena, cebada, arroz, ma√≠z, etc.");
 INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(2,"RaÌces y TubÈrculos"," Son alimentos altos en carbohidratos, con un contenido aceptable de fibra diet√©tica, vitamina C (yuca), provitamina A y potasio (yaut√≠a, apio).");
 INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(3,"Frutas y Hortalizas","FRUTAS: fruto comestible, fruta carnoza, se come sin preparaci√≥n. HORTALIZA: Parte comestible de una planta.");

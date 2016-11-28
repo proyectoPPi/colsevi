@@ -42,7 +42,7 @@ public class BaseConfigController implements Serializable {
 			
 			for(Pagina pag: listaPag){
 				if(pag.getMenu()){
-					if(pag.getPadrePagina() != null){
+					if(pag.getPadrePagina() != null && !pag.getPadrePagina().trim().isEmpty()){
 						menu += "<li class=\"dropdown\">";
 					}else{
 						menu += "<li>";
@@ -90,7 +90,7 @@ public class BaseConfigController implements Serializable {
 			}
 			
 			try{
-				if(pagina != null && pagina.getPadrePagina() != null){
+				if(pagina != null && pagina.getPadrePagina() != null && !pagina.getPadrePagina().trim().isEmpty()){
 					pE = new PaginaExample();
 					String[] padre = pagina.getPadrePagina().split(",");
 					List<Integer> ListaP = new ArrayList<Integer>();

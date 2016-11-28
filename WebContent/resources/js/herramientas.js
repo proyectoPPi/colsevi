@@ -36,7 +36,7 @@ function HTabla(opciones){
 	        	return;
 			}
 			var html = ""; 
-			if(data == "" || data['datos'][0] == undefined ){
+			if(data == "" || data['datos'] === undefined || data['datos'][0] == undefined ){
 				 jQuery(Id).html("<br/>No hay datos");
 			 		jQuery("#ModalCargando").modal('hide');
 				 return;
