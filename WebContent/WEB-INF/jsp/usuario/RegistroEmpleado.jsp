@@ -28,7 +28,6 @@
 	                   		<div class="f1-steps">
 	                   			<div class="f1-progress">
 	                   			    	<div class="f1-progress-line" data-now-value="16.66" data-number-of-steps="4" style="width: 16.66%;"></div>
-	                   			    	<div class="f1-progress-line" data-now-value="50" data-number-of-steps="2" style="width: 50%;"></div>
 	                   			</div>
 	                   			<div class="f1-step active">
 	                   				<div class="f1-step-icon"><i class="fa fa-gear"></i></div>
@@ -58,14 +57,14 @@
 	                   			
 	                   		    <div class="col-md-6">
 			                        <label>Nombre</label>
-			                        <input type="text" class="form-control" id="nombre" name="nombre" value="${bean.nombre}"/>
+			                        <input type="text" class="form-control" id="nombre" name="nombre" value="${bean.nombre}" maxlength="40"/>
 			                    </div>
 			                    <div class="col-md-6">
 			                        <label>Apellido</label>
-			                        <input type="text" class="form-control" id="apellido" name="apellido" value="${bean.apellido}"/>
+			                        <input type="text" class="form-control" id="apellido" name="apellido" value="${bean.apellido}" maxlength="40"/>
 			                    </div>
 			                    <div class="col-md-6">
-			                        <label>Genero</label>
+			                        <label>Género</label>
 			                        <select class="form-control" id="genero" name="genero">
 			                        	<option value="0">Seleccione</option>
 			                        	<option value="1">Masculino</option>
@@ -83,7 +82,7 @@
 								</div>
 			                    <div class="col-md-6">    
 			                        <label>Documento</label>
-			                        <input type="text" class="form-control" id="documento" name="documento" value="${bean.documento}"/>
+			                        <input type="text" class="form-control" id="documento" name="documento" value="${bean.documento}" maxlength="10"/>
 		                        </div>
 		                        
 		                        <div class="col-lg-12">
@@ -96,16 +95,16 @@
 	
 								<fieldset data-step="2">
 									<div class="col-md-6">    
-				                        <label>Direccion</label>
-				                        <input type="text" class="form-control" id="direccion" name="direccion"  value="${bean.direccion}"/>
+				                        <label>Dirección</label>
+				                        <input type="text" class="form-control" id="direccion" name="direccion"  value="${bean.direccion}" maxlength="40"/>
 			                        </div>
 			                        <div class="col-md-6">    
 				                        <label>Barrio</label>
-				                        <input type="text" class="form-control" id="barrio" name="barrio"  value="${bean.barrio}"/>
+				                        <input type="text" class="form-control" id="barrio" name="barrio"  value="${bean.barrio}" maxlength="40"/>
 			                        </div>
 			                        <div class="col-md-6">    
-				                        <label>Descripcion</label>
-				                        <input type="text" class="form-control" id="descripcion" name="descripcion"  value="${bean.descripcion}"/>
+				                        <label>Descripción</label>
+				                        <input type="text" class="form-control" id="descripcion" name="descripcion"  value="${bean.descripcion}" maxlength="40"/>
 			                        </div>
 			                        <div class="col-lg-12">
 		                     	   		<br/>
@@ -118,16 +117,16 @@
 									
 		                        <fieldset data-step="3">
 									<div class="col-md-6">
-			                       		<label>Telefono Fijo</label>
-				                       	<input type="number" class="form-control" id="telFijo" name="telFijo" value="${bean.telFijo}"/>
+			                       		<label>Teléfono Fijo</label>
+				                       	<input type="number" class="form-control" id="telFijo" name="telFijo" value="${bean.telFijo}" maxlength="7"/>
 				                    </div>
 			                      	<div class="col-md-6">    
-				                       	<label>Telefono Celular</label>
-				                       	<input type="number" class="form-control" id="telCel" name="telCel" value="${bean.telCel}"/>
+				                       	<label>Teléfono Celular</label>
+				                       	<input type="number" class="form-control" id="telCel" name="telCel" value="${bean.telCel}" maxlength="10"/>
 			                      	</div>
 			                      	<div class="col-md-6">    
-				                       	<label>Telefono Contacto</label>
-				                       	<input type="number" class="form-control" id="telCon" name="telCon" value="${bean.telCon}"/>
+				                       	<label>Teléfono Contácto</label>
+				                       	<input type="number" class="form-control" id="telCon" name="telCon" value="${bean.telCon}" maxlength="7"/>
 			                       	</div> 
 			                       	<div class="col-lg-12">
 		                     	   		<br/>
