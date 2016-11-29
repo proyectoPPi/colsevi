@@ -273,7 +273,7 @@ CREATE TABLE ingrediente_x_producto(
 	cantidad INT,
 	id_unidad_peso INT,
     PRIMARY KEY(id_ingrediente,id_producto),
-    CONSTRAINT fk_producto_ing FOREIGN KEY (id_producto) REFERENCES tipo_producto(id_tipo_producto),
+    CONSTRAINT fk_producto_ing FOREIGN KEY (id_producto) REFERENCES producto(id_producto),
     CONSTRAINT fk_ingProducto FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
     CONSTRAINT fk_ingProdUP FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso)
 );

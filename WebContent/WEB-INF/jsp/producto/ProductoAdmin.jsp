@@ -192,13 +192,13 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/producto/productoAdmin.js"></script>
 	<script type="text/javascript">
 	
-		var LCatalogo = [];
-		<c:forEach var="tipo" items="${listaCatalogo}" varStatus="status">
-			var cat = {
-			    "id": '${tipo.id_catalogo}',
-			    "nombre": '${tipo.nombre}' 
+		var LMedida = [];
+		<c:forEach var="med" items="${listaMedida}">
+			var med = {
+			    "id": '${med.id_unidad_medida}',
+			    "nombre": '${med.nombre}' 
 			};
-			LCatalogo.push(cat);
+			LMedida.push(med);
 		</c:forEach>
 		
 		titulos = new Array();

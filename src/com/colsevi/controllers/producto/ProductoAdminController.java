@@ -44,7 +44,7 @@ public class ProductoAdminController extends BaseConfigController {
 	@RequestMapping
 	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipo", ProductoManager.tipoProducto());
-		model.addAttribute("listaCatalogo", ProductoManager.catalogo());
+		model.addAttribute("listaMedida", ProductoManager.getMedida());
 		
 		try{
 			if(request.getParameter("producto") != null && !request.getParameter("producto").trim().isEmpty()){

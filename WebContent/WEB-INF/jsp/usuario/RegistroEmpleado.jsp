@@ -6,11 +6,6 @@
 	<title>Empleado</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 	<link href="${pageContext.request.contextPath}/resources/css/estilosWizard.css" rel="stylesheet"/>
-	<style type="text/css">
-		.f1-step{
-			width: 50% !important;
-		}
-	</style>
 </head>
 <body>
 	<section class="page-wrapper">
