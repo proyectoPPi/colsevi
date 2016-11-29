@@ -5,7 +5,6 @@
    <meta charset="UTF-8" />
 	<title>Ingredientes</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
-
 </head>
 <body>
 
@@ -36,6 +35,15 @@
 								<option value="0">Seleccione</option>
 								<c:forEach items="${listaClasificar}" var="clasificar">
 									<option value="${clasificar.id_clasificar_ingrediente}">${clasificar.nombre}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+							<label>Medida</label>
+							<select class="form-control" id="medidaF" name="filtro">
+								<option value="0">Seleccione</option>
+								<c:forEach items="${listaMedida}" var="medida">
+									<option value="${medida.id_unidad_medida}">${medida.nombre}</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -80,6 +88,16 @@
 													</c:forEach>
 												</select>
 											</div>
+											
+											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+												<label>Medida</label>
+												<select class="form-control" id="medida" name="medida">
+													<option value="0">Seleccione</option>
+													<c:forEach items="${listaMedida}" var="medida">
+														<option value="${medida.id_unidad_medida}">${medida.nombre}</option>
+													</c:forEach>
+												</select>
+											</div>
 										</div>
 									</div>
 									<div class="modal-footer">
@@ -104,7 +122,8 @@
 		titulos["id_ingrediente"] = "ID";
 		titulos["nombre"] = "Nombre";
 		titulos["clasificar"] = "Clasificación";
-		titulos["descripcion"] = "Descripci&#243;n";
+		titulos["medida"] = "Unidad Medida";
+		titulos["descripcion"] = "Descripción";
 		
 		
 	</script>

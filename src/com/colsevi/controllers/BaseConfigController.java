@@ -1,5 +1,6 @@
 package com.colsevi.controllers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.NavegacionUsuario;
@@ -36,7 +41,8 @@ public class BaseConfigController implements Serializable {
 			
 			for(Pagina pag: listaPag){
 				if(pag.getMenu()){
-					if(pag.getPadrePagina() != null){
+					
+					if(pag.getPadrePagina() != null && !pag.getPadrePagina().trim().isEmpty()){
 						menu += "<li class=\"dropdown\">";
 					}else{
 						menu += "<li>";
@@ -44,7 +50,7 @@ public class BaseConfigController implements Serializable {
 					menu += "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\""+request.getContextPath()+pag.getUrl()+"\">"+
 							pag.getNombre()+"</a>";
 					
-					if(pag.getPadrePagina() != null){
+					if(pag.getPadrePagina() != null && !pag.getPadrePagina().trim().isEmpty()){
 						String[] Padre = pag.getPadrePagina().split(",");
 						List<Integer> list = new ArrayList<Integer>();
 						for(int i = 0; i<Padre.length; i++){
@@ -84,7 +90,7 @@ public class BaseConfigController implements Serializable {
 			}
 			
 			try{
-				if(pagina != null && pagina.getPadrePagina() != null){
+				if(pagina != null && pagina.getPadrePagina() != null && !pagina.getPadrePagina().trim().isEmpty()){
 					pE = new PaginaExample();
 					String[] padre = pagina.getPadrePagina().split(",");
 					List<Integer> ListaP = new ArrayList<Integer>();
@@ -108,7 +114,7 @@ public class BaseConfigController implements Serializable {
 				e.printStackTrace();
 			}
 				
-			}
+		}
 		return menu;
 	}
 	
@@ -117,6 +123,20 @@ public class BaseConfigController implements Serializable {
 			return (SesionUsuario) request.getSession().getAttribute("sesion");
 		}
 		return null;
+	}
+	
+	public void ResponseJson(HttpServletRequest request, HttpServletResponse response, JSONObject result) throws IOException{
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
+		result.writeJSONString(response.getWriter());
+	}
+	
+	public void ResponseArray(HttpServletRequest request, HttpServletResponse response, JSONArray result) throws IOException{
+		response.setContentType("text/html;charset=ISO-8859-1");
+		request.setCharacterEncoding("UTF8");
+		
+		result.writeJSONString(response.getWriter());
 	}
 
 }

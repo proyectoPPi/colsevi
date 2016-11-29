@@ -49,7 +49,7 @@
 		                   			</div>
 		                   			<div class="f1-step">
 		                   				<div class="f1-step-icon"><i class="fa fa-road"></i></div>
-		                   				<p>Direccion</p>
+		                   				<p>Dirección</p>
 		                   			</div>
 	                   			</c:if>
 	                   		    <div class="f1-step">

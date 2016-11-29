@@ -33,7 +33,6 @@
 		<mapper resource="com/colsevi/dao/pago/map/PagoPedidoMapper.xml" />
 		<mapper resource="com/colsevi/dao/pago/map/PagoProveedorMapper.xml" />
 		<mapper resource="com/colsevi/dao/deuda/map/DeudaPedidoMapper.xml" />
-		<mapper resource="com/colsevi/dao/deuda/map/DeudaProveedorMapper.xml" />
 		<mapper resource="com/colsevi/dao/inventario/map/InventarioMapper.xml" />
 		<mapper resource="com/colsevi/dao/inventario/map/MovimientoInventarioMapper.xml" />
 		<mapper resource="com/colsevi/dao/inventario/map/MovimientoMateriaMapper.xml" />

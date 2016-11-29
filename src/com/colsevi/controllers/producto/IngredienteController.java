@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -24,10 +25,12 @@ import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 public class IngredienteController extends BaseConfigController {
 
 	private static final long serialVersionUID = 8349230539753648934L;
+	private static Logger logger = Logger.getLogger(IngredienteController.class);
 
 	@RequestMapping("/Ingrediente/Ing")
 	public ModelAndView Ingrediente(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaClasificar", ProductoManager.getClasificar());
+		model.addAttribute("listaMedida", ProductoManager.getMedida());
 		return new ModelAndView("producto/Ingrediente","col",getValoresGenericos(request));
 	}
 	
@@ -43,20 +46,24 @@ public class IngredienteController extends BaseConfigController {
 			String nombre = request.getParameter("nombreF");
 			String descripcion = request.getParameter("descripcionF");
 			String clasificarF = request.getParameter("clasificarF");
+			String medidaF = request.getParameter("medidaF");
 			
 			IngredienteExample IngExample = new IngredienteExample();
 			IngredienteExample.Criteria criteria = (IngredienteExample.Criteria) IngExample.createCriteria();
 			IngExample.setOrderByClause("id_ingrediente DESC");
 			IngExample.setLimit(Inicio + ", " + Final);
 
-			if(nombre != null && !nombre.trim().isEmpty()){
+			if(!nombre.trim().isEmpty()){
 				criteria.andNombreLike("%" + nombre + "%");   
 			}
-			if(descripcion != null && !descripcion.trim().isEmpty()){
+			if(!descripcion.trim().isEmpty()){
 				criteria.andDescripcionLike("%" + descripcion + "%");   
 			}
-			if(clasificarF != null  && !clasificarF.trim().isEmpty() && !clasificarF.trim().equals("0")){
+			if(!clasificarF.trim().isEmpty() && !clasificarF.trim().equals("0")){
 				criteria.andId_clasificar_ingredienteEqualTo(Integer.parseInt(clasificarF));
+			}
+			if(!medidaF.trim().isEmpty() && !medidaF.trim().equals("0")){
+				criteria.andId_unidad_medidaEqualTo(Integer.parseInt(medidaF));
 			}
 			
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getIngredienteMapper().selectByExample(IngExample)));
@@ -77,24 +84,43 @@ public class IngredienteController extends BaseConfigController {
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
 		JSONObject labels = new JSONObject();
+		JSONObject labels2 = new JSONObject();
 		
-		if(listIng != null && listIng.size() >0){
-			for (Ingrediente bean : listIng) {
+		for (Ingrediente bean : listIng) {
+			try{
 				opciones = new JSONObject();
 				labels = new JSONObject();
+				labels2 = new JSONObject();
 				opciones.put("id_ingrediente", bean.getId_ingrediente());
 				opciones.put("nombre", bean.getNombre());
 				opciones.put("descripcion", bean.getDescripcion());
-
+	
 				if(bean.getId_clasificar_ingrediente() != null){
 					labels.put("label",ColseviDao.getInstance().getClasificarIngredienteMapper().selectByPrimaryKey(bean.getId_clasificar_ingrediente()).getNombre());
 					labels.put("value", bean.getId_clasificar_ingrediente());
 					opciones.put("clasificar", labels);
+				}else{
+					labels.put("label", "");
+					labels.put("value", "0");
+					opciones.put("clasificar", labels);
 				}
+				
+				if(bean.getId_unidad_medida() != null){
+					labels2.put("label",ColseviDao.getInstance().getUnidadMedidaMapper().selectByPrimaryKey(bean.getId_unidad_medida()).getNombre());
+					labels2.put("value", bean.getId_unidad_medida());
+					opciones.put("medida", labels2);
+				}else{
+					labels2.put("label", "");
+					labels2.put("value", "0");
+					opciones.put("medida", labels2);
+				}
+				
 				resultado.add(opciones);
+			}catch(Exception e){
+				logger.error(e.getMessage());
 			}
-			
 		}
+			
 		return resultado;
 	}
 	
@@ -103,13 +129,13 @@ public class IngredienteController extends BaseConfigController {
 		
 		try{
 			bean.setId_clasificar_ingrediente(Integer.parseInt(request.getParameter("clasificar")));
+			bean.setId_unidad_medida(Integer.parseInt(request.getParameter("medida")));
 			
 			String error = validarGuardado(bean);
 			if(!error.isEmpty()){
 				modelo.addAttribute("error", error);
 				return Ingrediente(request, modelo);
 			}
-
 			
 			if(bean.getId_ingrediente() != null){
 				ColseviDao.getInstance().getIngredienteMapper().updateByPrimaryKey(bean);
@@ -119,6 +145,7 @@ public class IngredienteController extends BaseConfigController {
 				modelo.addAttribute("correcto", "Ingrediente insertado");
 			}
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			modelo.addAttribute("error", "Contactar al administrador");
 		}
 		return Ingrediente(request, modelo);
@@ -134,6 +161,9 @@ public class IngredienteController extends BaseConfigController {
 		}
 		if(bean.getId_clasificar_ingrediente() == null || bean.getId_clasificar_ingrediente().equals(0)){
 			error += "Seleccionar una clasificación<br/>";
+		}
+		if(bean.getId_unidad_medida() == null || bean.getId_unidad_medida().equals(0)){
+			error += "Seleccionar unidad de Medida<br/>";
 		}
 		
 		return error;

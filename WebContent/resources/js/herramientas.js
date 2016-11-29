@@ -26,122 +26,122 @@ function HTabla(opciones){
 	SetFiltros();
 	
 	jQuery.ajaxQueue({
-		  url: dataMap['url'],
-		}).done(function(result) {
-			try{
-				data = jQuery.parseJSON(result);
-			} catch(err){
-				console.log("Error ejecutando tabla" + err);
-				jQuery("#ModalCargando").modal('hide');
-	        	return;
+	  url: dataMap['url'],
+	}).done(function(result) {
+		try{
+			data = jQuery.parseJSON(result);
+		} catch(err){
+			console.log("Error ejecutando tabla" + err);
+			jQuery("#ModalCargando").modal('hide');
+        	return;
+		}
+		var html = ""; 
+		html = '<section id="flip-scroll">';
+		html += '<table class="table table-bordered table-striped cf"><thead class="cf"><tr>';
+		var count = 0;
+		for(k in titulos){
+			count ++;
+			var className = '';
+			if(titulos[k] != "ID"){
+				html += "<th>"+opciones.titulos[k]+"</th>";
+			}else{
+				dataMap['id'] = k;
 			}
-			var html = ""; 
-			if(data == "" || data['datos'][0] == undefined ){
-				 jQuery(Id).html("<br/>No hay datos");
-			 		jQuery("#ModalCargando").modal('hide');
-				 return;
-			 }
+		 }
+		html += "</tr></thead><tbody>";
+		
+		
+		if(data == "" || data['datos'] === undefined || data['datos'][0] == undefined ){
+			html += '<tr>';
+			html += '<td colspan="'+count+'" style="text-align:center;font-weight: bold;">NO HAY DATOS</td>';
+			html += '</tr>';
+	 		jQuery("#ModalCargando").modal('hide');
+		 }else{
 			dataMap["datos"] = data["datos"];
 			dataMap["titulos"] = titulos;
 			dataMap["total"] = data["total"];
-			if(dataMap["datos"].length == 0){
-	 			jQuery('#tabla').html("<br/>No hay datos");
-	 	 		jQuery("#ModalCargando").modal('hide');
-	         	return;
-	 		}
-			if(data["total"] == 0){
-				organizarPaginacion(1);
-			}
-			html = '<section id="flip-scroll">';
-			html += '<table class="table table-bordered table-striped cf"><thead class="cf"><tr>';
-			for(k in titulos){
-				var className = '';
-				if(titulos[k] != "ID"){
-					html += "<th>"+opciones.titulos[k]+"</th>";
-				}else{
-					dataMap['id'] = k;
-				}
-			 }
-			html += "</tr></thead><tbody>";
-		 for(i in data["datos"]){
-			 html += "<tr>";
-			 var sw = true;
-			 for(k in titulos){
-				 if(titulos[k]=="ID"){
-					 id = data["datos"][i][k];
-				 }else{
-					 if(sw){
-						 if(dataMap['link'] !== undefined)
-							 html += '<td><span>'+data["datos"][i][k]+'</span></td>';
-						 else
-							 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
-						 sw = false;
+
+			 for(i in data["datos"]){
+				 html += "<tr>";
+				 var sw = true;
+				 for(k in titulos){
+					 if(titulos[k]=="ID"){
+						 id = data["datos"][i][k];
 					 }else{
-						 if(dataMap['color'] != undefined && dataMap['color'][k] != undefined){
-							 html += '<td style="background-color: ' + data["datos"][i][k] +'" ' + className + ">";
+						 if(sw){
+							 if(dataMap['link'] !== undefined)
+								 html += '<td><span>'+data["datos"][i][k]+'</span></td>';
+							 else
+								 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
+							 sw = false;
 						 }else{
-							 html += "<td>";
-						 }		 
-						 if(dataMap['campo'] != undefined && dataMap['campo'][k] != undefined){
-							 html += '<input type="number" value="'+data['datos'][i][k]+'" class="form-control" id="campo'+id+'" name="cantTbl"/>';
-						 }
-						 
-						 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
-							 html += data["datos"][i][k]['label'];
-						 }else{
-							 if(dataMap['color'][k] == undefined && dataMap['campo'][k] == undefined && dataMap['boton'][k] == undefined && dataMap['accion'][k] == undefined){
-								 html += data["datos"][i][k];
+							 if(dataMap['color'] != undefined && dataMap['color'][k] != undefined){
+								 html += '<td style="background-color: ' + data["datos"][i][k] +'" ' + className + ">";
+							 }else{
+								 html += "<td>";
+							 }		 
+							 if(dataMap['campo'] != undefined && dataMap['campo'][k] != undefined){
+								 html += '<input type="number" value="'+data['datos'][i][k]+'" class="form-control" id="campo'+id+'" name="cantTbl"/>';
 							 }
 							 
-							 if(dataMap['boton'][k] != undefined){
-								for(var key in dataMap['boton'][k]){
-								var opcion = dataMap['boton'][k][key];
-								var metodo = "metodo";
-								if(opcion.metodo!=undefined){
-									metodo = opcion.metodo;
-								}
-									html += '<a href="#" onclick="'+metodo+'(\''+id+'\', this);"><i class="'+opcion.img+'"></i></a>';
-								}
-							}
-							 if(dataMap['accion'][k] != undefined){
-								 html +='<div class="btn-group">';
-								 html +='<button data-toggle="dropdown" class="btn btn-white" aria-pressed="false"><i class="fa fa-ellipsis-v"></i></button>';
-								 html +='<ul role="menu" class="dropdown-menu">';
+							 if(data["datos"][i][k] != undefined && data["datos"][i][k]['label'] != undefined){
+								 html += data["datos"][i][k]['label'];
+							 }else{
+								 if(dataMap['color'][k] == undefined && dataMap['campo'][k] == undefined && dataMap['boton'][k] == undefined && dataMap['accion'][k] == undefined){
+									 html += data["datos"][i][k];
+								 }
 								 
-								 for(var key in dataMap['accion'][k]){
-									var opcion = dataMap['accion'][k][key];
+								 if(dataMap['boton'][k] != undefined){
+									for(var key in dataMap['boton'][k]){
+									var opcion = dataMap['boton'][k][key];
 									var metodo = "metodo";
-									if(opcion.metodo != undefined){
+									if(opcion.metodo!=undefined){
 										metodo = opcion.metodo;
 									}
-									html +='<li><a href="#" onclick="'+metodo+'(\''+id+'\');" href="#">'+opcion.label+'</a></li>';
+										html += '<a href="#" onclick="'+metodo+'(\''+id+'\', this);"><i class="'+opcion.img+'"></i></a>';
+									}
 								}
+								 if(dataMap['accion'][k] != undefined){
+									 html +='<div class="btn-group">';
+									 html +='<button data-toggle="dropdown" class="btn btn-white" aria-pressed="false"><i class="fa fa-ellipsis-v"></i></button>';
+									 html +='<ul role="menu" class="dropdown-menu">';
+									 
+									 for(var key in dataMap['accion'][k]){
+										var opcion = dataMap['accion'][k][key];
+										var metodo = "metodo";
+										if(opcion.metodo != undefined){
+											metodo = opcion.metodo;
+										}
+										html +='<li><a href="#" onclick="'+metodo+'(\''+id+'\');" href="#">'+opcion.label+'</a></li>';
+									}
+								 }
 							 }
+							 html += "</td>";
 						 }
-						 html += "</td>";
 					 }
 				 }
+				 html += "</tr>";
 			 }
-			 html += "</tr>";
-		 }
-		 html += "<tbody></table></section>";
-		 
-		 jQuery(Id).html(html);
-		 
-		 if(opciones.pagina == undefined){
-			 opciones.pagina = 1;
-		 }
-		 organizarPaginacion(opciones.pagina);
-		 
-		 dataMap['keys'] = [];
+			 
+			dataMap['keys'] = [];
 			var registro = dataMap["datos"][0];
 			if(registro != undefined){
 				for(key in registro){
 					dataMap['keys'].push(key);
 				}
 			}
-			
-			jQuery("#ModalCargando").modal('hide');
+		 }
+		 html += "<tbody></table></section>";
+		 
+		 jQuery(Id).html(html);
+		 
+		 if(opciones.pagina == undefined){
+			 dataMap["total"] = 0;
+			 opciones.pagina = 1;
+		 }
+		 organizarPaginacion(opciones.pagina);
+		 
+		jQuery("#ModalCargando").modal('hide');
 	});
 }
 
@@ -195,64 +195,29 @@ function SetFiltros(){
 }
 
 function organizarPaginacion(pagina){
-		jQuery("#paginacion").html('');
-		var n = dataMap["total"];
-		var NPaginas = Math.ceil(n/registrosPagina);
-		if(NPaginas == 0){
-			NPaginas = 1;
-		}
-		
-		var Inicio = (pagina-4) <= 0 ? 1 : pagina - 4;
-		var Final = (pagina+4) >= NPaginas ? NPaginas : pagina + 4;
-		
-		var html = '';
-		if(pagina>1){
-			html += '<li><a href="javascript:void(Tabla(1));">&laquo;</a></li>';
-			html += '<li><a href="javascript:void(Tabla('+parseInt(pagina-1)+'));">&lsaquo;</a></li>';
-		}
-		for(var i=Inicio; i<=Final; i++){
-			html += i==pagina ? '<li class="active"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>':'<li class="hidden-xs"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>';
-		}
-		if(pagina<NPaginas){
-			html += '<li><a href="javascript:void(Tabla('+parseInt(pagina+1)+'));">&rsaquo;</a></li>';
-			html += '<li><a href="javascript:void(Tabla('+NPaginas+'));">&raquo;</a></li>';
-		}
-		jQuery("#paginacion").append('<ul class="dataTables_paginate paging_bootstrap pagination">'+html+'</ul>');
-}
-
-function AuxiliarAutocompletar(input){
-
-	jQuery( "#"+input ).autocomplete({
-		source: dataMap['autocompletar'],
-		minLength: 0,
-		open: function( event, ui ) {
-			//jQuery("#"+input).width(jQuery(".ui-autocomplete.ui-menu").width());
-		}
-	});
-
-	jQuery("#"+input).focus(function() {
-		jQuery("#"+input).autocomplete("search");
-	});
-}
-
-function ActualizarAutocompletar(input){
-
-	jQuery.ajaxQueue({
-	  	url: dataMap['AutocompletarUrl'],
-	  	data: {valor: jQuery("#"+input).val()},
-	  	success: function(o) {
-			var data;
-			try{
-				data = jQuery.parseJSON(o);
-			} catch(err){
-				console.log("Error ejecutando ajaxQueue en ActualizarAutocompletar " + err);
-	        	return;
-			}
-			if(data.labels==undefined) data.labels = [];
-			jQuery("#"+input).autocomplete( "option", "source", data.labels );
-			jQuery("#"+input).autocomplete("search", "");
-	  	}
-	});
+	jQuery("#paginacion").html('');
+	var n = dataMap["total"];
+	var NPaginas = Math.ceil(n/registrosPagina);
+	if(NPaginas == 0){
+		NPaginas = 1;
+	}
+	
+	var Inicio = (pagina-4) <= 0 ? 1 : pagina - 4;
+	var Final = (pagina+4) >= NPaginas ? NPaginas : pagina + 4;
+	
+	var html = '';
+	if(pagina>1){
+		html += '<li><a href="javascript:void(Tabla(1));">&laquo;</a></li>';
+		html += '<li><a href="javascript:void(Tabla('+parseInt(pagina-1)+'));">&lsaquo;</a></li>';
+	}
+	for(var i=Inicio; i<=Final; i++){
+		html += i==pagina ? '<li class="active"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>':'<li class="hidden-xs"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>';
+	}
+	if(pagina<NPaginas){
+		html += '<li><a href="javascript:void(Tabla('+parseInt(pagina+1)+'));">&rsaquo;</a></li>';
+		html += '<li><a href="javascript:void(Tabla('+NPaginas+'));">&raquo;</a></li>';
+	}
+	jQuery("#paginacion").append('<ul class="dataTables_paginate paging_bootstrap pagination">'+html+'</ul>');
 }
 
 function HLimpiar(id){
@@ -270,33 +235,6 @@ function HLimpiar(id){
 function HEliminar(div, url){
 	jQuery('#' + div).attr('action', url);
 	jQuery('#' + div).submit();
-}
-
-/*
- @Id id del campo de texto que servirá para desplegar el selector
- @Popup Si es true se muestra en un popup, de lo contrario se mostrará como un Dropdown
- */
-function HDatetimePicker(Id, Popup){
-	if(Popup == undefined){
-		Popup = true;
-	}
-	
-	jQuery('#'+ Id).DateTimePicker({
-		language: "es",
-		isPopup: Popup
-	});
-}
-
-function HColorPicker(Id){
-	jQuery('#' + Id).colorpickerplus();
-}
-
-function HValidador(Id){
-	jQuery('#'+Id).validate({
-		submitHandler: function(form) {
-		    form.submit();
-		  }
-	});
 }
 
 function HiniciarAutocompletar(url,input){
@@ -320,15 +258,13 @@ function HiniciarAutocompletar(url,input){
 		
 		jQuery( "input[id="+ input +"]" ).keyup(function(e) {
 			if((e.which<37 || e.which>40) && e.which!=13){
-				ActualizarAutocompletar(input);
+				ActualizarAutocompletar(this);
 			}
 		});
-	
 	});
 }
 
 function AuxiliarAutocompletar(input){
-
 	jQuery( "input[id="+ input +"]" ).autocomplete({
 		source: dataMap['autocompletar'],
 		minLength: 0,
@@ -336,15 +272,14 @@ function AuxiliarAutocompletar(input){
 	});
 
 	jQuery( "input[id="+ input +"]" ).focus(function() {
-		jQuery( "input[id="+ input +"]" ).autocomplete("search");
+		$(this).autocomplete("search");
 	});
 }
 
 function ActualizarAutocompletar(input){
-
 	jQuery.ajaxQueue({
 	  	url: dataMap['AutocompletarUrl'],
-	  	data: {campo: jQuery("#"+input).val()},
+	  	data: {campo: input.value},
 	  	success: function(o) {
 			var data;
 			try{
@@ -354,8 +289,8 @@ function ActualizarAutocompletar(input){
 	        	return;
 			}
 			if(data.labels==undefined) data.labels = [];
-			jQuery( "input[id="+ input +"]" ).autocomplete( "option", "source", data.labels );
-			jQuery( "input[id="+ input +"]" ).autocomplete("search", "");
+			jQuery(input).autocomplete( "option", "source", data.labels );
+			jQuery(input).autocomplete("search", "");
 	  	}
 	});
 }
@@ -385,6 +320,45 @@ function HPreprocesar(opcion){
 	});
 }
 
-function HMask(Id, mask){
-	jQuery('#' + Id).mask(mask);
+function HAjax(opciones){
+	jQuery.ajaxQueue({
+		url: opciones.url,
+		data:opciones.data,
+		async:opciones.async,
+	}).done(function(result) {
+ 		try{ 
+ 			eval(opciones.method + '(' + result + ');');
+ 		} catch(err){ 
+ 			console.log("Error ejecutando HAjax" + err); 
+ 			eval(opciones.method + '();');
+ 		} 
+	});
 }
+
+function HValidador(Id){
+	jQuery('#'+Id).validate({
+		submitHandler: function(form) {
+		    form.submit();
+		  }
+	});
+}
+
+/*
+@Id id del campo de texto que servirá para desplegar el selector
+@Popup Si es true se muestra en un popup, de lo contrario se mostrará como un Dropdown
+*/
+function HDatetimePicker(Id, Popup){
+	if(Popup == undefined){
+		Popup = true;
+	}
+	
+	jQuery('#'+ Id).DateTimePicker({
+		language: "es",
+		isPopup: Popup
+	});
+}
+
+function HColorPicker(Id){
+	jQuery('#' + Id).colorpickerplus();
+}
+

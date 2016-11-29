@@ -286,6 +286,20 @@
     where id_inventario = #{id_inventario,jdbcType=INTEGER}
   </update>
   
+  	<select id="CargarInvIngrediente" parameterType="java.util.Map" resultType="java.util.HashMap">
+		
+		SELECT ixp.id_ingrediente,CAST((ixp.cantidad*#{cantidad})/prod.cantidadMin AS UNSIGNED) AS cantidadProd, up.nombre As nombreIngU, 
+			ing.nombre as nombreIng, up.id_unidad_peso, up.codigo AS codUM, ixm.cantidad AS cantAsig, ixm.id_unidad_peso As umAsig
+		FROM producto prod
+		LEFT JOIN ingrediente_x_producto ixp ON ixp.id_producto = prod.id_producto
+		LEFT JOIN unidad_peso up ON up.id_unidad_peso = ixp.id_unidad_peso
+		LEFT JOIN ingrediente ing ON ing.id_ingrediente = ixp.id_ingrediente
+        LEFT JOIN inventario_x_materia ixm ON ixm.id_ingrediente = ing.id_ingrediente
+		WHERE prod.id_producto = #{producto}
+		GROUP BY ixp.id_ingrediente; 
+		
+	</select>
+  
   <select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
 		SELECT inv.id_inventario, prod.id_producto, prod.nombre AS nombreProd, prod.referencia, inv.id_establecimiento,
 			esta.nombre AS nombreEsta, inv.disponible, inv.compromiso
@@ -352,15 +366,4 @@
 		
 	</select>
 	
-	<select id="CargarIngProd" parameterType="java.util.Map" resultType="java.util.HashMap">
-		SELECT ixp.id_ingrediente, ixp.cantidad*#{cantidad} AS cantidadProd, up.nombre As nombreIngU, ing.nombre as nombreIng,
-			up.id_unidad_peso, up.codigo AS codUM, ixm.cantidad AS cantAsig, ixm.id_unidad_peso As umAsig
-		FROM producto prod
-		LEFT JOIN ingrediente_x_producto ixp ON ixp.id_producto = prod.id_producto
-		LEFT JOIN unidad_peso up ON up.id_unidad_peso = ixp.id_unidad_peso
-		LEFT JOIN ingrediente ing ON ing.id_ingrediente = ixp.id_ingrediente
-        LEFT JOIN inventario_x_materia ixm ON ixm.id_ingrediente = ing.id_ingrediente
-		WHERE prod.id_producto = #{producto}
-		GROUP BY ixp.id_ingrediente; 
-	</select>   
 </mapper>

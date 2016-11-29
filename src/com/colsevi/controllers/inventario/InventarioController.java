@@ -35,12 +35,10 @@ import com.colsevi.dao.inventario.model.MovimientoMateria;
 import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
 import com.colsevi.dao.producto.model.IngredienteXProductoKey;
+import com.colsevi.dao.producto.model.Producto;
 
 @Controller
 public class InventarioController extends BaseConfigController {
-/*
- * Cambiar carga de ingredientes a que sea por una sola consulta que devuelva toda la data, JSON ingrediente, SUBJSON MATERIA PRIMA
- * */
 
 	private static final long serialVersionUID = -1900570445397410663L;
 	private static Logger logger = Logger.getLogger(InventarioController.class);
@@ -136,7 +134,7 @@ public class InventarioController extends BaseConfigController {
 		mapa.put("cantidad", cantidad);
 		
 		try{
-			opciones.put("datos", Construir(ColseviDao.getInstance().getInventarioMapper().CargarIngProd(mapa), request.getParameter("establecimiento")));
+			opciones.put("datos", Construir(ColseviDao.getInstance().getInventarioMapper().CargarInvIngrediente(mapa), request.getParameter("establecimiento")));
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
@@ -164,10 +162,10 @@ public class InventarioController extends BaseConfigController {
 					opciones.put("codUM", map.get("codUM"));
 					opciones.put("id_unidad_peso", map.get("id_unidad_peso"));
 					
-					JSONArray detalle = cargarIng((Long) map.get("cantidadProd"), (Integer) map.get("id_unidad_peso"), map.get("id_ingrediente").toString(), establecimiento);
-					if(detalle != null){
-						opciones.put("detalle", detalle);
-					}
+//					JSONArray detalle = cargarIng((Long) map.get("cantidadProd"), (Integer) map.get("id_unidad_peso"), map.get("id_ingrediente").toString(), establecimiento);
+//					if(detalle != null){
+//						opciones.put("detalle", detalle);
+//					}
 					
 					resultado.add(opciones);
 				}catch(Exception e){
@@ -333,6 +331,7 @@ public class InventarioController extends BaseConfigController {
 		List<MateriaPrima> listaMP = new ArrayList<MateriaPrima>();
 		List<MovimientoMateria> listamov = new ArrayList<MovimientoMateria>();
 		MovimientoMateria movmat = new MovimientoMateria();
+		Producto prodBean = new Producto();
 		
 		String error = "";
 		String[] sec = request.getParameterValues("lote");
@@ -354,7 +353,8 @@ public class InventarioController extends BaseConfigController {
 			keyIXP.setId_ingrediente(invxmatv.getId_ingrediente());
 			keyIXP.setId_producto(producto);
 			ingProd = ColseviDao.getInstance().getIngredienteXProductoMapper().selectByPrimaryKey(keyIXP);
-			ingProd.setCantidad(ingProd.getCantidad() * cantSolicitada);
+			prodBean = ColseviDao.getInstance().getProductoMapper().selectByPrimaryKey(ingProd.getId_producto());
+			ingProd.setCantidad((ingProd.getCantidad() * cantSolicitada) / prodBean.getCantidadMin());
 			
 			if(cantArray[i] != null && !umArray[i].trim().equals("0")){
 				invxmatv.setCantidad(Double.valueOf(cantArray[i]));

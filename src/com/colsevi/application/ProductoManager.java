@@ -7,6 +7,10 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.colsevi.dao.catalogo.model.Catalogo;
+import com.colsevi.dao.catalogo.model.CatalogoExample;
+import com.colsevi.dao.general.model.UnidadMedida;
+import com.colsevi.dao.general.model.UnidadMedidaExample;
 import com.colsevi.dao.general.model.UnidadPeso;
 import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.producto.model.ClasificarIngrediente;
@@ -26,12 +30,20 @@ public class ProductoManager {
 		return ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(new UnidadPesoExample());
 	}
 	
+	public static List<UnidadMedida> getMedida(){
+		return ColseviDao.getInstance().getUnidadMedidaMapper().selectByExample(new UnidadMedidaExample());
+	}
+	
 	public static List<DificultadReceta> getDificultad(){
 		return ColseviDao.getInstance().getDificultadRecetaMapper().selectByExample(new DificultadRecetaExample());
 	}
 	
 	public static List<TipoProducto> tipoProducto(){
 		return ColseviDao.getInstance().getTipoProductoMapper().selectByExample(new TipoProductoExample());
+	}
+	
+	public static List<Catalogo> catalogo(){
+		return ColseviDao.getInstance().getCatalogoMapper().selectByExample(new CatalogoExample());
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -23,29 +23,28 @@ import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
+import com.colsevi.application.ingredienteManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.dao.producto.model.ProductoExample;
-import com.colsevi.dao.producto.model.RecetaExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoExample;
 import com.colsevi.dao.inventario.model.InventarioExample;
 import com.colsevi.dao.pedido.model.DetallePedidoExample;
-import com.colsevi.dao.producto.model.Ingrediente;
-import com.colsevi.dao.producto.model.IngredienteExample;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 import com.colsevi.dao.producto.model.Producto;
+import com.colsevi.dao.producto.model.ProductoExample;
+import com.colsevi.dao.producto.model.RecetaExample;
 
 @Controller
+@RequestMapping("/Producto/Admin")
 public class ProductoAdminController extends BaseConfigController {
 
 	private static final long serialVersionUID = 4997906906136000223L;
 	private static Logger logger = Logger.getLogger(ProductoAdminController.class);
 	
-	@RequestMapping("/Producto/Admin")
+	@RequestMapping
 	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipo", ProductoManager.tipoProducto());
-		model.addAttribute("listaClasificar", ProductoManager.getClasificar());
-		model.addAttribute("listaTipoPeso", ProductoManager.getTipoPeso());
+		model.addAttribute("listaCatalogo", ProductoManager.catalogo());
 		
 		try{
 			if(request.getParameter("producto") != null && !request.getParameter("producto").trim().isEmpty()){
@@ -63,7 +62,7 @@ public class ProductoAdminController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Producto/Admin/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -95,11 +94,7 @@ public class ProductoAdminController extends BaseConfigController {
 			logger.error(e.getMessage());
 			opciones.put("error", "Contactar al administrador");
 		}
-
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		opciones.writeJSONString(response.getWriter());
+		ResponseJson(request, response, opciones);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -122,6 +117,7 @@ public class ProductoAdminController extends BaseConfigController {
 					opciones.put("ventaf", UtilidadManager.MonedaVista(bean.getVenta()));
 					opciones.put("venta", bean.getVenta());
 					opciones.put("imagen", bean.getImagen());
+					opciones.put("cantidadMin", bean.getCantidadMin());
 					
 					if(bean.getId_tipo_producto() != null){
 						labels.put("label", ColseviDao.getInstance().getTipoProductoMapper().selectByPrimaryKey(bean.getId_tipo_producto()).getNombre());
@@ -135,6 +131,7 @@ public class ProductoAdminController extends BaseConfigController {
 					resultado.add(opciones);
 				
 				}catch(Exception e){
+					logger.error(e.getMessage());
 					continue;
 				}
 			}
@@ -179,27 +176,31 @@ public class ProductoAdminController extends BaseConfigController {
 			}else{
 				error += "Ingresar el venta<br/>";
 			}
+			if(!request.getParameter("cantidadMin").trim().isEmpty())
+				bean.setCantidadMin(Integer.parseInt(request.getParameter("cantidadMin")));
+			else
+				error += "Ingresar la cantidad";
 			
-			Integer count = Integer.parseInt(request.getParameter("count"));
+			String[] ingrediente = request.getParameterValues("idIng");
+			String[] cantidad = request.getParameterValues("cant");
+			String[] umedida = request.getParameterValues("tipo");
 			
-			if(count != null && count > 0){
-				for(int i = 0; i < count; i++){
-					if(request.getParameter("idIng" + (i +1)) != null && !request.getParameter("idIng" + (i +1)).trim().isEmpty()){
-						ixpB = new IngredienteXProducto();
-						ixpB.setId_ingrediente(Integer.parseInt(request.getParameter("idIng" + (i +1))));
-						ixpB.setCantidad(Integer.parseInt(request.getParameter("cant" + (i +1))));
-						ixpB.setId_unidad_peso(Integer.parseInt(request.getParameter("tipo" + (i +1))));
-						ixpB.setId_producto(bean.getId_producto());
+			
+			if(ingrediente.length > 0){
+				for(int i = 0; i < ingrediente.length; i++){
+					ixpB = new IngredienteXProducto();
+					ixpB.setId_ingrediente(Integer.parseInt(ingrediente[i]));
+					ixpB.setCantidad(Integer.parseInt(cantidad[i]));
+					ixpB.setId_unidad_peso(Integer.parseInt(umedida[i]));
+					ixpB.setId_producto(bean.getId_producto());
 
-						ixp.add(ixpB);
-					}
+					ixp.add(ixpB);
 				}
 			}else
 				error += "No hay detalle seleccionado";
 			
 			if(ixp != null && ixp.size() < 1)
 				error = "No hay detalle seleccionado";
-			
 				
 		}catch(Exception e){
 			logger.error(e.getMessage());
@@ -211,16 +212,17 @@ public class ProductoAdminController extends BaseConfigController {
 		obj[2] = ixp;
 		
 		return obj;
-		
 	}
+	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Producto/Admin/Guardar")
+	@RequestMapping("/Guardar")
 	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
 		
 		SqlSession sesion = ColseviDaoTransaccion.getInstance();
 		Producto bean = null;
 		List<IngredienteXProducto> listaIngProd = null;
 		Object[] obj = validarGuardar(request);
+		
 		try{
 			 
 			if(obj[0] != null && !obj[0].toString().isEmpty()){
@@ -258,7 +260,7 @@ public class ProductoAdminController extends BaseConfigController {
 		return Producto(request, modelo);
 	}
 	
-	@RequestMapping("/Producto/Admin/Eliminar")
+	@RequestMapping("/Eliminar")
 	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
 		
 		try{
@@ -308,47 +310,8 @@ public class ProductoAdminController extends BaseConfigController {
 		return Producto(request, modelo);
 	}
 	
-	@RequestMapping("/Producto/Admin/ClasificarIng")
-	public void ClasificarIng(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		
-		JSONArray result = new JSONArray();
-		Integer id = 0;
-		try{
-			id = Integer.parseInt(request.getParameter("clasificar"));
-		}catch(Exception e){
-			return;
-		}
-		IngredienteExample ingExample = new IngredienteExample();
-		ingExample.createCriteria().andId_clasificar_ingredienteEqualTo(id);
-		
-		result = ConstruirIngrediente(ColseviDao.getInstance().getIngredienteMapper().selectByExample(ingExample));
-
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		result.writeJSONString(response.getWriter());
-	}
-	
 	@SuppressWarnings("unchecked")
-	public JSONArray ConstruirIngrediente(List<Ingrediente> listaIng){
-
-		JSONArray resultado = new JSONArray();
-		JSONObject opciones = new JSONObject();
-		
-		if(listaIng != null && listaIng.size() >0){
-			for (Ingrediente bean : listaIng) {
-				opciones = new JSONObject();
-				opciones.put("id", bean.getId_ingrediente());
-				opciones.put("nombre", bean.getNombre());
-				resultado.add(opciones);
-			}
-		}
-		return resultado;
-	}
-
-
-	@SuppressWarnings("unchecked")
-	@RequestMapping("/Producto/Admin/cargarIng")
+	@RequestMapping("/cargarIng")
 	public void cargarIng(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject result = new JSONObject();
@@ -361,11 +324,7 @@ public class ProductoAdminController extends BaseConfigController {
 			logger.error(e.getMessage());
 			result.put("error", "Contactar al administrador");
 		}
-		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		result.writeJSONString(response.getWriter());
+		ResponseJson(request, response, result);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -392,12 +351,11 @@ public class ProductoAdminController extends BaseConfigController {
 		return resultado;
 	}
 	
-	@RequestMapping("/Producto/Admin/buscarProd")
+	@RequestMapping("/buscarProd")
 	public void auto(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject result = new JSONObject();
 
 		try{
-			
 			String producto = request.getParameter("campo");
 			result = ProductoManager.AutocompletarProducto(producto);
 
@@ -406,10 +364,51 @@ public class ProductoAdminController extends BaseConfigController {
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
-		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		result.writeJSONString(response.getWriter());
+		ResponseJson(request, response, result);
 	}
+	
+	@RequestMapping("/autocompletar")
+	public void autoIng(HttpServletRequest request, HttpServletResponse response){
+		try{
+			JSONObject result = new JSONObject();
+			
+			String ing = request.getParameter("campo");
+			result = ingredienteManager.AutocompletarIngrediente(ing);
+			
+			if(result != null){
+				response.setContentType("text/html;charset=ISO-8859-1");
+				request.setCharacterEncoding("UTF8");
+				
+				result.writeJSONString(response.getWriter());
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/ProdInCatalog")
+	public void ProdInCatalog(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
+		JSONArray options = new JSONArray();
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		
+		try{
+			mapa.put("producto", request.getParameter("producto"));
+			List<Map<String, Object>> listProdCatalog = ColseviDao.getInstance().getProductoMapper().ProdInCatalog(mapa);
+			if(listProdCatalog != null && listProdCatalog.size() > 0){
+				Map<String, Object> map = listProdCatalog.get(0);
+				String[] Array = map.get("id_catalogo").toString().split(",");
+				for(String sub: Array){
+					options.add(sub);
+				}
+			}
+			result.put("datos", options);			
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
+		ResponseJson(request, response, result);
+	}
+	
 }

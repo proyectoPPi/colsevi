@@ -24,116 +24,80 @@ function Tabla(pagina){
 
 function Limpiar(){
 	HLimpliar();
-	jQuery('#clasificar, #tipoP').val(0);
+	jQuery('#clasificar, #tipoP, #count').val(0);
 }
 
 function Eliminar(){
 	HEliminar("formulario", contexto + "/Producto/Admin/Eliminar.html?");
 }
 
-
-jQuery( "#clasificarIng" ).change(function() {
-	
-	jQuery('#Ing > select, #Ing > label').remove();
-	if(jQuery('#clasificarIng').val() == ""){
-		jQuery('#dynamic').hide();
-		return;
-	}
-	
-	jQuery.ajaxQueue({
-		url: contexto + "/Producto/Admin/ClasificarIng.html?",
-		 data:{clasificar: jQuery('#clasificarIng').val()},
-	}).done(function(result) {
-		var data; 
- 		try{ 
- 			data = jQuery.parseJSON(result); 
- 		} catch(err){ 
- 			console.log("Error ejecutando CargarIngredientes" + err); 
-         	return; 
-         	jQuery('#dynamic').hide();
- 		} 
- 		
- 		var html = '<label>Ingrediente</label>';
- 			html += '<select id="IngSelect" name="IngSelect" class="form-control">';
- 			html += '<option value="">Seleccione</option>';
-		for(i in data){
-			html += '<option value="'+data[i]['id']+'">'+data[i]['nombre']+'</option>';
-		}
-		html += '</select>';
-		jQuery('#Ing').html(html);
-		jQuery('#dynamic').show();
-	});
-	
-});
-
 jQuery('#adicion').click(function(){
-	try{
-		if(jQuery('#IngSelect').val() != "" && jQuery('#tipopeso').val() != "" && parseInt(jQuery('#cantidad').val()) > 0){
-			if(!buscarIngrediente()){
-				jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);		
-				var html ='<tr>';
-				html += '<td><input type="text" value="'+jQuery('#IngSelect option:selected').text()+'" class="fieldDynamic" readonly /><input type="hidden" name="idIng'+jQuery('#count').val()+'" value="'+jQuery('#IngSelect').val()+'"/></td>';
-				html += '<td><input type="text" value="'+jQuery('#cantidad').val()+'" class="fieldDynamic" readonly name="cant'+jQuery('#count').val()+'" /></td>';
-				html += '<td class="hidden-xs"><input type="text" value="'+jQuery('#tipopeso option:selected').text()+'" class="fieldDynamic" readonly /><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+jQuery('#tipopeso').val()+'"/></td>';
-				html += '<td><buttton data-toggle="button" class="btn btn-white" onclick="EliminarDet(this);"><i class="fa fa-remove text-info"></i></button></td>';
-				html += '</tr>';
-				
-			}
-
-			jQuery('#IngDynamic > table > tbody').append(html);
-		}
-	}catch (e) {
-		alert('error');
-	}
+	jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);
+	construirTabla();
 });
-
-function buscarIngrediente(){
-	var count = jQuery('#count').val();
-	for(i = 0; i <= count; i++) {
-		if(jQuery( "input[name='idIng"+i+"']" ).val() == jQuery('#IngSelect').val()){
-			jQuery('input[name="cant'+ i+'"]').val(parseInt(jQuery('input[name="cant'+ i+'"]').val()) + parseInt(jQuery('#cantidad').val()));
-			return true;
-		}
-	}
-	return false;
-}
 
 function CargarFormulario(Id){
-	jQuery('#count').val('0');
 	HCargarFormulario(Id);
 	jQuery('#IngDynamic > table > tbody > tr').remove();
-	cargarIng();
+	jQuery('#count').val('0');
+	HAjax({
+		url: contexto + "/Producto/Admin/cargarIng.html?",
+		data: {producto: jQuery('#id_producto').val()},
+		async: false,
+		method: 'cargarIng'
+	});
+	
+	HAjax({
+		url: contexto + "/Producto/Admin/ProdInCatalog.html?",
+		data: {producto: Id},
+		async: false,
+		method: 'productInCatalog'
+	});
 }
 
+function construirTabla(data){
+	var html = '';
+	var count = jQuery('#count').val();
+	var campoIng = data !== undefined && data['id_ingrediente'] !== undefined ? data['id_ingrediente'] : '';
+	var campoCant = data !== undefined && data['cantidad'] !== undefined ? data['cantidad'] : '';
+	var campoTipo = data !== undefined && data['id_tipo_peso'] !== undefined ? data['id_tipo_peso'] : '';
+	
+	html += '<tr>';
+	html += '<td>';
+		html += '<input type="text" class="form-control" id="ingredienteText" sec="idIng' + count + '"/>';
+		html += '<input type="hidden" value="' + campoIng + '" name="idIng" id="idIng' + count + '"/>';
+	html += '</td>';
+	html += '<td>';
+		html += '<input type="text" value="' + campoCant + '" class="form-control" name="cant"/>';
+	html += '</td>';
+	html += '<td>';
+		html += '<input type="text" value="' + campoTipo + '" class="form-control" name="tipo"/>';
+	html += '</td>';
+	html += '<td>';
+		html += '<a href="#" onclick="EliminarDet(this);"><i class="fa fa-times-circle fa-2x"></i></a>';
+	html += '</td>';
+	html += '</tr>';
+	
+	jQuery('#IngDynamic > table > tbody').append(html);
+	HiniciarAutocompletar(contexto + '/Producto/Admin/autocompletar.html?', 'ingredienteText');
+	jQuery( "input[id=ingredienteText]" ).autocomplete({
+		  select: function(e, ui) {
+		  this.value = ui.item.value;
+		  jQuery('#' + this.getAttribute('sec')).val(ui.item.id_ingrediente);
+		}
+	});
+}
 
-function cargarIng(){
-	jQuery.ajaxQueue({
-		url: contexto + "/Producto/Admin/cargarIng.html?",
-		 data:{producto: jQuery('#id_producto').val()},
-	}).done(function(result) {
-		var data; 
- 		try{ 
- 			data = jQuery.parseJSON(result); 
- 			data = data['dato'];
- 		} catch(err){ 
- 			console.log("Error ejecutando CargarIng" + err); 
-         	return; 
-         	jQuery('#dynamic').hide();
- 		} 
- 		
- 		var html = '';
+function cargarIng(data){
+	try{ 
+		data = data['dato'];
 		for(i in data){
 			jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);		
-			
-			html += '<tr>';
-			html += '<td><input type="text" value="'+data[i]['nombreIng']+'" class="fieldDynamic" readonly /><input type="hidden" name="idIng'+jQuery('#count').val()+'" value="'+data[i]['id_ingrediente']+'"/></td>';
-			html += '<td><input type="text" value="'+data[i]['cantidad']+'" class="fieldDynamic" readonly name="cant'+jQuery('#count').val()+'" /><input type="hidden" name="lote'+jQuery('#count').val()+'" value="'+data[i]['lote']+'"/></td>';
-			html += '<td class="hidden-xs"><input type="text" value="'+data[i]['nombreTp']+'" class="fieldDynamic" readonly /><input type="hidden" name="tipo'+jQuery('#count').val()+'" value="'+data[i]['id_tipo_peso']+'"/></td>';
-			html += '<td><buttton data-toggle="button" class="btn btn-white" onclick="EliminarDet(this);"><i class="fa fa-remove text-info"></i></button></td>';
-			html += '</tr>';
+			construirTabla(data[i]);
 		}
-		jQuery('#IngDynamic > table > tbody').append(html);
-	});
+	} catch(err){ 
+     	return; 
+	} 
 }
 
 function EliminarDet(option){
@@ -151,3 +115,21 @@ jQuery("#localImage").click(function() {
 	jQuery('#fileview').click();
 
 });
+
+function VCatalogo(){
+	var html = '';
+	for(i in LCatalogo){
+		html += '<option value='+LCatalogo[i]['id']+'>'+LCatalogo[i]['nombre']+'</option>';
+	}
+	return html;
+}
+
+function productInCatalog(data){
+	var html = '<select>' + VCatalogo() + '</select>';
+	jQuery('#detalleCatalog').html(html);
+	if(data !== undefined){
+		for(i in data){
+			data[i];
+		}
+	}
+}

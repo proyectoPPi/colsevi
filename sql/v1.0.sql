@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS COLSEVI;
-
-CREATE DATABASE COLSEVI;
+DROP DATABASE IF EXISTS colsevi;
+CREATE DATABASE colsevi;
+USER colsevi;
 
 CREATE TABLE establecimiento(
 	id_establecimiento INT AUTO_INCREMENT,
@@ -156,7 +156,7 @@ CREATE TABLE pago_proveedor(
     valor_pagado DECIMAL(12,2),
     observacion VARCHAR(150),
     PRIMARY KEY(id_pago_proveedor),
-	CONSTRAINT fk_PagoProv FOREIGN KEY (id_compra) REFERENCES compra(id_compra)
+	CONSTRAINT fk_PagoProv FOREIGN KEY (id_compra) REFERENCES compra_proveedor(id_compra_proveedor)
 );
 
 CREATE TABLE clasificar_ingrediente(
@@ -166,21 +166,33 @@ CREATE TABLE clasificar_ingrediente(
     PRIMARY KEY(id_clasificar_ingrediente)
 );
 
+CREATE TABLE unidad_medida(
+    id_unidad_medida INT AUTO_INCREMENT,
+	nombre VARCHAR(50) NOT NULL,
+    codigo VARCHAR(4) DEFAULT NULL,
+    UNIQUE (codigo),
+    PRIMARY KEY(id_unidad_medida)
+);
+
 CREATE TABLE ingrediente(
     id_ingrediente INT AUTO_INCREMENT,
     id_clasificar_ingrediente INT,
+    id_unidad_medida INT,
 	nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
     PRIMARY KEY(id_ingrediente),
-    CONSTRAINT fk_clasing FOREIGN KEY (id_clasificar_ingrediente) REFERENCES clasificar_ingrediente(id_clasificar_ingrediente)
+    CONSTRAINT fk_clasing FOREIGN KEY (id_clasificar_ingrediente) REFERENCES clasificar_ingrediente(id_clasificar_ingrediente),
+    CONSTRAINT fk_medidaIng FOREIGN KEY (id_unidad_medida) REFERENCES unidad_medida(id_unidad_medida)
 );
 
 CREATE TABLE unidad_peso(
     id_unidad_peso INT AUTO_INCREMENT,
+    id_unidad_medida INT NOT NULL,
 	nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
     codigo VARCHAR(4) DEFAULT NULL,
-    PRIMARY KEY(id_unidad_peso)
+    PRIMARY KEY(id_unidad_peso),
+    CONSTRAINT fk_unidadMedida FOREIGN KEY (id_unidad_medida) REFERENCES unidad_medida(id_unidad_medida)
 );
 
 CREATE TABLE materia_prima(
@@ -205,7 +217,7 @@ CREATE TABLE compra_x_ingrediente(
     fecha_vencimiento DATETIME,
     lote INT,
     PRIMARY KEY(id_compra,id_ingrediente),
-	CONSTRAINT fk_cxi FOREIGN KEY (id_compra) REFERENCES compra(id_compra),
+	CONSTRAINT fk_cxi FOREIGN KEY (id_compra) REFERENCES compra_proveedor(id_compra_proveedor),
     CONSTRAINT fk_icx FOREIGN KEY (id_ingrediente) REFERENCES ingrediente(id_ingrediente),
     CONSTRAINT fk_ucxi FOREIGN KEY (id_unidad_peso) REFERENCES unidad_peso(id_unidad_peso),
     CONSTRAINT fk_lcxi FOREIGN KEY (lote) REFERENCES materia_prima(lote)
@@ -249,6 +261,7 @@ CREATE TABLE producto(
     descripcion VARCHAR(120) DEFAULT NULL,
     venta DECIMAL(12,2),
     imagen VARCHAR (50) DEFAULT 'imagenFotoProducto.jpg',
+    cantidadMin INT NOT NULL,
     PRIMARY KEY(id_producto),
     UNIQUE (referencia),
     CONSTRAINT fk_tipo_producto_Producto FOREIGN KEY (id_tipo_producto) REFERENCES tipo_producto(id_tipo_producto)
@@ -419,6 +432,8 @@ CREATE TABLE inventario_x_materia(
 
 CREATE TABLE plato(
 	id_plato INT AUTO_INCREMENT,
-	PRIMARY KEY(id_plato),
-	 CONSTRAINT fk_invCom1 FOREIGN KEY (id_inventario) REFERENCES inventario(id_inventario),
+    id_establecimiento INT NOT NULL,
+    nombre VARCHAR(60) NOT NULL,
+    PRIMARY KEY(id_plato),
+    CONSTRAINT fk_estabPlato FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento)
 );
