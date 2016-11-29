@@ -42,7 +42,7 @@
 				</div>
 				
 				<div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-sm">
+					<div class="modal-dialog">
 						<div class="modal-content-wrap">
 							<form method="post" action="${pageContext.request.contextPath}/Ingrediente/Clasificar/Guardar.html?" id="formulario">
 								<div class="modal-content">
@@ -54,11 +54,11 @@
 										<input type="hidden" id="id_clasificar_ingrediente" name="id_clasificar_ingrediente"/>
 										<div class="form-group">
 											<label>*Nombre</label>
-											<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
+											<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true" required="required"/>
 										</div>
 										<div class="form-group">
 											<label>*Descripci&#243;n</label>
-											<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
+											<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true" required="required"/>
 										</div>
 									</div>
 									<div class="modal-footer">
