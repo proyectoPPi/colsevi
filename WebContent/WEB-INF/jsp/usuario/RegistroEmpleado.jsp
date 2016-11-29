@@ -6,11 +6,6 @@
 	<title>Empleado</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 	<link href="${pageContext.request.contextPath}/resources/css/estilosWizard.css" rel="stylesheet"/>
-	<style type="text/css">
-		.f1-step{
-			width: 50% !important;
-		}
-	</style>
 </head>
 <body>
 	<section class="page-wrapper">
@@ -28,7 +23,6 @@
 	                   		<div class="f1-steps">
 	                   			<div class="f1-progress">
 	                   			    	<div class="f1-progress-line" data-now-value="16.66" data-number-of-steps="4" style="width: 16.66%;"></div>
-	                   			    	<div class="f1-progress-line" data-now-value="50" data-number-of-steps="2" style="width: 50%;"></div>
 	                   			</div>
 	                   			<div class="f1-step active">
 	                   				<div class="f1-step-icon"><i class="fa fa-gear"></i></div>

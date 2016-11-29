@@ -47,12 +47,12 @@ function CargarFormulario(Id){
 		method: 'cargarIng'
 	});
 	
-	HAjax({
-		url: contexto + "/Producto/Admin/ProdInCatalog.html?",
-		data: {producto: Id},
-		async: false,
-		method: 'productInCatalog'
-	});
+//	HAjax({
+//		url: contexto + "/Producto/Admin/ProdInCatalog.html?",
+//		data: {producto: Id},
+//		async: false,
+//		method: 'productInCatalog'
+//	});
 }
 
 function construirTabla(data){
@@ -61,17 +61,18 @@ function construirTabla(data){
 	var campoIng = data !== undefined && data['id_ingrediente'] !== undefined ? data['id_ingrediente'] : '';
 	var campoCant = data !== undefined && data['cantidad'] !== undefined ? data['cantidad'] : '';
 	var campoTipo = data !== undefined && data['id_tipo_peso'] !== undefined ? data['id_tipo_peso'] : '';
+	var nombreIng = data !== undefined && data['nombreIng'] !== undefined ? data['nombreIng'] : '';
 	
 	html += '<tr>';
 	html += '<td>';
-		html += '<input type="text" class="form-control" id="ingredienteText" sec="idIng' + count + '"/>';
+		html += '<input type="text" class="form-control" id="ingredienteText" sec="idIng' + count + '" value="' + nombreIng + '"/>';
 		html += '<input type="hidden" value="' + campoIng + '" name="idIng" id="idIng' + count + '"/>';
 	html += '</td>';
 	html += '<td>';
 		html += '<input type="text" value="' + campoCant + '" class="form-control" name="cant"/>';
 	html += '</td>';
 	html += '<td>';
-		html += '<input type="text" value="' + campoTipo + '" class="form-control" name="tipo"/>';
+		html += '<select name="tipo" class="form-control">' + VMed(campoTipo) + '</select>';
 	html += '</td>';
 	html += '<td>';
 		html += '<a href="#" onclick="EliminarDet(this);"><i class="fa fa-times-circle fa-2x"></i></a>';
@@ -116,20 +117,13 @@ jQuery("#localImage").click(function() {
 
 });
 
-function VCatalogo(){
-	var html = '';
-	for(i in LCatalogo){
-		html += '<option value='+LCatalogo[i]['id']+'>'+LCatalogo[i]['nombre']+'</option>';
+function VMed(value){
+	var html = '<option value"0">Seleccione</option>';
+	for(i in LMedida){
+		if(value == LMedida[i]['id'])
+			html += '<option value='+LMedida[i]['id']+' selected>'+LMedida[i]['nombre']+'</option>';
+		else
+			html += '<option value='+LMedida[i]['id']+'>'+LMedida[i]['nombre']+'</option>';
 	}
 	return html;
-}
-
-function productInCatalog(data){
-	var html = '<select>' + VCatalogo() + '</select>';
-	jQuery('#detalleCatalog').html(html);
-	if(data !== undefined){
-		for(i in data){
-			data[i];
-		}
-	}
 }
