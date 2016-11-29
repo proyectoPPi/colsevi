@@ -114,11 +114,9 @@ public class TipoProductoController extends BaseConfigController {
 	public String validarGuardado(TipoProducto bean){
 		String error = "";
 		if(bean.getNombre() == null || bean.getNombre().trim().isEmpty()){
-			error = "Ingresar el Nombre<br/>";
+			error += "Ingresar el Nombre<br/>";
 		}
-		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
-			error = "Ingresar la descripción<br/>";
-		}
+		
 		
 		return error;
 	}
