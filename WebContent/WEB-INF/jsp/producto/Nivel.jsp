@@ -26,7 +26,7 @@
 				<section class="panel">
 					<div class="panel-body">
 						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-							<label>Nombre</label>
+							<label>*Nombre</label>
 							<input type="text" class="form-control" id="nombreF" name="filtro"/>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -57,10 +57,10 @@
 										<input type="hidden" id="id_dificultad_receta" name="id_dificultad_receta"/>
 										<div class="form-group">
 											<label>*Nombre</label>
-											<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
+											<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true" required="required"/>
 										</div>
 										<div class="form-group">
-											<label>*Descripci&#243;n</label>
+											<label>Descripci&#243;n</label>
 											<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
 										</div>
 										<div class="form-group">

@@ -114,9 +114,6 @@ public class DificultadRecetaController extends BaseConfigController {
 		if(bean.getNombre() == null || bean.getNombre().trim().isEmpty()){
 			error = "Ingresar el Nombre<br/>";
 		}
-		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
-			error = "Ingresar la descripción<br/>";
-		}
 		
 		return error;
 	}
