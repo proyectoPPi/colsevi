@@ -57,8 +57,8 @@
 											<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true" required="required"/>
 										</div>
 										<div class="form-group">
-											<label>*Descripci&#243;n</label>
-											<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true" required="required"/>
+											<label>Descripci&#243;n</label>
+											<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true" />
 										</div>
 									</div>
 									<div class="modal-footer">

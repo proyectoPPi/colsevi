@@ -26,11 +26,12 @@ import com.colsevi.dao.usuario.model.Usuario;
 import com.colsevi.dao.usuario.model.UsuarioExample;
 
 @Controller
+@RequestMapping("/Usuario/EmpleadoRegistro")
 public class EmpleadoRegistroController extends BaseConfigController{
 
 	private static final long serialVersionUID = -8946886707945498254L;
 	
-	@RequestMapping("/Usuario/EmpleadoRegistro")
+	@RequestMapping
 	public ModelAndView Registro(HttpServletRequest request, ModelMap model){
 		model.addAttribute("tipoDoc", GeneralManager.listaTipoDocumento());
 		String persona = request.getParameter("Persona");
@@ -40,7 +41,7 @@ public class EmpleadoRegistroController extends BaseConfigController{
 		return new ModelAndView("usuario/RegistroEmpleado","col", getValoresGenericos(request));
 	}
 	
-	@RequestMapping("/Usuario/ClienteEmpleado/Grabar")
+	@RequestMapping("/Grabar")
 	public ModelAndView Guardar(HttpServletRequest request, ModelMap model, ClienteBean bean){
 		
 		SqlSession sesion = null;

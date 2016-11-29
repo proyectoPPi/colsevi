@@ -104,16 +104,10 @@ public class ClasificarIngredienteController extends BaseConfigController {
 	}
 	
 	public String validarGuardado(ClasificarIngrediente bean){
-		String errorNombre = "";
-		String errorDescripcion ="";
 		String error = "";
 		if(bean.getNombre() == null || bean.getNombre().trim().isEmpty()){
-			errorNombre = "Ingresar el Nombre<br/>";
+			error = "Ingresar el Nombre<br/>";
 		}
-		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
-			errorDescripcion = "Ingresar la descripción<br/>";
-		}
-		error  =  errorNombre + errorDescripcion;
 		return error;
 	}
 	@RequestMapping("/Ingrediente/Clasificar/Eliminar")

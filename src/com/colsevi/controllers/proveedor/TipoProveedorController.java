@@ -72,7 +72,7 @@ public class TipoProveedorController extends BaseConfigController{
 		if(listTipoProv != null && listTipoProv.size() >0){
 			for (TipoProveedor bean : listTipoProv) {
 				opciones = new JSONObject();
-				opciones.put("id_TipoProveedor", bean.getId_tipo_proveedor());
+				opciones.put("id_tipo_proveedor", bean.getId_tipo_proveedor());
 				opciones.put("nombre", bean.getNombre());
 				opciones.put("descripcion", bean.getDescripcion());
 
@@ -94,10 +94,10 @@ public class TipoProveedorController extends BaseConfigController{
 			
 			if(bean.getId_tipo_proveedor() != null){
 				ColseviDao.getInstance().getTipoProveedorMapper().updateByPrimaryKey(bean);
-				modelo.addAttribute("correcto", "Ingrediente Actualizado");
+				modelo.addAttribute("correcto", "Tipo Proveedor Actualizado");
 			}else{
 				ColseviDao.getInstance().getTipoProveedorMapper().insert(bean);
-				modelo.addAttribute("correcto", "Ingrediente insertado");
+				modelo.addAttribute("correcto", "Tipo Proveedor insertado");
 			}
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
@@ -117,7 +117,7 @@ public class TipoProveedorController extends BaseConfigController{
 	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
 		
 		try{
-			Integer id = Integer.parseInt(request.getParameter("id_TipoProveedor"));
+			Integer id = Integer.parseInt(request.getParameter("id_tipo_proveedor"));
 			if(id != null){
 				
 				ProveedorExample Prov = new ProveedorExample();
@@ -127,7 +127,7 @@ public class TipoProveedorController extends BaseConfigController{
 					modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociada a un proveedor");
 				}else{
 					ColseviDao.getInstance().getTipoProveedorMapper().deleteByPrimaryKey(id);
-					modelo.addAttribute("correcto", "Establecimiento Eliminado");
+					modelo.addAttribute("correcto", "Tipo Proveedor Eliminado");
 				}
 			}
 		}catch(Exception e){
