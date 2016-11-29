@@ -107,7 +107,7 @@ public class IngredienteController extends BaseConfigController {
 				
 				if(bean.getId_unidad_medida() != null){
 					labels2.put("label",ColseviDao.getInstance().getUnidadMedidaMapper().selectByPrimaryKey(bean.getId_unidad_medida()).getNombre());
-					labels2.put("value", bean.getId_clasificar_ingrediente());
+					labels2.put("value", bean.getId_unidad_medida());
 					opciones.put("medida", labels2);
 				}else{
 					labels2.put("label", "");
@@ -161,6 +161,9 @@ public class IngredienteController extends BaseConfigController {
 		}
 		if(bean.getId_clasificar_ingrediente() == null || bean.getId_clasificar_ingrediente().equals(0)){
 			error += "Seleccionar una clasificación<br/>";
+		}
+		if(bean.getId_unidad_medida() == null || bean.getId_unidad_medida().equals(0)){
+			error += "Seleccionar unidad de Medida<br/>";
 		}
 		
 		return error;
