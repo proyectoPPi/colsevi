@@ -112,7 +112,7 @@ public class IngredienteController extends BaseConfigController {
 				}else{
 					labels2.put("label", "");
 					labels2.put("value", "0");
-					opciones.put("clasificar", labels2);
+					opciones.put("medida", labels2);
 				}
 				
 				resultado.add(opciones);
@@ -129,13 +129,13 @@ public class IngredienteController extends BaseConfigController {
 		
 		try{
 			bean.setId_clasificar_ingrediente(Integer.parseInt(request.getParameter("clasificar")));
+			bean.setId_unidad_medida(Integer.parseInt(request.getParameter("medida")));
 			
 			String error = validarGuardado(bean);
 			if(!error.isEmpty()){
 				modelo.addAttribute("error", error);
 				return Ingrediente(request, modelo);
 			}
-
 			
 			if(bean.getId_ingrediente() != null){
 				ColseviDao.getInstance().getIngredienteMapper().updateByPrimaryKey(bean);

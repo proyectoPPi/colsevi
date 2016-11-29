@@ -41,7 +41,12 @@ public class BaseConfigController implements Serializable {
 			
 			for(Pagina pag: listaPag){
 				if(pag.getMenu()){
-					menu += "<li class=\"dropdown\">";
+					
+					if(pag.getPadrePagina() != null && !pag.getPadrePagina().trim().isEmpty()){
+						menu += "<li class=\"dropdown\">";
+					}else{
+						menu += "<li>";
+					}
 					menu += "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\""+request.getContextPath()+pag.getUrl()+"\">"+
 							pag.getNombre()+"</a>";
 					

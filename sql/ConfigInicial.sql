@@ -22,14 +22,14 @@ INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripci
 INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(8,"Grasas y Aceites","Las grasas y aceites de origen vegetal o animal son triglicÃ©ridos o tambiÃ©n llamados Ã©steres de la glicerina.");
 INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(9,"azucares y dulces","azÃºcar, panela, miel, confites, bocadillo, arequipe, gaseosas, chocolatinas, etc.");
 
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, nombre, descripcion) VALUES(1,1,"arro","trigo");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, nombre, descripcion) VALUES(2,4,"filete merluza","filete");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, nombre, descripcion) VALUES(3,7,"crema de leche","crema de leche");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, nombre, descripcion) VALUES(4,3,"cebolla de huevo","cebolla de huevo");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, nombre, descripcion) VALUES(5,8,"sal","sal");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, nombre, descripcion) VALUES(6,2,"pimienta","pimienta");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, nombre, descripcion) VALUES(7,3,"orégano","orégano");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, nombre, descripcion) VALUES(8,3,"mostaza","mostaza");
+INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (1, 1, 1,"arro","trigo");
+INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (2, 4, 1,"filete merluza","filete");
+INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (3, 7, 2,"crema de leche","crema de leche");
+INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (4, 3, 1,"cebolla de huevo","cebolla de huevo");
+INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (5, 8, 1,"sal","sal");
+INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (6, 2, 1,"pimienta","pimienta");
+INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (7, 3, 1,"orégano","orégano");
+INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (8, 3, 1,"mostaza","mostaza");
 
 INSERT INTO tipo_telefono (id_tipo_telefono, nombre, descripcion) VALUES(1,"Celular","Celular");
 INSERT INTO tipo_telefono (id_tipo_telefono, nombre, descripcion) VALUES(2,"Fijo","Fijo");
