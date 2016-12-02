@@ -280,7 +280,7 @@ public class ProductoAdminController extends BaseConfigController {
 	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
 		
 		validarCatalogo(request);
-		SqlSession sesion = ColseviDaoTransaccion.getInstance();
+		SqlSession sesion = ColseviDaoTransaccion.getInstance("/TransaccionProducto.xml");
 		Producto bean = null;
 		List<IngredienteXProducto> listaIngProd = null;
 		List<Integer> ListaC = new ArrayList<Integer>(), ListaN = new ArrayList<Integer>();

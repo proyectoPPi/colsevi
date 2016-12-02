@@ -8,16 +8,18 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 public class ColseviDaoTransaccion {
-	
-	private static SqlSession current = null;
 
 	public static SqlSession getInstance() {
-		return current = ColseviDaoTransaccion();
+		return ColseviDaoTransaccion("/spring-mybatis-configTransaccion.xml");
 	}
 
-	private static SqlSession ColseviDaoTransaccion() {
+	public static SqlSession getInstance(String transaccion) {
+		return ColseviDaoTransaccion(transaccion);
+	}
+
+	private static SqlSession ColseviDaoTransaccion(String transaccion) {
 		try{
-			Reader reader = Resources.getResourceAsReader("/spring-mybatis-configTransaccion.xml");
+			Reader reader = Resources.getResourceAsReader(transaccion);
 			SqlSessionFactory sqlMapper = new SqlSessionFactoryBuilder().build(reader);
 			return sqlMapper.openSession();
 		}catch(Exception e){
