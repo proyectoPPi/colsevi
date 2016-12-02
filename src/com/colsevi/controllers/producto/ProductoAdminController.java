@@ -328,7 +328,7 @@ public class ProductoAdminController extends BaseConfigController {
 				CatalogoXProductoKey cxp = new CatalogoXProductoKey();
 				cxp.setId_catalogo(c);
 				cxp.setId_producto(bean.getId_producto());
-				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.catalogo.map.CatalogoXProductoMapper.insert", bean);
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.catalogo.map.CatalogoXProductoMapper.insert", cxp);
 			}
 		
 			ColseviDaoTransaccion.RealizarCommit(sesion);
