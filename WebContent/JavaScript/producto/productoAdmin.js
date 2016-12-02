@@ -26,6 +26,14 @@ function Limpiar(){
 	HLimpiar();
 	jQuery('#clasificar, #tipoP, #count').val(0);
 	jQuery('#IngDynamic > section > table > tbody > tr').remove();
+	jQuery('#count').val(1);
+	construirTabla();
+
+	HAjax({
+		url: contexto + "/Producto/Admin/ListaCatalogoPosibleProducto.html?",
+		async: false,
+		method: 'productInCatalog'
+	});
 }
 
 function Eliminar(){

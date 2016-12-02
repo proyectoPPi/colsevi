@@ -497,15 +497,17 @@ public class ProductoAdminController extends BaseConfigController {
 		List<Integer> catList = new ArrayList<Integer>();
 		
 		try{
-			mapa.put("producto", request.getParameter("producto"));
-			List<Map<String, Object>> listProdCatalog = ColseviDao.getInstance().getProductoMapper().ListaCatalogoPosibleProducto(mapa);
-			for(Map<String, Object> map: listProdCatalog ){
-				labels2 = new JSONObject();
-				catList.add(Integer.parseInt(map.get("id_catalogo").toString()));
-				labels2.put("id", map.get("id_catalogo"));
-				labels2.put("nombreC", map.get("nombre"));
-				labels2.put("select", "");
-				catalogo.add(labels2);
+			if(request.getParameter("producto") != null){
+				mapa.put("producto", request.getParameter("producto"));
+				List<Map<String, Object>> listProdCatalog = ColseviDao.getInstance().getProductoMapper().ListaCatalogoPosibleProducto(mapa);
+				for(Map<String, Object> map: listProdCatalog ){
+					labels2 = new JSONObject();
+					catList.add(Integer.parseInt(map.get("id_catalogo").toString()));
+					labels2.put("id", map.get("id_catalogo"));
+					labels2.put("nombreC", map.get("nombre"));
+					labels2.put("select", "");
+					catalogo.add(labels2);
+				}
 			}
 			
 			CatalogoExample EX = new CatalogoExample();
