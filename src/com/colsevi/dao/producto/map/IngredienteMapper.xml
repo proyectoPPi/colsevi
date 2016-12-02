@@ -286,7 +286,7 @@
     where id_ingrediente = #{id_ingrediente,jdbcType=INTEGER}
   </update>
   <select id="SelectAutocomplete" parameterType="java.util.Map" resultType="java.util.HashMap">
-  	SELECT ing.id_ingrediente, ing.nombre AS nombreIng, ing.descripcion AS descripIng,
+  	SELECT ing.id_ingrediente, ing.nombre AS nombreIng, ing.descripcion AS descripIng, ing.id_unidad_medida,
 		clas.id_clasificar_ingrediente, clas.nombre AS nombreClas, clas.descripcion AS descripClas
 	FROM ingrediente ing
 	LEFT JOIN clasificar_ingrediente clas ON ing.id_clasificar_ingrediente = clas.id_clasificar_ingrediente

@@ -66,4 +66,5 @@ public interface ProductoMapper {
 	int updateByPrimaryKey(Producto record);
 	List<Map<String, Object>> SelectAutocomplete(Map<String, Object> map);
 	List<Map<String, Object>> ProdInCatalog(Map<String, Object> map);
+	List<Map<String, Object>> ListaCatalogoPosibleProducto(Map<String, Object> map);
 }

@@ -216,16 +216,6 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/proveedor/Compra.js"></script>
 	<script type="text/javascript">
 	
-		var LPeso = [];
-		<c:forEach var="tipo" items="${listaTipoPeso}" varStatus="status">
-		
-			var unidad = {
-			    "id": '${tipo.id_unidad_peso}',
-			    "nombre": '${tipo.nombre}' 
-			};
-			LPeso.push(unidad);
-		</c:forEach>
-
 		titulos = new Array();
 		titulos["id_compra"] = "ID";
 		titulos["compra"] = "Secuencia compra";

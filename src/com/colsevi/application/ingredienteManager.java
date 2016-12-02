@@ -42,6 +42,7 @@ public class ingredienteManager {
 				opciones.put("label", map.get("nombreIng"));
 				opciones.put("value", map.get("nombreIng"));
 				opciones.put("id_ingrediente", map.get("id_ingrediente"));
+				opciones.put("id_unidad_medida", map.get("id_unidad_medida"));
 				opciones.put("descripIng", map.get("descripIng"));
 				opciones.put("id_clasificar_ingrediente", map.get("id_clasificar_ingrediente"));
 				opciones.put("nombreClas", map.get("nombreClas"));

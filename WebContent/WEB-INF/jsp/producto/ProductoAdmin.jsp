@@ -164,7 +164,9 @@
 							                                  </div>
 							                                  
 							                                  <div id="Catalog" class="tab-pane">
-							                                  	<div class="col-lg-12" id="detalleCatalog"></div>
+							                                  	<input type="hidden" id="catalogActive" name="catalogActive" />
+							                                  	<input type="hidden" id="catalogNoActive" name="catalogNoActive" />
+							                                  	<div id="detalleCatalog"></div>
 							                                  </div>
 							                                  
 							                              </div>
@@ -175,8 +177,8 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-										<button class="btn btn-warning" type="submit">Guardar</button>
-										<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpliar();">Cerrar</button>
+										<button class="btn btn-warning" type="submit" onclick="preprocesar();">Guardar</button>
+										<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 										<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 									</div>
 								</div>
@@ -192,15 +194,6 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/producto/productoAdmin.js"></script>
 	<script type="text/javascript">
 	
-		var LMedida = [];
-		<c:forEach var="med" items="${listaMedida}">
-			var med = {
-			    "id": '${med.id_unidad_medida}',
-			    "nombre": '${med.nombre}' 
-			};
-			LMedida.push(med);
-		</c:forEach>
-		
 		titulos = new Array();
 		titulos["id_producto"] = "ID";
 		titulos["referencia"] = "Referencia";

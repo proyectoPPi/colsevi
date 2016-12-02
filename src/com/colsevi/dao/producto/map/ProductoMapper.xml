@@ -350,4 +350,10 @@
 		
 		WHERE prod.id_producto = #{producto};
 	</select>
+	<select id="ListaCatalogoPosibleProducto" parameterType="java.util.Map" resultType="java.util.HashMap">
+		SELECT cat.id_catalogo, cat.nombre  FROM catalogo cat
+		LEFT JOIN catalogo_x_producto cxp ON cxp.id_catalogo = cat.id_catalogo
+		LEFT JOIN producto prod ON prod.id_producto = cxp.id_producto
+		WHERE cxp.id_producto = #{producto};	
+	</select>
 </mapper>

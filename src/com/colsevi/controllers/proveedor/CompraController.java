@@ -27,6 +27,8 @@ import com.colsevi.application.ProveedorManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.application.ingredienteManager;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.dao.general.model.UnidadPeso;
+import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.dao.inventario.model.MateriaPrimaExample;
 import com.colsevi.dao.inventario.model.MovimientoMateriaExample;
@@ -43,7 +45,6 @@ public class CompraController extends BaseConfigController {
 	@RequestMapping("/Proveedor/Compra")
 	public ModelAndView Compra(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaProveedores", ProveedorManager.getProveedores());
-		model.addAttribute("listaTipoPeso", ProductoManager.getTipoPeso());
 		model.addAttribute("listaEstablecimiento", GeneralManager.getEstablecimientos());
 		
 		if(request.getParameter("Compra") != null){
@@ -499,6 +500,7 @@ public class CompraController extends BaseConfigController {
 				opciones = new JSONObject();
 				opciones.put("id_ingrediente", map.get("id_ingrediente"));
 				opciones.put("id_tipo_peso", map.get("id_unidad_peso"));
+				opciones.put("id_unidad_medida", map.get("id_unidad_medida"));
 				opciones.put("nombreIng", map.get("nombreIng"));
 				opciones.put("nombreTp", map.get("nombreTp"));
 				opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FechaStringConHora_Vista(map.get("fecha_vencimiento").toString()) : "");
@@ -506,6 +508,21 @@ public class CompraController extends BaseConfigController {
 				opciones.put("iva", map.get("iva") != null ? map.get("iva") : "");
 				opciones.put("vunitario", map.get("vunitario") != null ? map.get("vunitario") : "");
 				opciones.put("lote", map.get("lote"));
+				
+				String html = "<option value='0'>Seleccione</option>";
+				if(map.get("id_unidad_medida") != null){
+					UnidadPesoExample UPX = new UnidadPesoExample();
+					UPX.createCriteria().andId_unidad_medidaEqualTo(Integer.parseInt(map.get("id_unidad_medida").toString()));
+					List<UnidadPeso> listaPeso = ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(UPX);
+					for(UnidadPeso bean: listaPeso){
+						if(bean.getId_unidad_peso().equals(map.get("id_unidad_peso"))){
+							html += "<option value='" + bean.getId_unidad_peso() + "' selected>" + bean.getNombre() + "</option>";
+						}else{
+							html += "<option value='" + bean.getId_unidad_peso() + "'>" + bean.getNombre() + "</option>";
+						}
+					}
+				}
+				opciones.put("medida", html);
 				
 				resultado.add(opciones);
 				
@@ -515,4 +532,30 @@ public class CompraController extends BaseConfigController {
 		}
 		return resultado;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Proveedor/Compra/MedidaDetalle")
+	public void MedidaDetalle(HttpServletRequest request, HttpServletResponse response){
+		try{
+			JSONObject opt = new JSONObject();
+			JSONArray result = new JSONArray();
+			Integer medida = Integer.parseInt(request.getParameter("medida"));
+
+			UnidadPesoExample UPX = new UnidadPesoExample();
+			UPX.createCriteria().andId_unidad_medidaEqualTo(medida);
+			List<UnidadPeso> listaPeso = ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(UPX);
+			for(UnidadPeso bean: listaPeso){
+				opt = new JSONObject();
+				opt.put("id", bean.getId_unidad_peso());
+				opt.put("nombre", bean.getNombre());
+				
+				result.add(opt);
+			}
+			
+			ResponseArray(request, response, result);
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+	}
+
 }

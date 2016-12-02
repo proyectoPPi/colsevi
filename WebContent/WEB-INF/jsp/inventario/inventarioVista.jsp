@@ -91,7 +91,7 @@
 							                                  <div id="producto" class="tab-pane active">
 							                                  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 									                                 <label>*Producto</label>
-						                                              <input type="text" id="nombreProd" name="nombreProd" class="form-control" readonly/>
+						                                              <input type="text" id="nombreProd" name="nombreProd" class="form-control"/>
 																</div>
 																<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 																	<label>*Cantidad</label>

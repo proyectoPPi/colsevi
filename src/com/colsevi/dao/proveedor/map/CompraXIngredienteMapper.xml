@@ -335,7 +335,7 @@
   
 	<select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
 		SELECT cxi.id_ingrediente, cxi.id_unidad_peso, ing.nombre AS nombreIng, tp.nombre AS nombreTp, mp.fecha_vencimiento, 
-			cxi.lote, cxi.cantidad, cxi.iva, cxi.vunitario
+			cxi.lote, cxi.cantidad, cxi.iva, cxi.vunitario, ing.id_unidad_medida
 		FROM compra_proveedor com
 		INNER JOIN compra_x_ingrediente cxi ON cxi.id_compra = com.id_compra_proveedor
         LEFT JOIN materia_prima mp ON mp.lote = cxi.lote 

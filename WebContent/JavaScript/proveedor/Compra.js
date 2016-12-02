@@ -2,14 +2,6 @@ jQuery(document).ready(function(){
 	Tabla();
 });
 
-function construirSelectTipoPeso(){
-	var html = '';
-	for(i in LPeso){
-		html += '<option value='+LPeso[i]['id']+'>'+LPeso[i]['nombre']+'</option>';
-	}
-	return html;
-}
-
 jQuery('#adicion').click(function(){
 	jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);
 	construirTbl();
@@ -20,6 +12,7 @@ function inicialTabla(){
 }
 
 function construirTbl(data){
+	var medida = data !== undefined && data['medida'] !== undefined ? data['medida'] : ''; 
 	var count = jQuery('#count').val();
 	var html ='<tr>';
 	html += '<td>';
@@ -31,7 +24,7 @@ function construirTbl(data){
 		html += '<input type="hidden" name="lote' + count + '" />';
 	html += '</td>';
 	html += '<td>';
-		html += '<select name="tipo' + count + '" class="form-control">' + construirSelectTipoPeso() + '</select>';
+		html += '<select name="tipo' + count + '" class="form-control">' + medida + '</select>';
 	html += '</td>';
 	html += '<td>';
 		html += '<input type="text" name="fecha' + count + '" data-field="date" data-format="yyyy-MM-dd" class="form-control"/>';
@@ -63,6 +56,24 @@ function construirTbl(data){
 		  select: function(e, ui) {
 		  this.value = ui.item.value;
 		  jQuery('#' + this.getAttribute('sec')).val(ui.item.id_ingrediente);
+		  var dit = this;
+		  
+		  jQuery.ajaxQueue({
+				url: contexto + "/Proveedor/Compra/MedidaDetalle.html?",
+				 data:{medida: ui.item.id_unidad_medida},
+			}).done(function(result) {
+				var data; 
+		 		try{ 
+		 			data = jQuery.parseJSON(result); 
+		 		} catch(err){ 
+		         	return; 
+		 		} 
+		 		var html = '<option value"0">Seleccione</option>';
+		 		for(i in data){
+		 			html += '<option value="' + data[i]['id'] + '" >' + data[i]['nombre'] + '</option>';
+		 		}
+		 		dit.parentNode.parentNode.childNodes[2].querySelector('select').innerHTML = html;
+			});
 		}
 	});
 }
@@ -113,12 +124,6 @@ function CargarFormulario(Id){
 	HCargarFormulario(Id);
 //	jQuery('#valorsin').val(BuscarRegistro(Id)['valorsin']);
 }
-
-jQuery('#carga').click(function(){
-	jQuery('#IngDynamic > section > table > tbody > tr').remove();
-	jQuery('#count').val('0');
-	cargarIng();
-});
 
 function cargarIng(){
 	jQuery.ajaxQueue({

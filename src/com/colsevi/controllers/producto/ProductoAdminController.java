@@ -21,11 +21,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
+import com.colsevi.application.GeneralManager;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.application.ingredienteManager;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.dao.catalogo.model.Catalogo;
+import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoExample;
+import com.colsevi.dao.catalogo.model.CatalogoXProductoKey;
+import com.colsevi.dao.general.model.Establecimiento;
+import com.colsevi.dao.general.model.UnidadPeso;
+import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.inventario.model.InventarioExample;
 import com.colsevi.dao.pedido.model.DetallePedidoExample;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
@@ -44,7 +51,6 @@ public class ProductoAdminController extends BaseConfigController {
 	@RequestMapping
 	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipo", ProductoManager.tipoProducto());
-		model.addAttribute("listaMedida", ProductoManager.getMedida());
 		
 		try{
 			if(request.getParameter("producto") != null && !request.getParameter("producto").trim().isEmpty()){
@@ -204,7 +210,7 @@ public class ProductoAdminController extends BaseConfigController {
 				
 		}catch(Exception e){
 			logger.error(e.getMessage());
-			error += "Contactar al administrador";
+			error = "Contactar al administrador";
 		}
 		
 		obj[0] = error;
@@ -214,13 +220,70 @@ public class ProductoAdminController extends BaseConfigController {
 		return obj;
 	}
 	
+	public Object[] validarCatalogo(HttpServletRequest request){
+		Object[] obj = new Object[3];
+		String result = "";
+		List<Integer> ListaC = new ArrayList<Integer>(), ListaN = new ArrayList<Integer>();
+		try{
+			String checked = request.getParameter("catalogActive");
+			String Nochecked = request.getParameter("catalogNoActive");
+			
+			if(checked != null && !checked.isEmpty()){
+				String[] c = checked.split(",");
+				for(String ch: c){
+					ListaC.add(Integer.parseInt(ch));
+				}
+			}
+			
+			if(Nochecked != null && !Nochecked.isEmpty()){
+				String[] n = Nochecked.split(",");
+				for(String ch: n){
+					ListaN.add(Integer.parseInt(ch));
+				}
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			result = "Contactar al administrador";
+		}
+		
+		obj[0] = result;
+		obj[1] = ListaC;
+		obj[2] = ListaN;
+		
+		return obj;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/preprocesador")
+	public void preprocesador(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
+		try{
+			Object[] validacion = validarGuardar(request);
+			
+			if(!validacion[0].toString().isEmpty()){
+				result.put("error", validacion[0]);
+			}
+			validacion = validarCatalogo(request);
+			if(!validacion[0].toString().isEmpty()){
+				result.put("error", validacion[0]);
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			result.put("error", "Contactar al administrador");
+		}
+		
+		ResponseJson(request, response, result);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/Guardar")
 	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
 		
+		validarCatalogo(request);
 		SqlSession sesion = ColseviDaoTransaccion.getInstance();
 		Producto bean = null;
 		List<IngredienteXProducto> listaIngProd = null;
+		List<Integer> ListaC = new ArrayList<Integer>(), ListaN = new ArrayList<Integer>();
 		Object[] obj = validarGuardar(request);
 		
 		try{
@@ -231,6 +294,14 @@ public class ProductoAdminController extends BaseConfigController {
 			}
 			bean = (Producto) obj[1];
 			listaIngProd = (List<IngredienteXProducto>) obj[2];
+			
+			obj = validarCatalogo(request);
+			if(obj[0] != null && !obj[0].toString().isEmpty()){
+				modelo.addAttribute("error", obj[0]);
+				return Producto(request, modelo);
+			}
+			ListaC = (List<Integer>) obj[1];
+			ListaN = (List<Integer>) obj[2];
 			
 			if(bean.getId_producto() != null){
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.producto.map.ProductoMapper.updateByPrimaryKeySelective", bean);
@@ -247,6 +318,17 @@ public class ProductoAdminController extends BaseConfigController {
 			for(IngredienteXProducto ingProd : listaIngProd){
 				ingProd.setId_producto(bean.getId_producto());
 				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.producto.map.IngredienteXProductoMapper.insertSelective", ingProd);
+			}
+			
+			CatalogoXProductoExample CXPE = new CatalogoXProductoExample();
+			CXPE.createCriteria().andId_productoEqualTo(bean.getId_producto());
+			ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.catalogo.map.CatalogoXProductoMapper.deleteByExample", CXPE);
+			
+			for(Integer c: ListaC){
+				CatalogoXProductoKey cxp = new CatalogoXProductoKey();
+				cxp.setId_catalogo(c);
+				cxp.setId_producto(bean.getId_producto());
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.catalogo.map.CatalogoXProductoMapper.insert", bean);
 			}
 		
 			ColseviDaoTransaccion.RealizarCommit(sesion);
@@ -338,9 +420,25 @@ public class ProductoAdminController extends BaseConfigController {
 				opciones = new JSONObject();
 				opciones.put("id_ingrediente", map.get("id_ingrediente"));
 				opciones.put("id_tipo_peso", map.get("id_unidad_peso"));
+				opciones.put("id_unidad_medida", map.get("id_unidad_medida"));
 				opciones.put("nombreIng", map.get("nombreIng"));
 				opciones.put("nombreTp", map.get("nombreTp"));
 				opciones.put("cantidad", map.get("cantidad"));
+
+				String html = "<option value='0'>Seleccione</option>";
+				if(map.get("id_unidad_medida") != null){
+					UnidadPesoExample UPX = new UnidadPesoExample();
+					UPX.createCriteria().andId_unidad_medidaEqualTo(Integer.parseInt(map.get("id_unidad_medida").toString()));
+					List<UnidadPeso> listaPeso = ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(UPX);
+					for(UnidadPeso bean: listaPeso){
+						if(bean.getId_unidad_peso().equals(map.get("id_unidad_peso"))){
+							html += "<option value='" + bean.getId_unidad_peso() + "' selected>" + bean.getNombre() + "</option>";
+						}else{
+							html += "<option value='" + bean.getId_unidad_peso() + "'>" + bean.getNombre() + "</option>";
+						}
+					}
+				}
+				opciones.put("medida", html);
 				
 				resultado.add(opciones);
 				
@@ -351,64 +449,82 @@ public class ProductoAdminController extends BaseConfigController {
 		return resultado;
 	}
 	
-	@RequestMapping("/buscarProd")
-	public void auto(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		JSONObject result = new JSONObject();
-
-		try{
-			String producto = request.getParameter("campo");
-			result = ProductoManager.AutocompletarProducto(producto);
-
-			if(result == null)
-				result = new JSONObject();
-		}catch(Exception e){
-			logger.error(e.getMessage());
-		}
-		ResponseJson(request, response, result);
-	}
-	
 	@RequestMapping("/autocompletar")
 	public void autoIng(HttpServletRequest request, HttpServletResponse response){
 		try{
 			JSONObject result = new JSONObject();
-			
 			String ing = request.getParameter("campo");
 			result = ingredienteManager.AutocompletarIngrediente(ing);
 			
-			if(result != null){
-				response.setContentType("text/html;charset=ISO-8859-1");
-				request.setCharacterEncoding("UTF8");
-				
-				result.writeJSONString(response.getWriter());
-			}
+			if(result != null)
+				ResponseJson(request, response, result);
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/ProdInCatalog")
-	public void ProdInCatalog(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		JSONObject result = new JSONObject();
-		JSONArray options = new JSONArray();
+	@RequestMapping("/MedidaDetalle")
+	public void MedidaDetalle(HttpServletRequest request, HttpServletResponse response){
+		try{
+			JSONObject opt = new JSONObject();
+			JSONArray result = new JSONArray();
+			Integer medida = Integer.parseInt(request.getParameter("medida"));
+
+			UnidadPesoExample UPX = new UnidadPesoExample();
+			UPX.createCriteria().andId_unidad_medidaEqualTo(medida);
+			List<UnidadPeso> listaPeso = ColseviDao.getInstance().getUnidadPesoMapper().selectByExample(UPX);
+			for(UnidadPeso bean: listaPeso){
+				opt = new JSONObject();
+				opt.put("id", bean.getId_unidad_peso());
+				opt.put("nombre", bean.getNombre());
+				
+				result.add(opt);
+			}
+			
+			ResponseArray(request, response, result);
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/ListaCatalogoPosibleProducto")
+	public void ListaCatalogoPosibleProducto(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONArray catalogo = new JSONArray();
+		JSONObject labels2 = new JSONObject();
 		Map<String, Object> mapa = new HashMap<String, Object>();
+		List<Integer> catList = new ArrayList<Integer>();
 		
 		try{
 			mapa.put("producto", request.getParameter("producto"));
-			List<Map<String, Object>> listProdCatalog = ColseviDao.getInstance().getProductoMapper().ProdInCatalog(mapa);
-			if(listProdCatalog != null && listProdCatalog.size() > 0){
-				Map<String, Object> map = listProdCatalog.get(0);
-				String[] Array = map.get("id_catalogo").toString().split(",");
-				for(String sub: Array){
-					options.add(sub);
-				}
+			List<Map<String, Object>> listProdCatalog = ColseviDao.getInstance().getProductoMapper().ListaCatalogoPosibleProducto(mapa);
+			for(Map<String, Object> map: listProdCatalog ){
+				labels2 = new JSONObject();
+				catList.add(Integer.parseInt(map.get("id_catalogo").toString()));
+				labels2.put("id", map.get("id_catalogo"));
+				labels2.put("nombreC", map.get("nombre"));
+				labels2.put("select", "");
+				catalogo.add(labels2);
 			}
-			result.put("datos", options);			
+			
+			CatalogoExample EX = new CatalogoExample();
+			CatalogoExample.Criteria criteria = (CatalogoExample.Criteria) EX.createCriteria();
+			if(catList.size() > 0)
+				criteria.andId_catalogoNotIn(catList);
+			List<Catalogo> listaCat = ColseviDao.getInstance().getCatalogoMapper().selectByExample(EX);
+			for(Catalogo cat: listaCat){
+				labels2 = new JSONObject();
+				labels2.put("id", cat.getId_catalogo());
+				labels2.put("nombreC", cat.getNombre());
+				catalogo.add(labels2);
+			}
+			
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
 		
-		ResponseJson(request, response, result);
+		ResponseArray(request, response, catalogo);
 	}
 	
 }

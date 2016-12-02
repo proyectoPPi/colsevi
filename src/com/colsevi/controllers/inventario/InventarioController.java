@@ -76,10 +76,7 @@ public class InventarioController extends BaseConfigController {
 			logger.error(e.getMessage());
 		}
 		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		opciones.writeJSONString(response.getWriter());
+		ResponseJson(request, response, opciones);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -139,10 +136,7 @@ public class InventarioController extends BaseConfigController {
 			logger.error(e.getMessage());
 		}
 		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-
-		opciones.writeJSONString(response.getWriter());
+		ResponseJson(request, response, opciones);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -587,7 +581,7 @@ public class InventarioController extends BaseConfigController {
 			result.put("error", "Contactar al administrador");
 		}
 		
-		result.writeJSONString(response.getWriter());
+		ResponseJson(request, response, result);
 	}
 	
 	@RequestMapping("/Inventario/Inv/buscarProd")
@@ -599,7 +593,7 @@ public class InventarioController extends BaseConfigController {
 			result = ProductoManager.AutocompletarProducto(producto);
 
 			if(result != null){
-				result.writeJSONString(response.getWriter());
+				ResponseJson(request, response, result);
 			}
 			
 		}catch(Exception e){
