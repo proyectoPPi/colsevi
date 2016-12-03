@@ -21,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
-import com.colsevi.application.GeneralManager;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.application.ingredienteManager;
@@ -30,7 +29,6 @@ import com.colsevi.dao.catalogo.model.Catalogo;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoKey;
-import com.colsevi.dao.general.model.Establecimiento;
 import com.colsevi.dao.general.model.UnidadPeso;
 import com.colsevi.dao.general.model.UnidadPesoExample;
 import com.colsevi.dao.inventario.model.InventarioExample;
@@ -285,6 +283,7 @@ public class ProductoAdminController extends BaseConfigController {
 		List<IngredienteXProducto> listaIngProd = null;
 		List<Integer> ListaC = new ArrayList<Integer>();
 		Object[] obj = validarGuardar(request);
+		Map<String, Object> mapa = new HashMap<String, Object>();
 		
 		try{
 			 
@@ -319,9 +318,8 @@ public class ProductoAdminController extends BaseConfigController {
 				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.producto.map.IngredienteXProductoMapper.insertSelective", ingProd);
 			}
 			
-			CatalogoXProductoExample CXPE = new CatalogoXProductoExample();
-			CXPE.createCriteria().andId_productoEqualTo(bean.getId_producto());
-			ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.catalogo.map.CatalogoXProductoMapper.deleteByExample", CXPE);
+			mapa.put("producto", bean.getId_producto());
+			ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.catalogo.map.CatalogoXProductoMapper.deleteDetalleCat", mapa);
 			
 			for(Integer c: ListaC){
 				CatalogoXProductoKey cxp = new CatalogoXProductoKey();

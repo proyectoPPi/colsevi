@@ -46,7 +46,7 @@ function productInCatalog(data){
 		var html = '';
 		for(i in data){
 				html += '<div class="col-xs-6 col-lg-2"><label>';
-				html += '<input type="checkbox" value="'+data[i]['id']+'" name="producto"';
+				html += '<input type="checkbox" value="'+data[i]['id']+'" name="catalogo"';
 				data[i]['select'] !== undefined ? html += ' checked' : '';
 				html += '>' + data[i]['nombre'] + '</label></div>';
 		}

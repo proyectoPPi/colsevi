@@ -3,6 +3,8 @@ package com.colsevi.dao.catalogo.map;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoExample;
 import com.colsevi.dao.catalogo.model.CatalogoXProductoKey;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface CatalogoXProductoMapper {
@@ -56,4 +58,7 @@ public interface CatalogoXProductoMapper {
 	 */
 	int updateByExample(@Param("record") CatalogoXProductoKey record,
 			@Param("example") CatalogoXProductoExample example);
+	
+	int deleteDetalleProd(Map<String, Object> map);
+	int deleteDetalleCat(Map<String, Object> map);
 }

@@ -177,6 +177,8 @@ public class CatalogoController extends BaseConfigController{
 	public ModelAndView GuardarCatalogo(HttpServletRequest request, ModelMap modelo, Catalogo bean){
 		String error = "";
 		List<Integer> ListaP = new ArrayList<Integer>();
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		SqlSession sesion = ColseviDaoTransaccion.getInstance("/TransaccionCatalogo.xml");
 
 		try{
 			
@@ -196,8 +198,6 @@ public class CatalogoController extends BaseConfigController{
 			
 			ListaP = (List<Integer>) result[1];
 			
-			SqlSession sesion = ColseviDaoTransaccion.getInstance("/TransaccionCatalogo.xml");
-			
 			if(bean.getId_catalogo() != null){
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.catalogo.map.CatalogoMapper.updateByPrimaryKeySelective", bean);
 				modelo.addAttribute("correcto", "Catalogo Actualizado");
@@ -206,20 +206,22 @@ public class CatalogoController extends BaseConfigController{
 				modelo.addAttribute("correcto", "Catalogo insertado");
 			}
 			
-			CatalogoXProductoExample CXPE = new CatalogoXProductoExample();
-			CXPE.createCriteria().andId_productoEqualTo(bean.getId_catalogo());
-			ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.catalogo.map.CatalogoXProductoMapper.deleteByExample", CXPE);
+			mapa.put("catalogo", bean.getId_catalogo());
+			ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.catalogo.map.CatalogoXProductoMapper.deleteDetalleProd", mapa);
 			
 			for(Integer c: ListaP){
 				CatalogoXProductoKey cxp = new CatalogoXProductoKey();
-				cxp.setId_catalogo(c);
-				cxp.setId_producto(bean.getId_catalogo());
-				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.catalogo.map.CatalogoXProductoMapper.insert", cxp);
+				cxp.setId_catalogo(bean.getId_catalogo());
+				cxp.setId_producto(c);
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.catalogo.map.CatalogoXProductoMapper.insertSelective", cxp);
 			}
+			ColseviDaoTransaccion.RealizarCommit(sesion);
 		}catch (Exception e) {
 			logger.error(e.getMessage());
 			modelo.addAttribute("error", "Contactar al administrador");
+			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
+		ColseviDaoTransaccion.CerrarSesion(sesion);
 		return Catalogo(request, modelo);
 	}
 	
@@ -285,6 +287,7 @@ public class CatalogoController extends BaseConfigController{
 				mapa.put("catalogo", request.getParameter("catalogo"));
 				List<Map<String, Object>> listProdCatalog = ColseviDao.getInstance().getCatalogoMapper().ListaCatalogoPosibleProducto(mapa);
 				for(Map<String, Object> map: listProdCatalog ){
+					if(map == null) break;
 					labels2 = new JSONObject();
 					prodL.add(Integer.parseInt(map.get("id_producto").toString()));
 					labels2.put("id", map.get("id_producto"));

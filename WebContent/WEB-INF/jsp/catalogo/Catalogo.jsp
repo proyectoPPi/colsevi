@@ -117,7 +117,7 @@
                    						</div>	
 									</div>
 									<div class="modal-footer">
-										<button class="btn btn-warning" type="submit">Guardar</button>
+										<button class="btn btn-warning" type="submit" onclick="preprocesar();">Guardar</button>
 										<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 										<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 									</div>
