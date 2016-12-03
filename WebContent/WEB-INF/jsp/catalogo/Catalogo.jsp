@@ -35,14 +35,14 @@
 							<label>Nombre</label>
 							<input type="text" class="form-control" id="nombreF" name="filtro"/>
 						</div>
-						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-							<label>Descripción</label>
-							<input type="text" class="form-control" id="descripcionF" name="filtro"/>
-						</div>
-						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-							<label>Vigente</label>
-                            	<input type="checkbox" style="width: 20px" class="checkbox form-control" id="vigenteF" name="filtro">
-						</div>
+<!-- 						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"> -->
+<!-- 							<label>Descripción</label> -->
+<!-- 							<input type="text" class="form-control" id="descripcionF" name="filtro"/> -->
+<!-- 						</div> -->
+<!-- 						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"> -->
+<!-- 							<label>Vigente</label> -->
+<!--                             	<input type="checkbox" style="width: 20px" class="checkbox form-control" id="vigenteF" name="filtro"> -->
+<!-- 						</div> -->
 						<div class="col-xs-12 col-md-12 col-lg-12"><br/>
 							<button class="btn btn-button" onclick="Tabla(1);">Filtrar</button>
 						</div>	
@@ -80,19 +80,19 @@
 							                              </ul>
 							                          </header>
 							                          <div class="panel-body">
-							                              <div class="tab-content">
+							                              <div class="tab-content"> 
 							                                  <div id="general" class="tab-pane active">
 							                                  	 <div class="form-group">
 																	<label>*Nombre</label>
-																	<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
+																	<input type="text" class="form-control" id="nombre" name="nombre" required="required" data-bv-notempty="true"/>
 																</div>
 																<div class="form-group">
 																	<label>*Descripci&#243;n</label>
-																	<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
+																	<input type="text" class="form-control" id="descripcion" required="required"  name="descripcion" data-bv-notempty="true"/>
 																</div>
 																<div class="form-group">
-																	<label>Establecimiento</label>
-																	<select class="form-control" id="est" name="est">
+																	<label>*Establecimiento</label>
+																	<select class="form-control" id="est" name="est" required="required">
 																		<option value="0">Seleccione</option>
 																			<c:forEach items="${listaEst}" var="est">
 																				<option value="${est.id_establecimiento}">${est.nombre}</option>

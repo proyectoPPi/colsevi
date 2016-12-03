@@ -72,16 +72,16 @@
 											<input type="hidden" id="id_ingrediente" name="id_ingrediente"/>
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 												<label>*Nombre</label>
-												<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
+												<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true" required="required"/>
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 												<label>*Descripci&#243;n</label>
-												<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
+												<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true" required="required"/>
 											</div>
 										
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 												<label>Clasificar</label>
-												<select class="form-control" id="clasificar" name="clasificar">
+												<select class="form-control" id="clasificar" name="clasificar" required="required">
 													<option value="0">Seleccione</option>
 													<c:forEach items="${listaClasificar}" var="clasificar">
 														<option value="${clasificar.id_clasificar_ingrediente}">${clasificar.nombre}</option>
@@ -91,7 +91,7 @@
 											
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 												<label>Medida</label>
-												<select class="form-control" id="medida" name="medida">
+												<select class="form-control" id="medida" name="medida" required="required">
 													<option value="0">Seleccione</option>
 													<c:forEach items="${listaMedida}" var="medida">
 														<option value="${medida.id_unidad_medida}">${medida.nombre}</option>

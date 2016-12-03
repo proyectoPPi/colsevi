@@ -67,7 +67,7 @@ public class EstablecimientoController extends BaseConfigController {
 			mapa.put("desc","%" + descripcion + "%");   
 		}
 		if(direccion != null && !direccion.trim().isEmpty()){
-			mapa.put("direccion","%" + descripcion + "%");   
+			mapa.put("direccion","%" + direccion + "%");   
 		}
 		
 		try{
