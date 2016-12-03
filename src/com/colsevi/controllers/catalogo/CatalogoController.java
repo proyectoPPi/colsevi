@@ -200,10 +200,10 @@ public class CatalogoController extends BaseConfigController{
 			
 			if(bean.getId_catalogo() != null){
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.catalogo.map.CatalogoMapper.updateByPrimaryKeySelective", bean);
-				modelo.addAttribute("correcto", "Catalogo Actualizado");
+				modelo.addAttribute("correcto", "Catálogo Actualizado");
 			}else{
 				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.catalogo.map.CatalogoMapper.insertSelective", bean);
-				modelo.addAttribute("correcto", "Catalogo insertado");
+				modelo.addAttribute("correcto", "Catálogo insertado");
 			}
 			
 			mapa.put("catalogo", bean.getId_catalogo());
@@ -240,7 +240,7 @@ public class CatalogoController extends BaseConfigController{
 					modelo.addAttribute("error", "No se puede eliminar, tiene productos asociados");	
 				}else{
 					ColseviDao.getInstance().getCatalogoMapper().deleteByPrimaryKey(id);
-					modelo.addAttribute("correcto", "Catalogo Eliminado");
+					modelo.addAttribute("correcto", "Catálogo Eliminado");
 				}
 			}
 		}catch(Exception e){
