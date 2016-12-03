@@ -283,7 +283,7 @@ public class ProductoAdminController extends BaseConfigController {
 		SqlSession sesion = ColseviDaoTransaccion.getInstance("/TransaccionProducto.xml");
 		Producto bean = null;
 		List<IngredienteXProducto> listaIngProd = null;
-		List<Integer> ListaC = new ArrayList<Integer>(), ListaN = new ArrayList<Integer>();
+		List<Integer> ListaC = new ArrayList<Integer>();
 		Object[] obj = validarGuardar(request);
 		
 		try{
@@ -301,7 +301,6 @@ public class ProductoAdminController extends BaseConfigController {
 				return Producto(request, modelo);
 			}
 			ListaC = (List<Integer>) obj[1];
-			ListaN = (List<Integer>) obj[2];
 			
 			if(bean.getId_producto() != null){
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.producto.map.ProductoMapper.updateByPrimaryKeySelective", bean);

@@ -3,6 +3,8 @@ package com.colsevi.dao.catalogo.map;
 import com.colsevi.dao.catalogo.model.Catalogo;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface CatalogoMapper {
@@ -74,4 +76,5 @@ public interface CatalogoMapper {
 	 * @mbggenerated  Tue Apr 12 16:35:47 COT 2016
 	 */
 	int updateByPrimaryKey(Catalogo record);
+	List<Map<String, Object>> ListaCatalogoPosibleProducto(Map<String, Object> map);
 }

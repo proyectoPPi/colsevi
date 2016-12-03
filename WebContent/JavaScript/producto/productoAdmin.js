@@ -49,6 +49,7 @@ function CargarFormulario(Id){
 	HCargarFormulario(Id);
 	jQuery('#IngDynamic > table > tbody > tr').remove();
 	jQuery('#count').val('0');
+	jQuery('#catalogActive, #catalogNoActive').val('');
 	HAjax({
 		url: contexto + "/Producto/Admin/cargarIng.html?",
 		data: {producto: jQuery('#id_producto').val()},

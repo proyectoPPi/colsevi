@@ -64,28 +64,61 @@
 										<h4 class="modal-title">Administrar catálogo</h4>
 									</div>
 									<div class="modal-body">
-										<input type="hidden" id="id_catalogo" name="id_catalogo"/>
-										<div class="form-group">
-											<label>*Nombre</label>
-											<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
-										</div>
-										<div class="form-group">
-											<label>*Descripci&#243;n</label>
-											<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
-										</div>
-										<div class="form-group">
-											<label>Establecimiento</label>
-											<select class="form-control" id="est" name="est">
-												<option value="0">Seleccione</option>
-													<c:forEach items="${listaEst}" var="est">
-														<option value="${est.id_establecimiento}">${est.nombre}</option>
-													</c:forEach>
-											</select>
-										</div>
+										<div class="row">
+											<input type="hidden" id="id_catalogo" name="id_catalogo"/>
+										
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+												<section class="panel">
+							                          <header class="panel-heading tab-bg-dark-navy-blue">
+							                              <ul class="nav nav-tabs">
+							                                  <li class="active">
+							                                      <a data-toggle="tab" href="#general">General</a>
+							                                  </li>
+							                                  <li class="">
+							                                      <a data-toggle="tab" href="#producto">Producto</a>
+							                                  </li>
+							                              </ul>
+							                          </header>
+							                          <div class="panel-body">
+							                              <div class="tab-content">
+							                                  <div id="general" class="tab-pane active">
+							                                  	 <div class="form-group">
+																	<label>*Nombre</label>
+																	<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
+																</div>
+																<div class="form-group">
+																	<label>*Descripci&#243;n</label>
+																	<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
+																</div>
+																<div class="form-group">
+																	<label>Establecimiento</label>
+																	<select class="form-control" id="est" name="est">
+																		<option value="0">Seleccione</option>
+																			<c:forEach items="${listaEst}" var="est">
+																				<option value="${est.id_establecimiento}">${est.nombre}</option>
+																			</c:forEach>
+																	</select>
+																</div> 
+							                                  </div>
+							                                  
+							                                  <div id="producto" class="tab-pane">
+							                                  	<input type="hidden" id="catalogActive" name="catalogActive" />
+							                                  	<input type="hidden" id="catalogNoActive" name="catalogNoActive" />
+							                                  	<h3 style="margin:0px;">Productos</h3>
+							                                  	<div class="separator-2"></div>
+							                                  	
+							                                  	<div id="detalleCatalog"></div>
+							                                  </div>
+							                                  
+							                              </div>
+							                          </div>
+                     							</section>
+                   							</div>
+                   						</div>	
 									</div>
 									<div class="modal-footer">
 										<button class="btn btn-warning" type="submit">Guardar</button>
-										<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpliar();">Cerrar</button>
+										<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 										<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 									</div>
 								</div>
