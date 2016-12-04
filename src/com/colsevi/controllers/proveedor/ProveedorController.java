@@ -90,7 +90,9 @@ public class ProveedorController extends BaseConfigController {
 				opciones.put("descripcion", bean.getDescripcion());
 				opciones.put("Idtelefono", bean.getId_telefono());
 				if(bean.getId_telefono() != null){
-					opciones.put("telefono", ColseviDao.getInstance().getTelefonoMapper().selectByPrimaryKey(bean.getId_telefono()).getTelefono());
+					Telefono tel = ColseviDao.getInstance().getTelefonoMapper().selectByPrimaryKey(bean.getId_telefono());
+					opciones.put("telefono", tel.getTelefono());
+					opciones.put("telTipo", tel.getId_tipo_telefono());
 				}
 				opciones.put("Iddireccion", bean.getId_direccion());
 				if(bean.getId_direccion() != null){
