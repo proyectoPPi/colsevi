@@ -95,7 +95,7 @@
 							                                      <a data-toggle="tab" href="#ingview" id="carga">Ingredientes</a>
 							                                  </li>
 							                                  <li class="">
-							                                      <a data-toggle="tab" href="#Catalog">Catalogo</a>
+							                                      <a data-toggle="tab" href="#Catalog">Catálogo</a>
 							                                  </li>
 							                              </ul>
 							                          </header>
@@ -104,11 +104,11 @@
 							                                  <div id="producto" class="tab-pane active">
 							                                  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 																	<label>* Referencia</label>
-																	<input type="text" class="form-control" id="referencia" name="referencia" data-bv-notempty="true"/>
+																	<input type="text" class="form-control" required="required" id="referencia" name="referencia" data-bv-notempty="true"/>
 																</div>
 																<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 																	<label>* Clasificar</label>
-																	<select class="form-control" id="tipoP" name="tipoP">
+																	<select class="form-control" id="tipoP" required="required" name="tipoP">
 																		<option value="0">Tipo Producto</option>
 																		<c:forEach items="${listaTipo}" var="tipo">
 																			<option value="${tipo.id_tipo_producto}">${tipo.nombre}</option>	
@@ -118,15 +118,15 @@
 																
 																<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 																	<label>* Nombre</label>
-																	<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true"/>
+																	<input type="text" class="form-control" id="nombre" required="required" name="nombre" data-bv-notempty="true"/>
 																</div>
 																<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 																	<label>* Descripci&#243;n</label>
-																	<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true"/>
+																	<input type="text" class="form-control" id="descripcion" required="required" name="descripcion" data-bv-notempty="true"/>
 																</div>
 																<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 																	<label>* Precio de venta</label>
-																	<input type="text" class="form-control" id="venta" name="venta" data-bv-notempty="true"/>
+																	<input type="number" class="form-control" id="venta" name="venta" required="required" data-bv-notempty="true"/>
 																</div>
 							                                  
 							                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -142,7 +142,7 @@
 							                                  	  
 							                                  	  <div class="col-lg-12">
 							                                  	  		<label>* Cantidad Minima</label>
-							                                  	  		<input type="number" id="cantidadMin" name="cantidadMin" class="form-control"/>
+							                                  	  		<input type="number" id="cantidadMin" name="cantidadMin" required="required" class="form-control"/>
 							                                  	  </div>
 								                                  <div class="col-lg-12" style="text-align: right;">
 																	<button type="button" class="btn btn-primary" id="adicion"> Adicionar</button>

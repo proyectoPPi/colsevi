@@ -66,15 +66,15 @@
 											<input type="hidden" id="id_telefono" name="id_telefono"/>
 											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 												<label>*Nombre</label>
-												<input type="text" class="form-control" id="nombre" name="nombre" maxlength="30"/>
+												<input type="text" class="form-control" id="nombre" required="required" name="nombre" maxlength="30"/>
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 												<label>*Descripci&#243;n</label>
-												<input type="text" class="form-control" id="descripcion" name="descripcion" maxlength="50"/>
+												<input type="text" class="form-control" id="descripcion" required="required" name="descripcion" maxlength="50"/>
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-												<label>Tipo proveedor</label>
-												<select class="form-control" id="tipoProv" name="tipoProv">
+												<label>*Tipo proveedor</label>
+												<select class="form-control" id="tipoProv" required="required" name="tipoProv">
 													<option value="0">Seleccione</option>
 														<c:forEach items="${listaTipoProv}" var="tipoProv">
 															<option value="${tipoProv.id_tipo_proveedor}">${tipoProv.nombre}</option>
@@ -86,27 +86,27 @@
 												<h4><strong>Dirección</strong></h4>
 												<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 													<label>*Direcci&#243;n</label>
-													<input type="text" class="form-control" id="direccion" name="direccion" maxlength="50"/>
+													<input type="text" class="form-control" id="direccion" required="required" name="direccion" maxlength="50"/>
 												</div>
 												<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 													<label>*Barrio</label>
-													<input type="text" class="form-control" id="barrio" name="barrio" maxlength="50"/>
+													<input type="text" class="form-control" id="barrio" required="required" name="barrio" maxlength="50"/>
 												</div>
 												<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 													<label>*Descipción</label>
-													<input type="text" class="form-control" id="descripDir" name="descripDir" maxlength="100"/>
+													<input type="text" class="form-control" id="descripDir" required="required" name="descripDir" maxlength="100"/>
 												</div>
 											</div>
 											
 											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-												<h4><strong>Teléfono</strong></h4>
+												<h4><strong>*Teléfono</strong></h4>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>*Número</label>
-													<input type="text" class="form-control" id="telefono" name="telefono" maxlength="10"/>
+													<input type="text" class="form-control" id="telefono" name="telefono" maxlength="10" required="required"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>Tipo teléfono</label>
-													<select class="form-control" id="telTipo" name="telTipo">
+													<label>*Tipo teléfono</label>
+													<select class="form-control" id="telTipo" name="telTipo" required="required">
 														<option value="0">Seleccione</option>
 														<c:forEach items="${listaTipoTel}" var="tipoTel">
 															<option value="${tipoTel.id_tipo_telefono}">${tipoTel.nombre}</option>
