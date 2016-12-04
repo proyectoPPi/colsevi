@@ -94,7 +94,10 @@ public class ProveedorController extends BaseConfigController {
 				}
 				opciones.put("Iddireccion", bean.getId_direccion());
 				if(bean.getId_direccion() != null){
-					opciones.put("direccion", ColseviDao.getInstance().getDireccionMapper().selectByPrimaryKey(bean.getId_direccion()).getDireccion());
+					Direccion dir = ColseviDao.getInstance().getDireccionMapper().selectByPrimaryKey(bean.getId_direccion());
+					opciones.put("direccion", dir.getDireccion());
+					opciones.put("barrio", dir.getBarrio());
+					opciones.put("descripDir", dir.getDescripcion());
 				}
 
 				if(bean.getId_tipo_proveedor() != null){

@@ -7,8 +7,7 @@ function Tabla(pagina){
 		url: contexto + "/Proveedor/Prov/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
-		pagina:pagina,
-		clase: clase
+		pagina:pagina
 	});
 }
 

@@ -142,11 +142,6 @@
 		titulos["direccion"] = "Direcci&#243;n";
 		titulos["descripcion"] = "Descripci&#243;n";
 		
-		clase = new Array();
-		clase['telefono'] = 'hidden-xs';
-		clase['descripcion'] = 'hidden-xs';
-		clase['tipoProv'] = 'hidden-xs';
-		
 	</script>
 </body>
 </html>
