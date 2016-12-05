@@ -77,7 +77,7 @@
 								</div>
 			                    <div class="col-md-6">    
 			                        <label>Documento</label>
-			                        <input type="text" class="form-control" required="required" id="documento" name="documento" value="${bean.documento}" maxlength="10"/>
+			                        <input type="number" class="form-control" required="required" id="documento" name="documento" value="${bean.documento}" maxlength="10"/>
 		                        </div>
 		                        
 		                        <div class="col-lg-12">

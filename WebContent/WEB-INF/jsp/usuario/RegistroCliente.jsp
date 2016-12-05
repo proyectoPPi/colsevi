@@ -93,7 +93,7 @@
 								</div>
 			                    <div class="col-md-6">    
 			                        <label>Documento</label>
-			                        <input type="text" class="form-control" id="documento" required="required" name="documento" value="${bean.documento}" maxlength="11"/>
+			                        <input type="number" class="form-control" id="documento" required="required" name="documento" value="${bean.documento}" maxlength="11"/>
 		                        </div>
 		                        
 		                        <div class="col-lg-12">
