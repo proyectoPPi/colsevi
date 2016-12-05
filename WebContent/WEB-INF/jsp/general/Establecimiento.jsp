@@ -62,11 +62,11 @@
 											
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 												<label>*Nombre</label>
-												<input type="text" class="form-control" id="nombreEsta" name="nombreEsta" data-bv-notempty="true" required="required" />
+												<input type="text" class="form-control" id="nombreEsta" name="nombreEsta" maxdata-bv-notempty="true" required="required" maxlength="30"/>
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 												<label>*Descripci&#243;n</label>
-												<input type="text" class="form-control" id="descipEsta" name="descipEsta" required="required" data-bv-notempty="true"/>
+												<input type="text" class="form-control" id="descipEsta" name="descipEsta" required="required" data-bv-notempty="true" maxlength="30"/>
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 				                                 <label>*Hora de inicio</label>
@@ -93,14 +93,14 @@
 												</div>
 												<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 													<label>Descripci&#243;n</label>
-													<input type="text" class="form-control" id="descripDir" name="descripDir" data-bv-notempty="true" maxlength="50"/>
+													<input type="text" class="form-control" id="descripDir" name="descripDir" data-bv-notempty="true" maxlength="30"/>
 												</div>
 											</div>
 											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 												<h4><strong>TEL&Eacute;FONO</strong></h4>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>*Tel&eacute;fono</label>
-													<input type="number" class="form-control" id="telefono" name="telefono" required="required"/>
+													<input type="number" class="form-control" id="telefono" name="telefono" required="required" maxlength="10"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>*Tipo T&eacute;lefono</label>
