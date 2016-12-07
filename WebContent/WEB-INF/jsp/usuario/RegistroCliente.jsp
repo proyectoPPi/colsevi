@@ -45,11 +45,11 @@
 	                   			<c:if test="${init != 'T'}">
 		                   			<div class="f1-step">
 		                   				<div class="f1-step-icon"><i class="fa fa-phone"></i></div>
-		                   				<p>Contacto</p>
+		                   				<p>Dirección</p>
 		                   			</div>
 		                   			<div class="f1-step">
 		                   				<div class="f1-step-icon"><i class="fa fa-road"></i></div>
-		                   				<p>Dirección</p>
+		                   				<p>Contacto</p>
 		                   			</div>
 	                   			</c:if>
 	                   		    <div class="f1-step">
@@ -68,15 +68,15 @@
 	                   			
 	                   		    <div class="col-md-6">
 			                        <label>Nombre</label>
-			                        <input type="text" class="form-control" id="nombre" name="nombre" value="${bean.nombre}" maxlength="40"/>
+			                        <input type="text" class="form-control" id="nombre" name="nombre" value="${bean.nombre}" required="required" maxlength="40"/>
 			                    </div>
 			                    <div class="col-md-6">
 			                        <label>Apellido</label>
-			                        <input type="text" class="form-control" id="apellido" name="apellido" value="${bean.apellido}" maxlength="40"/>
+			                        <input type="text" class="form-control" id="apellido" name="apellido" value="${bean.apellido}" required="required" maxlength="40"/>
 			                    </div>
 			                    <div class="col-md-6">
 			                        <label>Género</label>
-			                        <select class="form-control" id="genero" name="genero">
+			                        <select class="form-control" id="genero" required="required" name="genero">
 			                        	<option value="0">Seleccione</option>
 			                        	<option value="1">Masculino</option>
 			                        	<option value="2">Femenino</option>
@@ -84,7 +84,7 @@
 			                    </div>
 			                    <div class="col-md-6">
 									<label>Tipo Doc</label>
-									<select class="form-control" id="tipo_doc" name="tipo_doc">
+									<select class="form-control" id="tipo_doc" required="required" name="tipo_doc">
 										<option value="0">Seleccione</option>
 										<c:forEach items="${tipoDoc}" var="doc">
 											<option value="${doc.id_tipo_documento}">${doc.nombre}</option>
@@ -93,7 +93,7 @@
 								</div>
 			                    <div class="col-md-6">    
 			                        <label>Documento</label>
-			                        <input type="text" class="form-control" id="documento" name="documento" value="${bean.documento}" maxlength="11"/>
+			                        <input type="number" class="form-control" id="documento" required="required" name="documento" value="${bean.documento}" maxlength="11"/>
 		                        </div>
 		                        
 		                        <div class="col-lg-12">
@@ -107,16 +107,16 @@
 							<c:if test="${init != 'T'}">
 								<fieldset data-step="2">
 									<div class="col-md-6">    
-				                        <label>Direccion</label>
-				                        <input type="text" class="form-control" id="direccion" name="direccion"  value="${bean.direccion}" maxlength="30"/>
+				                        <label>Dirección</label>
+				                        <input type="text" class="form-control" id="direccion"  required="required" name="direccion"  value="${bean.direccion}" maxlength="30"/>
 			                        </div>
 			                        <div class="col-md-6">    
 				                        <label>Barrio</label>
-				                        <input type="text" class="form-control" id="barrio" name="barrio"  value="${bean.barrio}" maxlength="40"/>
+				                        <input type="text" class="form-control" id="barrio" name="barrio" required="required" value="${bean.barrio}" maxlength="40"/>
 			                        </div>
 			                        <div class="col-md-6">    
 				                        <label>Descripción</label>
-				                        <input type="text" class="form-control" id="descripcion" name="descripcion"  value="${bean.descripcion}" maxlength="60"/>
+				                        <input type="text" class="form-control" id="descripcion" name="descripcion" required="required" value="${bean.descripcion}" maxlength="60"/>
 			                        </div>
 			                        <div class="col-lg-12">
 		                     	   		<br/>
@@ -130,15 +130,15 @@
 		                        <fieldset data-step="3">
 									<div class="col-md-6">
 			                       		<label>Telefono Fijo</label>
-				                       	<input type="number" class="form-control" id="telFijo" name="telFijo" value="${bean.telFijo}" maxlength="7"/>
+				                       	<input type="number" class="form-control" id="telFijo" name="telFijo" required="required" value="${bean.telFijo}" maxlength="7"/>
 				                    </div>
 			                      	<div class="col-md-6">    
 				                       	<label>Telefono Celular</label>
-				                       	<input type="number" class="form-control" id="telCel" name="telCel" value="${bean.telCel}" maxlength="10"/>
+				                       	<input type="number" class="form-control" id="telCel" name="telCel" value="${bean.telCel}" required="required" maxlength="10"/>
 			                      	</div>
 			                      	<div class="col-md-6">    
 				                       	<label>Telefono Contacto</label>
-				                       	<input type="number" class="form-control" id="telCon" name="telCon" value="${bean.telCon}" maxlength="7"/>
+				                       	<input type="number" class="form-control" id="telCon" name="telCon" value="${bean.telCon}" required="required" maxlength="7"/>
 			                       	</div> 
 			                       	<div class="col-lg-12">
 		                     	   		<br/>
@@ -152,15 +152,15 @@
 	                       <fieldset data-step="4">
 	                           <div class="col-md-12">
 			                      <label>Usuario</label>
-			                      <input type="text" class="form-control" id="usuario" name="usuario" value="${bean.usuario}"/>
+			                      <input type="text" class="form-control" id="usuario" name="usuario" required="required" value="${bean.usuario}"/>
 	                     	   </div>
 	                     	   <div class="col-md-6">    
 	                     	   	  <label>Contraseña</label>
-	                     	   	  <input type="password" class="form-control" id="clave" name="clave" value="${bean.clave}"/>
+	                     	   	  <input type="password" class="form-control" id="clave" name="clave" required="required" value="${bean.clave}"/>
 	                     	   </div>
 	                     	   <div class="col-md-6">    
 	                     	   	  <label>Confirmar contraseña</label>
-	                     	   	  <input type="password" class="form-control" id="repetir" name="repetir"/>
+	                     	   	  <input type="password" class="form-control" id="repetir" required="required" name="repetir"/>
 	                     	   </div>
 	                     	   <div class="col-lg-12">
 	                     	   		<br/>

@@ -44,6 +44,40 @@ jQuery('.f1 fieldset:first').fadeIn('slow');
     		jQuery('#clave, #repetir').addClass('input-error');
     		e.preventDefault();
     	}
+    	
+    	 var pswd = jQuery('#clave').val();
+         //validate the length
+         if ( pswd.length < 8 ) {
+        	 jQuery('#clave').addClass('input-error');
+     		e.preventDefault();
+         } 
+
+         //validate letter
+         if ( pswd.match(/[A-z]/) ) {
+             
+         } else {
+        	 jQuery('#clave').addClass('input-error');
+     		e.preventDefault();
+         }
+
+         //validate capital letter
+         if ( pswd.match(/[A-Z]/) ) {
+             
+         } else {
+        	 jQuery('#clave').addClass('input-error');
+     		e.preventDefault();
+         }
+
+         //validate number
+         if ( pswd.match(/\d/) ) {
+           
+         } else {
+        	 jQuery('#clave').addClass('input-error');
+     		e.preventDefault();
+         }
+
+     
+  	
     });
 });
 
@@ -97,3 +131,6 @@ function step1(){
 	}
 	return result;
 }
+
+
+
