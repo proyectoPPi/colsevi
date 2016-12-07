@@ -17,7 +17,7 @@ import com.colsevi.dao.usuario.model.Pagina;
 public class FiltroAutenticacion implements Filter, Serializable{
 
 	private static final long serialVersionUID = -130687285287276931L;
-	public static final String LOGIN = "/login";
+	public static final String INDEX = "/front/index";
 	
 	public void destroy() { }
 
@@ -43,16 +43,16 @@ public class FiltroAutenticacion implements Filter, Serializable{
 					chain.doFilter(servletRequest, servletResponse);
 					return;
 				}else{
-					httpServletRequest.getRequestDispatcher("/login.html").forward(servletRequest, servletResponse);
+					httpServletRequest.getRequestDispatcher(INDEX + ".html").forward(servletRequest, servletResponse);
 				}
 			}else{
-				httpServletRequest.getRequestDispatcher(LOGIN).forward(servletRequest, servletResponse);
+				httpServletRequest.getRequestDispatcher(INDEX).forward(servletRequest, servletResponse);
 			}
 			
 		}catch (Throwable e) {
 			e.printStackTrace();
 			((HttpServletRequest)servletRequest).setAttribute("ERROR", "ERROR EN EL SISTEMA");
-			((HttpServletRequest)servletRequest).getRequestDispatcher(LOGIN).forward(servletRequest, servletResponse);
+			((HttpServletRequest)servletRequest).getRequestDispatcher(INDEX).forward(servletRequest, servletResponse);
 		}
 	}
 
@@ -76,9 +76,10 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			path.startsWith("/Ingrediente/Ing") ||
 			path.startsWith("/Usuario/EmpleadoRegistro") ||
 			path.startsWith("/Proveedor/Prov") ||
+			path.startsWith("/General/Establecimiento") ||
 			
 			path.startsWith("/front/index") ||
-			path.startsWith(LOGIN)
+			path.startsWith(INDEX)
 			){
 			return true;
 		}else{		

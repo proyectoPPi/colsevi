@@ -1,5 +1,5 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
-       <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.1.custom.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.1.custom.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.min.js"></script>
     
@@ -10,6 +10,8 @@
 	<script src="http://htmlcoder.me/preview/the_project/v.1.3/template/plugins/pace/pace.min.js"></script>
 	
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/script.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/moment-with-locales.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.js"></script>
 	
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
     

@@ -1,4 +1,5 @@
 jQuery(document).ready(function(){
+	HDatetimePicker('hora_inicio','LT'); 
 	Tabla();
 });
 
@@ -12,7 +13,7 @@ function Tabla(pagina){
 }
 
 function Limpiar(){
-	HLimpliar();
+	HLimpiar();
 	jQuery('#telTipo').val('0');
 }
 

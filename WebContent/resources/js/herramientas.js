@@ -347,14 +347,10 @@ function HValidador(Id){
 @Id id del campo de texto que servirá para desplegar el selector
 @Popup Si es true se muestra en un popup, de lo contrario se mostrará como un Dropdown
 */
-function HDatetimePicker(Id, Popup){
-	if(Popup == undefined){
-		Popup = true;
-	}
+function HDatetimePicker(Id, format){
 	
-	jQuery('#'+ Id).DateTimePicker({
-		language: "es",
-		isPopup: Popup
+	jQuery('#'+ Id).datetimepicker({
+		format: format
 	});
 }
 

@@ -10,3 +10,5 @@
 <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet"/>
 <link href="${pageContext.request.contextPath}/resources/css/table-responsive.css" rel="stylesheet"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery-ui-1.10.1.custom.min.css" />
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
+

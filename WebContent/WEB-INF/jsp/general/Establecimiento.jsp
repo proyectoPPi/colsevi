@@ -70,7 +70,7 @@
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 				                                 <label>*Hora de inicio</label>
-	                                              <input type="text" id="hora_inicio" name="hora_inicio" class="form-control" data-field="time" required="required" data-format="HH:mm"/>
+	                                              <input type="text" id="hora_inicio" name="hora_inicio" class="form-control" required="required"/>
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 				                                 <label>*Hora de cierre</label>

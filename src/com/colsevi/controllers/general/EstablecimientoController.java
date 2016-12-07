@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.controllers.producto.ProductoAdminController;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
 import com.colsevi.dao.general.model.Correo;
 import com.colsevi.dao.general.model.Direccion;
