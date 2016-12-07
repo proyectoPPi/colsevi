@@ -1,6 +1,7 @@
 package com.colsevi.controllers.inventario;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -156,10 +157,10 @@ public class InventarioController extends BaseConfigController {
 					opciones.put("codUM", map.get("codUM"));
 					opciones.put("id_unidad_peso", map.get("id_unidad_peso"));
 					
-//					JSONArray detalle = cargarIng((Long) map.get("cantidadProd"), (Integer) map.get("id_unidad_peso"), map.get("id_ingrediente").toString(), establecimiento);
-//					if(detalle != null){
-//						opciones.put("detalle", detalle);
-//					}
+					JSONArray detalle = cargarIng((BigInteger) map.get("cantidadProd"), (Integer) map.get("id_unidad_peso"), map.get("id_ingrediente").toString(), establecimiento);
+					if(detalle != null){
+						opciones.put("detalle", detalle);
+					}
 					
 					resultado.add(opciones);
 				}catch(Exception e){
@@ -171,7 +172,7 @@ public class InventarioController extends BaseConfigController {
 		return resultado;
 	}
 
-	public JSONArray cargarIng(Long cantidad, Integer um, String ing, String establecimiento) throws IOException{
+	public JSONArray cargarIng(BigInteger cantidad, Integer um, String ing, String establecimiento) throws IOException{
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("ing", ing);
 		mapa.put("esta", establecimiento);
@@ -184,7 +185,7 @@ public class InventarioController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public JSONArray ConstruirInv(List<Map<String, Object>> listData, Long cantidad, Integer um){
+	public JSONArray ConstruirInv(List<Map<String, Object>> listData, BigInteger cantidad, Integer um){
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
@@ -200,27 +201,25 @@ public class InventarioController extends BaseConfigController {
 					opciones.put("nombre", map.get("nombre") != null ? map.get("nombre") : "");
 					opciones.put("fecha_vencimiento", map.get("fecha_vencimiento") != null ? UtilidadManager.FechaDateConHora_Vista((Date) map.get("fecha_vencimiento")) : "");
 					opciones.put("lote", map.get("lote"));
-					opciones.put("color", true);
-					opciones.put("codUM", map.get("codUM") != null ? map.get("codUM") : "0");
+					opciones.put("codUM", map.get("codUM"));
 					opciones.put("id_ingrediente", map.get("id_ingrediente"));
 					opciones.put("cantAsig", map.get("cantAsig") == null ? "" : map.get("cantAsig"));
 					opciones.put("umAsig", map.get("umAsig") == null ? "0" : map.get("umAsig"));
+					opciones.put("id_unidad_medida", map.get("id_unidad_medida"));
 					
-					medida = (Integer) map.get("um");
-					cant = (Double) map.get("cantidad");
-					opciones.put("cantidad", cant);
-					if(medida != null && cant != null){
-						op = cant;
-					
-						result = InventarioManager.ConversionPMenorMayor(um, medida, cant);
-						op = (Double) result[0];
-						
-						if(op < cantidad){
-							opciones.put("color", false);
-						}
-					}else{
-						opciones.put("color", false);
-					}
+					opciones.put("cantidad", map.get("cantidad"));
+//					if(medida != null && cant != null){
+//						op = cant;
+//					
+//						result = InventarioManager.ConversionPMenorMayor(um, medida, cant);
+//						op = (Double) result[0];
+//						
+//						if(op < cantidad){
+//							opciones.put("color", false);
+//						}
+//					}else{
+//						opciones.put("color", false);
+//					}
 					resultado.add(opciones);
 				}catch(Exception e){
 					logger.error(e.getMessage());
@@ -343,14 +342,18 @@ public class InventarioController extends BaseConfigController {
 			cxiE.clear();
 			IXME.clear();
 
-			invxmatv.setId_ingrediente(Integer.parseInt(ingArray[i]));
-			keyIXP.setId_ingrediente(invxmatv.getId_ingrediente());
-			keyIXP.setId_producto(producto);
-			ingProd = ColseviDao.getInstance().getIngredienteXProductoMapper().selectByPrimaryKey(keyIXP);
-			prodBean = ColseviDao.getInstance().getProductoMapper().selectByPrimaryKey(ingProd.getId_producto());
-			ingProd.setCantidad((ingProd.getCantidad() * cantSolicitada) / prodBean.getCantidadMin());
-			
-			if(cantArray[i] != null && !umArray[i].trim().equals("0")){
+			if(!ingrediente.equals(ingArray[i]))
+				totalAsignado = 0d;
+
+			if(!cantArray[i].trim().isEmpty() && !umArray[i].trim().equals("0")){
+				invxmatv.setId_ingrediente(Integer.parseInt(ingArray[i]));
+				keyIXP.setId_ingrediente(invxmatv.getId_ingrediente());
+				keyIXP.setId_producto(producto);
+				ingProd = ColseviDao.getInstance().getIngredienteXProductoMapper().selectByPrimaryKey(keyIXP);
+				prodBean = ColseviDao.getInstance().getProductoMapper().selectByPrimaryKey(ingProd.getId_producto());
+				ingProd.setCantidad((ingProd.getCantidad() * cantSolicitada) / prodBean.getCantidadMin());
+				
+				
 				invxmatv.setCantidad(Double.valueOf(cantArray[i]));
 				invxmatv.setId_unidad_peso(Integer.parseInt(umArray[i]));
 				invxmatv.setLote(Integer.parseInt(sec[i]));
@@ -503,7 +506,7 @@ public class InventarioController extends BaseConfigController {
 			}else{
 				//consultar 
 				if(request.getParameter("id_inventario") != null && !request.getParameter("id_inventario").trim().isEmpty()){
-
+					
 					invxmatv.setLote(Integer.parseInt(sec[i]));
 					invxmatv.setId_ingrediente(Integer.parseInt(ingArray[i]));
 					

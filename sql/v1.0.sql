@@ -239,6 +239,7 @@ CREATE TABLE movimiento_materia(
     id_establecimiento INT,
     cantidad DOUBLE,
 	fecha_movimiento DATETIME NOT NULL,
+	descripcion VARCHAR(3000), 
     PRIMARY KEY(id_movimiento_materia),
     CONSTRAINT fk_movcomMotivo FOREIGN KEY (id_motivo) REFERENCES motivo(id_motivo),
     CONSTRAINT fk_matxIngMov FOREIGN KEY (lote) REFERENCES materia_prima(lote),

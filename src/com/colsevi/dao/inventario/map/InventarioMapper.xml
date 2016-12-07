@@ -344,7 +344,7 @@
 	<select id="CargarInv" parameterType="java.util.Map" resultType="java.util.HashMap">
 		
 		SELECT mp.lote, mp.cantidad, mp.fecha_vencimiento, up.nombre,up.id_unidad_peso AS um, up.codigo AS codUM, ing.id_ingrediente,
-			ixm.cantidad AS cantAsig, ixm.id_unidad_peso As umAsig
+			ixm.cantidad AS cantAsig, ixm.id_unidad_peso As umAsig, ing.id_unidad_medida
 		FROM ingrediente ing
 		LEFT JOIN materia_prima mp ON mp.id_ingrediente = ing.id_ingrediente
 		LEFT JOIN unidad_peso up ON up.id_unidad_peso = mp.id_unidad_peso

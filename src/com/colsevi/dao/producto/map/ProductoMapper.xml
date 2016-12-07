@@ -340,7 +340,10 @@
 	  SELECT referencia, nombre, descripcion, id_producto
 	  FROM producto
 	  WHERE 1 = 1
-	  AND (referencia LIKE #{producto} OR nombre LIKE #{producto} OR descripcion LIKE #{producto});
+	  <if test="producto != null">
+        AND (referencia LIKE #{producto} OR nombre LIKE #{producto} OR descripcion LIKE #{producto});
+    </if>
+    
    </select>
    <select id="ProdInCatalog" parameterType="java.util.Map" resultType="java.util.HashMap">
 	   SELECT GROUP_CONCAT(cat.id_catalogo SEPARATOR ',') AS id_catalogo

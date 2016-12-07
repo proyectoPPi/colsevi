@@ -22,7 +22,7 @@
 					<div class="panel-body">
 						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 							<label>Producto</label>
-							<input type="text" class="form-control" id="prodF" name="prodF"/>
+							<input type="text" class="form-control" id="prodF" name="filtro"/>
 							<input type="hidden" id="prodV" name="filtro"/>
 						</div>
 						<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
@@ -66,13 +66,6 @@
 											<input type="hidden" id="id_producto" name="id_producto"/>
 											<input type="hidden" id="secuencia" name="secuencia"/>
 											<input type="hidden" id="detalle" name="detalle"/>
-											
-											<select id="listaUnidad" style="display: none;">
-												<option value="0">Seleccione</option>
-												<c:forEach items="${listaUnidad}" var="um">
-													<option value="${um.id_unidad_peso}">${um.nombre}</option>
-												</c:forEach>
-											</select>
 											
 											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 												<section class="panel">
@@ -144,14 +137,6 @@
 		titulos["disponible"] = "disponible";
 		titulos["compromiso"] = "compromiso";
 		
-		var LPeso = [];
-		<c:forEach var="tipo" items="${listaUnidad}" varStatus="status">
-			var unidad = {
-			    "id": '${tipo.id_unidad_peso}',
-			    "nombre": '${tipo.nombre}' 
-			};
-			LPeso.push(unidad);
-		</c:forEach>
 	</script>
 </body>
 </html>

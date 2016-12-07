@@ -220,7 +220,7 @@ function organizarPaginacion(pagina){
 	jQuery("#paginacion").append('<ul class="dataTables_paginate paging_bootstrap pagination">'+html+'</ul>');
 }
 
-function HLimpiar(id){
+function HLimpiar(){
 	
 	for(key in dataMap['keys']){
 		var valor = dataMap['keys'][key];
@@ -362,3 +362,15 @@ function HColorPicker(Id){
 	jQuery('#' + Id).colorpickerplus();
 }
 
+function HTipoPeso(value){
+	var html = '<option value="0">Seleccione</option>';
+	
+	if(value === 1){
+		html += '<option value="1">Kilogramos</option>';
+		html += '<option value="2">Libras</option>';
+		html += '<option value="3">Gramos</option>';
+	}else{
+		html += '<option value="4">Litros</option>';
+	}
+	return html;
+}

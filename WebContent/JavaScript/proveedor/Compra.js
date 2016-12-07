@@ -110,41 +110,28 @@ function Limpiar(){
 	jQuery('#IngDynamic > section > table > tbody > tr').remove();
 	jQuery('#id_compra').val('');
 	jQuery('#count').val('0');
+	HLimpiar();
 	jQuery('#validarModificacion').show();
 }
 
 function CargarFormulario(Id){
 	jQuery('#validarModificacion').show();
 	jQuery('[href=#producto]').tab('show');
+	HCargarFormulario(Id);
+	validarModificacion();
+	inicialTabla();
 	jQuery("#pagado").prop("checked", BuscarRegistro(Id)['pagado'] == "SI" ? true : false);
-	jQuery('#motivo').val(BuscarRegistro(Id)['motivo']);	
 	jQuery('#count').val('0');
 	jQuery('#IngDynamic > section > table > tbody > tr').remove();
-	validarModificacion();
-	HCargarFormulario(Id);
-//	jQuery('#valorsin').val(BuscarRegistro(Id)['valorsin']);
+	
+	cargarDetalle(BuscarRegistro(Id)['detalle']);
 }
 
-function cargarIng(){
-	jQuery.ajaxQueue({
-		url: contexto + "/Proveedor/Compra/cargarIng.html?",
-		 data:{compra: jQuery('#id_compra').val()},
-	}).done(function(result) {
-		var data; 
- 		try{ 
- 			data = jQuery.parseJSON(result); 
- 			data = data['dato'];
- 		} catch(err){ 
- 			console.log("Error ejecutando CargarIng" + err); 
- 			jQuery('#dynamic').hide();
-         	return; 
- 		} 
- 		
-		for(i in data){
-			jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);		
-			construirTbl(data[i]);
-		}
-	});
+function cargarDetalle(data){
+	for(i in data){
+		jQuery('#count').val(parseInt(jQuery('#count').val()) + 1);
+		construirTbl(data[i]);
+	}
 }
 
 function MotivoModal(value){

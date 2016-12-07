@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.application.GeneralManager;
-import com.colsevi.application.ProductoManager;
 import com.colsevi.application.ProveedorManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.application.ingredienteManager;
@@ -116,15 +117,13 @@ public class CompraController extends BaseConfigController {
 			logger.error(e.getMessage());
 		}
 		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		opciones.writeJSONString(response.getWriter());
+		ResponseJson(request, response, opciones);
 	}
 
 	@SuppressWarnings("unchecked")
 	public JSONArray ConstruirJson(List<Map<String,Object>> listaCompra){
-
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject(), labels = new JSONObject();
 		
@@ -143,7 +142,7 @@ public class CompraController extends BaseConfigController {
 
 				labels = new JSONObject();
 				labels.put("label", bean.get("nombreProv"));
-				labels.put("value", bean.get(""));
+				labels.put("value", bean.get("id_proveedor"));
 				opciones.put("proveedor", labels);
 					
 				labels = new JSONObject();
@@ -151,10 +150,18 @@ public class CompraController extends BaseConfigController {
 				labels.put("value", bean.get("id_establecimiento"));
 				opciones.put("establecimiento", labels);
 				
+				mapa.put("compra", bean.get("id_compra"));
+				opciones.put("detalle", subIng(ColseviDao.getInstance().getCompraXIngredienteMapper().SelectDataView(mapa)));
+				
 				resultado.add(opciones);
 			}
 		}
 		return resultado;
+	}
+	
+	public void detalle(List<CompraXIngrediente> LCompra){
+		
+		
 	}
 	
 	@RequestMapping("/Proveedor/Compra/autocompletar")
@@ -188,6 +195,7 @@ public class CompraController extends BaseConfigController {
 			}
 		}catch(Exception e){
 			result.put("error", "Contactar al administrador");
+			logger.error(e.getMessage());
 		}
 		response.setContentType("text/html;charset=ISO-8859-1");
 		request.setCharacterEncoding("UTF8");
@@ -201,6 +209,7 @@ public class CompraController extends BaseConfigController {
 	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
 		
 		List<CompraXIngrediente> listaCXI = null;
+		SqlSession sesion = ColseviDaoTransaccion.getInstance("/TransaccionCompra.xml");
 		CompraXIngredienteExample cie = new CompraXIngredienteExample();
 		List<MateriaPrima> listaMP = null;
 		List<Integer> loteList = null;
@@ -239,16 +248,16 @@ public class CompraController extends BaseConfigController {
 					cie.clear();
 					cie.createCriteria().andLoteIn(countDelete);
 					mpe.createCriteria().andLoteIn(countDelete);
-					ColseviDao.getInstance().getCompraXIngredienteMapper().deleteByExample(cie);
-					ColseviDao.getInstance().getMateriaPrimaMapper().deleteByExample(mpe);
+					ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.proveedor.map.CompraXIngredienteMapper.deleteByExample", cie);
+					ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.deleteByExample", mpe);
 				}
 			}
 
 			if(bean.getId_compra_proveedor() != null){
-				ColseviDao.getInstance().getCompraProveedorMapper().updateByPrimaryKey(bean);
+				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.proveedor.map.CompraProveedorMapper.updateByPrimaryKey", bean);
 				modelo.addAttribute("correcto", "Compra Actualizada");
 			}else{
-				ColseviDao.getInstance().getCompraProveedorMapper().insertSelective(bean);
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.proveedor.map.CompraProveedorMapper.insertSelective", bean);
 				modelo.addAttribute("correcto", "Compra insertada");
 			}
 
@@ -257,19 +266,22 @@ public class CompraController extends BaseConfigController {
 				listaMP.get(i).setId_establecimiento(bean.getId_establecimiento());
 				
 				if(listaCXI.get(i).getLote() != null){
-					
-					ColseviDao.getInstance().getMateriaPrimaMapper().updateByPrimaryKey(listaMP.get(i));
-					CompraXIngredienteExample comIngE = new CompraXIngredienteExample();
-					comIngE.createCriteria().andLoteEqualTo(listaCXI.get(i).getLote());
-					ColseviDao.getInstance().getCompraXIngredienteMapper().updateByExampleSelective(listaCXI.get(i), comIngE);
+					ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.updateByPrimaryKey", listaMP.get(i));
+					ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.proveedor.map.CompraXIngredienteMapper.updateByExampleSelective", listaCXI.get(i));
 				}else{
-					listaCXI.get(i).setLote(ColseviDao.getInstance().getMateriaPrimaMapper().insertSelective(listaMP.get(i)));
-					ColseviDao.getInstance().getCompraXIngredienteMapper().insertSelective(listaCXI.get(i));
+					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.insertSelective", listaMP.get(i));
+					listaCXI.get(i).setLote(listaMP.get(i).getLote());
+					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.proveedor.map.CompraXIngredienteMapper.insertSelective", listaCXI.get(i));
 				}
 			}
+			ColseviDaoTransaccion.RealizarCommit(sesion);
 		}catch(Exception e){
 			modelo.addAttribute("error", "Contactar al administrador");
+			logger.error(e.getMessage());
+			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
+		
+		ColseviDaoTransaccion.CerrarSesion(sesion);
 		return Compra(request, modelo);
 	}
 	
@@ -429,6 +441,7 @@ public class CompraController extends BaseConfigController {
 			modelo.addAttribute("correcto", "Compra dada de Baja");
 		}catch (Exception e) {
 			modelo.addAttribute("error", "Contactar al administrador");
+			logger.error(e.getMessage());
 		}
 		return Compra(request, modelo);
 	}
@@ -470,26 +483,6 @@ public class CompraController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Proveedor/Compra/cargarIng")
-	public void cargarIng(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		
-		JSONObject result = new JSONObject();
-		Map<String, Object> mapa = new HashMap<String, Object>();
-		
-		try{
-			mapa.put("compra", request.getParameter("compra"));
-			result.put("dato", subIng(ColseviDao.getInstance().getCompraXIngredienteMapper().SelectDataView(mapa)));
-		}catch(Exception e){
-			result.put("error", "Contactar al administrador");
-		}
-		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		result.writeJSONString(response.getWriter());
-	}
-	
-	@SuppressWarnings("unchecked")
 	public JSONArray subIng(List<Map<String, Object>> listaCXI){
 		
 		JSONArray resultado = new JSONArray();
@@ -527,6 +520,7 @@ public class CompraController extends BaseConfigController {
 				resultado.add(opciones);
 				
 			}catch(Exception e){
+				logger.error(e.getMessage());
 				continue;
 			}
 		}
