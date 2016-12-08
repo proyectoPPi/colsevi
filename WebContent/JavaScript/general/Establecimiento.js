@@ -1,5 +1,6 @@
 jQuery(document).ready(function(){
-	HDatetimePicker('hora_inicio','LT'); 
+	HDatetimePicker('hora_inicio','LT');
+	HDatetimePicker('hora_fin','LT');
 	Tabla();
 });
 
