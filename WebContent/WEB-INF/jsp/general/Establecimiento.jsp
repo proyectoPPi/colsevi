@@ -74,7 +74,7 @@
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 				                                 <label>*Hora de cierre</label>
-	                                              <input type="text" id="hora_fin" name="hora_fin" class="form-control"  required="required" data-field="time" data-format="HH:mm"/>
+	                                              <input type="text" id="hora_fin" name="hora_fin" class="form-control"  required="required"/>
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 												<label>Correo</label>
