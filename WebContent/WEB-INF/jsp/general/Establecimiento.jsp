@@ -74,7 +74,7 @@
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 				                                 <label>*Hora de cierre</label>
-	                                              <input type="text" id="hora_fin" name="hora_fin" class="form-control"  required="required" data-field="time" data-format="HH:mm"/>
+	                                              <input type="text" id="hora_fin" name="hora_fin" class="form-control"  required="required"/>
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 												<label>Correo</label>
@@ -116,7 +116,7 @@
 									</div>
 									<div class="modal-footer">
 										<button class="btn btn-warning" type="submit">Guardar</button>
-										<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
+										<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpiar();">Cerrar</button>
 										<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 									</div>
 								</div>

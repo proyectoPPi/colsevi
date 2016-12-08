@@ -60,6 +60,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 
 		if (path.endsWith("jpg")  || path.endsWith("png")  || path.endsWith("gif") ||
 			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") ||  path.endsWith("map") ||
+			path.startsWith("/login")|| 
 			path.startsWith("/Caja/CierreCaja")|| //suspendido
 			path.startsWith("/Usuario/ClienteRegistro") || //terminado
 			path.startsWith("/Proveedor/Compra") || // OK
