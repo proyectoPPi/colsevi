@@ -8,20 +8,20 @@ function CompraXEstablecimientoXDia(){
 		id: 'CompraXEstablecimientoXDia',
 		tipo: 'bar',
 		opt: {
-			legend: {
-				display: true,
-				labels: {
-					fontColor: 'rgb(255, 99, 132)',
-					backgroundColor: 'rgba(75, 192, 192, 0.4)'
-				}
-			}
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        beginAtZero: true
+                    }
+                }]
+            }
 		}
 	});
 }
 
 
-//
-//var ctx = document.getElementById("myChart");
+//var ctx = document.getElementById("CompraXEstablecimientoXDia");
 //var randomScalingFactor = function(){ return Math.round(Math.random()*500)};
 //var barChartData = {
 //		labels : ["January","February","March","April","May","June","July"],
@@ -39,6 +39,6 @@ function CompraXEstablecimientoXDia(){
 //
 //
 //var scatterChart = new Chart(ctx, {
-//    type: 'line',
+//    type: 'bar',
 //    data: barChartData
 //});
