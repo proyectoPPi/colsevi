@@ -18,6 +18,7 @@
 					<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 				</h2>
 				<div class="separator-2"></div>
+
 				<section class="panel">
 					<div class="panel-body">
 						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -138,5 +139,6 @@
 		titulos["compromiso"] = "compromiso";
 		
 	</script>
+
 </body>
 </html>

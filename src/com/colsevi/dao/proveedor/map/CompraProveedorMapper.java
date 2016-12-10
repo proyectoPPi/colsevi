@@ -80,6 +80,7 @@ public interface CompraProveedorMapper {
 	
     List<Map<String, Object>> TablaCompras(Map<String, Object> mapa);
     int CountTablaCompras(Map<String, Object> mapa);
+    List<Map<String, Object>> compraEstablecimientoDiario(Map<String, Object> mapa);
     
 	
 }

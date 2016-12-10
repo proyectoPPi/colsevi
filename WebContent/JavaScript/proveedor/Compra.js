@@ -1,6 +1,5 @@
 jQuery(document).ready(function(){
 	Tabla();
-	HDatetimePicker('fecha','');
 });
 
 jQuery('#adicion').click(function(){
@@ -52,7 +51,7 @@ function construirTbl(data){
 	}
 	
 	HiniciarAutocompletar(contexto + '/Proveedor/Compra/autocompletar.html?', 'ingredienteText');
-	
+	HDatetimePicker('fecha','');
 	
 	jQuery( "input[id=ingredienteText]" ).autocomplete({
 		  select: function(e, ui) {

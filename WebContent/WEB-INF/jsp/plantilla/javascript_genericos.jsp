@@ -13,6 +13,8 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/moment-with-locales.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.js"></script>
 	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/Chart.js"></script>
+	
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
     
     <script type="text/javascript">

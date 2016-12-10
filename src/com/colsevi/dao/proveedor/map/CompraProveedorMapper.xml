@@ -456,4 +456,10 @@
 	WHERE compra.id_compra_proveedor = #{compra};
   </select>
   
+  <select id="compraEstablecimientoDiario" parameterType="java.util.Map" resultType="java.util.HashMap">
+	SELECT SUM(valor) as total, CAST( fecha_compra AS DATE ) AS fechaDia
+	FROM compra_proveedor 
+	where id_establecimiento = #{estab}
+	GROUP BY CAST( fecha_compra AS DATE );
+  </select>
 </mapper>

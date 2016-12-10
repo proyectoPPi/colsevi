@@ -24,6 +24,8 @@ function Tabla(pagina){
 }
 
 function Limpiar(){
+	jQuery('[href=#producto]').tab('show');
+	jQuery('#establecimiento').val('0');
 	HLimpiar();
 }
 
@@ -95,7 +97,7 @@ function cargarInv(detalle){
 			html += '<input type="hidden" value="'+detalle[i]['id_ingrediente']+'" name="ing"/> ';
 			html += '</td>';
 			html += '<td>';
-			html += '<select class="form-control" name="um" value="' + detalle[i]['umAsig'] + '">' + HTipoPeso(detalle[i]['id_unidad_medida']) + '</select>';
+			html += '<select class="form-control" name="um">' + HTipoPeso(detalle[i]['id_unidad_medida'], detalle[i]['umAsig']) + '</select>';
 			html += '</td>';
 			html += '<td>';
 			html += detalle[i]['lote'] + ' - '+detalle[i]['cantidad']+' '+ detalle[i]['codUM'];

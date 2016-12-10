@@ -134,7 +134,7 @@ public class InventarioManager {
 		if(tipoP.equals(UnidadPesoE.KILO.getUnidadM())){
 			obj[0] = cantidad;
 			obj[1] = UnidadPesoE.KILO.getUnidadM();
-		}else if(tipoP.equals(UnidadPesoE.LIBRA.getUnidadM()) && (cantidad  * 0.45359237) > 1){
+		}else if(tipoP.equals(UnidadPesoE.LIBRA.getUnidadM())){
 			obj[0] = cantidad * 0.5;
 			obj[1] = UnidadPesoE.KILO.getUnidadM();
 		}else if(tipoP.equals(UnidadPesoE.GRAMO.getUnidadM())){

@@ -345,12 +345,15 @@ function HValidador(Id){
 
 /*
 @Id id del campo de texto que servirá para desplegar el selector
-@Popup Si es true se muestra en un popup, de lo contrario se mostrará como un Dropdown
+@format Formato de la fecha
+Se utiliza la acción focus para cuando se ingrese al campo
+$(this) se utiliza para obtener el contexto del campo por medio del focus en el cual se ubica el mouse
 */
 function HDatetimePicker(Id, format){
-	
-	jQuery('#'+ Id).datetimepicker({
-		format: format
+	jQuery( "input[id="+ Id +"]" ).focus(function(e) {
+		$(this).datetimepicker({
+			format: format
+		});
 	});
 }
 
@@ -358,15 +361,63 @@ function HColorPicker(Id){
 	jQuery('#' + Id).colorpickerplus();
 }
 
-function HTipoPeso(value){
-	var html = '<option value="0">Seleccione</option>';
+function HTipoPeso(value, opt){
+	if(opt !== undefined){
+		return HTipoPesoVal(value, opt);
+	}else{
+		var html = '<option value="0" selected>Seleccione</option>';
+		
+		if(value === 1){
+			html += '<option value="1">Kilogramos</option>';
+			html += '<option value="2">Libras</option>';
+			html += '<option value="3">Gramos</option>';
+		}else{
+			html += '<option value="4" selected>Litros</option>';
+		}
+		return html;
+	}
+}
+
+function HTipoPesoVal(value, opt){
+	var html = '<option value="0" selected>Seleccione</option>';
 	
 	if(value === 1){
-		html += '<option value="1">Kilogramos</option>';
-		html += '<option value="2">Libras</option>';
-		html += '<option value="3">Gramos</option>';
+		
+		html += '<option value="1" ';
+		if(opt === 1)
+			html += 'selected';
+		html += '>Kilogramos</option>';
+		html += '<option value="2" ';
+		if(opt === 2)
+			html += 'selected';
+		html += '>Libras</option>';
+		html += '<option value="3" ';
+		if(opt === 3)
+			html += 'selected';
+		html +='>Gramos</option>';
 	}else{
-		html += '<option value="4">Litros</option>';
+		html += '<option value="4" selected>Litros</option>';
 	}
 	return html;
+}
+
+function HGrafico(opciones){
+	var data = undefined;
+	jQuery.ajaxQueue({
+		url: opciones.url,
+	}).done(function(result) {
+ 		try{ 
+ 			data = jQuery.parseJSON(result);
+ 			var ctx = document.getElementById(opciones.id);
+ 			var scatterChart = new Chart(ctx, {
+ 			    type: opciones.tipo,
+ 			    data: data,
+ 			    options: opciones.opt
+ 			});
+ 		} catch(err){ 
+ 			console.log("Error ejecutando HGrafico" + err); 
+ 		} 
+	});
+	
+	
 }
