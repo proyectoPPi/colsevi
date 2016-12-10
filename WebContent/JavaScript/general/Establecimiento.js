@@ -1,5 +1,6 @@
 jQuery(document).ready(function(){
-	HDatetimePicker('hora_inicio','LT'); 
+	HDatetimePicker('hora_inicio','LT');
+	HDatetimePicker('hora_fin','LT');
 	Tabla();
 });
 
@@ -24,3 +25,9 @@ function Eliminar(){
 function CargarFormulario(Id){
 	HCargarFormulario(Id);
 }
+
+function ValidaSoloNumeros() {
+    if ((event.keyCode < 48) || (event.keyCode > 57))
+       event.returnValue = false;
+    
+ }

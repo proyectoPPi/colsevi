@@ -100,7 +100,7 @@
 												<h4><strong>TEL&Eacute;FONO</strong></h4>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>*Tel&eacute;fono</label>
-													<input type="number" class="form-control" id="telefono" name="telefono" required="required" maxlength="10"/>
+													<input type="text" class="form-control" id="telefono" name="telefono" onkeypress="ValidaSoloNumeros()" required="required" maxlength="10"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>*Tipo T&eacute;lefono</label>
@@ -116,7 +116,7 @@
 									</div>
 									<div class="modal-footer">
 										<button class="btn btn-warning" type="submit">Guardar</button>
-										<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpiar();">Cerrar</button>
+										<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 										<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 									</div>
 								</div>

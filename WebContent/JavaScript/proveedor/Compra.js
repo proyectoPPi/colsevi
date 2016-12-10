@@ -1,5 +1,6 @@
 jQuery(document).ready(function(){
 	Tabla();
+	HDatetimePicker('fecha','');
 });
 
 jQuery('#adicion').click(function(){
@@ -27,7 +28,7 @@ function construirTbl(data){
 		html += '<select name="tipo' + count + '" class="form-control">' + medida + '</select>';
 	html += '</td>';
 	html += '<td>';
-		html += '<input type="text" name="fecha' + count + '" data-field="date" data-format="yyyy-MM-dd" class="form-control"/>';
+		html += '<input type="text" id="fecha" name="fecha' + count + '" class="form-control"/>';
 	html += '</td>';
 	html += '<td>';
 		html += '<input type="text" name="vunitario' + count + '" class="form-control"/>';
@@ -51,6 +52,7 @@ function construirTbl(data){
 	}
 	
 	HiniciarAutocompletar(contexto + '/Proveedor/Compra/autocompletar.html?', 'ingredienteText');
+	
 	
 	jQuery( "input[id=ingredienteText]" ).autocomplete({
 		  select: function(e, ui) {
