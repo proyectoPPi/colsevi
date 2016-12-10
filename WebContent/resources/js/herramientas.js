@@ -347,7 +347,7 @@ function HValidador(Id){
 @Id id del campo de texto que servirá para desplegar el selector
 @format Formato de la fecha
 Se utiliza la acción focus para cuando se ingrese al campo
-$(this) se utiliza para obtener el contexto del campo por medio del focus en el cual se ubica el mouse
+$(this) se utiliza para obtener el contexto del campo
 */
 function HDatetimePicker(Id, format){
 	jQuery( "input[id="+ Id +"]" ).focus(function(e) {
