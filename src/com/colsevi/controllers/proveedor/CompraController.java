@@ -314,7 +314,7 @@ public class CompraController extends BaseConfigController {
 			error += "Ingresar la fecha de la compra<br/>";
 		else{
 			if(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true).getTime() > new Date().getTime() ){
-				error += "La fecha no puede ser mayo a la actual<br/>";
+				error += "La fecha no puede ser mayor a la actual<br/>";
 			}else{
 				beanC.setFecha_compra(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true));
 			}
@@ -345,7 +345,7 @@ public class CompraController extends BaseConfigController {
 					
 					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
 						Date dat = UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha" + (i +1)), true);
-						if(dat.getTime() < new Date(System.currentTimeMillis()).getTime()){
+						if(dat.getTime() > new Date(System.currentTimeMillis()).getTime()){
 							Calendar calendar = Calendar.getInstance();
 							calendar.setTime(dat);
 							int year = calendar.get(Calendar.YEAR);
