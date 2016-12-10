@@ -18,16 +18,8 @@ function CompraXEstablecimientoXDia(){
 		}
 	});
 }
-//
-//{
-//	"labels" : ["Enero","Febrero","Marzo","Abril"],
-//	"datasets" : [
-//	              {
-//	            	  "data" : [1,2,3,4]
-//	              }
-//	             ]
-//	
-//}
+
+
 //
 //var ctx = document.getElementById("myChart");
 //var randomScalingFactor = function(){ return Math.round(Math.random()*500)};
