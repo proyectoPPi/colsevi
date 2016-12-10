@@ -20,7 +20,6 @@ function CompraXEstablecimientoXDia(){
 	});
 }
 
-
 //var ctx = document.getElementById("CompraXEstablecimientoXDia");
 //var randomScalingFactor = function(){ return Math.round(Math.random()*500)};
 //var barChartData = {

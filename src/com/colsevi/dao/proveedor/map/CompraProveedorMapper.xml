@@ -458,9 +458,10 @@
   
   <select id="compraEstablecimientoDiario" parameterType="java.util.Map" resultType="java.util.HashMap">
 	Select SUM(valor) as total, CAST( fecha_compra AS DATE ) AS fechaDia, estab.nombre
-from compra_proveedor com
-left join establecimiento estab on estab.id_establecimiento = com.id_establecimiento
-where fecha_compra like #{fecha}
-GROUP BY CAST( fecha_compra AS DATE ), estab.id_establecimiento;
+	from compra_proveedor com
+	left join establecimiento estab on estab.id_establecimiento = com.id_establecimiento
+	where fecha_compra between DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND CURDATE() and  estab.id_establecimiento = #{estab}
+	GROUP BY fechaDia, estab.id_establecimiento
+	ORDER BY fechaDia asc;
   </select>
 </mapper>
