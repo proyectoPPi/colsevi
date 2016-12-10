@@ -47,7 +47,7 @@
                            </div>
                            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 							<label>Fecha Compra</label>
-							<input type="text" class="form-control" id="fechaF" name="filtro" data-field="datetime" data-format="yyyy-MM-dd HH:mm:ss"/>
+							<input type="text" class="form-control" id="fechaF" name="filtro"/>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 							<label>valor menor</label>
