@@ -26,8 +26,8 @@ function construirVista(data){
 		html +='<h3><a href="shop-product.html">'+data[i]['nombre']+'</a></h3>';
 		html +='<div class="elements-list clearfix">';
 		html +='<span class="price">$'+data[i]['venta']+'</span>';
-		html += '<p><input type="number" id="cantidad_'+data[i]['referencia']+'" name="cantidad" class="form-control"/>';
-		html +='<a href="#" class="pull-right margin-clear btn btn-sm btn-default-transparent btn-animated" onclick="OpcionVista('+data[i]['id_producto']+',"'+data[i]['referencia']+'", 1);">Adicionar';
+		html += '<p><input type="number" id="cantidad_'+data[i]['id_producto']+'" name="cantidad" class="form-control"/>';
+		html +='<a href="#" class="pull-right margin-clear btn btn-sm btn-default-transparent btn-animated" onclick="OpcionVista('+data[i]['id_producto']+', 1);">Adicionar';
 		html +='<i class="fa fa-shopping-cart"></i>';
 		html +='</a></p></div></div></div></div>';
 	}
@@ -35,13 +35,13 @@ function construirVista(data){
 	jQuery('#vistaProducto').html(html);
 }
 
-function OpcionVista(value, ref, opt){
+function OpcionVista(value, opt){
 	
 	switch(opt) {
     case 1://Add
     	HAjax({
     		url: contexto + "/Pedido/PedidoWizardStep2/Adicionar.html?",
-    		data: {consecutivo: jQuery('#consecutivo').val(), prod: value, cantidad: jQuery('#cantidad_'+ref).val()},
+    		data: {consecutivo: jQuery('#consecutivo').val(), prod: value, cantidad: jQuery('#cantidad_'+value).val()},
     		async: false,
     		method: 'Add'
     	});
