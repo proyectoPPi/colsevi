@@ -313,8 +313,8 @@ public class CompraController extends BaseConfigController {
 		if(request.getParameter("fecha_compra") == null || request.getParameter("fecha_compra").trim().isEmpty())
 			error += "Ingresar la fecha de la compra<br/>";
 		else{
-			if(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true).getTime() > new Date().getTime() ){
-				error += "La fecha no puede ser mayor a la actual<br/>";
+			if(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true).getTime() >= new Date().getTime() ){
+				error += "La fecha de la compra no puede ser menor a la actual<br/>";
 			}else{
 				beanC.setFecha_compra(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true));
 			}
@@ -356,7 +356,7 @@ public class CompraController extends BaseConfigController {
 							mp.setFecha_vencimiento(calendar.getTime());
 							cxi.setFecha_vencimiento(calendar.getTime());
 						}else{
-							error += "La fecha de la compra debe ser mayor a la actual<br/>";
+							error += "La fecha de vencimiento debe ser mayor a la actual<br/>";
 						}
 					}
 					if(request.getParameter("lote" + (i +1)) != null && !request.getParameter("lote" + (i +1)).trim().isEmpty()){
