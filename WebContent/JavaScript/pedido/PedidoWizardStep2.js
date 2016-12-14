@@ -27,7 +27,7 @@ function construirVista(data){
 		html +='<div class="elements-list clearfix">';
 		html +='<span class="price">$'+data[i]['venta']+'</span>';
 		html += '<p><input type="number" id="cantidad_'+data[i]['referencia']+'" name="cantidad" class="form-control"/>';
-		html +='<a href="#" class="pull-right margin-clear btn btn-sm btn-default-transparent btn-animated" onclick="OpcionVista('+data[i]['id_producto']+','+data[i]['referencia']+', 1);">Adicionar';
+		html +='<a href="#" class="pull-right margin-clear btn btn-sm btn-default-transparent btn-animated" onclick="OpcionVista('+data[i]['id_producto']+',"'+data[i]['referencia']+'", 1);">Adicionar';
 		html +='<i class="fa fa-shopping-cart"></i>';
 		html +='</a></p></div></div></div></div>';
 	}
