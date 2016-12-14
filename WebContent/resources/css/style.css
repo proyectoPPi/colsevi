@@ -2620,7 +2620,6 @@ fieldset[disabled] .btn-default {
   padding: 5px 15px;
   font-size: 12px;
   line-height: 1.4666666667;
-  border-radius: 3px;
   margin: 5px 0;
 }
 
@@ -2628,7 +2627,6 @@ fieldset[disabled] .btn-default {
   padding: 10px 25px;
   font-size: 18px;
   line-height: 1.4666666667;
-  border-radius: 4px;
   margin: 10px 0;
 }
 
@@ -2636,7 +2634,6 @@ fieldset[disabled] .btn-default {
   padding: 15px 50px;
   font-size: 22px;
   line-height: 1.4666666667;
-  border-radius: 6px;
   margin: 10px 0;
 }
 

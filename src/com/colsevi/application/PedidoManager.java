@@ -18,27 +18,29 @@ import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 
 public class PedidoManager {
 	
-	public static Boolean crearPedido(Integer persona, Date fecha, BigDecimal total, Boolean pagado, Integer estado, Integer establecimiento, Integer motivo){
+	public static Integer crearPedido(Integer persona, Integer establecimiento, Integer motivo){
 		
+		Integer result = null;
 		try{
 			Pedido ped = new Pedido();
 			
-			ped.setFecha_pedido(fecha);
+			ped.setFecha_pedido(new Date());
 			ped.setId_persona(persona);
-			ped.setTotal(total);
-			ped.setPagado(pagado);
-			ped.setId_estado_pedido(estado);
+			ped.setTotal(new BigDecimal(0));
+			ped.setPagado(false);
+			ped.setId_estado_pedido(PedidoE.BORRADOR.getPedidoE());
 			ped.setId_establecimiento(establecimiento);
 			ped.setMotivo(motivo);
 			
 			ColseviDao.getInstance().getPedidoMapper().insertSelective(ped);
-			return true;
+			result = ColseviDao.getInstance().getPedidoMapper().UltimoPedidoCreado();
 		}catch(Exception e){
-			return false;
+			result = null;
 		}
+		return result;
 	}
 	
-	public static Pedido obtenerPedido(Integer persona, String pedido){
+	public static Pedido obtenerPedido(Integer pedido){
 		Pedido ped = new Pedido();
 		PedidoExample PedE = new PedidoExample();
 		
@@ -47,9 +49,8 @@ public class PedidoManager {
 		PedidoExample.Criteria criteria = (PedidoExample.Criteria) PedE.createCriteria();
 		
 		try{		
-			criteria.andId_personaEqualTo(persona).andId_estado_pedidoEqualTo(PedidoE.BORRADOR.getPedidoE());
-			if(pedido != null && !pedido.trim().isEmpty())
-				criteria.andId_pedidoEqualTo(Integer.parseInt(pedido));
+			criteria.andId_estado_pedidoEqualTo(PedidoE.BORRADOR.getPedidoE());
+				criteria.andId_pedidoEqualTo(pedido);
 		
 			ped = ColseviDao.getInstance().getPedidoMapper().selectByExample(PedE).get(0);
 		}catch(Exception e){

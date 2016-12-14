@@ -1,3 +1,8 @@
+INSERT INTO estado_pedido (id_estado_pedido, nombre, descripcion) VALUES(1,"CANCELADO","CANCELADO");
+INSERT INTO estado_pedido (id_estado_pedido, nombre, descripcion) VALUES(2,"BORRADOR","BORRADOR");
+INSERT INTO estado_pedido (id_estado_pedido, nombre, descripcion) VALUES(3,"NUEVO","NUEVO");
+INSERT INTO estado_pedido (id_estado_pedido, nombre, descripcion) VALUES(4,"PREPARACION","PREPARACION");
+INSERT INTO estado_pedido (id_estado_pedido, nombre, descripcion) VALUES(5,"ENTREGADO","ENTREGADO");
 
 INSERT INTO rol (id_rol, nombre_rol, codigo_rol) VALUES(1,"ADMIN","ADMIN");
 INSERT INTO rol (id_rol, nombre_rol, codigo_rol) VALUES(2,"EMPLEADO","EMPLEADO");

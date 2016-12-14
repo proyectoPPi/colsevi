@@ -1,5 +1,12 @@
 jQuery(document).ready(function(){
-	HiniciarAutocompletar(contexto + '/Pedido/Flujo/autocompletar.html?', 'clienteF', true);
+	HiniciarAutocompletar(contexto + '/Pedido/PedidoWizardStep1/autocompletar.html?', 'cliente', true);
+});
+
+jQuery("#cliente").autocomplete({
+   select: function(e, ui) {
+        this.value = ui.item.value;
+        jQuery('#CodigoPersona').val(ui.item.id_persona);
+    }
 });
 
 function cargarHijos(value){
@@ -86,13 +93,6 @@ function Adicionar(value){
 		
 	});
 }
-
-jQuery("#clienteF").autocomplete({
-   select: function(e, ui) {
-        this.value = ui.item.value;
-        jQuery('#CodigoPersona').val(ui.item.id_persona);
-    }
-});
 
 function cargarDetalle(){
 	HTabla({
