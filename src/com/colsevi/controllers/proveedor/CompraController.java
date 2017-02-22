@@ -319,7 +319,9 @@ public class CompraController extends BaseConfigController {
 				beanC.setFecha_compra(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true));
 			}
 		}
-		
+		if(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_vencimiento"), true).getTime() <= new Date().getTime() ){
+			error += "La fecha de la compra no puede ser menor a la actual<br/>";
+		}
 		if(request.getParameter("pagado") != null)
 			beanC.setPagado(request.getParameter("pagado").equals("SI") || request.getParameter("pagado").equals("on") ? true: false);
 		
