@@ -1,6 +1,89 @@
-jQuery(document).ready(function(){
-	HiniciarAutocompletar(contexto + '/Pedido/PedidoWizardStep1/autocompletar.html?', 'cliente', true);
-});
+function initPaso1(){
+	if(jQuery('#consecutivo').val() === '')
+		jQuery("#ModalUbicacion").modal('show');
+	else
+		detalle();
+}
+function detalle(){
+	HiniciarAutocompletar(contexto + '/Pedido/PedidoWizardStep1/completarProducto.html?', 'producto');
+	HAjax({
+		url: contexto + "/Pedido/PedidoWizardStep1/listaProductos.html?",
+		data: {consecutivo: jQuery('#consecutivo').val()},
+		async: false,
+		method: 'construirVista'
+	});
+}
+
+function construirVista(data){
+	var html = '';
+	data = data['records'];
+	for(i in data){
+		html +='<div class="col-md-3 col-sm-6 masonry-grid-item">';
+		html +='<div class="listing-item white-bg bordered mb-20">';
+		html +='<div class="overlay-container">';
+		html +='<img src="http://cdn2.salud180.com/sites/www.salud180.com/files/cheescake.jpg" alt="">';
+		html +='<a class="overlay-link popup-img-single" href="images/product-1.jpg"><i class="fa fa-search-plus"></i></a>';
+		html +='<div class="overlay-to-top links">';
+		html +='<span class="small">';
+		html +='<a href="#" class="btn-sm-link"><i class="fa fa-heart-o pr-10"></i>Favoritos</a>';
+		html +='<a href="#" class="btn-sm-link"><i class="icon-link pr-5"></i>Detalles</a>';
+		html +='</span></div></div>';
+		html +='<div class="body">';
+		html +='<h3><a href="shop-product.html">'+data[i]['nombre']+'</a></h3>';
+		html +='<div class="elements-list clearfix">';
+		html +='<div class="col-xs-12" style="text-align:center;margin-bottom:5px;"><span class="price">$'+data[i]['venta']+'</span></div>';
+		html +='<div class="col-xs-4" style="padding-right: 0px !important; padding-left: 0px !important;"><input type="number" id="cantidad_'+data[i]['id_producto']+'" name="cantidad" class="form-control"/></div>';
+		html +='<div class="col-xs-8" style="padding-right: 0px !important; padding-left: 0px !important;"><a href="#" class="pull-right margin-clear btn btn-default-transparent btn-animated" onclick="OpcionVista('+data[i]['id_producto']+', 1);">Adicionar';
+		html +='<i class="fa fa-shopping-cart"></i>';
+		html +='</a></div></div></div></div></div></div>';
+	}
+	
+	jQuery('#vistaProducto').html(html);
+}
+
+function OpcionVista(value, opt){
+	
+	switch(opt) {
+    case 1://Add
+    	HAjax({
+    		url: contexto + "/Pedido/PedidoWizardStep1/Adicionar.html?",
+    		data: {consecutivo: jQuery('#consecutivo').val(), prod: value, cantidad: jQuery('#cantidad_'+value).val()},
+    		async: false,
+    		method: 'Add'
+    	});
+        break;
+    case n:
+    	alert(value);
+        break;
+	}
+}
+
+function Add(data){
+	if(data.error == undefined){
+    	jQuery("#mensajeC").html(data.correcto);
+    	jQuery("#correcto").show();
+	}else{
+    	jQuery("#mensajeE").html(data.error);
+    	jQuery("#error").show();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 jQuery("#cliente").autocomplete({
    select: function(e, ui) {

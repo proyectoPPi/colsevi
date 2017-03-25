@@ -3848,7 +3848,7 @@ textarea {
   border-radius: 1px;
   background: #ffffff;
   height: 40px;
-  padding-right: 30px;
+/*   padding-right: 30px; */
   border-color: #e1e1e1;
   color: #777777;
   position: relative;
@@ -4571,10 +4571,9 @@ fieldset[disabled] .form-control {
 }
 
 .listing-item .price {
-  font-size: 18px;
-  margin-top: 1px;
+  font-size: 23px;
   display: inline-block;
-  font-weight: 400;
+  font-weight: bold;
 }
 
 .listing-item .price del {

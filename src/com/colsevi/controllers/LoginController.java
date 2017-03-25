@@ -85,29 +85,30 @@ public class LoginController {
 			model.addAttribute("error", "Contactar al administrador");
 			return null;
 		}
-		UsuarioExample UsuarioExample = new UsuarioExample();
-		UsuarioExample.createCriteria().andUsuarioEqualTo(usuario).andClaveEqualTo(sha);
-		Usuario usu = new Usuario();
+		UsuarioExample UE = new UsuarioExample();
+		UE.createCriteria().andUsuarioEqualTo(usuario).andClaveEqualTo(sha);
+		Usuario usuarioBean = new Usuario();
 		
 		try{
-			usu = ColseviDao.getInstance().getUsuarioMapper().selectByExample(UsuarioExample).get(0);
+			usuarioBean = ColseviDao.getInstance().getUsuarioMapper().selectByExample(UE).get(0);
 		}catch(Exception e){
 			logger.error(e.getMessage());
 			model.addAttribute("error", "Usuario y/o contraseña incorrecta");
 			return null;
 		}
 		
-		if(!usu.getEstado().equals("T")){
+		if(!usuarioBean.getEstado().equals("T")){
 			model.addAttribute("error", "Usuario inactivo");
 			return null;
 		}
-		if(usu.getId_rol() == null){
+		if(usuarioBean.getId_rol() == null){
 			model.addAttribute("error", "Usuario sin perfil asignado");
 			return null;
 		}
 		
-		U.setUsuario(usu.getUsuario());
-		U.setRol(usu.getId_rol());
+		U.setUsuario(usuarioBean.getUsuario());
+		U.setRol(usuarioBean.getId_rol());
+		U.setPersona(usuarioBean.getId_persona());
 		
 		return U;
 	}

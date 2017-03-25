@@ -20,24 +20,18 @@ public class PedidoManager {
 	
 	public static Integer crearPedido(Integer persona, Integer establecimiento, Integer motivo){
 		
-		Integer result = null;
-		try{
-			Pedido ped = new Pedido();
-			
-			ped.setFecha_pedido(new Date());
-			ped.setId_persona(persona);
-			ped.setTotal(new BigDecimal(0));
-			ped.setPagado(false);
-			ped.setId_estado_pedido(PedidoE.BORRADOR.getPedidoE());
-			ped.setId_establecimiento(establecimiento);
-			ped.setMotivo(motivo);
-			
-			ColseviDao.getInstance().getPedidoMapper().insertSelective(ped);
-			result = ColseviDao.getInstance().getPedidoMapper().UltimoPedidoCreado();
-		}catch(Exception e){
-			result = null;
-		}
-		return result;
+		Pedido ped = new Pedido();
+		
+		ped.setFecha_pedido(new Date());
+		ped.setId_persona(persona);
+		ped.setTotal(new BigDecimal(0));
+		ped.setPagado(false);
+		ped.setId_estado_pedido(PedidoE.BORRADOR.getPedidoE());
+		ped.setId_establecimiento(establecimiento);
+		ped.setMotivo(motivo);
+		
+		ColseviDao.getInstance().getPedidoMapper().insertSelective(ped); // optimizar la resolución de la consulta
+		return ColseviDao.getInstance().getPedidoMapper().UltimoPedidoCreado();
 	}
 	
 	public static Pedido obtenerPedido(Integer pedido){
@@ -60,6 +54,7 @@ public class PedidoManager {
 	}
 	
 	public static Boolean crearDetalle(Integer id_pedido, Integer id_producto, Integer cantidad){
+		//Depurar Organizar
 		Boolean result = false;
 		DetallePedido DP = new DetallePedido();
 		BigDecimal venta = ColseviDao.getInstance().getProductoMapper().selectByPrimaryKey(id_producto).getVenta();
