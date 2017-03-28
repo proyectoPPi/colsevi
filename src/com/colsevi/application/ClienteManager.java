@@ -35,8 +35,8 @@ public class ClienteManager {
 		for(Map<String, Object> map: listaCliente){
 			opciones = new JSONObject();
 
-			opciones.put("label", map.get("documento"));
-			opciones.put("value", map.get("documento") + " " + map.get("nombre").toString() + " " + map.get("apellido"));
+			opciones.put("value", map.get("documento"));
+			opciones.put("label", map.get("documento") + " -- " + map.get("nombre").toString() + " " + map.get("apellido"));
 			opciones.put("nombreC",map.get("nombre").toString() + " " + map.get("apellido"));
 			opciones.put("id_persona", map.get("id_persona"));
 			opciones.put("documento", map.get("documento"));

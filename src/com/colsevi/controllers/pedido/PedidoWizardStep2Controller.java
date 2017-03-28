@@ -1,6 +1,8 @@
 package com.colsevi.controllers.pedido;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.PedidoManager;
 import com.colsevi.application.ProductoManager;
+import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.dao.pedido.model.DetallePedidoExample;
 import com.colsevi.dao.pedido.model.Pedido;
 
 @Controller
@@ -31,25 +35,8 @@ public class PedidoWizardStep2Controller extends BaseConfigController {
 
 	@RequestMapping
 	public ModelAndView Step2(HttpServletRequest request,ModelMap model){
-		model.addAttribute("consecutivo", request.getParameter("consecutivo"));
+		model.addAttribute("consecutivo", request.getParameter("sec"));
 		return new ModelAndView("pedido/PedidoWizardStep2View", "col", getValoresGenericos(request));
-	}
-	
-	@RequestMapping("/autocompletar")
-	public void auto(HttpServletRequest request, HttpServletResponse response){
-		try{
-			JSONObject result = new JSONObject();
-			
-			String producto = request.getParameter("campo");
-			result = ProductoManager.AutocompletarProducto(producto);
-
-			if(result != null){
-				ResponseJson(request, response, result);
-			}
-			
-		}catch(Exception e){
-			logger.error(e.getMessage());
-		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -62,37 +49,112 @@ public class PedidoWizardStep2Controller extends BaseConfigController {
 			
 			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("consecutivo")));
 			
-			mapa.put("esta", ped.getId_establecimiento());
-			List<Map<String, Object>> map = ColseviDao.getInstance().getDetallePedidoMapper().SelectDataView(mapa);
-			result.put("records", construirJson(map));
+			mapa.put("ped", ped.getId_pedido());
+			List<Map<String, Object>> map = ColseviDao.getInstance().getDetallePedidoMapper().obtenerDetalle(mapa);
+			result.put("records", ConsJsonDet(map));
 			
-			response.setContentType("text/html;charset=ISO-8859-1");
-			request.setCharacterEncoding("UTF8");
-			
-			result.writeJSONString(response.getWriter());
+			ResponseJson(request, response, result);
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public JSONArray construirJson(List<Map<String, Object>> listaProd){
+	public JSONArray ConsJsonDet(List<Map<String, Object>> detalle){
+		JSONArray result = new JSONArray();
+		JSONObject options = new JSONObject();
 		
-		JSONArray resultado = new JSONArray();
-		JSONObject opciones = new JSONObject();
-		
-		for(Map<String, Object> map: listaProd){
-			opciones = new JSONObject();
-			opciones.put("id_producto", map.get("id_producto"));
-			opciones.put("referencia", map.get("referencia"));
-			opciones.put("nombre", map.get("nombre"));
-			opciones.put("descripcion", map.get("descripcion"));
-			opciones.put("venta", map.get("venta"));
-			opciones.put("imagen", map.get("imagen"));
-			
-			resultado.add(opciones);
+		for(Map<String, Object> map: detalle){
+			try{
+				options = new JSONObject();
+
+				options.put("prod", map.get("id_producto"));
+				options.put("prodId", map.get("id_producto"));
+				options.put("ref", map.get("referencia"));
+				options.put("nombre", map.get("referencia") + " " + map.get("nombre"));
+				options.put("cantidad", map.get("cantidad"));
+				options.put("sub_total",UtilidadManager.MonedaVista((BigDecimal) map.get("sub_total")));
+				options.put("venta",UtilidadManager.MonedaVista((BigDecimal) map.get("venta")));
+				options.put("suma", new BigDecimal(map.get("sub_total").toString()).toBigInteger());
+				
+				result.add(options);
+			}catch(Exception e){
+				logger.error(e.getMessage());
+				continue;
+			}
 		}
-		return resultado;
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Actualizar")
+	public void Actualizar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
+		Pedido ped = new Pedido();
+		
+		try{
+			ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("consecutivo")));
+			
+			String[] cantidad = request.getParameterValues("cantidad");
+			String[] producto = request.getParameterValues("producto");
+			List<Integer> listP = new ArrayList<Integer>();
+			
+			for(int i=0; i<producto.length;i++){
+				Integer p = Integer.parseInt(producto[i]);
+				Integer c = Integer.parseInt(cantidad[i]);
+				listP.add(p);
+				
+				if(ped != null && ped.getId_pedido() != null){
+					PedidoManager.crearDetalle(ped.getId_pedido(), p, c);
+				}else{
+					result.put("error", "El pedido no se pudo crear");
+				}
+			}
+			
+			if(producto.length > 0){
+				DetallePedidoExample DPE = new DetallePedidoExample();
+				DPE.createCriteria().andId_productoNotIn(listP).andId_pedidoEqualTo(ped.getId_pedido());
+				ColseviDao.getInstance().getDetallePedidoMapper().deleteByExample(DPE);
+			}
+			
+			result.put("correcto", "Productos actualizados");
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			result.put("Error", "Contactar al administrador");
+		}
+		
+		ResponseJson(request, response, result);
+	}
+	
+	@RequestMapping("/continuar")
+	public ModelAndView continuar(HttpServletRequest request, ModelMap model){
+
+		try{
+			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("secuencia")));
+			
+			PedidoManager.actualizarPedido(ped.getId_pedido(), null, PedidoE.NUEVO.getPedidoE(), null, null);
+			model.addAttribute("correcto", "Pedido Creado con número: " + ped.getId_pedido());
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			model.addAttribute("error", "Contactar al administrador");
+		}
+		return new ModelAndView("redirect:/Pedido/Visualizar.html", model);
+	}
+	
+	@RequestMapping("/autocompletar")
+	public void auto(HttpServletRequest request, HttpServletResponse response){
+		try{
+			JSONObject result = new JSONObject();
+			
+			String producto = request.getParameter("campo");
+			result = ProductoManager.AutocompletarProducto(producto);
+
+			if(result != null)
+				ResponseJson(request, response, result);
+			
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -101,19 +163,15 @@ public class PedidoWizardStep2Controller extends BaseConfigController {
 		JSONObject result = new JSONObject();
 		try{
 			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("consecutivo")));		
-			PedidoManager.crearDetalle(ped.getId_pedido(), Integer.parseInt(request.getParameter("prod")), Integer.parseInt(request.getParameter("cantidad")));
+			PedidoManager.crearDetalle(ped.getId_pedido(), Integer.parseInt(request.getParameter("prod")), 
+					Integer.parseInt(request.getParameter("cantidad")));
 			result.put("correcto", "Producto adicionado");
 
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			result.put("error", "Contactar al administrador");
 		}
-		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		result.writeJSONString(response.getWriter());
+		ResponseJson(request, response, result);
 	}
 	
-
-
 }

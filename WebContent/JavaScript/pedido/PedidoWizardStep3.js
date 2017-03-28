@@ -9,6 +9,7 @@ jQuery(document).ready(function(){
 });
 
 function construirVista(data){
+	var suma = '';
 	jQuery('#vistaProducto').html('');
 	data = data['records'];
 	var html = '';
@@ -37,15 +38,16 @@ function construirVista(data){
 		html +='<td class="remove"><a class="btn btn-remove btn-sm btn-default">Remover</a></td>';
 		html +='<td class="amount">'+data[i]['sub_total']+'</td>';
 		html +='</tr>';
+		suma += data[i]['suma'];
 	}
 	
 	html +='<tr>';
-	html +='<td class="total-quantity" colspan="4">Total 8 productos</td>';
-	html +='<td class="total-amount">$1997.00</td>';
+	html +='<td class="total-quantity" colspan="4">Total ' + data.length + ' producto(s)</td>';
+	html +='<td class="total-amount">$' + suma + '</td>';
 	html +='</tr>';
 	html +='</tbody>';
 	html +='</table>';
-	
+
 	jQuery('#vistaProducto').html(html);
 	
 }

@@ -1,7 +1,7 @@
 jQuery(document).ready(function(){
-	HiniciarAutocompletar(contexto + '/Pedido/PedidoWizardStep2/autocompletar.html?', 'producto');
+//	HiniciarAutocompletar(contexto + '/Pedido/PedidoWizardStep2/autocompletar.html?', 'producto');
 	HAjax({
-		url: contexto + "/Pedido/PedidoWizardStep2/listaProductos.html?",
+		url: contexto + "/Pedido/PedidoWizardStep3/listaProductos.html?",
 		data: {consecutivo: jQuery('#consecutivo').val()},
 		async: false,
 		method: 'construirVista'
@@ -9,55 +9,58 @@ jQuery(document).ready(function(){
 });
 
 function construirVista(data){
-	var html = '';
+	var suma = '';
+	jQuery('#vistaProducto').html('');
 	data = data['records'];
+	var html = '';
+	html +='<table class="table cart table-hover table-colored">';	
+	html +='<thead>';
+	html +='<tr>';
+	html +='<th>Producto </th>';
+	html +='<th>Precio </th>';
+	html +='<th>Cantidad</th>';
+	html +='<th>Remover </th>';		
+	html +='<th class="amount">Total </th>';
+	html +='</tr>';
+	html +='</thead>';
+	html +='<tbody>';
+	
 	for(i in data){
-		html +='<div class="col-md-3 col-sm-6 masonry-grid-item">';
-		html +='<div class="listing-item white-bg bordered mb-20">';
-		html +='<div class="overlay-container">';
-		html +='<img src="http://cdn2.salud180.com/sites/www.salud180.com/files/cheescake.jpg" alt="">';
-		html +='<a class="overlay-link popup-img-single" href="images/product-1.jpg"><i class="fa fa-search-plus"></i></a>';
-		html +='<div class="overlay-to-top links">';
-		html +='<span class="small">';
-		html +='<a href="#" class="btn-sm-link"><i class="fa fa-heart-o pr-10"></i>Favoritos</a>';
-		html +='<a href="#" class="btn-sm-link"><i class="icon-link pr-5"></i>Detalles</a>';
-		html +='</span></div></div>';
-		html +='<div class="body">';
-		html +='<h3><a href="shop-product.html">'+data[i]['nombre']+'</a></h3>';
-		html +='<div class="elements-list clearfix">';
-		html +='<span class="price">$'+data[i]['venta']+'</span>';
-		html += '<p><input type="number" id="cantidad_'+data[i]['id_producto']+'" name="cantidad" class="form-control"/>';
-		html +='<a href="#" class="pull-right margin-clear btn btn-sm btn-default-transparent btn-animated" onclick="OpcionVista('+data[i]['id_producto']+', 1);">Adicionar';
-		html +='<i class="fa fa-shopping-cart"></i>';
-		html +='</a></p></div></div></div></div>';
+		html +='<tr class="remove-data">';
+		html +='<td class="product"><a href="shop-product.html">'+data[i]['nombre']+'</a> <small>'+data[i]['descripcion']+'</small></td>';
+		html +='<td class="price">'+data[i]['venta']+'</td>';
+		html +='<td class="quantity">';
+		html +='<div class="form-group">';
+		html +='<input type="text" class="form-control" value="'+data[i]['cantidad']+'" name="cantidad">';
+		html +='<input type="hidden" name="producto" value="'+data[i]['prodId']+'"/>';
+		html +='</div>';											
+		html +='</td>';
+		html +='<td class="remove"><a class="btn btn-remove btn-sm btn-default">Remover</a></td>';
+		html +='<td class="amount">'+data[i]['sub_total']+'</td>';
+		html +='</tr>';
+		suma += data[i]['suma'];
 	}
 	
+	html +='<tr>';
+	html +='<td class="total-quantity" colspan="4">Total ' + data.length + ' producto(s)</td>';
+	html +='<td class="total-amount">$' + suma + '</td>';
+	html +='</tr>';
+	html +='</tbody>';
+	html +='</table>';
+
 	jQuery('#vistaProducto').html(html);
 }
 
-function OpcionVista(value, opt){
-	
-	switch(opt) {
-    case 1://Add
-    	HAjax({
-    		url: contexto + "/Pedido/PedidoWizardStep2/Adicionar.html?",
-    		data: {consecutivo: jQuery('#consecutivo').val(), prod: value, cantidad: jQuery('#cantidad_'+value).val()},
-    		async: false,
-    		method: 'Add'
-    	});
-        break;
-    case n:
-    	alert(value);
-        break;
-	}
+function actualizar(){
+	HAjax({
+		url: contexto + "/Pedido/PedidoWizardStep3/Actualizar.html?" + jQuery('#formulario').serialize(),
+		async: false,
+		method: 'Confirmar'
+	});
 }
 
-function Add(data){
+function Confirmar(data){
 	if(data.error == undefined){
-    	jQuery("#mensajeC").html(data.correcto);
-    	jQuery("#correcto").show();
-	}else{
-    	jQuery("#mensajeE").html(data.error);
-    	jQuery("#error").show();
+    	jQuery('#continuar').submit();
 	}
 }

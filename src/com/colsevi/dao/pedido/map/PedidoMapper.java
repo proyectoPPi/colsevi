@@ -76,5 +76,6 @@ public interface PedidoMapper {
 	int updateByPrimaryKey(Pedido record);
 
 	List<Map<String, Object>> SelectDataView(Map<String, Object> map);
+	int CountDataView(Map<String, Object> mapa);
 	int UltimoPedidoCreado();
 }

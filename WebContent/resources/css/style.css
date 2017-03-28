@@ -64,12 +64,12 @@ ul {
 }
 
 .table.table-colored {
-  border-bottom-color: #09afdf;
+  border-bottom-color: #331d08;
 }
 
 .table-colored > thead > tr > th {
-  border-color: #09afdf;
-  background-color: #09afdf;
+  border-color: #331d08;
+  background-color: #331d08;
   color: #ffffff;
 }
 
@@ -9927,20 +9927,7 @@ mark,
 
 /* Tables
 ---------------------------------- */
-.table.table-colored {
-  border-bottom-color: #09afdf;
-}
 
-.table-colored > thead > tr > th {
-  border-color: #09afdf;
-  background-color: #09afdf;
-  color: #ffffff;
-}
-
-.header-top.dark {
-  background-color: #2e3537;
-  border-bottom: 1px solid #252a2c;
-}
 
 .header.dark {
   background-color: #394245;

@@ -49,7 +49,7 @@ function HTabla(opciones){
 			}
 		 }
 		html += "</tr></thead><tbody>";
-		
+		dataMap["total"] = data["total"];
 		
 		if(data == "" || data['datos'] === undefined || data['datos'][0] == undefined ){
 			html += '<tr>';
@@ -59,7 +59,6 @@ function HTabla(opciones){
 		 }else{
 			dataMap["datos"] = data["datos"];
 			dataMap["titulos"] = titulos;
-			dataMap["total"] = data["total"];
 
 			 for(i in data["datos"]){
 				 html += "<tr>";
@@ -135,10 +134,9 @@ function HTabla(opciones){
 		 
 		 jQuery(Id).html(html);
 		 
-		 if(opciones.pagina == undefined){
-			 dataMap["total"] = 0;
+		 if(opciones.pagina == undefined)
 			 opciones.pagina = 1;
-		 }
+
 		 organizarPaginacion(opciones.pagina);
 		 
 		jQuery("#ModalCargando").modal('hide');

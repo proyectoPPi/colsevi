@@ -19,12 +19,9 @@
 					<section class="panel">
 						<div class="panel-body">
 							<div class="col-xs-12 col-sm-6 col-md-3">
-								<label>Documento</label>
-								<input type="text" class="form-control" id="documentoF" name="filtro"/>
-							</div>
-							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label>Cliente</label>
-								<input type="text" class="form-control" id="clienteF" name="filtro"/>
+								<input type="text" class="form-control" id="clienteV" name="clienteV"/>
+								<input type="hidden" id="clienteF" name="filtro"/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label>Estado</label>
@@ -55,7 +52,7 @@
 		titulos = new Array();
 		titulos["id_pedido"] = "ID";
 		titulos["documento"] = "Documento";
-		titulos["nombreCompleto"] = "Nombre";
+		titulos["nombreCompleto"] = "Cliente";
 		titulos["estado"] = "Estado";
 		titulos["fecha_pedido"] = "fecha";
 		titulos["pagado"] = "Pagado";

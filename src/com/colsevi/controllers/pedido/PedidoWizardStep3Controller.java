@@ -53,10 +53,7 @@ public class PedidoWizardStep3Controller extends BaseConfigController {
 			List<Map<String, Object>> map = ColseviDao.getInstance().getDetallePedidoMapper().obtenerDetalle(mapa);
 			result.put("records", ConsJsonDet(map));
 			
-			response.setContentType("text/html;charset=ISO-8859-1");
-			request.setCharacterEncoding("UTF8");
-			
-			result.writeJSONString(response.getWriter());
+			ResponseJson(request, response, result);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -78,6 +75,7 @@ public class PedidoWizardStep3Controller extends BaseConfigController {
 				options.put("cantidad", map.get("cantidad"));
 				options.put("sub_total",UtilidadManager.MonedaVista((BigDecimal) map.get("sub_total")));
 				options.put("venta",UtilidadManager.MonedaVista((BigDecimal) map.get("venta")));
+				options.put("suma", new BigDecimal(map.get("venta").toString()).toBigInteger());
 				
 				result.add(options);
 			}catch(Exception e){

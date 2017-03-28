@@ -81,10 +81,6 @@ function Add(data){
 
 
 
-
-
-
-
 jQuery("#cliente").autocomplete({
    select: function(e, ui) {
         this.value = ui.item.value;

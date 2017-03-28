@@ -11,36 +11,25 @@
 	<section class="page-wrapper">
 		<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
 		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
-		<div class="light-gray-bg section">
-			<div class="container">
-				<div class="sorting-filters text-center mb-20">
-					<div class="form-inline">
-						<input type="hidden" id="consecutivo" name="consecutivo" value="${consecutivo}"/>
-						<div class="form-group">
-							<label>Producto</label>
-							<input type="text" class="form-control" id="producto" id="producto"/>
-							<input type="hidden" id="codigo_prod" name="codigo_prod"/>
-						</div>
-						
-						<div class="form-group">
-							<a href="#" class="btn btn-warning">Buscar</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<section class="container">
 			<div class="row">
 				<c:import url="/WEB-INF/jsp/plantilla/alertas.jsp"></c:import>
-			
-				<div id="vistaProducto"></div>
+				<h1 class="page-title">Verificar</h1>
+				<div class="separator-2"></div>
 				
-				<form action="${pageContext.request.contextPath}/Pedido/PedidoWizardStep3.html" method="post">
-					<input type="hidden" id="secuencia" name="secuencia" value="${consecutivo}"/>
-					<div class="form-group">
-						<button type="submit" class="btn btn-primary">Siguiente</button>
-					</div>
+				<form action="#" method="post" id="formulario">
+					<input type="hidden" id="consecutivo" name="consecutivo" value="${consecutivo}"/>
+					<div id="vistaProducto"></div>
 				</form>
+				asdasd
+				<div class="text-right">
+					<form action="${pageContext.request.contextPath}/Pedido/PedidoWizardStep2/continuar.html" method="post" id="continuar">
+						<input type="hidden" id="secuencia" name="secuencia" value="${consecutivo}"/>
+						<div class="form-group">
+							<button type="button" class="btn btn-primary" onclick="actualizar();">Siguiente</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</section>
 		<c:import url="/WEB-INF/jsp/plantilla/pie_pagina.jsp"></c:import>

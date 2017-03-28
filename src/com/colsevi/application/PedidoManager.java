@@ -11,12 +11,18 @@ import com.colsevi.dao.inventario.model.InventarioXMateria;
 import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
 import com.colsevi.dao.pedido.model.DetallePedido;
 import com.colsevi.dao.pedido.model.DetallePedidoExample;
+import com.colsevi.dao.pedido.model.EstadoPedido;
+import com.colsevi.dao.pedido.model.EstadoPedidoExample;
 import com.colsevi.dao.pedido.model.Pedido;
 import com.colsevi.dao.pedido.model.PedidoExample;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 
 public class PedidoManager {
+	
+	public static List<EstadoPedido> listaEstadoP(){
+		return ColseviDao.getInstance().getEstadoPedidoMapper().selectByExample(new EstadoPedidoExample());
+	}
 	
 	public static Integer crearPedido(Integer persona, Integer establecimiento, Integer motivo){
 		

@@ -11,7 +11,7 @@
 		<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
 		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
 		
-		<div class="light-gray-bg section">
+		<div class="light-gray-bg section" id="filtroPedidoWizard">
 			<div class="container">
 				<div class="col-xs-3">
 					<label>Producto</label>
@@ -59,6 +59,13 @@
 				</div>
 				
 				<div id="vistaProducto"></div>
+				
+				<form action="${pageContext.request.contextPath}/Pedido/PedidoWizardStep2.html" method="post">
+					<input type="hidden" name="sec" value="${consecutivo}"/>
+					<div class="col-xs-12">
+						<button type="submit" class="btn btn-primary">Siguiente</button>
+					</div>
+				</form>
 				
 			</div>
 		</section>

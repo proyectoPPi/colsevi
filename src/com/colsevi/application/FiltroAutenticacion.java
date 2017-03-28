@@ -59,29 +59,12 @@ public class FiltroAutenticacion implements Filter, Serializable{
 	private boolean isExcluirVerficacion(String path) {
 
 		if (path.endsWith("jpg")  || path.endsWith("png")  || path.endsWith("gif") ||
-			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") ||  path.endsWith("map") ||
-			path.startsWith("/login")|| 
-			path.startsWith("/Caja/CierreCaja")|| //suspendido
-			path.startsWith("/Usuario/ClienteRegistro") || //terminado
-			path.startsWith("/Proveedor/Compra") || // OK
-			path.startsWith("/Usuario/TipoDocumento") || // OK
-			path.startsWith("/Inventario/MateriaPrima") || // OK
-			path.startsWith("/Inventario/MovimientoMateria") || // OK
-			path.startsWith("/pago/Proveedor") ||// filtros
-			path.startsWith("/Producto/Tipo") || // OK
-			path.startsWith("/Producto/Admin") || // Pendiente
-			path.startsWith("/Inventario/Inv") || // OK
-			path.startsWith("/Catalogo/Cat") || // OK
-			path.startsWith("/Pedido/Visualizar") ||
-			path.startsWith("/Ingrediente/Ing") ||
-			path.startsWith("/Usuario/EmpleadoRegistro") ||
-			path.startsWith("/Proveedor/Prov") ||
-			path.startsWith("/General/Establecimiento") ||
+			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") || 
+			path.startsWith("/login") ||
 			path.startsWith("/Pedido/PedidoWizardStep1") ||
 			path.startsWith("/Pedido/PedidoWizardStep2") ||
 			path.startsWith("/Pedido/PedidoWizardStep3") ||
-			
-			path.startsWith("/login") ||
+			path.startsWith("/Pedido/Visualizar") ||
 			path.startsWith(INDEX)
 			){
 			return true;

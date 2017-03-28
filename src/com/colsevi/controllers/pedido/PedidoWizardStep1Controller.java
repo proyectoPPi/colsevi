@@ -16,7 +16,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.colsevi.application.ClienteManager;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.GeneralManager;
 import com.colsevi.application.PedidoManager;
@@ -37,26 +36,6 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 		return new ModelAndView("pedido/PedidoWizardStep1View", "col", getValoresGenericos(request));
 	}
 
-	@RequestMapping("/autocompletar")
-	public void auto(HttpServletRequest request, HttpServletResponse response){
-		
-		try{
-			JSONObject result = new JSONObject();
-			
-			String cliente = request.getParameter("campo");
-			result = ClienteManager.AutocompletarCliente(cliente);
-			
-			if(result != null){
-				response.setContentType("text/html;charset=ISO-8859-1");
-				request.setCharacterEncoding("UTF8");
-				
-				result.writeJSONString(response.getWriter());
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-	
 	@RequestMapping("/crearPedido")
 	public ModelAndView CrearPedido(HttpServletRequest request, ModelMap model) throws IOException{
 		String error = "";
@@ -65,7 +44,7 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 		try{
 			pedido = PedidoManager.crearPedido(getUsuario(request).getPersona(), Integer.parseInt(request.getParameter("establecimiento")), null);
 		}catch(Exception e){
-			error += "Contactar al administrador";
+			error = "Contactar al administrador";
 			logger.error(e.getMessage());
 		}
 		model.addAttribute("consecutivo", pedido);
@@ -80,15 +59,10 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 	@RequestMapping("/completarProducto")
 	public void completarProducto(HttpServletRequest request, HttpServletResponse response){
 		try{
-			JSONObject result = new JSONObject();
-			
 			String producto = request.getParameter("campo");
-			result = ProductoManager.AutocompletarProducto(producto);
-
-			if(result != null){
+			JSONObject result = ProductoManager.AutocompletarProducto(producto);
+			if(result != null)
 				ResponseJson(request, response, result);
-			}
-			
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
@@ -110,7 +84,7 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 			
 			ResponseJson(request, response, result);
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 	
@@ -121,15 +95,20 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 		JSONObject opciones = new JSONObject();
 		
 		for(Map<String, Object> map: listaProd){
-			opciones = new JSONObject();
-			opciones.put("id_producto", map.get("id_producto"));
-			opciones.put("referencia", map.get("referencia"));
-			opciones.put("nombre", map.get("nombre"));
-			opciones.put("descripcion", map.get("descripcion"));
-			opciones.put("venta", map.get("venta"));
-			opciones.put("imagen", map.get("imagen"));
-			
-			resultado.add(opciones);
+			try{
+				opciones = new JSONObject();
+				opciones.put("id_producto", map.get("id_producto"));
+				opciones.put("referencia", map.get("referencia"));
+				opciones.put("nombre", map.get("nombre"));
+				opciones.put("descripcion", map.get("descripcion"));
+				opciones.put("venta", map.get("venta"));
+				opciones.put("imagen", map.get("imagen"));
+				
+				resultado.add(opciones);
+			}catch(Exception e){
+				logger.error(e.getMessage());
+				continue;
+			}
 		}
 		return resultado;
 	}
@@ -140,10 +119,11 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 		JSONObject result = new JSONObject();
 		try{
 			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("consecutivo")));		
-			PedidoManager.crearDetalle(ped.getId_pedido(), Integer.parseInt(request.getParameter("prod")), Integer.parseInt(request.getParameter("cantidad")));
+			PedidoManager.crearDetalle(ped.getId_pedido(), Integer.parseInt(request.getParameter("prod")), 
+					Integer.parseInt(request.getParameter("cantidad")));
 			result.put("correcto", "Producto adicionado");
-
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			result.put("error", "Contactar al administrador");
 		}
 		
