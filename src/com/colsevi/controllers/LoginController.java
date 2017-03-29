@@ -21,16 +21,17 @@ import com.colsevi.dao.usuario.model.Usuario;
 import com.colsevi.dao.usuario.model.UsuarioExample;
 
 @Controller
+@RequestMapping("login")
 public class LoginController {
 	
 	private static Logger logger = Logger.getLogger(LoginController.class);
 	
-	@RequestMapping("login")
+	@RequestMapping
 	public ModelAndView login(HttpServletRequest request, ModelMap model){
-		return new ModelAndView("login");
+		return new ModelAndView("/");
 	}
 	
-	@RequestMapping("login/Ingresar")
+	@RequestMapping("/Ingresar")
 	public ModelAndView Ingresar(HttpServletRequest request, HttpServletResponse response, ModelMap model){
 		String usuario = request.getParameter("usuario");
 		String clave = request.getParameter("clave");
@@ -52,7 +53,7 @@ public class LoginController {
 		return new ModelAndView("redirect:/General/Establecimiento.html");
 	}
 	
-	@RequestMapping("login/Cerrar")
+	@RequestMapping("/Cerrar")
 	public ModelAndView Logouth(HttpServletRequest request, HttpServletResponse response, ModelMap model){
 		
 		try{
@@ -113,19 +114,24 @@ public class LoginController {
 		return U;
 	}
 	
+	@RequestMapping("/recuperar")
 	public ModelAndView recuperar(HttpServletRequest request, ModelMap model){
 		
 		Correo cor = new Correo();
 		Persona per = new Persona();
-		String correo = request.getParameter("email");
-		if(correo != null && !correo.trim().isEmpty()){
+		Usuario usuarioBean = new Usuario();
+		String usuario = request.getParameter("usuarioRecuperar");
+		if(usuario != null && !usuario.trim().isEmpty()){
 
 			CorreoExample CE = new CorreoExample();
-			CE.createCriteria().andCorreoEqualTo(correo);
+			UsuarioExample UE = new UsuarioExample();
+			UE.createCriteria().andUsuarioEqualTo(usuario);
 			
 			try{
+				usuarioBean = ColseviDao.getInstance().getUsuarioMapper().selectByExample(UE).get(0);
+				CE.createCriteria().andId_personaEqualTo(usuarioBean.getId_persona());
 				cor = ColseviDao.getInstance().getCorreoMapper().selectByExample(CE).get(0);
-				per = ColseviDao.getInstance().getPersonaMapper().selectByPrimaryKey(cor.getId_persona());
+				per = ColseviDao.getInstance().getPersonaMapper().selectByPrimaryKey(usuarioBean.getId_persona());
 			}catch(Exception e){
 				cor = null;
 				model.addAttribute("error", "No existe un correo en el sistema");

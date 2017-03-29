@@ -1,7 +1,7 @@
 jQuery(document).ready(function(){
 //	HiniciarAutocompletar(contexto + '/Pedido/PedidoWizardStep2/autocompletar.html?', 'producto');
 	HAjax({
-		url: contexto + "/Pedido/PedidoWizardStep3/listaProductos.html?",
+		url: contexto + "/Pedido/PedidoWizardStep2/listaProductos.html?",
 		data: {consecutivo: jQuery('#consecutivo').val()},
 		async: false,
 		method: 'construirVista'
@@ -53,7 +53,7 @@ function construirVista(data){
 
 function actualizar(){
 	HAjax({
-		url: contexto + "/Pedido/PedidoWizardStep3/Actualizar.html?" + jQuery('#formulario').serialize(),
+		url: contexto + "/Pedido/PedidoWizardStep2/Actualizar.html?" + jQuery('#formulario').serialize(),
 		async: false,
 		method: 'Confirmar'
 	});

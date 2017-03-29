@@ -27,7 +27,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			String uri = httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length());
 			String url = uri;
 			if (httpServletRequest.getQueryString() != null){
-				url += "?"+httpServletRequest.getQueryString();
+				url += "?" + httpServletRequest.getQueryString();
 			}
 			
 			boolean ExcluirVerficacion= isExcluirVerficacion(uri);
@@ -43,16 +43,16 @@ public class FiltroAutenticacion implements Filter, Serializable{
 					chain.doFilter(servletRequest, servletResponse);
 					return;
 				}else{
-					httpServletRequest.getRequestDispatcher(INDEX + ".html").forward(servletRequest, servletResponse);
+					httpServletRequest.getRequestDispatcher("/").forward(servletRequest, servletResponse);//Ajustar pagina error
 				}
 			}else{
-				httpServletRequest.getRequestDispatcher(INDEX).forward(servletRequest, servletResponse);
+				httpServletRequest.getRequestDispatcher("/").forward(servletRequest, servletResponse);
 			}
 			
 		}catch (Throwable e) {
 			e.printStackTrace();
 			((HttpServletRequest)servletRequest).setAttribute("ERROR", "ERROR EN EL SISTEMA");
-			((HttpServletRequest)servletRequest).getRequestDispatcher(INDEX).forward(servletRequest, servletResponse);
+			((HttpServletRequest)servletRequest).getRequestDispatcher("/").forward(servletRequest, servletResponse);
 		}
 	}
 
@@ -61,6 +61,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 		if (path.endsWith("jpg")  || path.endsWith("png")  || path.endsWith("gif") ||
 			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") || 
 			path.startsWith("/login") ||
+			path.startsWith("/Usuario/ClienteRegistro") ||
 			path.startsWith("/Pedido/PedidoWizardStep1") ||
 			path.startsWith("/Pedido/PedidoWizardStep2") ||
 			path.startsWith("/Pedido/PedidoWizardStep3") ||

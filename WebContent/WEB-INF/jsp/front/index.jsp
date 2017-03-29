@@ -11,7 +11,7 @@
 		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
 		<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
 			<div class="row">
-				<img alt="" src="http://placehold.it/1920x1080">
+				<img alt="" src="http://blog.emenuweb.com/wp-content/uploads/2015/02/restaurante.jpg">
 			
 				<div class="modal fade modal-dialog-center " id="ModalLogin" style="z-index: 100000;"
 					tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

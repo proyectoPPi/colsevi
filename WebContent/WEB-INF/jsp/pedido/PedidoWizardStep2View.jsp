@@ -7,7 +7,6 @@
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 </head>
 <body>
-
 	<section class="page-wrapper">
 		<c:import url="/WEB-INF/jsp/plantilla/encabezado.jsp"></c:import>
 		<c:import url="/WEB-INF/jsp/plantilla/menu.jsp"></c:import>
@@ -21,7 +20,6 @@
 					<input type="hidden" id="consecutivo" name="consecutivo" value="${consecutivo}"/>
 					<div id="vistaProducto"></div>
 				</form>
-				asdasd
 				<div class="text-right">
 					<form action="${pageContext.request.contextPath}/Pedido/PedidoWizardStep2/continuar.html" method="post" id="continuar">
 						<input type="hidden" id="secuencia" name="secuencia" value="${consecutivo}"/>

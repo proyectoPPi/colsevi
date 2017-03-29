@@ -17,19 +17,22 @@
 				<h1 class="page-title">Verificar</h1>
 				<div class="separator-2"></div>
 				
-				<form action="#" method="post" id="formulario">
-					<input type="hidden" id="consecutivo" name="consecutivo" value="${secuencia}"/>
-					<div id="vistaProducto"></div>
+				<form action="${pageContext.request.contextPath}/Pedido/PedidoWizardStep3/continuar.html" method="post" id="continuar">
+					<input type="hidden" id="secuencia" name="secuencia" value="${secuencia}"/>
+					
+					<div class="col-xs-6">
+						<label>Seleccione algún cliente</label>
+						<input type="text" class="form-control" id="cliente" id="cliente"/>
+						<input type="hidden" id="persona" name="persona"/>
+					</div>
+					
+					<div class="col-xs-12 text-right">
+						<button type="submit" class="btn btn-primary">Siguiente</button>
+					</div>
+					
 				</form>
 				
-				<div class="text-right">
-					<form action="${pageContext.request.contextPath}/Pedido/PedidoWizardStep3/continuar.html" method="post" id="continuar">
-						<input type="hidden" id="secuencia" name="secuencia" value="${secuencia}"/>
-						<div class="form-group">
-							<button type="button" class="btn btn-primary" onclick="actualizar();">Siguiente</button>
-						</div>
-					</form>
-				</div>
+				
 			</div>
 		</section>
 		<c:import url="/WEB-INF/jsp/plantilla/pie_pagina.jsp"></c:import>

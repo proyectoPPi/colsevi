@@ -6,7 +6,6 @@ var cantPagina = 16;
  * Método para pintar la tabla
  */
 function HTabla(opciones){
-	jQuery("#ModalCargando").modal('show');
 	var titulos = opciones.titulos;
 	var Id = opciones.Id;
 	var id = null;
@@ -32,7 +31,6 @@ function HTabla(opciones){
 			data = jQuery.parseJSON(result);
 		} catch(err){
 			console.log("Error ejecutando tabla" + err);
-			jQuery("#ModalCargando").modal('hide');
         	return;
 		}
 		var html = ""; 
@@ -55,7 +53,6 @@ function HTabla(opciones){
 			html += '<tr>';
 			html += '<td colspan="'+count+'" style="text-align:center;font-weight: bold;">NO HAY DATOS</td>';
 			html += '</tr>';
-	 		jQuery("#ModalCargando").modal('hide');
 		 }else{
 			dataMap["datos"] = data["datos"];
 			dataMap["titulos"] = titulos;
@@ -138,8 +135,6 @@ function HTabla(opciones){
 			 opciones.pagina = 1;
 
 		 organizarPaginacion(opciones.pagina);
-		 
-		jQuery("#ModalCargando").modal('hide');
 	});
 }
 
@@ -209,7 +204,8 @@ function organizarPaginacion(pagina){
 		html += '<li><a href="javascript:void(Tabla('+parseInt(pagina-1)+'));">&lsaquo;</a></li>';
 	}
 	for(var i=Inicio; i<=Final; i++){
-		html += i==pagina ? '<li class="active"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>':'<li class="hidden-xs"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>';
+		html += i==pagina ? '<li class="active"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>':
+			'<li class="hidden-xs"><a href="javascript:void(Tabla('+i+'));">'+i+'</a></li>';
 	}
 	if(pagina<NPaginas){
 		html += '<li><a href="javascript:void(Tabla('+parseInt(pagina+1)+'));">&rsaquo;</a></li>';
@@ -294,7 +290,6 @@ function ActualizarAutocompletar(input){
 }
 
 function HPreprocesar(opcion){
-	jQuery("#ModalCargando").modal('show');
 	jQuery("#errorDivF").hide();
 	jQuery.ajax({
 		url: opcion.url + jQuery("#" + opcion.formulario).serialize(),
@@ -314,9 +309,16 @@ function HPreprocesar(opcion){
  		}else{
  			jQuery("#" + opcion.formulario).submit();
  		}
- 		jQuery("#ModalCargando").modal('hide');
 	});
 }
+
+$(document).ajaxStart(function(){
+	jQuery("#ModalCargando").modal('show');
+});
+
+$(document).ajaxStop(function(){
+	jQuery("#ModalCargando").modal('hide');
+});
 
 function HAjax(opciones){
 	jQuery.ajaxQueue({
@@ -399,6 +401,19 @@ function HTipoPesoVal(value, opt){
 	return html;
 }
 
+function HMensaje(mensaje, tipo){
+	$.notify({
+		message: mensaje
+	},{
+		type: tipo,
+		delay: 4000,
+		offset : {
+			y: 100,
+			x: 20
+		}
+	});
+}
+
 function HGrafico(opciones){
 	var data = undefined;
 	jQuery.ajaxQueue({
@@ -416,6 +431,4 @@ function HGrafico(opciones){
  			console.log("Error ejecutando HGrafico" + err); 
  		} 
 	});
-	
-	
 }

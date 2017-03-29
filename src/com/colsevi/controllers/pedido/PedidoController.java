@@ -34,6 +34,9 @@ public class PedidoController extends BaseConfigController {
 	@RequestMapping
 	public ModelAndView Pedido(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaEstado", PedidoManager.listaEstadoP());
+		if(request.getParameter("correcto") != null)
+			model.addAttribute("correcto", "Pedido Creado con número: " + request.getParameter("correcto"));
+		
 		return new ModelAndView("pedido/visualizadorPedido","col",getValoresGenericos(request));
 	}
 	
