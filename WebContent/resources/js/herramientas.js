@@ -18,7 +18,7 @@ function HredireccionarVista(accion, data, fnCorrecto, fnError) {
 		fnCorrecto = HMostrarDiv;
 	}
 	if (fnError === null || fnError === undefined) {
-		fnError = HValidadErrorGeneralAjax;
+		fnError = HValidarErrorGeneralAjax;
 	}
 
 	xhr = $.ajax({
@@ -34,7 +34,7 @@ function HMostrarDiv(response) {
 	$("#contenedor").html(response);
 }
 
-function HValidadErrorGeneralAjax(jqXHR, textStatus, errorThrown) {
+function HValidarErrorGeneralAjax(jqXHR, textStatus, errorThrown) {
 	
 	console.log("Fallo general al cargar la pantalla");
 	
@@ -56,7 +56,7 @@ function HValidadErrorGeneralAjax(jqXHR, textStatus, errorThrown) {
 		window.location = '/logout/logout.jsp';
 	}else {
 		console.log(jqXHR, 'xhr response');
-		console.log('Falló General al cargar MostrarDiv: ValidadErrorGeneralAjax');
+		console.log('Falló General al cargar MostrarDiv: HValidarErrorGeneralAjax');
 	}	
 }
 
@@ -90,11 +90,20 @@ function moveTopScroll(){
 $(document).ajaxStart(function(){
 	xhr = null;
 	jQuery("#ModalCargando").modal('show');
+	$(window).trigger('resize');
 });
 
 $(document).ajaxStop(function(){
 	xhr = null;
 	jQuery("#ModalCargando").modal('hide');
+	$(window).trigger('resize');
+});
+
+$( document ).ajaxError(function( event, jqxhr, settings, thrownError ){
+	xhr = null;
+	jQuery("#ModalCargando").modal('hide');
+	HValidarErrorGeneralAjax(jqxhr, event, thrownError);
+	$(window).trigger('resize');
 });
 
 function HAjax(opciones){
