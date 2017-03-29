@@ -1,6 +1,117 @@
+var xhr = null;
 var dataMap = {};
 var registrosPagina = 10;
 var cantPagina = 16;
+
+
+function HvalidateXHR() {
+	if( xhr !== null ) {
+        	xhr.abort();
+        	xhr = null;
+	}
+}
+
+function HredireccionarVista(accion, data, fnCorrecto, fnError) {
+	HvalidateXHR();
+	
+	if (fnCorrecto === null || fnCorrecto === undefined) {
+		fnCorrecto = HMostrarDiv;
+	}
+	if (fnError === null || fnError === undefined) {
+		fnError = HValidadErrorGeneralAjax;
+	}
+
+	xhr = $.ajax({
+		url : accion,
+		type : 'POST',
+		data : data,
+		success : fnCorrecto,
+		error : fnError
+	});
+}
+
+function HMostrarDiv(response) {
+	$("#contenedor").html(response);
+}
+
+function HValidadErrorGeneralAjax(jqXHR, textStatus, errorThrown) {
+	
+	console.log("Fallo general al cargar la pantalla");
+	
+	
+	if (jqXHR.status === '403' || jqXHR.status === '500') {
+		HcheckSession();
+		if (jqXHR.status === '403') {
+			console.log('Access Denied (Permissions)');
+		} else {
+			console.log('Internal Error Encountered: '+ jqXHR.responseText);
+		}
+	} else if(jqXHR.status === '900'){
+			console.log('******INTENTO ATAQUE CSFR - URL****** OR ******INTENTO ATAQUE XSS******');
+			inFormOrLink = true;
+			window.location = '/logout/logout.jsp';
+	} else if(jqXHR.status === '800'){
+		console.log('Se detecto diferencias al comprar los atributos ingresados en step1 con step2');
+		inFormOrLink = true;
+		window.location = '/logout/logout.jsp';
+	}else {
+		console.log(jqXHR, 'xhr response');
+		console.log('Falló General al cargar MostrarDiv: ValidadErrorGeneralAjax');
+	}	
+}
+
+function HcheckSession() {
+	$.get('/app/authentication/check_session', function(data) {
+		// inactive session so redirect to login page
+		if (data !== '1') {
+			inFormOrLink = true;
+			window.location = '/logout/logout.jsp';
+		}
+		// likely does not have perimissions
+	});
+}
+
+/*
+	@RequestMapping(method = RequestMethod.GET, value = "/check_session")
+	@ResponseBody
+	public String checkSession(Model model, HttpServletRequest request) {
+	    HttpSession session = request.getSession(false);
+	    if(session.getAttribute("nombreUsuario") == null){
+		return "-1";
+	    }
+	    return "1";
+	}
+*/
+
+function moveTopScroll(){
+    	 window.scrollTo(0,0);
+}
+
+$(document).ajaxStart(function(){
+	xhr = null;
+	jQuery("#ModalCargando").modal('show');
+});
+
+$(document).ajaxStop(function(){
+	xhr = null;
+	jQuery("#ModalCargando").modal('hide');
+});
+
+function HAjax(opciones){
+	jQuery.ajaxQueue({
+		url: opciones.url,
+		data:opciones.data,
+		async:opciones.async,
+	}).done(function(result) {
+ 		try{ 
+ 			eval(opciones.method + '(' + result + ');');
+ 		} catch(err){ 
+ 			console.log("Error ejecutando HAjax" + err); 
+ 			eval(opciones.method + '();');
+ 		} 
+	});
+}
+
 
 /*
  * Método para pintar la tabla
@@ -309,29 +420,6 @@ function HPreprocesar(opcion){
  		}else{
  			jQuery("#" + opcion.formulario).submit();
  		}
-	});
-}
-
-$(document).ajaxStart(function(){
-	jQuery("#ModalCargando").modal('show');
-});
-
-$(document).ajaxStop(function(){
-	jQuery("#ModalCargando").modal('hide');
-});
-
-function HAjax(opciones){
-	jQuery.ajaxQueue({
-		url: opciones.url,
-		data:opciones.data,
-		async:opciones.async,
-	}).done(function(result) {
- 		try{ 
- 			eval(opciones.method + '(' + result + ');');
- 		} catch(err){ 
- 			console.log("Error ejecutando HAjax" + err); 
- 			eval(opciones.method + '();');
- 		} 
 	});
 }
 
