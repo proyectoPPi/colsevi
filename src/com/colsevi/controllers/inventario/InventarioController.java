@@ -17,7 +17,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.GeneralManager;
@@ -39,20 +38,21 @@ import com.colsevi.dao.producto.model.IngredienteXProductoKey;
 import com.colsevi.dao.producto.model.Producto;
 
 @Controller
+@RequestMapping("/Inventario/Inv")
 public class InventarioController extends BaseConfigController {
 
 	private static final long serialVersionUID = -1900570445397410663L;
 	private static Logger logger = Logger.getLogger(InventarioController.class);
 
-	@RequestMapping("/Inventario/Inv")
-	public ModelAndView Inventario(HttpServletRequest request,ModelMap model){
+	@RequestMapping
+	public String Inventario(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaEsta", GeneralManager.getEstablecimientos());
 		model.addAttribute("listaUnidad", ProductoManager.getTipoPeso());
-		return new ModelAndView("inventario/inventarioVista","col",getValoresGenericos(request));
+		return "inventario/inventarioVista";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Inventario/Inv/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -121,7 +121,7 @@ public class InventarioController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Inventario/Inv/cargarInv")
+	@RequestMapping("/cargarInv")
 	public void cargarInv(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -189,10 +189,6 @@ public class InventarioController extends BaseConfigController {
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
-		Object[] result = new Object[2];
-		Double cant = 0d;
-		Integer medida = 0;
-		double op = 0;
 		if(listData != null && listData.size() >0){
 			for (Map<String, Object> map : listData) {
 				try{
@@ -231,9 +227,9 @@ public class InventarioController extends BaseConfigController {
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Inventario/Inv/Guardar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
-		
+	@RequestMapping("/Guardar")
+	public void Guardar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		try{
 			Inventario bean = new Inventario();
 			List<InventarioXMateria> listaIXM = null;
@@ -242,8 +238,9 @@ public class InventarioController extends BaseConfigController {
 			Object[] result = validarGuardar(request);
 			
 			if(!result[0].toString().isEmpty()){
-				modelo.addAttribute("error", result[0]);
-				return Inventario(request, modelo);
+				resultVista.put("error", result[0]);
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 
 			bean.setId_inventario(request.getParameter("id_inventario") == null || request.getParameter("id_inventario").trim().isEmpty() ? null : Integer.parseInt(request.getParameter("id_inventario")));
@@ -259,7 +256,7 @@ public class InventarioController extends BaseConfigController {
 			if(bean.getId_inventario() != null){
 				ColseviDao.getInstance().getInventarioMapper().updateByPrimaryKey(bean);
 				registrarInventario(request, listaMP, listaIXM,listamov, bean);
-				modelo.addAttribute("correcto", "Inventario actualizado");
+				resultVista.put("correcto", "Inventario actualizado");
 			}else{
 				ColseviDao.getInstance().getInventarioMapper().insert(bean);
 				
@@ -268,13 +265,13 @@ public class InventarioController extends BaseConfigController {
 				bean.setId_inventario(ColseviDao.getInstance().getInventarioMapper().selectByExample(invE).get(0).getId_inventario());
 				
 				registrarInventario(request, listaMP, listaIXM,listamov, bean);
-				modelo.addAttribute("correcto", "Inventario insertado");
+				resultVista.put("correcto", "Inventario insertado");
 			}
 		}catch (Exception e) {
 			logger.error(e.getMessage());
-			modelo.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 		}
-		return Inventario(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	public void registrarInventario(HttpServletRequest request, List<MateriaPrima> listaMP, List<InventarioXMateria> listaInv, List<MovimientoMateria> listaMov, Inventario bean){
@@ -570,7 +567,7 @@ public class InventarioController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Inventario/Inv/preprocesador")
+	@RequestMapping("/preprocesador")
 	public void preprocesador(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject result = new JSONObject();
 		try{
@@ -587,7 +584,7 @@ public class InventarioController extends BaseConfigController {
 		ResponseJson(request, response, result);
 	}
 	
-	@RequestMapping("/Inventario/Inv/buscarProd")
+	@RequestMapping("/buscarProd")
 	public void auto(HttpServletRequest request, HttpServletResponse response){
 		try{
 			JSONObject result = new JSONObject();

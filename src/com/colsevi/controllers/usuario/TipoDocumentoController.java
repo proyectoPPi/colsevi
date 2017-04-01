@@ -12,7 +12,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.controllers.BaseConfigController;
@@ -22,18 +21,19 @@ import com.colsevi.dao.usuario.model.TipoDocumento;
 import com.colsevi.dao.usuario.model.TipoDocumentoExample;
 
 @Controller
+@RequestMapping("/Usuario/TipoDocumento")
 public class TipoDocumentoController extends BaseConfigController {
 	
 	private static final long serialVersionUID = 4256773623052938383L;
 	private static Logger logger = Logger.getLogger(ProductoAdminController.class);
 	
-	@RequestMapping("/Usuario/TipoDocumento")
-	public ModelAndView tipoDocumento(HttpServletRequest request,ModelMap model){
-		return new ModelAndView("usuario/TipoDocumento","col",getValoresGenericos(request));
+	@RequestMapping
+	public String tipoDocumento(HttpServletRequest request,ModelMap model){
+		return "usuario/TipoDocumento";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Usuario/TipoDocumento/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -61,10 +61,7 @@ public class TipoDocumentoController extends BaseConfigController {
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		opciones.writeJSONString(response.getWriter());
+		ResponseJson(request, response, opciones);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -91,31 +88,33 @@ public class TipoDocumentoController extends BaseConfigController {
 		return resultado;
 	}
 	
-	@RequestMapping("/Usuario/TipoDocumento/GuardarTipo")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, TipoDocumento bean){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/GuardarTipo")
+	public void Guardar(HttpServletRequest request, HttpServletResponse response, TipoDocumento bean) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		String error = validarGuardado(bean);
 		if(!error.isEmpty()){
-			modelo.addAttribute("error", error);
-			return tipoDocumento(request, modelo);
+			resultVista.put("error", error);
+			ResponseJson(request, response, resultVista);
+			return;
 		}
 		try{
 			if(bean.getId_tipo_documento() != null){
 				ColseviDao.getInstance().getTipoDocumentoMapper().updateByPrimaryKey(bean);
-				modelo.addAttribute("correcto", "Tipo de Documento Actualizado");
+				resultVista.put("correcto", "Tipo de Documento Actualizado");
 			}else{
 				ColseviDao.getInstance().getTipoDocumentoMapper().insert(bean);
-				modelo.addAttribute("correcto", "Tipo de Documento insertado");
+				resultVista.put("correcto", "Tipo de Documento insertado");
 			}
 		}catch (Exception e) {
 			logger.error(e.getMessage());
-			modelo.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 		}
-		return tipoDocumento(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Usuario/TipoDocumento/preprocesador")
+	@RequestMapping("/preprocesador")
 	public void preprocesador(HttpServletRequest request, HttpServletResponse response, TipoDocumento bean) throws IOException{
 		JSONObject result = new JSONObject();
 		try{
@@ -127,10 +126,7 @@ public class TipoDocumentoController extends BaseConfigController {
 			logger.error(e.getMessage());
 			result.put("error", "Contactar al administrador");
 		}
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		result.writeJSONString(response.getWriter());
+		ResponseJson(request, response, result);
 	}
 	
 	public String validarGuardado(TipoDocumento bean){
@@ -144,9 +140,10 @@ public class TipoDocumentoController extends BaseConfigController {
 		
 		return error;
 	}
-	@RequestMapping("/Usuario/TipoDocumento/EliminarTipoDocumento")
-	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/EliminarTipoDocumento")
+	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		try{
 		
 			Integer id = Integer.parseInt(request.getParameter("id_tipo_documento"));
@@ -158,15 +155,15 @@ public class TipoDocumentoController extends BaseConfigController {
 				
 				if(count != null && count < 0){
 					ColseviDao.getInstance().getTipoDocumentoMapper().deleteByPrimaryKey(id);
-					modelo.addAttribute("correcto", "Tipo de Documento Eliminado");
+					resultVista.put("correcto", "Tipo de Documento Eliminado");
 				}else{
-					modelo.addAttribute("error", "No se puede eliminar el tipo de documento ya que se encuentra en " + count + " personas");
+					resultVista.put("error", "No se puede eliminar el tipo de documento ya que se encuentra en " + count + " personas");
 				}
 			}
 		}catch(Exception e){
 			logger.error(e.getMessage());
-			modelo.addAttribute("error", "Contactar al Administrador");
+			resultVista.put("error", "Contactar al Administrador");
 		}
-		return tipoDocumento(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 }

@@ -8,7 +8,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
@@ -32,17 +31,17 @@ public class EmpleadoRegistroController extends BaseConfigController{
 	private static final long serialVersionUID = -8946886707945498254L;
 	
 	@RequestMapping
-	public ModelAndView Registro(HttpServletRequest request, ModelMap model){
+	public String Registro(HttpServletRequest request, ModelMap model){
 		model.addAttribute("tipoDoc", GeneralManager.listaTipoDocumento());
 		String persona = request.getParameter("Persona");
 		if(persona != null){
 			model.addAttribute("bean", getBeanCliente(Integer.parseInt(persona)));
 		}
-		return new ModelAndView("usuario/RegistroEmpleado","col", getValoresGenericos(request));
+		return "usuario/RegistroEmpleado";
 	}
 	
 	@RequestMapping("/Grabar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap model, ClienteBean bean){
+	public String Guardar(HttpServletRequest request, ModelMap model, ClienteBean bean){
 		
 		SqlSession sesion = null;
 		String error = "";

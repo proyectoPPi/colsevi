@@ -15,7 +15,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.GeneralManager;
@@ -24,20 +23,21 @@ import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
 
 @Controller
+@RequestMapping("/Inventario/MovimientoMateria")
 public class MovimientoMateriaController extends BaseConfigController{
 
 	private static final long serialVersionUID = 8419735704984053475L;
 	private static Logger logger = Logger.getLogger(MovimientoMateriaController.class);
 
-	@RequestMapping("/Inventario/MovimientoMateria")
-	public ModelAndView MovimientoMateria(HttpServletRequest request, ModelMap model){
+	@RequestMapping
+	public String MovimientoMateria(HttpServletRequest request, ModelMap model){
 		model.addAttribute("ListaUM", ProductoManager.getTipoPeso());
 		model.addAttribute("ListaE", GeneralManager.getEstablecimientos());
-		return new ModelAndView("/inventario/MovimientoMateria", "col", getValoresGenericos(request));
+		return "/inventario/MovimientoMateria";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Inventario/MovimientoMateria/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject options = new JSONObject();

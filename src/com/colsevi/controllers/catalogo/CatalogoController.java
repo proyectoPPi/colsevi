@@ -16,7 +16,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
@@ -38,9 +37,9 @@ public class CatalogoController extends BaseConfigController{
 	private static Logger logger = Logger.getLogger(CatalogoController.class);	
 	
 	@RequestMapping
-	public ModelAndView Catalogo(HttpServletRequest request,ModelMap model){
+	public String Catalogo(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaEst", listaEstablecimiento());
-		return new ModelAndView("catalogo/Catalogo","col",getValoresGenericos(request));
+		return "catalogo/Catalogo";
 	}
 	
 	public static List<Establecimiento> listaEstablecimiento(){
@@ -78,10 +77,7 @@ public class CatalogoController extends BaseConfigController{
 			logger.error(e.getMessage());
 		}
 		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		opciones.writeJSONString(response.getWriter());
+		ResponseJson(request, response, opciones);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -174,36 +170,37 @@ public class CatalogoController extends BaseConfigController{
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/Guardar")
-	public ModelAndView GuardarCatalogo(HttpServletRequest request, ModelMap modelo, Catalogo bean){
-		String error = "";
+	public void GuardarCatalogo(HttpServletRequest request, HttpServletResponse response, Catalogo bean) throws IOException{
+		JSONObject result = new JSONObject();
 		List<Integer> ListaP = new ArrayList<Integer>();
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		SqlSession sesion = ColseviDaoTransaccion.getInstance("/TransaccionCatalogo.xml");
 
 		try{
-			
-			Object[] result = validarGuardar(request);
-			if(!error.isEmpty()){
-				modelo.addAttribute("error", error);
-				return Catalogo(request, modelo);
+			Object[] resultValidar = validarGuardar(request);
+			if(!resultValidar[0].toString().isEmpty()){
+				result.put("error", resultValidar[0]);
+				ResponseJson(request, response, result);
+				return;
 			}
 			
-			bean = (Catalogo) result[1];
+			bean = (Catalogo) resultValidar[1];
 			
-			result = validarCatalogo(request);
-			if(!result[0].toString().isEmpty()){
-				modelo.addAttribute("error", result[0]);
-				return Catalogo(request, modelo);
+			resultValidar = validarCatalogo(request);
+			if(!resultValidar[0].toString().isEmpty()){
+				result.put("error", resultValidar[0]);
+				ResponseJson(request, response, result);
+				return;
 			}
 			
-			ListaP = (List<Integer>) result[1];
+			ListaP = (List<Integer>) resultValidar[1];
 			
 			if(bean.getId_catalogo() != null){
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.catalogo.map.CatalogoMapper.updateByPrimaryKeySelective", bean);
-				modelo.addAttribute("correcto", "Catálogo Actualizado");
+				result.put("correcto", "Catálogo Actualizado");
 			}else{
 				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.catalogo.map.CatalogoMapper.insertSelective", bean);
-				modelo.addAttribute("correcto", "Catálogo insertado");
+				result.put("correcto", "Catálogo insertado");
 			}
 			
 			mapa.put("catalogo", bean.getId_catalogo());
@@ -218,17 +215,18 @@ public class CatalogoController extends BaseConfigController{
 			ColseviDaoTransaccion.RealizarCommit(sesion);
 		}catch (Exception e) {
 			logger.error(e.getMessage());
-			modelo.addAttribute("error", "Contactar al administrador");
+			result.put("error", "Contactar al administrador");
 			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
 		ColseviDaoTransaccion.CerrarSesion(sesion);
-		return Catalogo(request, modelo);
+		
+		ResponseJson(request, response, result);
 	}
 	
-	
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/Eliminar")
-	public ModelAndView EliminarCatalogo(HttpServletRequest request, ModelMap modelo){
-		
+	public void EliminarCatalogo(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
 		try{
 			Integer id = Integer.parseInt(request.getParameter("id_catalogo"));
 			if(id != null){
@@ -237,18 +235,18 @@ public class CatalogoController extends BaseConfigController{
 				CXPE.createCriteria().andId_catalogoEqualTo(id);
 				Integer count = ColseviDao.getInstance().getCatalogoXProductoMapper().countByExample(CXPE);
 				if(!count.equals(0)){
-					modelo.addAttribute("error", "No se puede eliminar, tiene productos asociados");	
+					result.put("error", "No se puede eliminar, tiene productos asociados");	
 				}else{
 					ColseviDao.getInstance().getCatalogoMapper().deleteByPrimaryKey(id);
-					modelo.addAttribute("correcto", "Catálogo Eliminado");
+					result.put("correcto", "Catálogo Eliminado");
 				}
 			}
 		}catch(Exception e){
 			logger.error(e.getMessage());
-			modelo.addAttribute("error", "Contacte al Administrador");
+			result.put("error", "Contacte al Administrador");
 		}
 		
-		return Catalogo(request, modelo);
+		ResponseJson(request, response, result);
 	}
 	
 	@SuppressWarnings("unchecked")

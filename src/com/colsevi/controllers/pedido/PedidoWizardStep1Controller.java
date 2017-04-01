@@ -14,7 +14,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.GeneralManager;
@@ -31,13 +30,15 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 	private static Logger logger = Logger.getLogger(PedidoWizardStep1Controller.class);
 
 	@RequestMapping
-	public ModelAndView administrador(HttpServletRequest request,ModelMap model){
+	public String administrador(HttpServletRequest request,ModelMap model){
 		model.addAttribute("establecimiento", GeneralManager.getEstablecimientos());
-		return new ModelAndView("pedido/PedidoWizardStep1View", "col", getValoresGenericos(request));
+		return "pedido/PedidoWizardStep1View";
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/crearPedido")
-	public ModelAndView CrearPedido(HttpServletRequest request, ModelMap model) throws IOException{
+	public void CrearPedido(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		String error = "";
 		Integer pedido = null;
 		
@@ -47,12 +48,12 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 			error = "Contactar al administrador";
 			logger.error(e.getMessage());
 		}
-		model.addAttribute("consecutivo", pedido);
+		resultVista.put("consecutivo", pedido);
 		
 		if(!error.isEmpty())
-			model.addAttribute("error", error);
+			resultVista.put("error", error);
 		
-		return administrador(request, model);
+		ResponseJson(request, response, resultVista);
 	}
 
 	
@@ -67,7 +68,6 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 			logger.error(e.getMessage());
 		}
 	}
-	
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/listaProductos")
@@ -116,18 +116,17 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/Adicionar")
 	public void Adicionar(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		JSONObject result = new JSONObject();
+		JSONObject resultVista = new JSONObject();
 		try{
 			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("consecutivo")));		
 			PedidoManager.crearDetalle(ped.getId_pedido(), Integer.parseInt(request.getParameter("prod")), 
 					Integer.parseInt(request.getParameter("cantidad")));
-			result.put("correcto", "Producto adicionado");
+			resultVista.put("correcto", "Producto adicionado");
 		}catch(Exception e){
 			logger.error(e.getMessage());
-			result.put("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 		}
-		
-		ResponseJson(request, response, result);
+		ResponseJson(request, response, resultVista);
 	}
 
 

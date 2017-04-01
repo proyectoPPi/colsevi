@@ -1,4 +1,5 @@
 jQuery(document).ready(function(){
+	Hformulario();
 	Tabla();
 	HiniciarAutocompletar(contexto + '/Inventario/Inv/buscarProd.html?', 'prodF');
 	HiniciarAutocompletar(contexto + '/Inventario/Inv/buscarProd.html?', 'nombreProd');

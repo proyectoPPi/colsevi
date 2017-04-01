@@ -17,7 +17,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
@@ -47,7 +46,7 @@ public class ProductoAdminController extends BaseConfigController {
 	private static Logger logger = Logger.getLogger(ProductoAdminController.class);
 	
 	@RequestMapping
-	public ModelAndView Producto(HttpServletRequest request,ModelMap model){
+	public String Producto(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipo", ProductoManager.tipoProducto());
 		
 		try{
@@ -62,7 +61,7 @@ public class ProductoAdminController extends BaseConfigController {
 			logger.error(e.getMessage());
 		}
 		
-		return new ModelAndView("producto/ProductoAdmin","col",getValoresGenericos(request));
+		return "producto/ProductoAdmin";
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -275,9 +274,8 @@ public class ProductoAdminController extends BaseConfigController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/Guardar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
-		
-		validarCatalogo(request);
+	public void Guardar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		SqlSession sesion = ColseviDaoTransaccion.getInstance("/TransaccionProducto.xml");
 		Producto bean = null;
 		List<IngredienteXProducto> listaIngProd = null;
@@ -286,27 +284,28 @@ public class ProductoAdminController extends BaseConfigController {
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		
 		try{
-			 
 			if(obj[0] != null && !obj[0].toString().isEmpty()){
-				modelo.addAttribute("error", obj[0]);
-				return Producto(request, modelo);
+				resultVista.put("error", obj[0]);
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			bean = (Producto) obj[1];
 			listaIngProd = (List<IngredienteXProducto>) obj[2];
 			
 			obj = validarCatalogo(request);
 			if(obj[0] != null && !obj[0].toString().isEmpty()){
-				modelo.addAttribute("error", obj[0]);
-				return Producto(request, modelo);
+				resultVista.put("error", obj[0]);
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			ListaC = (List<Integer>) obj[1];
 			
 			if(bean.getId_producto() != null){
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.producto.map.ProductoMapper.updateByPrimaryKeySelective", bean);
-				modelo.addAttribute("correcto", "Producto Actualizado");
+				resultVista.put("correcto", "Producto Actualizado");
 			}else{
 				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.producto.map.ProductoMapper.insertSelective", bean);
-				modelo.addAttribute("correcto", "Producto Insertado");
+				resultVista.put("correcto", "Producto Insertado");
 			}
 			
 			IngredienteXProductoExample ingProdE = new IngredienteXProductoExample();
@@ -331,62 +330,68 @@ public class ProductoAdminController extends BaseConfigController {
 			ColseviDaoTransaccion.RealizarCommit(sesion);
 		}catch (Exception e) {
 			logger.error(e.getMessage());
-			modelo.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
 		
 		ColseviDaoTransaccion.CerrarSesion(sesion);
-		return Producto(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/Eliminar")
-	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
-		
+	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		try{
 			Integer id_producto = Integer.parseInt(request.getParameter("id_producto"));
 			
 			IngredienteXProductoExample ixpE = new IngredienteXProductoExample();
 			ixpE.createCriteria().andId_productoEqualTo(id_producto);
 			if(ColseviDao.getInstance().getIngredienteXProductoMapper().countByExample(ixpE) > 0){
-				modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociada a un Ingrediente");
-				return Producto(request, modelo);
+				resultVista.put("error", "No se puede eliminar, ya que se encuentra asociada a un Ingrediente");
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			
 			DetallePedidoExample dpE = new DetallePedidoExample();
 			dpE.createCriteria().andId_productoEqualTo(id_producto);
 			if(ColseviDao.getInstance().getDetallePedidoMapper().countByExample(dpE) > 0){
-				modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociada a un Pedido");
-				return Producto(request, modelo);
+				resultVista.put("error", "No se puede eliminar, ya que se encuentra asociada a un Pedido");
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			
 			InventarioExample iE = new InventarioExample();
 			iE.createCriteria().andId_productoEqualTo(id_producto);
 			if(ColseviDao.getInstance().getInventarioMapper().countByExample(iE) > 0){
-				modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociada a un Inventario");
-				return Producto(request, modelo);
+				resultVista.put("error", "No se puede eliminar, ya que se encuentra asociada a un Inventario");
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			
 			CatalogoXProductoExample cxpE = new CatalogoXProductoExample();
 			cxpE.createCriteria().andId_productoEqualTo(id_producto);
 			if(ColseviDao.getInstance().getCatalogoXProductoMapper().countByExample(cxpE) > 0){
-				modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociada a un catálogo");
-				return Producto(request, modelo);
+				resultVista.put("error", "No se puede eliminar, ya que se encuentra asociada a un catálogo");
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			
 			RecetaExample rE = new RecetaExample();
 			rE.createCriteria().andId_productoEqualTo(id_producto);
 			if(ColseviDao.getInstance().getRecetaMapper().countByExample(rE) > 0){
-				modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociada a una Receta");
-				return Producto(request, modelo);
+				resultVista.put("error", "No se puede eliminar, ya que se encuentra asociada a una Receta");
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			
 			ColseviDao.getInstance().getProductoMapper().deleteByPrimaryKey(id_producto);
-			modelo.addAttribute("correcto", "Producto Eliminado");
+			resultVista.put("correcto", "Producto Eliminado");
 			
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
-		return Producto(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	@SuppressWarnings("unchecked")

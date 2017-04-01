@@ -12,7 +12,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.controllers.BaseConfigController;
@@ -21,18 +20,19 @@ import com.colsevi.dao.producto.model.TipoProducto;
 import com.colsevi.dao.producto.model.TipoProductoExample;
 
 @Controller
+@RequestMapping("/Producto/Tipo")
 public class TipoProductoController extends BaseConfigController {
 
 	private static final long serialVersionUID = -8489159548975806696L;
 	private static Logger logger = Logger.getLogger(TipoProductoController.class);
 
-	@RequestMapping("/Producto/Tipo")
-	public ModelAndView Clasificar(HttpServletRequest request,ModelMap model){
-		return new ModelAndView("producto/TipoProducto","col",getValoresGenericos(request));
+	@RequestMapping
+	public String Clasificar(HttpServletRequest request,ModelMap model){
+		return "producto/TipoProducto";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Producto/Tipo/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -88,41 +88,41 @@ public class TipoProductoController extends BaseConfigController {
 		return resultado;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/Producto/Tipo/Guardar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, TipoProducto bean){
-		
+	public void Guardar(HttpServletRequest request, HttpServletResponse response, TipoProducto bean) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		String error = validarGuardado(bean);
 		if(!error.isEmpty()){
-			modelo.addAttribute("error", error);
-			return Clasificar(request, modelo);
+			resultVista.put("error", error);
+			ResponseJson(request, response, resultVista);
+			return;
 		}
 		try{
 			if(bean.getId_tipo_producto() != null){
 				ColseviDao.getInstance().getTipoProductoMapper().updateByPrimaryKey(bean);
-				modelo.addAttribute("correcto", "Tipo de producto Actualizada");
+				resultVista.put("correcto", "Tipo de producto Actualizada");
 			}else{
 				ColseviDao.getInstance().getTipoProductoMapper().insert(bean);
-				modelo.addAttribute("correcto", "Tipo de producto Insertada");
+				resultVista.put("correcto", "Tipo de producto Insertada");
 			}
 		}catch (Exception e) {
 			logger.error(e.getMessage());
-			modelo.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 		}
-		return Clasificar(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	public String validarGuardado(TipoProducto bean){
 		String error = "";
-		if(bean.getNombre() == null || bean.getNombre().trim().isEmpty()){
+		if(bean.getNombre() == null || bean.getNombre().trim().isEmpty())
 			error += "Ingresar el Nombre<br/>";
-		}
-		
-		
 		return error;
 	}
-	@RequestMapping("/Producto/Tipo/Eliminar")
-	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Eliminar")
+	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		try{
 			Integer id = Integer.parseInt(request.getParameter("id_tipo_producto"));
 			if(id != null){
@@ -132,15 +132,15 @@ public class TipoProductoController extends BaseConfigController {
 				Integer countProd = ColseviDao.getInstance().getProductoMapper().countByExample(ProdExample);
 	
 				if(countProd != null && countProd > 0){
-					modelo.addAttribute("error", "El tipo de producto no puede ser eliminado ya que se encuentra asociado a " + countProd + " producto(s)");
+					resultVista.put("error", "El tipo de producto no puede ser eliminado ya que se encuentra asociado a " + countProd + " producto(s)");
 				}else{
 					ColseviDao.getInstance().getTipoProductoMapper().deleteByPrimaryKey(id);
-					modelo.addAttribute("correcto", "Tipo de producto Eliminada");
+					resultVista.put("correcto", "Tipo de producto Eliminada");
 				}
 			}
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
-		return Clasificar(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 }

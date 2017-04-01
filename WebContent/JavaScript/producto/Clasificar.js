@@ -1,5 +1,6 @@
 jQuery(document).ready(function(){
 	Tabla();
+	Hformulario();
 });
 
 function Tabla(pagina){
@@ -12,11 +13,11 @@ function Tabla(pagina){
 }
 
 function Limpiar(){
-	HLimpliar();
+	HLimpiar();
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/Ingrediente/Clasificar/Eliminar.html?");
+	HEliminar("Formulario", contexto + "/Ingrediente/Clasificar/Eliminar.html?");
 }
 
 function CargarFormulario(Id){

@@ -11,7 +11,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.GeneralManager;
@@ -26,19 +25,20 @@ import com.colsevi.dao.proveedor.model.Proveedor;
 import com.colsevi.dao.proveedor.model.ProveedorExample;
 
 @Controller
+@RequestMapping("/Proveedor/Prov")
 public class ProveedorController extends BaseConfigController {
 	
 	private static final long serialVersionUID = 6171705625439131732L;
 
-	@RequestMapping("/Proveedor/Prov")
-	public ModelAndView Proveedor(HttpServletRequest request,ModelMap model){
+	@RequestMapping
+	public String Proveedor(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaTipoProv", ProveedorManager.listaTipoProveedor());
 		model.addAttribute("listaTipoTel", GeneralManager.listaTipoTelefono());
-		return new ModelAndView("proveedor/Proveedor","col",getValoresGenericos(request));
+		return "proveedor/Proveedor";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Proveedor/Prov/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -113,17 +113,19 @@ public class ProveedorController extends BaseConfigController {
 		return resultado;
 	}
 	
-	@RequestMapping("/Proveedor/Prov/Guardar")
-	public ModelAndView GuardarProveedor(HttpServletRequest request, ModelMap modelo, Proveedor bean){
-
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Guardar")
+	public void GuardarProveedor(HttpServletRequest request, HttpServletResponse response, Proveedor bean) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		try{
 			Direccion beanD = new Direccion();
 			Telefono beanT = new Telefono();
 			Object[] result = validarGuardado(bean,request);
 			
 			if(result[0] != null && !result[0].toString().isEmpty()){
-				modelo.addAttribute("error", result[0]);
-				return Proveedor(request, modelo);
+				resultVista.put("error", result[0]);
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			
 			bean = (Proveedor) result[1];
@@ -154,19 +156,19 @@ public class ProveedorController extends BaseConfigController {
 			
 			if(bean.getId_proveedor() != null){
 				ColseviDao.getInstance().getProveedorMapper().updateByPrimaryKey(bean);
-				modelo.addAttribute("correcto", "Proveedor Actualizado");
+				resultVista.put("correcto", "Proveedor Actualizado");
 			}else{
 				ColseviDao.getInstance().getProveedorMapper().insert(bean);
-				modelo.addAttribute("correcto", "Proveedor insertado");
+				resultVista.put("correcto", "Proveedor insertado");
 			}
 		}catch (Exception e) {
-			modelo.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 		}
-		return Proveedor(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Proveedor/Prov/preprocesador")
+	@RequestMapping("/preprocesador")
 	public void preprocesador(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject result = new JSONObject();
 		try{
@@ -178,10 +180,7 @@ public class ProveedorController extends BaseConfigController {
 		}catch(Exception e){
 			result.put("error", "Contactar al administrador");
 		}
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		result.writeJSONString(response.getWriter());
+		ResponseJson(request, response, result);
 	}
 	
 	
@@ -251,9 +250,10 @@ public class ProveedorController extends BaseConfigController {
 		return result;
 	}
 	
-	@RequestMapping("/Proveedor/Prov/Eliminar")
-	public ModelAndView EliminarProveedor(HttpServletRequest request, ModelMap modelo){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Eliminar")
+	public void EliminarProveedor(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		try{
 			Integer id = Integer.parseInt(request.getParameter("id_proveedor"));
 			if(id != null){
@@ -262,16 +262,16 @@ public class ProveedorController extends BaseConfigController {
 				compra.createCriteria().andId_proveedorEqualTo(id);
 				Integer dataCruce = ColseviDao.getInstance().getCompraProveedorMapper().countByExample(compra);
 				if(dataCruce != null && dataCruce > 0){
-					modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociado a una compra");
+					resultVista.put("error", "No se puede eliminar, ya que se encuentra asociado a una compra");
 				}else{
 					ColseviDao.getInstance().getProveedorMapper().deleteByPrimaryKey(id);
-					modelo.addAttribute("correcto", "Proveedor Eliminado");
+					resultVista.put("correcto", "Proveedor Eliminado");
 				}
 			}
 		}catch(Exception e){
-			modelo.addAttribute("error", "Contacte al Administrador");
+			resultVista.put("error", "Contacte al Administrador");
 		}
 		
-		return Proveedor(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 }

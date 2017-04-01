@@ -8,12 +8,9 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ClienteManager;
-import com.colsevi.application.PedidoManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.dao.pedido.model.Pedido;
 
 @Controller
 @RequestMapping("/Pedido/PedidoWizardStep3")
@@ -23,9 +20,9 @@ public class PedidoWizardStep3Controller extends BaseConfigController {
 	private static Logger logger = Logger.getLogger(PedidoWizardStep3Controller.class);
 
 	@RequestMapping
-	public ModelAndView Step3(HttpServletRequest request,ModelMap model){
+	public String Step3(HttpServletRequest request,ModelMap model){
 		model.addAttribute("secuencia", request.getParameter("secuencia"));
-		return new ModelAndView("pedido/PedidoWizardStep3View", "col", getValoresGenericos(request));
+		return "pedido/PedidoWizardStep3View";
 	}
 	
 	@RequestMapping("/autocompletar")
@@ -39,23 +36,23 @@ public class PedidoWizardStep3Controller extends BaseConfigController {
 			logger.error(e.getMessage());
 		}
 	}
-	
-	@RequestMapping("/continuar")
-	public ModelAndView continuar(HttpServletRequest request, ModelMap model){
-
-		try{
-			Integer persona = request.getParameter("persona") != null && !request.getParameter("persona").trim().isEmpty() ? 
-					Integer.parseInt(request.getParameter("persona")) : null;
-			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("secuencia")));
-			
-			PedidoManager.actualizarPedido(ped.getId_pedido(), persona, PedidoE.NUEVO.getPedidoE(), null, null);
-			model.addAttribute("correcto", ped.getId_pedido());
-			return new ModelAndView("redirect:/Pedido/Visualizar.html", model);
-		}catch(Exception e){
-			logger.error(e.getMessage());
-			model.addAttribute("error", "Contactar al administrador");
-			return Step3(request, model);
-		}
-	}
+//	
+//	@RequestMapping("/continuar")
+//	public String continuar(HttpServletRequest request, ModelMap model){
+//
+//		try{
+//			Integer persona = request.getParameter("persona") != null && !request.getParameter("persona").trim().isEmpty() ? 
+//					Integer.parseInt(request.getParameter("persona")) : null;
+//			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("secuencia")));
+//			
+//			PedidoManager.actualizarPedido(ped.getId_pedido(), persona, PedidoE.NUEVO.getPedidoE(), null, null);
+//			model.addAttribute("correcto", ped.getId_pedido());
+//			return new ModelAndView("redirect:/Pedido/Visualizar.html", model);
+//		}catch(Exception e){
+//			logger.error(e.getMessage());
+//			model.addAttribute("error", "Contactar al administrador");
+//			return Step3(request, model);
+//		}
+//	}
 	
 }

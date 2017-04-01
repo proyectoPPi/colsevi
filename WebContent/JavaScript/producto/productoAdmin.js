@@ -1,5 +1,6 @@
 jQuery(document).ready(function(){
 	Tabla();
+	Hformulario();
 	HiniciarAutocompletar(contexto + '/Producto/Admin/autocompletar.html?', 'prodF');
 	jQuery('#dynamic').hide();
 });

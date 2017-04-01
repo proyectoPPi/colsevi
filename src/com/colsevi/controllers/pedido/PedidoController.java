@@ -16,7 +16,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ClienteManager;
 import com.colsevi.application.ColseviDao;
@@ -32,12 +31,12 @@ public class PedidoController extends BaseConfigController {
 	private static Logger logger = Logger.getLogger(PedidoController.class);
 
 	@RequestMapping
-	public ModelAndView Pedido(HttpServletRequest request,ModelMap model){
+	public String Pedido(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaEstado", PedidoManager.listaEstadoP());
 		if(request.getParameter("correcto") != null)
 			model.addAttribute("correcto", "Pedido Creado con número: " + request.getParameter("correcto"));
 		
-		return new ModelAndView("pedido/visualizadorPedido","col",getValoresGenericos(request));
+		return "pedido/visualizadorPedido";
 	}
 	
 	@SuppressWarnings("unchecked")

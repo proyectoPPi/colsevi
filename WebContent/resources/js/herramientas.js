@@ -6,39 +6,30 @@ var cantPagina = 16;
 
 function HvalidateXHR() {
 	if( xhr !== null ) {
-        	xhr.abort();
-        	xhr = null;
+    	xhr.abort();
+    	xhr = null;
 	}
 }
 
-function HredireccionarVista(accion, data, fnCorrecto, fnError) {
+function HredireccionarVista(accion, data) {
 	HvalidateXHR();
 	
-	if (fnCorrecto === null || fnCorrecto === undefined) {
-		fnCorrecto = HMostrarDiv;
-	}
-	if (fnError === null || fnError === undefined) {
-		fnError = HValidarErrorGeneralAjax;
-	}
-
 	xhr = $.ajax({
 		url : accion,
 		type : 'POST',
 		data : data,
-		success : fnCorrecto,
-		error : fnError
+		success : HMostrarDiv,
+		error : HValidarErrorGeneralAjax
 	});
 }
 
 function HMostrarDiv(response) {
-	$("#contenedor").html(response);
+	dataMap = {};
+	$("#contenidoHTML").html(response);
 }
 
 function HValidarErrorGeneralAjax(jqXHR, textStatus, errorThrown) {
-	
 	console.log("Fallo general al cargar la pantalla");
-	
-	
 	if (jqXHR.status === '403' || jqXHR.status === '500') {
 		HcheckSession();
 		if (jqXHR.status === '403') {
@@ -58,6 +49,45 @@ function HValidarErrorGeneralAjax(jqXHR, textStatus, errorThrown) {
 		console.log(jqXHR, 'xhr response');
 		console.log('Falló General al cargar MostrarDiv: HValidarErrorGeneralAjax');
 	}	
+}
+
+function Hformulario(id){
+	id === undefined ? id = 'Formulario': '';
+	$("#" + id).submit(function(e) {
+		var form = $(this);
+		e.preventDefault(); 
+	
+	    $.ajax({
+	           type: "POST",
+	           url: form.attr('action'),
+	           data: form.serialize(),
+	           success: function(data){
+	        	   try{
+		       			data = jQuery.parseJSON(data);
+		       			modal = form.attr('data-modal') !== undefined ? form.attr('data-modal') : id;
+	       				tabla = form.attr('data-tabla') !== undefined ? form.attr('data-tabla') : 'Tabla';
+		       			MostrarMensaje(data, modal, tabla);
+		       		} catch(err){
+		       			console.log("Error ejecutando tabla" + err);
+		               	return;
+		       		}
+	           }
+         });
+	});
+}
+
+function MostrarMensaje(data, modal, tabla){
+	if(data["error"]  != undefined && data["error"] != ""){
+   		HMensaje(data["error"], 'danger');
+   	}else if(data["correcto"]  != undefined && data["correcto"] != ""){
+   		jQuery("#" + modal).modal('hide');
+   		HMensaje(data["correcto"], 'success');
+   		eval(tabla + '();');
+   	}else if(data["peligro"]  != undefined && data["peligro"] != ""){
+   		HMensaje(data["peligro"], 'warning');
+   	}else if(data["info"]  != undefined && data["info"] != ""){
+   		HMensaje(data["info"], 'info');
+   	}
 }
 
 function HcheckSession() {
@@ -272,6 +302,9 @@ function BuscarRegistro(Id){
 }
 
 function HCargarFormulario(Id){
+	if(dataMap['URLInicial'] !== undefined)
+		jQuery('#Formulario').attr('action', dataMap['URLInicial']);
+
 	var Fila = BuscarRegistro(Id);
 	if(Fila != null){
 		for(key in dataMap['keys']){
@@ -335,7 +368,9 @@ function organizarPaginacion(pagina){
 }
 
 function HLimpiar(){
-	
+	if(dataMap['URLInicial'] !== undefined)
+		jQuery('#Formulario').attr('action', dataMap['URLInicial']);
+
 	for(key in dataMap['keys']){
 		var valor = dataMap['keys'][key];
 		if(valor['value'] != undefined){
@@ -347,6 +382,7 @@ function HLimpiar(){
 }
 
 function HEliminar(div, url){
+	dataMap['URLInicial'] = jQuery('#' + div).attr('action');
 	jQuery('#' + div).attr('action', url);
 	jQuery('#' + div).submit();
 }
@@ -503,9 +539,9 @@ function HMensaje(mensaje, tipo){
 		message: mensaje
 	},{
 		type: tipo,
-		delay: 4000,
+		delay: 5000,
 		offset : {
-			y: 100,
+			y: 150,
 			x: 20
 		}
 	});

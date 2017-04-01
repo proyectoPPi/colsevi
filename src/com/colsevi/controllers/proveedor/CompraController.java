@@ -19,7 +19,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
@@ -38,13 +37,14 @@ import com.colsevi.dao.proveedor.model.CompraXIngrediente;
 import com.colsevi.dao.proveedor.model.CompraXIngredienteExample;
 
 @Controller
+@RequestMapping("/Proveedor/Compra")
 public class CompraController extends BaseConfigController {
 
 	private static final long serialVersionUID = 7006733943938315447L;
 	private static Logger logger = Logger.getLogger(CompraController.class);
 
-	@RequestMapping("/Proveedor/Compra")
-	public ModelAndView Compra(HttpServletRequest request,ModelMap model){
+	@RequestMapping
+	public String Compra(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaProveedores", ProveedorManager.getProveedores());
 		model.addAttribute("listaEstablecimiento", GeneralManager.getEstablecimientos());
 		
@@ -52,11 +52,11 @@ public class CompraController extends BaseConfigController {
 			model.addAttribute("com", request.getParameter("Compra"));
 		}
 		
-		return new ModelAndView("proveedor/Compra","col",getValoresGenericos(request));
+		return "proveedor/Compra";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Proveedor/Compra/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -164,7 +164,7 @@ public class CompraController extends BaseConfigController {
 		
 	}
 	
-	@RequestMapping("/Proveedor/Compra/autocompletar")
+	@RequestMapping("/autocompletar")
 	public void auto(HttpServletRequest request, HttpServletResponse response){
 		try{
 			JSONObject result = new JSONObject();
@@ -184,7 +184,7 @@ public class CompraController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Proveedor/Compra/preprocesador")
+	@RequestMapping("/preprocesador")
 	public void preprocesador(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject result = new JSONObject();
 		try{
@@ -205,9 +205,9 @@ public class CompraController extends BaseConfigController {
 	
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Proveedor/Compra/Guardar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
-		
+	@RequestMapping("/Guardar")
+	public void Guardar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		List<CompraXIngrediente> listaCXI = null;
 		SqlSession sesion = ColseviDaoTransaccion.getInstance("/TransaccionCompra.xml");
 		CompraXIngredienteExample cie = new CompraXIngredienteExample();
@@ -220,8 +220,9 @@ public class CompraController extends BaseConfigController {
 			Object[] result = validarGuardar(request);
 			
 			if(result[0] != null && !result[0].toString().isEmpty()){
-				modelo.addAttribute("error", result[0]);
-				return Compra(request, modelo);
+				resultVista.put("error", result[0]);
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 	
 			loteList = (List<Integer>) result[1];
@@ -255,10 +256,10 @@ public class CompraController extends BaseConfigController {
 
 			if(bean.getId_compra_proveedor() != null){
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.proveedor.map.CompraProveedorMapper.updateByPrimaryKey", bean);
-				modelo.addAttribute("correcto", "Compra Actualizada");
+				resultVista.put("correcto", "Compra Actualizada");
 			}else{
 				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.proveedor.map.CompraProveedorMapper.insertSelective", bean);
-				modelo.addAttribute("correcto", "Compra insertada");
+				resultVista.put("correcto", "Compra insertada");
 			}
 
 			for(int i=0; i<listaMP.size(); i++){
@@ -276,13 +277,13 @@ public class CompraController extends BaseConfigController {
 			}
 			ColseviDaoTransaccion.RealizarCommit(sesion);
 		}catch(Exception e){
-			modelo.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 			logger.error(e.getMessage());
 			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
 		
 		ColseviDaoTransaccion.CerrarSesion(sesion);
-		return Compra(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	public Object[] validarGuardar(HttpServletRequest request){
@@ -398,9 +399,10 @@ public class CompraController extends BaseConfigController {
 		return result;
 	}
 	
-	@RequestMapping("/Proveedor/Compra/GuardarMotivo")
-	public ModelAndView GuardarMotivo(HttpServletRequest request, ModelMap modelo){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/GuardarMotivo")
+	public void GuardarMotivo(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		CompraProveedor bean = new CompraProveedor();
 		String error = "";
 		
@@ -415,15 +417,17 @@ public class CompraController extends BaseConfigController {
 			error += "Ingresar un motivo";
 		
 		if(!error.isEmpty()){
-			modelo.addAttribute("error", error);
-			return Compra(request, modelo);
+			resultVista.put("error", error);
+			ResponseJson(request, response, resultVista);
+			return;
 		}
 		
 		error = validarNoInv(bean.getId_compra_proveedor());
 		
 		if(!error.isEmpty()){
-			modelo.addAttribute("error", error);
-			return Compra(request, modelo);
+			resultVista.put("error", error);
+			ResponseJson(request, response, resultVista);
+			return;
 		}
 		
 		try{
@@ -440,16 +444,16 @@ public class CompraController extends BaseConfigController {
 				ColseviDao.getInstance().getMateriaPrimaMapper().deleteByPrimaryKey(lote);
 			}
 			
-			modelo.addAttribute("correcto", "Compra dada de Baja");
+			resultVista.put("correcto", "Compra dada de Baja");
 		}catch (Exception e) {
-			modelo.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 			logger.error(e.getMessage());
 		}
-		return Compra(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Proveedor/Compra/ValidarModificacion")
+	@RequestMapping("/ValidarModificacion")
 	public void validarModificarCompra(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject result = new JSONObject();
 		
@@ -530,7 +534,7 @@ public class CompraController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Proveedor/Compra/MedidaDetalle")
+	@RequestMapping("/MedidaDetalle")
 	public void MedidaDetalle(HttpServletRequest request, HttpServletResponse response){
 		try{
 			JSONObject opt = new JSONObject();

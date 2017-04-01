@@ -22,8 +22,12 @@ import com.colsevi.dao.usuario.model.UsuarioExample;
 
 @Controller
 @RequestMapping("login")
-public class LoginController {
+public class LoginController extends BaseConfigController {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1759665983139848003L;
 	private static Logger logger = Logger.getLogger(LoginController.class);
 	
 	@RequestMapping
@@ -49,8 +53,8 @@ public class LoginController {
 		}else{
 			return login(request, model);
 		}
-		
-		return new ModelAndView("redirect:/General/Establecimiento.html");
+		//principalBase
+		return new ModelAndView("inicialApp","col",getValoresGenericos(request));
 	}
 	
 	@RequestMapping("/Cerrar")

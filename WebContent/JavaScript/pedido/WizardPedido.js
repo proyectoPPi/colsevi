@@ -1,4 +1,5 @@
 function initPaso1(){
+	Hformulario('formularioMotivo');
 	if(jQuery('#consecutivo').val() === '')
 		jQuery("#ModalUbicacion").modal('show');
 	else

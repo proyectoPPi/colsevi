@@ -11,7 +11,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.controllers.BaseConfigController;
@@ -21,17 +20,18 @@ import com.colsevi.dao.producto.model.Ingrediente;
 import com.colsevi.dao.producto.model.IngredienteExample;
 
 @Controller
+@RequestMapping("/Ingrediente/Clasificar")
 public class ClasificarIngredienteController extends BaseConfigController {
 	
 	private static final long serialVersionUID = -7914278347217809210L;
 	
-	@RequestMapping("/Ingrediente/Clasificar")
-	public ModelAndView Clasificar(HttpServletRequest request,ModelMap model){
-		return new ModelAndView("producto/Clasificar","col",getValoresGenericos(request));
+	@RequestMapping
+	public String Clasificar(HttpServletRequest request,ModelMap model){
+		return "producto/Clasificar";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Ingrediente/Clasificar/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -56,10 +56,7 @@ public class ClasificarIngredienteController extends BaseConfigController {
 		opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getClasificarIngredienteMapper().selectByExample(clasificarExample)));
 		opciones.put("total", ColseviDao.getInstance().getClasificarIngredienteMapper().countByExample(clasificarExample));
 
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		opciones.writeJSONString(response.getWriter());
+		ResponseJson(request, response, opciones);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -81,26 +78,26 @@ public class ClasificarIngredienteController extends BaseConfigController {
 		return resultado;
 	}
 	
-	@RequestMapping("/Ingrediente/Clasificar/Guardar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, ClasificarIngrediente bean){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Guardar")
+	public void Guardar(HttpServletRequest request, HttpServletResponse response, ClasificarIngrediente bean) throws IOException{
+		JSONObject result = new JSONObject();
 		String error = validarGuardado(bean);
 		if(!error.isEmpty()){
-			modelo.addAttribute("error", error);
-			return Clasificar(request, modelo);
-		}
-		try{
-			if(bean.getId_clasificar_ingrediente() != null){
-				ColseviDao.getInstance().getClasificarIngredienteMapper().updateByPrimaryKey(bean);
-				modelo.addAttribute("correcto", "Clasificación Actualizada");
-			}else{
-				ColseviDao.getInstance().getClasificarIngredienteMapper().insert(bean);
-				modelo.addAttribute("correcto", "Clasificación insertada");
+			result.put("error", error);
+		}else
+			try{
+				if(bean.getId_clasificar_ingrediente() != null){
+					ColseviDao.getInstance().getClasificarIngredienteMapper().updateByPrimaryKey(bean);
+					result.put("correcto", "Clasificación Actualizada");
+				}else{
+					ColseviDao.getInstance().getClasificarIngredienteMapper().insert(bean);
+					result.put("correcto", "Clasificación insertada");
+				}
+			}catch (Exception e) {
+				result.put("error", "Contactar al administrador");
 			}
-		}catch (Exception e) {
-			modelo.addAttribute("error", "Contactar al administrador");
-		}
-		return Clasificar(request, modelo);
+		ResponseJson(request, response, result);
 	}
 	
 	public String validarGuardado(ClasificarIngrediente bean){
@@ -110,9 +107,10 @@ public class ClasificarIngredienteController extends BaseConfigController {
 		}
 		return error;
 	}
-	@RequestMapping("/Ingrediente/Clasificar/Eliminar")
-	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Eliminar")
+	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
 		Integer id = Integer.parseInt(request.getParameter("id_clasificar_ingrediente"));
 		if(id != null){
 			
@@ -121,12 +119,12 @@ public class ClasificarIngredienteController extends BaseConfigController {
 			List<Ingrediente> listaIng = ColseviDao.getInstance().getIngredienteMapper().selectByExample(ingExample);
 
 			if(listaIng != null && listaIng.size() > 0){
-				modelo.addAttribute("error", "Clasificación No Eliminada, Asociada a ingredientes");
+				result.put("error", "Clasificación No Eliminada, Asociada a ingredientes");
 			}else{
 				ColseviDao.getInstance().getClasificarIngredienteMapper().deleteByPrimaryKey(id);
-				modelo.addAttribute("correcto", "Clasificación Eliminada");
+				result.put("correcto", "Clasificación Eliminada");
 			}
 		}
-		return Clasificar(request, modelo);
+		ResponseJson(request, response, result);
 	}
 }

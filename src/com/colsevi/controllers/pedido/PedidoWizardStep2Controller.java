@@ -34,9 +34,9 @@ public class PedidoWizardStep2Controller extends BaseConfigController {
 	private static Logger logger = Logger.getLogger(PedidoWizardStep2Controller.class);
 
 	@RequestMapping
-	public ModelAndView Step2(HttpServletRequest request,ModelMap model){
+	public String Step2(HttpServletRequest request,ModelMap model){
 		model.addAttribute("consecutivo", request.getParameter("sec"));
-		return new ModelAndView("pedido/PedidoWizardStep2View", "col", getValoresGenericos(request));
+		return "pedido/PedidoWizardStep2View";
 	}
 	
 	@SuppressWarnings("unchecked")

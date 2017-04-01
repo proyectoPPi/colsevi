@@ -1,51 +1,35 @@
 package com.colsevi.controllers.caja;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.colsevi.application.ColseviDao;
-import com.colsevi.application.ProveedorManager;
-import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
-import com.colsevi.controllers.producto.ProductoAdminController;
-import com.colsevi.dao.caja.model.CierreCaja;
-import com.colsevi.dao.caja.model.CierreCajaExample;
-import com.colsevi.dao.inventario.model.InventarioXMateriaExample;
-import com.colsevi.dao.pago.model.PagoProveedor;
-import com.colsevi.dao.pedido.model.Pedido;
-import com.colsevi.dao.pedido.model.PedidoExample;
-import com.colsevi.dao.proveedor.model.CompraProveedor;
-import com.colsevi.dao.proveedor.model.CompraProveedorExample;
-import com.colsevi.dao.usuario.model.Persona;
 
 @Controller
+@RequestMapping("/Caja/CierreCaja")
 public class CierreCajaController extends BaseConfigController{
 
 	private static final long serialVersionUID = 2407344590292431117L;
 	private static Logger logger = Logger.getLogger(CierreCajaController.class);
 
-	@RequestMapping("/Caja/CierreCaja")
+	@RequestMapping
 	public ModelAndView cierre(HttpServletRequest request, ModelMap model){
 		return new ModelAndView("caja/Cierre", "co", getValoresGenericos(request));
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Caja/CierreCaja/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject result = new JSONObject();
 		

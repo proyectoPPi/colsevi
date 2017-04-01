@@ -15,7 +15,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.GeneralManager;
@@ -26,20 +25,21 @@ import com.colsevi.dao.inventario.model.MateriaPrima;
 import com.colsevi.controllers.BaseConfigController;
 
 @Controller
+@RequestMapping("/Inventario/MateriaPrima")
 public class MateriaPrimaController extends BaseConfigController{
 
 	private static final long serialVersionUID = 55977124238424730L;
 	private static Logger logger = Logger.getLogger(MateriaPrimaController.class);
 
-	@RequestMapping("/Inventario/MateriaPrima")
-	public ModelAndView MateriaPrima(HttpServletRequest request, ModelMap model){
+	@RequestMapping
+	public String MateriaPrima(HttpServletRequest request, ModelMap model){
 		model.addAttribute("ListaUM", ProductoManager.getTipoPeso());
 		model.addAttribute("ListaE", GeneralManager.getEstablecimientos());
-		return new ModelAndView("/inventario/MateriaPrima", "col", getValoresGenericos(request));
+		return "/inventario/MateriaPrima";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Inventario/MateriaPrima/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject options = new JSONObject();
@@ -115,15 +115,18 @@ public class MateriaPrimaController extends BaseConfigController{
 		return result;
 	}
 	
-	@RequestMapping("/Inventario/MateriaPrima/GuardarMovimiento")
-	public ModelAndView GuardarMovimiento(HttpServletRequest request, ModelMap model){
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/GuardarMovimiento")
+	public void GuardarMovimiento(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		try{
 			Object[] result = validarGuardar(request);
 			Double conv = 0d;
 			
 			if(!result[0].toString().isEmpty()){
-				model.addAttribute("error", result[0]);
-				return MateriaPrima(request, model);
+				resultVista.put("error", result[0]);
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			MateriaPrima materiaV = (MateriaPrima)result[1];
 			MateriaPrima MP = ColseviDao.getInstance().getMateriaPrimaMapper().selectByPrimaryKey(materiaV.getLote());
@@ -131,20 +134,23 @@ public class MateriaPrimaController extends BaseConfigController{
 			
 			if(MP != null && MP.getLote() != null){
 				if(materiaV.getId_establecimiento().equals(MP.getId_establecimiento())){
-					model.addAttribute("error", "Seleccionar un establecimiento distinto");
-					return MateriaPrima(request, model);
+					resultVista.put("error", "Seleccionar un establecimiento distinto");
+					ResponseJson(request, response, resultVista);
+					return;
 				}
 				if(request.getParameter("motivoMov") != null && !request.getParameter("motivoMov").trim().isEmpty() && (request.getParameter("motivoMov").equals("4") || request.getParameter("motivoMov").equals("3")))
 					motivo = Integer.parseInt(request.getParameter("motivoMov"));
 				else{
-					model.addAttribute("error", "Seleccionar un motivo");
-					return MateriaPrima(request, model);
+					resultVista.put("error", "Seleccionar un motivo");
+					ResponseJson(request, response, resultVista);
+					return;
 				}
 				
 				if(materiaV.getId_unidad_peso().equals(MP.getId_unidad_peso())){
 					if(materiaV.getCantidad() > MP.getCantidad()){
-						model.addAttribute("error", "La cantidad ingresada no puede ser mayor a la del sistema.");
-						return MateriaPrima(request, model);
+						resultVista.put("error", "La cantidad ingresada no puede ser mayor a la del sistema.");
+						ResponseJson(request, response, resultVista);
+						return;
 					}
 					
 					conv = MP.getCantidad() - materiaV.getCantidad();
@@ -158,8 +164,9 @@ public class MateriaPrimaController extends BaseConfigController{
 					conv = (Double) result[0];
 					
 					if((MP.getCantidad() - conv) < 0){
-						model.addAttribute("error", "La cantidad seleccionada supera la disponible");
-						return MateriaPrima(request, model);
+						resultVista.put("error", "La cantidad seleccionada supera la disponible");
+						ResponseJson(request, response, resultVista);
+						return;
 					}
 					conv = MP.getCantidad() - conv;
 					
@@ -188,15 +195,15 @@ public class MateriaPrimaController extends BaseConfigController{
 				InventarioManager.ActualizarMateriaPrima(materiaV);
 				
 				InventarioManager.RegistrarMovimientoMateria(MP.getLote(), MP.getId_unidad_peso(), conv, materiaV.getId_establecimiento(), new Date(), motivo);
-				model.addAttribute("correcto", "Movimiento realizado");
+				resultVista.put("correcto", "Movimiento realizado");
 			}else{
-				model.addAttribute("error", "Seleccionar un ingrediente");
+				resultVista.put("error", "Seleccionar un ingrediente");
 			}
 		}catch(Exception e){
 			logger.error(e.getMessage());
-			model.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 		}
-		return MateriaPrima(request, model);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	public Object[] validarGuardar(HttpServletRequest request){

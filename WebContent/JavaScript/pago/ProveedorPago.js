@@ -2,6 +2,7 @@ var data;
 jQuery(document).ready(function(){
 	HiniciarAutocompletar(contexto + '/pago/Proveedor/autocompletar.html?', 'proveedorText');
 	Tabla();
+	Hformulario();
 });
 
 jQuery('#proveedorText').autocomplete({

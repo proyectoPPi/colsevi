@@ -11,28 +11,26 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.producto.model.DificultadReceta;
 import com.colsevi.dao.producto.model.DificultadRecetaExample;
-import com.colsevi.dao.producto.model.Receta;
 import com.colsevi.dao.producto.model.RecetaExample;
 
 @Controller
+@RequestMapping("/Receta/Nivel")
 public class DificultadRecetaController extends BaseConfigController {
 
 	private static final long serialVersionUID = -2538142015739043306L;
 
-	@RequestMapping("/Receta/Nivel")
-	public ModelAndView Nivel(HttpServletRequest request,ModelMap model){
-		
-		return new ModelAndView("producto/Nivel","col" , getValoresGenericos(request));
+	@RequestMapping
+	public String Nivel(HttpServletRequest request,ModelMap model){
+		return "producto/Nivel";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Receta/Nivel/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -87,26 +85,26 @@ public class DificultadRecetaController extends BaseConfigController {
 		return resultado;
 	}
 	
-	@RequestMapping("/Receta/Nivel/Guardar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, DificultadReceta bean){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Guardar")
+	public void Guardar(HttpServletRequest request, HttpServletResponse response, DificultadReceta bean) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		String error = validarGuardado(bean);
 		if(!error.isEmpty()){
-			modelo.addAttribute("error", error);
-			return Nivel(request, modelo);
-		}
-		try{
-			if(bean.getId_dificultad_receta() != null){
-				ColseviDao.getInstance().getDificultadRecetaMapper().updateByPrimaryKey(bean);
-				modelo.addAttribute("correcto", "Dificultad Actualizada");
-			}else{
-				ColseviDao.getInstance().getDificultadRecetaMapper().insert(bean);
-				modelo.addAttribute("correcto", "Dificultad insertada");
+			resultVista.put("error", error);
+		}else
+			try{
+				if(bean.getId_dificultad_receta() != null){
+					ColseviDao.getInstance().getDificultadRecetaMapper().updateByPrimaryKey(bean);
+					resultVista.put("correcto", "Dificultad Actualizada");
+				}else{
+					ColseviDao.getInstance().getDificultadRecetaMapper().insert(bean);
+					resultVista.put("correcto", "Dificultad insertada");
+				}
+			}catch (Exception e) {
+				resultVista.put("error", "Contactar al administrador");
 			}
-		}catch (Exception e) {
-			modelo.addAttribute("error", "Contactar al administrador");
-		}
-		return Nivel(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	public String validarGuardado(DificultadReceta bean){
@@ -118,10 +116,10 @@ public class DificultadRecetaController extends BaseConfigController {
 		return error;
 	}
 
-	@SuppressWarnings({ "null", "unused" })
-	@RequestMapping("/Receta/Nivel/Eliminar")
-	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Eliminar")
+	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		Integer id = Integer.parseInt(request.getParameter("id_dificultad_receta"));
 		if(id != null){
 			
@@ -130,12 +128,12 @@ public class DificultadRecetaController extends BaseConfigController {
 			Integer CReceta = ColseviDao.getInstance().getRecetaMapper().countByExample(RExample);
 
 			if(CReceta != null && CReceta > 0){
-				modelo.addAttribute("error", "Dificultad No Eliminada, Asociada a receta");
+				resultVista.put("error", "Dificultad No Eliminada, Asociada a receta");
 			}else{
 				ColseviDao.getInstance().getDificultadRecetaMapper().deleteByPrimaryKey(id);
-				modelo.addAttribute("correcto", "Dificultad Eliminada");
+				resultVista.put("correcto", "Dificultad Eliminada");
 			}
 		}
-		return Nivel(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 }

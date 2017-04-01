@@ -12,7 +12,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ProductoManager;
@@ -22,20 +21,21 @@ import com.colsevi.dao.producto.model.IngredienteExample;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;
 
 @Controller
+@RequestMapping("/Ingrediente/Ing")
 public class IngredienteController extends BaseConfigController {
 
 	private static final long serialVersionUID = 8349230539753648934L;
 	private static Logger logger = Logger.getLogger(IngredienteController.class);
 
-	@RequestMapping("/Ingrediente/Ing")
-	public ModelAndView Ingrediente(HttpServletRequest request,ModelMap model){
+	@RequestMapping
+	public String Ingrediente(HttpServletRequest request,ModelMap model){
 		model.addAttribute("listaClasificar", ProductoManager.getClasificar());
 		model.addAttribute("listaMedida", ProductoManager.getMedida());
-		return new ModelAndView("producto/Ingrediente","col",getValoresGenericos(request));
+		return "producto/Ingrediente";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Ingrediente/Ing/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -124,31 +124,33 @@ public class IngredienteController extends BaseConfigController {
 		return resultado;
 	}
 	
-	@RequestMapping("/Ingrediente/Ing/Guardar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo, Ingrediente bean){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Guardar")
+	public void Guardar(HttpServletRequest request, HttpServletResponse response, Ingrediente bean) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		try{
 			bean.setId_clasificar_ingrediente(Integer.parseInt(request.getParameter("clasificar")));
 			bean.setId_unidad_medida(Integer.parseInt(request.getParameter("medida")));
 			
 			String error = validarGuardado(bean);
 			if(!error.isEmpty()){
-				modelo.addAttribute("error", error);
-				return Ingrediente(request, modelo);
+				resultVista.put("error", error);
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			
 			if(bean.getId_ingrediente() != null){
 				ColseviDao.getInstance().getIngredienteMapper().updateByPrimaryKey(bean);
-				modelo.addAttribute("correcto", "Ingrediente Actualizado");
+				resultVista.put("correcto", "Ingrediente Actualizado");
 			}else{
 				ColseviDao.getInstance().getIngredienteMapper().insert(bean);
-				modelo.addAttribute("correcto", "Ingrediente insertado");
+				resultVista.put("correcto", "Ingrediente insertado");
 			}
 		}catch (Exception e) {
 			logger.error(e.getMessage());
-			modelo.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 		}
-		return Ingrediente(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	public String validarGuardado(Ingrediente bean){
@@ -169,9 +171,10 @@ public class IngredienteController extends BaseConfigController {
 		return error;
 	}
 	
-	@RequestMapping("/Ingrediente/Ing/Eliminar")
-	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Eliminar")
+	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		try{
 			Integer id = Integer.parseInt(request.getParameter("id_ingrediente"));
 			if(id != null){
@@ -180,16 +183,15 @@ public class IngredienteController extends BaseConfigController {
 				IngProd.createCriteria().andId_ingredienteEqualTo(id);
 				Integer dataCruce = ColseviDao.getInstance().getIngredienteXProductoMapper().countByExample(IngProd);
 				if(dataCruce != null && dataCruce > 0){
-					modelo.addAttribute("error", "No se puede eliminar, ya que se encuentra asociada a un producto");
+					resultVista.put("error", "No se puede eliminar, ya que se encuentra asociada a un producto");
 				}else{
 					ColseviDao.getInstance().getIngredienteMapper().deleteByPrimaryKey(id);
-					modelo.addAttribute("correcto", "Establecimiento Eliminado");
+					resultVista.put("correcto", "Establecimiento Eliminado");
 				}
 			}
 		}catch(Exception e){
-			modelo.addAttribute("error", "Contacte al Administrador");
+			resultVista.put("error", "Contacte al Administrador");
 		}
-		
-		return Ingrediente(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 }

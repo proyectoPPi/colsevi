@@ -8,7 +8,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
@@ -26,12 +25,13 @@ import com.colsevi.dao.usuario.model.Usuario;
 import com.colsevi.dao.usuario.model.UsuarioExample;
 
 @Controller
+@RequestMapping("/Usuario/ClienteRegistro")
 public class ClienteRegistroController extends BaseConfigController{
 
 	private static final long serialVersionUID = 5049120499336624560L;
 
-	@RequestMapping("/Usuario/ClienteRegistro")
-	public ModelAndView Registro(HttpServletRequest request, ModelMap model){
+	@RequestMapping
+	public String Registro(HttpServletRequest request, ModelMap model){
 		model.addAttribute("tipoDoc", GeneralManager.listaTipoDocumento());
 		String persona = request.getParameter("Persona");
 		if(persona != null){
@@ -40,11 +40,11 @@ public class ClienteRegistroController extends BaseConfigController{
 		if(getUsuario(request) == null )
 			model.addAttribute("init", "T");
 		
-		return new ModelAndView("usuario/RegistroCliente","col", getValoresGenericos(request));
+		return "usuario/RegistroCliente";
 	}
 	
-	@RequestMapping("/Usuario/ClienteRegistro/Grabar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap model, ClienteBean bean){
+	@RequestMapping("/Grabar")
+	public String Guardar(HttpServletRequest request, ModelMap model, ClienteBean bean){
 		
 		SqlSession sesion = null;
 		String error = "";

@@ -47,7 +47,7 @@ public class BaseConfigController implements Serializable {
 					}else{
 						menu += "<li>";
 					}
-					menu += "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\""+request.getContextPath()+pag.getUrl()+"\">"+
+					menu += "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" onclick=\"HredireccionarVista('" + request.getContextPath()+pag.getUrl() + "')\" >"+
 							pag.getNombre()+"</a>";
 					
 					if(pag.getPadrePagina() != null && !pag.getPadrePagina().trim().isEmpty()){
@@ -61,7 +61,7 @@ public class BaseConfigController implements Serializable {
 						List<Pagina> listaPadre = ColseviDao.getInstance().getPaginaMapper().selectByExample(PE);
 						menu += "<ul class=\"dropdown-menu\">";
 						for(Pagina Ppag: listaPadre){
-							menu += "<li>"+"<a href=\""+request.getContextPath()+Ppag.getUrl()+"\"><i class=\""+Ppag.getIcono()+"\"></i>"
+							menu += "<li>"+"<a onclick=\"HredireccionarVista('" + request.getContextPath()+Ppag.getUrl() + "')\" ><i class=\""+Ppag.getIcono()+"\"></i>"
 									+Ppag.getNombre()+"</a></li>";
 						}
 						menu += "</ul>";
@@ -103,7 +103,7 @@ public class BaseConfigController implements Serializable {
 					
 					for(Pagina pag: listaPagina){
 						menu += "<li>";
-						menu += "<a href=\""+request.getContextPath()+pag.getUrl()+"\">";
+						menu += "<a onclick=\"HredireccionarVista('" + request.getContextPath()+pag.getUrl() + "')\" >";
 						menu += pag.getNombre();
 						menu += "</a>";
 						menu += "</li>";

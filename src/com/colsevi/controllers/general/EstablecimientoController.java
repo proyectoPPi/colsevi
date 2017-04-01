@@ -15,7 +15,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
@@ -27,17 +26,19 @@ import com.colsevi.dao.general.model.Establecimiento;
 import com.colsevi.dao.general.model.Telefono;
 import com.colsevi.dao.general.model.TipoTelefono;
 import com.colsevi.dao.general.model.TipoTelefonoExample;
+import com.colsevi.dao.inventario.model.MateriaPrimaExample;
 
 @Controller
+@RequestMapping("/General/Establecimiento")
 public class EstablecimientoController extends BaseConfigController {
 	
 	private static final long serialVersionUID = 1944372690226154900L;
 	private static Logger logger = Logger.getLogger(EstablecimientoController.class);
 	
-	@RequestMapping("/General/Establecimiento")
-	public ModelAndView Establecimiento(HttpServletRequest request,ModelMap model){
+	@RequestMapping
+	public String Establecimiento(HttpServletRequest request,ModelMap model){
 		model.addAttribute("tipoTel", ListaTipoTel());
-		return new ModelAndView("general/Establecimiento", "col" ,getValoresGenericos(request));
+		return "general/Establecimiento";
 	}
 	
 	public static List<TipoTelefono> ListaTipoTel(){
@@ -45,7 +46,7 @@ public class EstablecimientoController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/General/Establecimiento/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject opciones = new JSONObject();
@@ -76,10 +77,7 @@ public class EstablecimientoController extends BaseConfigController {
 			logger.error(e.getMessage());
 		}
 		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		opciones.writeJSONString(response.getWriter());
+		ResponseJson(request, response, opciones);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -116,14 +114,16 @@ public class EstablecimientoController extends BaseConfigController {
 		return resultado;
 	}
 	
-	@RequestMapping("/General/Establecimiento/GuardarLocal")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap modelo){
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/GuardarLocal")
+	public void Guardar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		
 		Object[] result = validarGuardado(request);
-				
 		if(!result[0].toString().isEmpty()){
-			modelo.addAttribute("error", result[0]);
-			return Establecimiento(request, modelo);
+			resultVista.put("error", result[0]);
+			ResponseJson(request, response, resultVista);
+			return;
 		}
 		
 		Establecimiento bean= (Establecimiento) result[1];
@@ -163,27 +163,25 @@ public class EstablecimientoController extends BaseConfigController {
 			
 			if(bean.getId_establecimiento() != null){
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.general.map.EstablecimientoMapper.updateByPrimaryKeySelective", bean);
-				modelo.addAttribute("correcto", "Establecimiento Actualizado");
+				resultVista.put("correcto", "Establecimiento Actualizado");
 			}else{
 				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.general.map.EstablecimientoMapper.insertSelective", bean);
-				modelo.addAttribute("correcto", "Establecimiento insertado");
+				resultVista.put("correcto", "Establecimiento insertado");
 			}
 
 			ColseviDaoTransaccion.RealizarCommit(sesion);
 			
 		}catch (Exception e) {
 			logger.error(e.getMessage());
-			modelo.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
 		
 		ColseviDaoTransaccion.CerrarSesion(sesion);
-		
-		return Establecimiento(request, modelo);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	public Object[] validarGuardado(HttpServletRequest request){
-		
 		Object[] obj = new Object[5];
 		Establecimiento beanE = new Establecimiento();
 		Direccion beanD = new Direccion();
@@ -215,7 +213,6 @@ public class EstablecimientoController extends BaseConfigController {
 			error += "Ingrese la Hora de Cierre del establecimiento<br/>";
 		
 		//Direccion Establecimiento
-		
 		if(request.getParameter("id_direccion") != null && !request.getParameter("id_direccion").trim().isEmpty())
 			beanD.setId_direccion(Integer.parseInt(request.getParameter("id_direccion")));
 		
@@ -231,7 +228,6 @@ public class EstablecimientoController extends BaseConfigController {
 			beanD.setDescripcion(request.getParameter("descripDir"));
 
 		//Telefono Establecimiento
-		
 		if(request.getParameter("id_telefono") != null && !request.getParameter("id_telefono").trim().isEmpty())
 			beanT.setId_telefono(Integer.parseInt(request.getParameter("id_telefono")));
 		
@@ -246,7 +242,6 @@ public class EstablecimientoController extends BaseConfigController {
 			error+= "Ingresar el tipo de Télefono<br/>";
 
 		//Correo Establecimiento
-		
 		if(request.getParameter("id_correo") != null && !request.getParameter("id_correo").trim().isEmpty())
 			beanC.setId_correo(Integer.parseInt(request.getParameter("id_correo")));
 		
@@ -262,31 +257,38 @@ public class EstablecimientoController extends BaseConfigController {
 		return obj;
 	}
 	
-	@SuppressWarnings("unused")
-	@RequestMapping("/General/Establecimiento/EliminarEstablecimiento")
-	public ModelAndView Eliminar(HttpServletRequest request, ModelMap modelo){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/EliminarEstablecimiento")
+	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
 		String id = request.getParameter("id_establecimiento");
 		if(id != null){
 			try {
 				CatalogoExample example = new CatalogoExample();
 				example.createCriteria().andId_establecimientoEqualTo(Integer.parseInt(id));
-				Integer contCatalogo = ColseviDao.getInstance().getCatalogoMapper().countByExample(example);
+				Integer contador = ColseviDao.getInstance().getCatalogoMapper().countByExample(example);
 				
-				if(contCatalogo == 0){
-					ColseviDao.getInstance().getEstablecimientoMapper().deleteByPrimaryKey(Integer.parseInt(id));
-					modelo.addAttribute("correcto", "Establecimiento Eliminado");
-				}else{
-					modelo.addAttribute("error", "El establecimiento no se pudo eliminar porqué tiene un catálogo asociado");
+				if(contador > 0){
+					result.put("error", "El establecimiento no se pudo eliminar porqué tiene un catálogo asociado");
+					ResponseJson(request, response, result);
+					return;
 				}
+				
+				MateriaPrimaExample MPE = new MateriaPrimaExample();
+				MPE.createCriteria().andId_establecimientoEqualTo(Integer.parseInt(id));
+				contador = ColseviDao.getInstance().getMateriaPrimaMapper().countByExample(MPE);
+				if(contador > 0){
+					result.put("error", "El establecimiento no se puede eliminar porqué tiene materia prima asociada");
+					ResponseJson(request, response, result);
+					return;
+				}else
+					ColseviDao.getInstance().getEstablecimientoMapper().deleteByPrimaryKey(Integer.parseInt(id));
 				
 			} catch (Exception e) {
 				logger.error(e.getMessage());
-				modelo.addAttribute("error", "Ocurrió un error, contacte al administrador");
+				result.put("error", "Ocurrió un error, contacte al administrador");
 			}
-			
 		}
-		
-		return Establecimiento(request, modelo);
+		ResponseJson(request, response, result);
 	}
 }

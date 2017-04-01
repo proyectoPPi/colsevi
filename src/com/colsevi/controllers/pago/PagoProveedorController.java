@@ -16,7 +16,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ProveedorManager;
@@ -27,18 +26,19 @@ import com.colsevi.dao.pago.model.PagoProveedorExample;
 import com.colsevi.dao.proveedor.model.CompraProveedor;
 
 @Controller
+@RequestMapping("/pago/Proveedor")
 public class PagoProveedorController extends BaseConfigController{
 
 	private static final long serialVersionUID = -3396874236142724754L;
 	private static Logger logger = Logger.getLogger(PagoProveedorController.class);
 	
-	@RequestMapping("/pago/Proveedor")
-	public ModelAndView PagoProv (HttpServletRequest request, ModelMap model){
-		return new ModelAndView("/pago/ProveedorPago", "col", getValoresGenericos(request));
+	@RequestMapping
+	public String PagoProv (HttpServletRequest request, ModelMap model){
+		return "/pago/ProveedorPago";
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/pago/Proveedor/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject result = new JSONObject();
 		
@@ -88,7 +88,7 @@ public class PagoProveedorController extends BaseConfigController{
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/pago/Proveedor/cargarDeuda")
+	@RequestMapping("/cargarDeuda")
 	public void cargarDeuda(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		JSONObject result = new JSONObject();
@@ -134,9 +134,10 @@ public class PagoProveedorController extends BaseConfigController{
 		return result;
 	}
 	
-	@RequestMapping("/pago/Proveedor/guardar")
-	public ModelAndView Guardar(HttpServletRequest request, ModelMap model){
-		
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/guardar")
+	public void Guardar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
 		Integer compra = 0;
 		BigDecimal pendiente = new BigDecimal(0);
 		BigDecimal valorP = new BigDecimal(0);
@@ -175,7 +176,7 @@ public class PagoProveedorController extends BaseConfigController{
 			error += "Ingresar una compra válida<br/>";
 		}
 		if(!error.isEmpty())
-			model.addAttribute("error", error);
+			resultVista.put("error", error);
 		else{
 			try{
 				CompraProveedor compraProv = new CompraProveedor();
@@ -185,16 +186,16 @@ public class PagoProveedorController extends BaseConfigController{
 				
 				ProveedorManager.InsertarPago(compra, new Date(), pendiente, valorP, obs);
 				
-				model.addAttribute("correcto", "Pago creado");
+				resultVista.put("correcto", "Pago creado");
 			}catch(Exception e){
 				logger.error(e.getMessage());
-				error += "Contactar al administrador<br/>";
+				resultVista.put("error", "Contactar al administrador<br/>");
 			}
 		}
-		return PagoProv(request, model);
+		ResponseJson(request, response, resultVista);
 	}
 	
-	@RequestMapping("/pago/Proveedor/autocompletar")
+	@RequestMapping("/autocompletar")
 	public void auto(HttpServletRequest request, HttpServletResponse response){
 		try{
 			JSONObject result = new JSONObject();

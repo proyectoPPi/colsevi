@@ -1,4 +1,5 @@
 jQuery(document).ready(function(){
+	Hformulario();
 	HDatetimePicker('hora_inicio','LT');
 	HDatetimePicker('hora_fin','LT');
 	Tabla();
@@ -19,7 +20,7 @@ function Limpiar(){
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/General/Establecimiento/EliminarEstablecimiento.html?");
+	HEliminar("Formulario", contexto + "/General/Establecimiento/EliminarEstablecimiento.html?");
 }
 
 function CargarFormulario(Id){

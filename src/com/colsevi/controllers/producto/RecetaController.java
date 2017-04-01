@@ -14,30 +14,26 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.colsevi.application.ClienteManager;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.producto.model.Producto;
 import com.colsevi.dao.producto.model.Receta;
 import com.colsevi.dao.producto.model.RecetaExample;
-import com.colsevi.dao.producto.model.DificultadReceta;
-import com.colsevi.dao.producto.model.DificultadRecetaExample;
 import com.colsevi.dao.producto.model.PreparacionReceta;
 import com.colsevi.dao.producto.model.PreparacionRecetaExample;
-import com.colsevi.application.ProveedorManager;
 
 @Controller
+@RequestMapping("/Recetario")
 public class RecetaController extends BaseConfigController {
 
 	private static final long serialVersionUID = -5237605245293196719L;
 
-	@RequestMapping("/Recetario")
-	public ModelAndView Recetario(HttpServletRequest request, ModelMap model) {
+	@RequestMapping
+	public String Recetario(HttpServletRequest request, ModelMap model) {
 		model.addAttribute("ListaD", ProductoManager.getDificultad());
-		return new ModelAndView("producto/Recetario", "col", getValoresGenericos(request));
+		return "producto/Recetario";
 	}
 
 	@SuppressWarnings("unchecked")
@@ -52,9 +48,8 @@ public class RecetaController extends BaseConfigController {
 		String difi = request.getParameter("difi");
 		String prod = request.getParameter("prodV");
 		String tiempo = request.getParameter("tiempo");
-		Boolean mayorF = Boolean
-				.valueOf(request.getParameter("mayorF") != null && request.getParameter("mayorF").trim().equals("true")
-						? "true" : "false");
+		Boolean mayorF = Boolean.valueOf(request.getParameter("mayorF") 
+				!= null && request.getParameter("mayorF").trim().equals("true") ? "true" : "false");
 		mapa.put("limit", Inicio + ", " + Final);
 
 		if (difi != null && !difi.trim().isEmpty() && !difi.trim().equals("0"))
@@ -103,7 +98,7 @@ public class RecetaController extends BaseConfigController {
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Recetario/detalle")
+	@RequestMapping("/detalle")
 	public void detalle(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		JSONObject result = new JSONObject();
@@ -162,7 +157,7 @@ public class RecetaController extends BaseConfigController {
 		return result;
 	}
 
-	@RequestMapping("/Recetario/buscarProd")
+	@RequestMapping("/buscarProd")
 	public void auto(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			JSONObject result = new JSONObject();
@@ -179,15 +174,16 @@ public class RecetaController extends BaseConfigController {
 		}
 	}
 
-	@RequestMapping("/Recetario/Guardar")
-	public ModelAndView guardar(HttpServletRequest request, ModelMap model) {
-
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Guardar")
+	public void guardar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		JSONObject resultVista = new JSONObject();
 		try {
 			Object[] result = validarGuardado(request);
-
 			if (!result[0].toString().isEmpty()) {
-				model.addAttribute("error", result[0]);
-				return Recetario(request, model);
+				resultVista.put("error", result[0]);
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 
 			Receta rec = (Receta) result[1];
@@ -202,7 +198,7 @@ public class RecetaController extends BaseConfigController {
 				RE.setOrderByClause("id_receta DESC");
 				rec.setId_receta(ColseviDao.getInstance().getRecetaMapper().selectByExample(RE).get(0).getId_receta());
 
-				model.addAttribute("correcto", "Receta creada");
+				resultVista.put("correcto", "Receta creada");
 			} else {
 				PreparacionRecetaExample PRE = new PreparacionRecetaExample();
 				PRE.createCriteria().andId_recetaEqualTo(rec.getId_receta());
@@ -210,7 +206,7 @@ public class RecetaController extends BaseConfigController {
 
 				ColseviDao.getInstance().getRecetaMapper().updateByPrimaryKey(rec);
 
-				model.addAttribute("correcto", "Receta actualizada");
+				resultVista.put("correcto", "Receta actualizada");
 			}
 
 			for (PreparacionReceta bean : listaP) {
@@ -220,10 +216,9 @@ public class RecetaController extends BaseConfigController {
 			}
 
 		} catch (Exception e) {
-			model.addAttribute("error", "Contactar al administrador");
+			resultVista.put("error", "Contactar al administrador");
 		}
-
-		return Recetario(request, model);
+		ResponseJson(request, response, resultVista);
 	}
 
 	public Object[] validarGuardado(HttpServletRequest request) {

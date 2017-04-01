@@ -2,6 +2,8 @@ jQuery(document).ready(function(){
 	HDatetimePicker('fechaF','LT');
 	HDatetimePicker('fecha_compra','YYYY-MM-DD hh:mm');
 	Tabla();
+	Hformulario();
+	Hformulario('formularioMotivo');
 });
 
 jQuery('#adicion').click(function(){

@@ -1,5 +1,6 @@
 jQuery(document).ready(function(){
 	Tabla();
+	Hformulario();
 	HiniciarAutocompletar(contexto + '/Recetario/buscarProd.html?', 'prod');
 	HiniciarAutocompletar(contexto + '/Recetario/buscarProd.html?', 'prodF');
 });
