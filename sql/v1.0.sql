@@ -438,3 +438,5 @@ CREATE TABLE plato(
     PRIMARY KEY(id_plato),
     CONSTRAINT fk_estabPlato FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento)
 );
+
+ALTER TABLE establecimiento add estado boolean default false;
