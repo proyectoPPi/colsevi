@@ -24,9 +24,6 @@ import com.colsevi.dao.usuario.model.UsuarioExample;
 @RequestMapping("login")
 public class LoginController extends BaseConfigController {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1759665983139848003L;
 	private static Logger logger = Logger.getLogger(LoginController.class);
 	
@@ -43,7 +40,7 @@ public class LoginController extends BaseConfigController {
 		String errores = validar(usuario, clave);
 		if(!errores.isEmpty()){
 			model.addAttribute("error", errores);
-			return login(request, model);
+			return new ModelAndView("front/index");
 		}
 		
 		SesionUsuario U = getUsuario(usuario, clave, model);
@@ -51,7 +48,7 @@ public class LoginController extends BaseConfigController {
 			HttpSession sesion = request.getSession(true);
 			sesion.setAttribute("sesion", U);
 		}else{
-			return login(request, model);
+			return new ModelAndView("front/index");
 		}
 		//principalBase
 		return new ModelAndView("inicialApp","col",getValoresGenericos(request));
@@ -155,6 +152,6 @@ public class LoginController extends BaseConfigController {
 			}
 		}
 		
-		return login(request, model);
+		return new ModelAndView("front/index");
 	}
 }

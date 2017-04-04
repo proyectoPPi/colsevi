@@ -1,11 +1,12 @@
 function initPaso1(){
 	Hformulario('formularioMotivo');
-	if(jQuery('#consecutivo').val() === '')
-		jQuery("#ModalUbicacion").modal('show');
-	else
-		detalle();
+	jQuery('#detalleContenido').hide();
+	jQuery("#ModalUbicacion").modal('show');
 }
-function detalle(){
+function detalle(secuencia){
+	jQuery("#consecutivo, #sec").val(secuencia);
+	jQuery("#ModalUbicacion").modal('hide');
+	jQuery('#detalleContenido').show();
 	HiniciarAutocompletar(contexto + '/Pedido/PedidoWizardStep1/completarProducto.html?', 'producto');
 	HAjax({
 		url: contexto + "/Pedido/PedidoWizardStep1/listaProductos.html?",
@@ -66,7 +67,9 @@ function Add(data){
 		HMensaje(data.error, 'danger');
 }
 
-
+function continuarPaso1(){
+	HredireccionarVista(contexto + "/Pedido/PedidoWizardStep2.html?" + jQuery('#formulario').serialize());
+}
 
 
 

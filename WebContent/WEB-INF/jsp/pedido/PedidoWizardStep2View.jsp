@@ -17,3 +17,6 @@
 </div>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/pedido/PedidoWizardStep2.js"></script>
+<script>
+	initPaso2();
+</script>

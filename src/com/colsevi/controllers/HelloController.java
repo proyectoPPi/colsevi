@@ -14,15 +14,11 @@ public class HelloController extends BaseConfigController{
 
 	@RequestMapping("/")
 	public ModelAndView profile(HttpServletRequest request){
-		ModelAndView model = null;
-		
 		if(getUsuario(request) != null && getUsuario(request).getPersona() != null){
-			model = new ModelAndView("producto/ProductoAdmin");
+			return new ModelAndView("inicialApp","col",getValoresGenericos(request));
 		}else{
 			return new ModelAndView("front/index");
 		}
-		
-		return model;
 	}
 
 

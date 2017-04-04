@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
    <head>
     	<title>Profile</title>
     	<c:import url="estilos_genericos.jsp"></c:import>
@@ -15,7 +15,7 @@
               <div data-original-title="Toggle Navigation" data-placement="right" class="fa fa-bars tooltips"></div>
           </div>
           <!--logo start-->
-          <a href="index.html" class="logo" >Colse<span>vi</span></a>
+          <a href="#" class="logo" >Colse<span>vi</span></a>
           <!--logo end-->
 
           

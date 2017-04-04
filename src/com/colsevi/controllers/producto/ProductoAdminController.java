@@ -439,7 +439,8 @@ public class ProductoAdminController extends BaseConfigController {
 							html += "<option value='" + bean.getId_unidad_peso() + "'>" + bean.getNombre() + "</option>";
 						}
 					}
-				}
+				}else
+					html = "<option selected>Seleccionar ingrediente</option>";
 				opciones.put("medida", html);
 				
 				resultado.add(opciones);

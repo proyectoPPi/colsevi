@@ -23,7 +23,7 @@
 				<div class="col-md-3 ">
 					<div class="header-left clearfix">
 						<div id="logo" class="logo">
-							<a href="index.html"><img id="logo_img" src="images/logo_light_blue.png" alt="The Project"></a>
+							<a href="${pageContext.request.contextPath}//front/index.html"><img id="logo_img" src="images/logo_light_blue.png" alt="The Project"></a>
 						</div>
 						<div class="site-slogan">
 							Colsevi PPI

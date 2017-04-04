@@ -61,12 +61,13 @@ function Hformulario(id){
 	           type: "POST",
 	           url: form.attr('action'),
 	           data: form.serialize(),
-	           success: function(data){
+	           success: function(respFormulario){
 	        	   try{
-		       			data = jQuery.parseJSON(data);
+	        		   respFormulario = jQuery.parseJSON(respFormulario);
 		       			modal = form.attr('data-modal') !== undefined ? form.attr('data-modal') : id;
 	       				tabla = form.attr('data-tabla') !== undefined ? form.attr('data-tabla') : 'Tabla';
-		       			MostrarMensaje(data, modal, tabla);
+	       				resp = form.attr('data-resp');
+		       			MostrarMensaje(respFormulario, modal, tabla, resp);
 		       		} catch(err){
 		       			console.log("Error ejecutando tabla" + err);
 		               	return;
@@ -76,17 +77,20 @@ function Hformulario(id){
 	});
 }
 
-function MostrarMensaje(data, modal, tabla){
-	if(data["error"]  != undefined && data["error"] != ""){
-   		HMensaje(data["error"], 'danger');
-   	}else if(data["correcto"]  != undefined && data["correcto"] != ""){
+function MostrarMensaje(respFormulario, modal, tabla, resp){
+	if(respFormulario["error"]  != undefined && respFormulario["error"] != ""){
+   		HMensaje(respFormulario["error"], 'danger');
+   	}else if(respFormulario["correcto"]  != undefined && respFormulario["correcto"] != ""){
    		jQuery("#" + modal).modal('hide');
-   		HMensaje(data["correcto"], 'success');
-   		eval(tabla + '();');
-   	}else if(data["peligro"]  != undefined && data["peligro"] != ""){
-   		HMensaje(data["peligro"], 'warning');
-   	}else if(data["info"]  != undefined && data["info"] != ""){
-   		HMensaje(data["info"], 'info');
+   		HMensaje(respFormulario["correcto"], 'success');
+   		eval(tabla + '(' + respFormulario + ');');
+   	}else if(respFormulario["peligro"]  != undefined && respFormulario["peligro"] != ""){
+   		HMensaje(respFormulario["peligro"], 'warning');
+   	}else if(respFormulario["info"]  != undefined && respFormulario["info"] != ""){
+   		HMensaje(respFormulario["info"], 'info');
+   	}else{
+   		jQuery("#" + modal).modal('hide');
+   		eval(tabla + '(' + respFormulario[resp] + ');');
    	}
 }
 

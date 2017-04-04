@@ -1,14 +1,15 @@
-jQuery(document).ready(function(){
-//	HiniciarAutocompletar(contexto + '/Pedido/PedidoWizardStep2/autocompletar.html?', 'producto');
+function initPaso2(){
+	alert(jQuery('#consecutivo').val());
 	HAjax({
 		url: contexto + "/Pedido/PedidoWizardStep2/listaProductos.html?",
 		data: {consecutivo: jQuery('#consecutivo').val()},
 		async: false,
 		method: 'construirVista'
 	});
-});
+};
 
 function construirVista(data){
+	alert(data);
 	var suma = '';
 	jQuery('#vistaProducto').html('');
 	data = data['records'];
@@ -52,15 +53,5 @@ function construirVista(data){
 }
 
 function actualizar(){
-	HAjax({
-		url: contexto + "/Pedido/PedidoWizardStep2/Actualizar.html?" + jQuery('#formulario').serialize(),
-		async: false,
-		method: 'Confirmar'
-	});
-}
-
-function Confirmar(data){
-	if(data.error == undefined){
-    	jQuery('#continuar').submit();
-	}
+	HredireccionarVista(contexto + "/Pedido/PedidoWizardStep2/Actualizar.html?" + jQuery('#formulario').serialize());
 }
