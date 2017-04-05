@@ -279,10 +279,10 @@ public class EstablecimientoController extends BaseConfigController {
 				contador = ColseviDao.getInstance().getMateriaPrimaMapper().countByExample(MPE);
 				if(contador > 0){
 					result.put("error", "El establecimiento no se puede eliminar porqué tiene materia prima asociada");
-					ResponseJson(request, response, result);
-					return;
-				}else
+				}else{
 					ColseviDao.getInstance().getEstablecimientoMapper().deleteByPrimaryKey(Integer.parseInt(id));
+					result.put("correcto", "Establecimiento Eliminado");
+				}
 				
 			} catch (Exception e) {
 				logger.error(e.getMessage());

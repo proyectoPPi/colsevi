@@ -184,27 +184,6 @@ public class CompraController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/preprocesador")
-	public void preprocesador(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		JSONObject result = new JSONObject();
-		try{
-			Object[] validacion = validarGuardar(request);
-			
-			if(!validacion[0].toString().isEmpty()){
-				result.put("error", validacion[0]);
-			}
-		}catch(Exception e){
-			result.put("error", "Contactar al administrador");
-			logger.error(e.getMessage());
-		}
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		result.writeJSONString(response.getWriter());
-	}
-	
-	
-	@SuppressWarnings("unchecked")
 	@RequestMapping("/Guardar")
 	public void Guardar(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject resultVista = new JSONObject();
@@ -236,7 +215,7 @@ public class CompraController extends BaseConfigController {
 	
 				MateriaPrimaExample mpe = new MateriaPrimaExample();
 				
-				cie.createCriteria().andLoteNotIn(loteList).andId_compraEqualTo(bean.getId_compra_proveedor());
+				cie.createCriteria().andLoteIn(loteList).andId_compraEqualTo(bean.getId_compra_proveedor());
 				List<CompraXIngrediente> listCXI = ColseviDao.getInstance().getCompraXIngredienteMapper().selectByExample(cie);
 				
 				countDelete = new ArrayList<Integer>();
@@ -246,8 +225,7 @@ public class CompraController extends BaseConfigController {
 				}
 	
 				if(countDelete.size() > 0){
-					cie.clear();
-					cie.createCriteria().andLoteIn(countDelete);
+					cie.createCriteria().andLoteIn(countDelete).andId_compraEqualTo(bean.getId_compra_proveedor());
 					mpe.createCriteria().andLoteIn(countDelete);
 					ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.proveedor.map.CompraXIngredienteMapper.deleteByExample", cie);
 					ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.deleteByExample", mpe);
@@ -319,9 +297,6 @@ public class CompraController extends BaseConfigController {
 			}else{
 				beanC.setFecha_compra(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true));
 			}
-		}
-		if(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_vencimiento"), true).getTime() <= new Date().getTime() ){
-			error += "La fecha de la compra no puede ser menor a la actual<br/>";
 		}
 		if(request.getParameter("pagado") != null)
 			beanC.setPagado(request.getParameter("pagado").equals("SI") || request.getParameter("pagado").equals("on") ? true: false);
