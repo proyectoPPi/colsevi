@@ -4,7 +4,7 @@
         .dropdown-color-fill-icon{position:relative;float:left;margin-left:0;margin-right: 0}
 </style>
 
-<h2>Nivel Receta
+<h2>Dificultad Receta
 	<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 </h2>
 <div class="separator-2"></div>
