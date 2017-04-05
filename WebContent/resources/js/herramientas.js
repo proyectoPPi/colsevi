@@ -83,7 +83,7 @@ function MostrarMensaje(respFormulario, modal, tabla, resp){
    	}else if(respFormulario["correcto"]  != undefined && respFormulario["correcto"] != ""){
    		jQuery("#" + modal).modal('hide');
    		HMensaje(respFormulario["correcto"], 'success');
-   		eval(tabla + '(' + respFormulario + ');');
+   		eval(tabla + '();');
    	}else if(respFormulario["peligro"]  != undefined && respFormulario["peligro"] != ""){
    		HMensaje(respFormulario["peligro"], 'warning');
    	}else if(respFormulario["info"]  != undefined && respFormulario["info"] != ""){

@@ -3,7 +3,7 @@
 <html>
 <head>
    <meta charset="UTF-8" />
-	<title>Clasificar ingrediente</title>
+	<title>App Colsevi</title>
 	<c:import url="/WEB-INF/jsp/plantilla/estilos_genericos.jsp" />
 </head>
 <body>
