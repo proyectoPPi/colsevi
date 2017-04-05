@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 			
-<h2>Catálogo 
+<h2>Carta 
 	<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 </h2>
 <div class="separator-2"></div>
@@ -42,11 +42,12 @@
 <div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content-wrap">
-			<form method="post" action="${pageContext.request.contextPath}/Catalogo/Cat/Guardar.html?" id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
+			<form method="post" action="${pageContext.request.contextPath}/Catalogo/Cat/Guardar.html?" 
+				id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
-						<h4 class="modal-title">Administrar catálogo</h4>
+						<h4 class="modal-title">Administrar carta</h4>
 					</div>
 					<div class="modal-body">
 						<div class="row">
@@ -78,7 +79,7 @@
 												<div class="form-group">
 													<label>*Establecimiento</label>
 													<select class="form-control" id="est" name="est" required="required">
-														<option value="0">Seleccione</option>
+														<option value="">Seleccione</option>
 															<c:forEach items="${listaEst}" var="est">
 																<option value="${est.id_establecimiento}">${est.nombre}</option>
 															</c:forEach>

@@ -17,6 +17,7 @@ function inicialTabla(){
 
 function construirTbl(data){
 	var medida = data !== undefined && data['medida'] !== undefined ? data['medida'] : ''; 
+	var lote = data !== undefined && data['lote'] !== undefined ? data['lote'] : ''; 
 	var count = jQuery('#count').val();
 	var html ='<tr>';
 	html += '<td>';
@@ -25,7 +26,7 @@ function construirTbl(data){
 	html += '</td>';
 	html += '<td>';
 		html += '<input type="text" class="form-control" name="cant' + count + '" />';
-		html += '<input type="hidden" name="lote' + count + '" />';
+		html += '<input type="hidden" name="lote' + count + '" id="lote' + count + '" value="' + lote + '" />';
 	html += '</td>';
 	html += '<td>';
 		html += '<select name="tipo' + count + '" class="form-control">' + medida + '</select>';

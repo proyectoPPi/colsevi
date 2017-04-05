@@ -12,8 +12,8 @@ function Tabla(pagina){
 	});
 }
 
-
 function Limpiar(){
+	jQuery('[href=#general]').tab('show');
 	jQuery('#detalleCatalog').html('');
 	jQuery('#catalogActive').val('');
 	HLimpiar();
@@ -26,10 +26,11 @@ function Limpiar(){
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/Catalogo/Cat/Eliminar.html?");
+	HEliminar("Formulario", contexto + "/Catalogo/Cat/Eliminar.html?");
 }
 
 function CargarFormulario(Id){
+	jQuery('[href=#general]').tab('show');
 	jQuery('#detalleCatalog').html('');
 	jQuery('#catalogActive').val('');
 	HCargarFormulario(Id);
@@ -57,14 +58,3 @@ function productInCatalog(data){
 	} 
 }
 
-function preprocesar(){
-	$("input[name=catalogo]").each(function(){
-	    if(this.checked){
-	    	jQuery('#catalogActive').val(jQuery('#catalogActive').val() + this.value + ',');
-	    }
-	});
-	HPreprocesar({
-		url: contexto + "/Catalogo/Cat/preprocesador.html?",
-		formulario: "formulario",
-	});
-}

@@ -250,28 +250,6 @@ public class CatalogoController extends BaseConfigController{
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/preprocesador")
-	public void preprocesador(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		JSONObject result = new JSONObject();
-		try{
-			Object[] validacion = validarGuardar(request);
-			
-			if(!validacion[0].toString().isEmpty()){
-				result.put("error", validacion[0]);
-			}
-			validacion = validarCatalogo(request);
-			if(!validacion[0].toString().isEmpty()){
-				result.put("error", validacion[0]);
-			}
-		}catch(Exception e){
-			logger.error(e.getMessage());
-			result.put("error", "Contactar al administrador");
-		}
-		
-		ResponseJson(request, response, result);
-	}
-	
-	@SuppressWarnings("unchecked")
 	@RequestMapping("/ListaCatalogoPosibleProducto")
 	public void ListaCatalogoPosibleProducto(HttpServletRequest request, HttpServletResponse response) throws IOException{
 
