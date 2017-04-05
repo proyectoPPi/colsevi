@@ -12,7 +12,7 @@ function Tabla(pagina){
 }
 
 function Limpiar(){
-	HLimpliar();
+	HLimpiar();
 	jQuery('#clasificar').val(0);
 }
 

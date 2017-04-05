@@ -14,7 +14,7 @@ function Tabla(pagina){
 }
 
 function Limpiar(){
-	HLimpliar();
+	HLimpiar();
 }
 
 function CargarFormulario(Id){

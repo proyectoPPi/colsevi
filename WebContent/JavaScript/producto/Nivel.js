@@ -26,7 +26,7 @@ jQuery('#color').on('changeColor', function(e,color){
 });
 
 function Limpiar(){
-	HLimpliar();
+	HLimpiar();
 }
 
 function Eliminar(){

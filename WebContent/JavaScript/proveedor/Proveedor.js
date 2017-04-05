@@ -13,7 +13,7 @@ function Tabla(pagina){
 }
 
 function Limpiar(){
-	HLimpliar();
+	HLimpiar();
 	jQuery('#tipoProv, #telTipo').val(0);
 	jQuery('#barrio, #descripDir').val('');
 
