@@ -2,7 +2,6 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.1.custom.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.min.js"></script>
-   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.form.js"></script>
    
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/modernizr.js"></script>
@@ -13,6 +12,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/script.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/moment-with-locales.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.validate-1.11.1.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/Chart.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
    

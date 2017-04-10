@@ -28,8 +28,8 @@ public class ColseviDaoTransaccion {
 		return null;
 	}
 	
-	public static void Insertar(SqlSession session, String url, Object bean){
-		session.insert(url, bean);
+	public static Integer Insertar(SqlSession session, String url, Object bean){
+		return session.insert(url, bean);
 	}
 	
 	public static void Actualizar(SqlSession session, String url, Object bean){

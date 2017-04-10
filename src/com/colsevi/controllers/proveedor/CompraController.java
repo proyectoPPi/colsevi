@@ -194,6 +194,7 @@ public class CompraController extends BaseConfigController {
 		List<Integer> loteList = null;
 		List<Integer> countDelete = null;
 		CompraProveedor bean = null;
+		MateriaPrimaExample mpe = new MateriaPrimaExample();
 		
 		try{
 			Object[] result = validarGuardar(request);
@@ -208,31 +209,15 @@ public class CompraController extends BaseConfigController {
 			listaCXI = (List<CompraXIngrediente>) result[2];
 			listaMP = (List<MateriaPrima>) result[3];
 			bean = (CompraProveedor) result[4];
-			
 			bean.setMotivo("");
-			
-			if(loteList != null && loteList.size() > 0){
-	
-				MateriaPrimaExample mpe = new MateriaPrimaExample();
-				
-				cie.createCriteria().andLoteIn(loteList).andId_compraEqualTo(bean.getId_compra_proveedor());
-				List<CompraXIngrediente> listCXI = ColseviDao.getInstance().getCompraXIngredienteMapper().selectByExample(cie);
-				
-				countDelete = new ArrayList<Integer>();
-				for(CompraXIngrediente ci: listCXI){
-					loteList.add(ci.getLote());
-					countDelete.add(ci.getLote());
-				}
-	
-				if(countDelete.size() > 0){
-					cie.createCriteria().andLoteIn(countDelete).andId_compraEqualTo(bean.getId_compra_proveedor());
-					mpe.createCriteria().andLoteIn(countDelete);
-					ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.proveedor.map.CompraXIngredienteMapper.deleteByExample", cie);
-					ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.deleteByExample", mpe);
-				}
-			}
 
 			if(bean.getId_compra_proveedor() != null){
+				cie.createCriteria().andId_compraEqualTo(bean.getId_compra_proveedor());
+				ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.proveedor.map.CompraXIngredienteMapper.deleteByExample", cie);
+				
+				mpe.createCriteria().andLoteIn(loteList);
+				ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.deleteByExample", mpe);
+				
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.proveedor.map.CompraProveedorMapper.updateByPrimaryKey", bean);
 				resultVista.put("correcto", "Compra Actualizada");
 			}else{
@@ -244,14 +229,10 @@ public class CompraController extends BaseConfigController {
 				listaCXI.get(i).setId_compra(bean.getId_compra_proveedor());
 				listaMP.get(i).setId_establecimiento(bean.getId_establecimiento());
 				
-				if(listaCXI.get(i).getLote() != null){
-					ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.updateByPrimaryKey", listaMP.get(i));
-					ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.proveedor.map.CompraXIngredienteMapper.updateByExampleSelective", listaCXI.get(i));
-				}else{
-					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.insertSelective", listaMP.get(i));
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.insertSelective", listaMP.get(i));
+				if(listaCXI.get(i).getLote() == null)
 					listaCXI.get(i).setLote(listaMP.get(i).getLote());
-					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.proveedor.map.CompraXIngredienteMapper.insertSelective", listaCXI.get(i));
-				}
+				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.proveedor.map.CompraXIngredienteMapper.insertSelective", listaCXI.get(i));
 			}
 			ColseviDaoTransaccion.RealizarCommit(sesion);
 		}catch(Exception e){
@@ -279,28 +260,23 @@ public class CompraController extends BaseConfigController {
 			beanC.setId_compra_proveedor(Integer.parseInt(request.getParameter("id_compra")));
 			error += validarNoInv(beanC.getId_compra_proveedor());
 		}
-		if(request.getParameter("proveedor") == null || request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").trim().equals("0"))
+		if(request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").trim().equals("0"))
 			error += "Seleccionar el proveedor<br/>";
 		else
 			beanC.setId_proveedor(Integer.parseInt(request.getParameter("proveedor")));
 		
-		if(request.getParameter("establecimiento") == null || request.getParameter("establecimiento").trim().isEmpty() || request.getParameter("establecimiento").trim().equals("0"))
+		if(request.getParameter("establecimiento").trim().isEmpty() || request.getParameter("establecimiento").trim().equals("0"))
 			error += "Seleccione un establecimiento <br/>";
 		else
 			beanC.setId_establecimiento(Integer.parseInt(request.getParameter("establecimiento")));
 		
-		if(request.getParameter("fecha_compra") == null || request.getParameter("fecha_compra").trim().isEmpty())
+		if(request.getParameter("fecha_compra").trim().isEmpty())
 			error += "Ingresar la fecha de la compra<br/>";
 		else{
-			if(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true).getTime() >= new Date().getTime() ){
-				error += "La fecha de la compra no puede ser menor a la actual<br/>";
-			}else{
-				beanC.setFecha_compra(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true));
-			}
+			beanC.setFecha_compra(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true));
 		}
 		if(request.getParameter("pagado") != null)
 			beanC.setPagado(request.getParameter("pagado").equals("SI") || request.getParameter("pagado").equals("on") ? true: false);
-		
 		
 		if(count != null && count > 0){
 			for(int i = 0; i < count; i++){
@@ -323,7 +299,7 @@ public class CompraController extends BaseConfigController {
 					
 					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
 						Date dat = UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha" + (i +1)), true);
-						if(dat.getTime() > new Date(System.currentTimeMillis()).getTime()){
+						if(dat.getTime() > beanC.getFecha_compra().getTime()){
 							Calendar calendar = Calendar.getInstance();
 							calendar.setTime(dat);
 							int year = calendar.get(Calendar.YEAR);
@@ -334,7 +310,7 @@ public class CompraController extends BaseConfigController {
 							mp.setFecha_vencimiento(calendar.getTime());
 							cxi.setFecha_vencimiento(calendar.getTime());
 						}else{
-							error += "La fecha de vencimiento debe ser mayor a la actual<br/>";
+							error += "La fecha de vencimiento debe ser mayor a la fecha de la compra<br/>";
 						}
 					}
 					if(request.getParameter("lote" + (i +1)) != null && !request.getParameter("lote" + (i +1)).trim().isEmpty()){

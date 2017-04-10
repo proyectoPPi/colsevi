@@ -37,7 +37,7 @@
 						<input type="hidden" id="id_tipo_producto" name="id_tipo_producto"/>
 						<div class="form-group">
 							<label>*Nombre</label>
-							<input type="text" class="form-control" id="nombre" name="nombre" required="required"/>
+							<input type="text" class="form-control" id="nombre" name="nombre"/>
 						</div>
 						<div class="form-group">
 							<label>Descripci&#243;n</label>
@@ -45,8 +45,8 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-warning" type="submit">Guardar</button>
-						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpliar();">Cerrar</button>
+						<button class="btn btn-warning" type="button" id="guardar" onclick="validarFormulario();">Guardar</button>
+						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 					</div>
 				</div>

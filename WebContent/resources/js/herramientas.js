@@ -57,24 +57,30 @@ function Hformulario(id){
 		var form = $(this);
 		e.preventDefault(); 
 	
-	    $.ajax({
-	           type: "POST",
-	           url: form.attr('action'),
-	           data: form.serialize(),
-	           success: function(respFormulario){
-	        	   try{
-	        		   respFormulario = jQuery.parseJSON(respFormulario);
-		       			modal = form.attr('data-modal') !== undefined ? form.attr('data-modal') : id;
-	       				tabla = form.attr('data-tabla') !== undefined ? form.attr('data-tabla') : 'Tabla';
-	       				resp = form.attr('data-resp');
-		       			MostrarMensaje(respFormulario, modal, tabla, resp);
-		       		} catch(err){
-		       			console.log("Error ejecutando tabla" + err);
-		               	return;
-		       		}
-	           }
-         });
+		enviarFormulario(form);
 	});
+}
+
+function enviarFormulario(form){
+	form === undefined ? form = 'Formulario': '';
+	form = jQuery('#' + form);
+	$.ajax({
+        type: "POST",
+        url: form.attr('action'),
+        data: form.serialize(),
+        success: function(respFormulario){
+     	   try{
+     		   respFormulario = jQuery.parseJSON(respFormulario);
+	       			modal = form.attr('data-modal') !== undefined ? form.attr('data-modal') : id;
+    				tabla = form.attr('data-tabla') !== undefined ? form.attr('data-tabla') : 'Tabla';
+    				resp = form.attr('data-resp');
+	       			MostrarMensaje(respFormulario, modal, tabla, resp);
+	       		} catch(err){
+	       			console.log("Error ejecutando tabla" + err);
+	               	return;
+	       		}
+        }
+  });
 }
 
 function MostrarMensaje(respFormulario, modal, tabla, resp){

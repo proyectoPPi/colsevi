@@ -1,6 +1,20 @@
 jQuery(document).ready(function(){
 	Tabla();
-	Hformulario();
+	
+	$('#Formulario').validate({
+		rules: {
+			nombre : {
+				required : true,
+				minlength: 5,
+				maxlength: 50
+			},
+			descripcion: {
+				minlength: 5,
+				maxlength: 120
+			}
+		}  
+     });
+	
 });
 
 function Tabla(pagina){
@@ -14,6 +28,13 @@ function Tabla(pagina){
 
 function Limpiar(){
 	HLimpiar();
+}
+
+function validarFormulario(){
+	if($('#Formulario').valid())
+		enviarFormulario();
+	else
+		alert(123);
 }
 
 function Eliminar(){

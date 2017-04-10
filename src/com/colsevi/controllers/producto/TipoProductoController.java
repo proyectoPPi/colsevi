@@ -89,7 +89,7 @@ public class TipoProductoController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Producto/Tipo/Guardar")
+	@RequestMapping("/Guardar")
 	public void Guardar(HttpServletRequest request, HttpServletResponse response, TipoProducto bean) throws IOException{
 		JSONObject resultVista = new JSONObject();
 		String error = validarGuardado(bean);
@@ -119,6 +119,7 @@ public class TipoProductoController extends BaseConfigController {
 			error += "Ingresar el Nombre<br/>";
 		return error;
 	}
+	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/Eliminar")
 	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
