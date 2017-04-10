@@ -30,7 +30,8 @@
 <div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content-wrap">
-			<form method="post" action="${pageContext.request.contextPath}/General/Establecimiento/GuardarLocal.html?" id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
+			<form method="post" action="${pageContext.request.contextPath}/General/Establecimiento/GuardarLocal.html?" 
+				id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
@@ -38,7 +39,6 @@
 					</div>
 					<div class="modal-body">
 						<div class="row">
-							
 							<input type="hidden" id="id_establecimiento" name="id_establecimiento"/>
 							<input type="hidden" id="id_direccion" name="id_direccion"/>
 							<input type="hidden" id="id_telefono" name="id_telefono"/>
@@ -46,49 +46,49 @@
 							
 							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 								<label>*Nombre</label>
-								<input type="text" class="form-control" id="nombreEsta" name="nombreEsta" required="required" maxlength="30"/>
+								<input type="text" class="form-control" id="nombreEsta" name="nombreEsta"/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 								<label>*Descripci&#243;n</label>
-								<input type="text" class="form-control" id="descipEsta" name="descipEsta" required="required" data-bv-notempty="true" maxlength="30"/>
+								<input type="text" class="form-control" id="descipEsta" name="descipEsta"/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                  <label>*Hora de inicio</label>
-                                           <input type="text" id="hora_inicio" name="hora_inicio" class="form-control" required="required"/>
+                                 <input type="text" id="hora_inicio" name="hora_inicio" class="form-control"/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                  <label>*Hora de cierre</label>
-                                           <input type="text" id="hora_fin" name="hora_fin" class="form-control"  required="required"/>
+                                 <input type="text" id="hora_fin" name="hora_fin" class="form-control"/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 								<label>Correo</label>
-								<input type="text" class="form-control" id="correo" name="correo" data-bv-notempty="true" maxlength="50"/>
+								<input type="text" class="form-control" id="correo" name="correo"/>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							
 								<h4><strong>DIRECCI&Oacute;N</strong></h4>
 								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 									<label>*Direcci&#243;n</label>
-									<input type="text" class="form-control" id="direccion" name="direccion" data-bv-notempty="true" required="required" maxlength="50"/>
+									<input type="text" class="form-control" id="direccion" name="direccion"/>
 								</div>
 								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 									<label>Barrio</label>
-									<input type="text" class="form-control" id="barrio" name="barrio" data-bv-notempty="true" maxlength="50"/>
+									<input type="text" class="form-control" id="barrio" name="barrio"/>
 								</div>
 								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 									<label>Descripci&#243;n</label>
-									<input type="text" class="form-control" id="descripDir" name="descripDir" data-bv-notempty="true" maxlength="30"/>
+									<input type="text" class="form-control" id="descripDir" name="descripDir"/>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								<h4><strong>TEL&Eacute;FONO</strong></h4>
 								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 									<label>*Tel&eacute;fono</label>
-									<input type="text" class="form-control" id="telefono" name="telefono" onkeypress="ValidaSoloNumeros()" required="required" maxlength="10"/>
+									<input type="number" class="form-control" id="telefono" name="telefono"/>
 								</div>
 								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 									<label>*Tipo T&eacute;lefono</label>
-									<select class="form-control" id="telTipo" name="telTipo" required="required">
+									<select class="form-control" id="telTipo" name="telTipo">
 										<option value="0">Seleccione</option>
 										<c:forEach items="${tipoTel}" var="tipo">
 											<option value="${tipo.id_tipo_telefono}">${tipo.nombre}</option>

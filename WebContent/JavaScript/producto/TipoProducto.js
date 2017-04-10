@@ -33,8 +33,6 @@ function Limpiar(){
 function validarFormulario(){
 	if($('#Formulario').valid())
 		enviarFormulario();
-	else
-		alert(123);
 }
 
 function Eliminar(){

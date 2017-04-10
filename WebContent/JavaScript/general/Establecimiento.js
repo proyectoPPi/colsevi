@@ -1,8 +1,22 @@
 jQuery(document).ready(function(){
-	Hformulario();
 	HDatetimePicker('hora_inicio','LT');
 	HDatetimePicker('hora_fin','LT');
 	Tabla();
+	
+	$('#Formulario').validate({
+		rules: {
+			nombreEsta: {
+				required : true,
+				minlength: 5,
+				maxlength: 40
+			},
+			descipEsta: {
+				minlength: 5,
+				maxlength: 120
+			}
+		}  
+     });
+	
 });
 
 function Tabla(pagina){
@@ -27,8 +41,7 @@ function CargarFormulario(Id){
 	HCargarFormulario(Id);
 }
 
-function ValidaSoloNumeros() {
-    if ((event.keyCode < 48) || (event.keyCode > 57))
-       event.returnValue = false;
-    
- }
+function validarFormulario(){
+	if($('#Formulario').valid())
+		enviarFormulario();
+}

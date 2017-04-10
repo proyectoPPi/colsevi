@@ -7,8 +7,8 @@ CREATE TABLE establecimiento(
     id_direccion INT,
     id_telefono INT,
     id_correo INT,
-    nombre VARCHAR (30) NOT NULL,
-    descripcion VARCHAR (30) NOT NULL,
+    nombre VARCHAR (40) NOT NULL,
+    descripcion VARCHAR (120),
     hora_inicio VARCHAR(7),
     hora_fin VARCHAR(7),
     PRIMARY KEY(id_establecimiento)
