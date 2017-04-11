@@ -11,8 +11,24 @@ jQuery(document).ready(function(){
 				maxlength: 40
 			},
 			descipEsta: {
+				required: false,
 				minlength: 5,
 				maxlength: 120
+			},
+			direccion:{
+				required: true
+			},
+			telefono:{
+				required: true
+			},
+			telTipo:{
+				required: true
+			},
+			hora_inicio: {
+				required: true
+			},
+			hora_fin: {
+				required: true
 			}
 		}  
      });
@@ -30,7 +46,6 @@ function Tabla(pagina){
 
 function Limpiar(){
 	HLimpiar();
-	jQuery('#telTipo').val('0');
 }
 
 function Eliminar(){

@@ -223,12 +223,12 @@ public class MateriaPrimaController extends BaseConfigController{
 			else
 				error += "Ingresar una cantidad válida</br>";
 			
-			if(request.getParameter("unidadMov") != null && !request.getParameter("unidadMov").trim().isEmpty() && !request.getParameter("unidadMov").trim().equals("0"))
+			if(request.getParameter("unidadMov") != null && !request.getParameter("unidadMov").trim().isEmpty())
 				MP.setId_unidad_peso(Integer.valueOf(request.getParameter("unidadMov")));
 			else
 				error += "Seleccionar un tipo de peso</br>";
 			
-			if(request.getParameter("estaMov") != null && !request.getParameter("estaMov").trim().isEmpty() && !request.getParameter("estaMov").trim().equals("0"))
+			if(request.getParameter("estaMov") != null && !request.getParameter("estaMov").trim().isEmpty())
 				MP.setId_establecimiento(Integer.valueOf(request.getParameter("estaMov")));
 			else
 				error += "Seleccionar un establecimiento</br>";

@@ -206,7 +206,7 @@ $.extend($.validator, {
 		messages: {},
 		groups: {},
 		rules: {},
-		errorClass: "error",
+		errorClass: "error-validate",
 		validClass: "valid",
 		errorElement: "label",
 		focusInvalid: true,

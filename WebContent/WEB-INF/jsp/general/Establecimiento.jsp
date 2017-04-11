@@ -44,28 +44,33 @@
 							<input type="hidden" id="id_telefono" name="id_telefono"/>
 							<input type="hidden" id="id_correo" name="id_correo"/>
 							
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-								<label>*Nombre</label>
-								<input type="text" class="form-control" id="nombreEsta" name="nombreEsta"/>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+									<label>*Nombre</label>
+									<input type="text" class="form-control" id="nombreEsta" name="nombreEsta"/>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+									<label>Descripci&#243;n</label>
+									<input type="text" class="form-control" id="descipEsta" name="descipEsta"/>
+								</div>
 							</div>
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-								<label>*Descripci&#243;n</label>
-								<input type="text" class="form-control" id="descipEsta" name="descipEsta"/>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	                                 <label>*Hora de inicio</label>
+	                                 <input type="text" id="hora_inicio" name="hora_inicio" class="form-control"/>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	                                 <label>*Hora de cierre</label>
+	                                 <input type="text" id="hora_fin" name="hora_fin" class="form-control"/>
+								</div>
 							</div>
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                 <label>*Hora de inicio</label>
-                                 <input type="text" id="hora_inicio" name="hora_inicio" class="form-control"/>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+									<label>Correo</label>
+									<input type="text" class="form-control" id="correo" name="correo"/>
+								</div>
 							</div>
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                 <label>*Hora de cierre</label>
-                                 <input type="text" id="hora_fin" name="hora_fin" class="form-control"/>
-							</div>
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-								<label>Correo</label>
-								<input type="text" class="form-control" id="correo" name="correo"/>
-							</div>
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							
+							<div class="row">
 								<h4><strong>DIRECCI&Oacute;N</strong></h4>
 								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 									<label>*Direcci&#243;n</label>
@@ -80,7 +85,7 @@
 									<input type="text" class="form-control" id="descripDir" name="descripDir"/>
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="row">
 								<h4><strong>TEL&Eacute;FONO</strong></h4>
 								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 									<label>*Tel&eacute;fono</label>
@@ -89,7 +94,7 @@
 								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 									<label>*Tipo T&eacute;lefono</label>
 									<select class="form-control" id="telTipo" name="telTipo">
-										<option value="0">Seleccione</option>
+										<option value="">Seleccione</option>
 										<c:forEach items="${tipoTel}" var="tipo">
 											<option value="${tipo.id_tipo_telefono}">${tipo.nombre}</option>
 										</c:forEach>
@@ -99,7 +104,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-warning" type="submit">Guardar</button>
+						<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
 						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 					</div>

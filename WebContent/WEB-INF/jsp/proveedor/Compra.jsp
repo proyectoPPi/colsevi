@@ -24,15 +24,15 @@
 			</select>
 		</div>
 		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label>Proveedor</label>
-                            <select class="form-control" id="provF" name="filtro">
+            <label>Proveedor</label>
+        	<select class="form-control" id="provF" name="filtro">
 				<option value="">Seleccione</option>
 				<c:forEach items="${listaProveedores}" var="proveedor">
 					<option value="${proveedor.id_proveedor}">${proveedor.nombre}</option>
 				</c:forEach>
 			</select>
-                       </div>
-                       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+         </div>
+         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 			<label>Fecha Compra</label>
 			<input type="text" class="form-control" id="fechaF" name="filtro"/>
 		</div>
@@ -65,10 +65,11 @@
 <div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content-wrap">
-			<form method="post" action="${pageContext.request.contextPath}/Proveedor/Compra/Guardar.html?" id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
+			<form method="post" action="${pageContext.request.contextPath}/Proveedor/Compra/Guardar.html?" id="Formulario" 
+				data-modal="ModalFormulario" data-tabla="Tabla">
 				<div class="modal-content modal-lg">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
 						<h4 class="modal-title">Seguimiento de Compras</h4>
 					</div>
 					<div class="modal-body">
@@ -95,37 +96,41 @@
 		                          <div class="panel-body">
 		                              <div class="tab-content">
 		                                  <div id="producto" class="tab-pane active">
-                   										<div class="col-xs-12 col-sm-6 col-md-6">
-												<label>*Proveedor</label>
-												<select class="form-control" id="proveedor" name="proveedor">
-													<option value="">Seleccione</option>
-													<c:forEach items="${listaProveedores}" var="proveedor">
-														<option value="${proveedor.id_proveedor}">${proveedor.nombre}</option>
-													</c:forEach>
-												</select>
+		                                  	<div class="row">
+	                   							<div class="col-xs-12 col-sm-6 col-md-6">
+													<label>*Proveedor</label>
+													<select class="form-control" id="proveedor" name="proveedor">
+														<option value="">Seleccione</option>
+														<c:forEach items="${listaProveedores}" var="proveedor">
+															<option value="${proveedor.id_proveedor}">${proveedor.nombre}</option>
+														</c:forEach>
+													</select>
+												</div>
+												<div class="col-xs-12 col-sm-6 col-md-6">
+													<label>*Establecimiento</label>
+													<select class="form-control" id="establecimiento" name="establecimiento">
+														<option value="">Seleccione</option>
+														<c:forEach items="${listaEstablecimiento}" var="esta">
+															<option value="${esta.id_establecimiento}">${esta.nombre}</option>
+														</c:forEach>
+													</select>
+												</div>
 											</div>
-											<div class="col-xs-12 col-sm-6 col-md-6">
-												<label>*Establecimiento</label>
-												<select class="form-control" id="establecimiento" name="establecimiento">
-													<option value="">Seleccione</option>
-													<c:forEach items="${listaEstablecimiento}" var="esta">
-														<option value="${esta.id_establecimiento}">${esta.nombre}</option>
-													</c:forEach>
-												</select>
-											</div>
-											<div class="col-xs-12 col-sm-6 col-md-6">
-												<label>*Fecha Compra</label>
-												<input type="text" class="form-control" id="fecha_compra" name="fecha_compra" data-field="datetime" data-format="yyyy-MM-dd HH:mm:ss"/>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-3">
-												<label>Valor</label>
-												<input type="text" class="form-control" id="valorsin" name="valorsin" disabled="disabled"/>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-3">
-												<label>Pagado</label> <br/>
-												<input type="checkbox" id="pagado" name="pagado" data-toggle="switch"/>
-											</div>
-		                                  	
+											<div class="row">
+												<div class="col-xs-12 col-sm-6 col-md-6">
+													<label>*Fecha Compra</label>
+													<input type="text" class="form-control" id="fecha_compra" name="fecha_compra" 
+														data-field="datetime" data-format="yyyy-MM-dd HH:mm:ss"/>
+												</div>
+												<div class="col-xs-6 col-sm-3 col-md-3">
+													<label>Valor</label>
+													<input type="text" class="form-control" id="valorsin" name="valorsin" disabled="disabled"/>
+												</div>
+												<div class="col-xs-6 col-sm-3 col-md-3">
+													<label>Pagado</label> <br/>
+													<input type="checkbox" id="pagado" name="pagado" data-toggle="switch"/>
+												</div>
+		                                  	</div>
 		                                  </div>
 		                                  <div id="ingview" class="tab-pane">
 											<input type="hidden" value="0" id="count" name="count"/>
@@ -158,8 +163,8 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-warning" type="submit" id="validarModificacion">Guardar</button>
-						<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpiar();">Cerrar</button>
+						<button class="btn btn-warning" type="button" id="validarModificacion" onclick="validarFormulario();">Guardar</button>
+						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 					</div>
 				</div>
 			</form>
@@ -188,7 +193,7 @@
 					</div>
 					<div class="modal-footer">
 						<button class="btn btn-warning" type="submit">Guardar</button>
-						<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();" data-dismiss="modal">Cerrar</button>
+						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpliar();" data-dismiss="modal">Cerrar</button>
 					</div>
 				</div>
 			</form>

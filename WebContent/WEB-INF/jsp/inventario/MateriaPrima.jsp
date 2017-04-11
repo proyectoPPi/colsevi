@@ -89,18 +89,16 @@
 								</select>
 							</div>
 							
-							<div class="col-lg-12">
-								<h4><strong>Realizar Movimiento</strong></h4>
+							<h4 class="col-lg-12"><strong>Realizar Movimiento</strong></h4>
 								<hr/>
-							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-								<label>Cantidad</label>
+								<label>* Cantidad</label>
 								<input type="number" class="form-control" id="cantMov" name="cantMov"/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-								<label>Unidad medida</label>
+								<label>* Unidad medida</label>
 								<select class="form-control" id="unidadMov" name="unidadMov">
-									<option value="0">Seleccione</option>
+									<option value="">Seleccione</option>
 									<c:forEach items="${ListaUM}" var="um">
 										<option value="${um.id_unidad_peso}">${um.nombre}</option>
 									</c:forEach>
@@ -108,16 +106,16 @@
 								<br/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-								<label>Establecimiento</label>
+								<label>* Establecimiento</label>
 								<select class="form-control" id="estaMov" name="estaMov">
-									<option value="0">Seleccione</option>
+									<option value="">Seleccione</option>
 									<c:forEach items="${ListaE}" var="esta">
 										<option value="${esta.id_establecimiento}">${esta.nombre}</option>
 									</c:forEach>
 								</select>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-								<label>Motivo</label>
+								<label>* Motivo</label>
 								<select class="form-control" id="motivoMov" name="motivoMov">
 									<option value="3">Prestamo</option>
 									<option value="4">Pago</option>
@@ -126,7 +124,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-warning" type="submit">Guardar</button>
+						<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
 						<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
 					</div>
 				</div>

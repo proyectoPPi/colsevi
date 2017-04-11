@@ -2,8 +2,21 @@ jQuery(document).ready(function(){
 	HDatetimePicker('fechaF','LT');
 	HDatetimePicker('fecha_compra','YYYY-MM-DD hh:mm');
 	Tabla();
-	Hformulario();
 	Hformulario('formularioMotivo');
+	
+	$('#Formulario').validate({
+		rules: {
+			proveedor: {
+				required : true
+			},
+			establecimiento: {
+				required: true
+			},
+			fecha_compra:{
+				required: true
+			}
+		}  
+     });
 });
 
 jQuery('#adicion').click(function(){
@@ -114,9 +127,9 @@ function Tabla(pagina){
 
 function Limpiar(){
 	jQuery('#IngDynamic > section > table > tbody > tr').remove();
+	HLimpiar();
 	jQuery('#id_compra').val('');
 	jQuery('#count').val('0');
-	HLimpiar();
 	jQuery('#validarModificacion').show();
 }
 
@@ -165,9 +178,13 @@ function validarModificacion(){
 	});
 }
 
-function preprocesar(){
-	HPreprocesar({
-		url: contexto + "/Proveedor/Compra/preprocesador.html?",
-		formulario: "formulario",
-	});
+function validarFormulario(){
+	if($('#Formulario').valid()){
+		if(jQuery('#count').val() !== '0') 
+			enviarFormulario();
+		else{
+			jQuery('[href=#ingview]').tab('show');
+			HMensaje('Por favor adicionar un detalle a la compra','danger');
+		}
+	}
 }

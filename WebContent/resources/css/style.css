@@ -4,6 +4,11 @@ body.canvas-slid {
   overflow-x: hidden;
 }
 
+.row{
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+}
+
 .no-trans * {
   -webkit-transition: none !important;
   -o-transition: none !important;
@@ -3848,11 +3853,11 @@ textarea {
   border-radius: 1px;
   background: #ffffff;
   height: 40px;
-/*   padding-right: 30px; */
   border-color: #e1e1e1;
   color: #777777;
   position: relative;
   -webkit-appearance: none;
+  margin-bottom: 8px !important;
 }
 
 .form-control.radius-50 {
@@ -10709,4 +10714,14 @@ header:not(.dark) .dropdown-menu > li.active > a i {
   background-color: #ffffff;
   border-color: #0c9ec7;
   text-decoration: none;
+}
+
+.error-validate{
+	color: #d43f3a;
+	margin-top: 0 !important;
+	margin-bottom: 5px;
+}
+
+input.error-validate, select.error-validate, textarea.error-validate, select2.error-validate{
+	border: solid 1px #d43f3a !important;
 }

@@ -1,6 +1,21 @@
 jQuery(document).ready(function(){
 	Tabla();
-	Hformulario();
+	
+	$('#Formulario').validate({
+		rules: {
+			cantMov: {
+				required : true,
+				min: 1,
+				number: true
+			},
+			unidadMov: {
+				required: true
+			},
+			estaMov:{
+				required: true
+			}
+		}  
+     });
 });
 
 function Tabla(pagina){
@@ -14,4 +29,9 @@ function Tabla(pagina){
 
 function CargarFormulario(Id){
 	HCargarFormulario(Id);
+}
+
+function validarFormulario(){
+	if(jQuery('#Formulario').valid())
+		enviarFormulario();
 }

@@ -394,7 +394,7 @@ function HLimpiar(){
 function HEliminar(div, url){
 	dataMap['URLInicial'] = jQuery('#' + div).attr('action');
 	jQuery('#' + div).attr('action', url);
-	jQuery('#' + div).submit();
+	enviarFormulario();
 }
 
 function HiniciarAutocompletar(url,input){
@@ -493,11 +493,11 @@ Se utiliza la acción focus para cuando se ingrese al campo
 $(this) se utiliza para obtener el contexto del campo
 */
 function HDatetimePicker(Id, format){
-	jQuery( "input[id="+ Id +"]" ).focus(function(e) {
-		$(this).datetimepicker({
+//	jQuery( "input[id="+ Id +"]" ).focus(function(e) {
+	jQuery( "input[id="+ Id +"]" ).datetimepicker({
 			format: format
 		});
-	});
+//	});
 }
 
 function HColorPicker(Id){

@@ -100,7 +100,7 @@ public class EstablecimientoController extends BaseConfigController {
 					opciones.put("barrio", map.get("barrio") != null ? map.get("barrio") : "");
 					opciones.put("descripDir", map.get("descripDir") != null ? map.get("descripDir") : "");
 					opciones.put("id_telefono", map.get("id_telefono") != null ? map.get("id_telefono") : "");
-					opciones.put("telTipo", map.get("telTipo") != null ? map.get("telTipo") : "0");
+					opciones.put("telTipo", map.get("telTipo") != null ? map.get("telTipo") : "");
 					opciones.put("telefono", map.get("telefono") != null ? map.get("telefono") : "");
 					opciones.put("id_correo", map.get("id_correo") != null ? map.get("id_correo") : "");
 					opciones.put("correo", map.get("correo") != null ? map.get("correo") : "");
@@ -236,7 +236,7 @@ public class EstablecimientoController extends BaseConfigController {
 		else
 			error += "Ingresar el teléfono<br/>";
 		
-		if(request.getParameter("telTipo") != null && !request.getParameter("telTipo").trim().isEmpty() && !request.getParameter("telTipo").trim().equals("0"))
+		if(request.getParameter("telTipo") != null && !request.getParameter("telTipo").trim().isEmpty())
 			beanT.setId_tipo_telefono(Integer.parseInt(request.getParameter("telTipo")));
 		else
 			error+= "Ingresar el tipo de Télefono<br/>";
