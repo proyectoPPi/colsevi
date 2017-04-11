@@ -35,6 +35,8 @@
 					</div>
 					<div class="modal-body">
 					<input type="hidden" id="valp" />
+					<input type="hidden" id="id_pago_proveedor" name="id_pago_proveedor"/>
+					<input type="hidden" id="id_compra" name="id_compra"/>
 						<div class="row">
 							<div class="col-md-12">
 								<label>*Proveedor</label>
@@ -65,6 +67,7 @@
 					<div class="modal-footer">
 						<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
 						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
+						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 					</div>
 				</div>
 			</form>

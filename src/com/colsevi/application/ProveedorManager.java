@@ -27,12 +27,11 @@ public class ProveedorManager {
 		return ColseviDao.getInstance().getTipoProveedorMapper().selectByExample(new TipoProveedorExample());
 	}
   
-  public static void InsertarPago(Integer compra, Date fechaPago, BigDecimal pendiente, BigDecimal valorPag, String obs){
+  public static void InsertarPago(Integer compra, Date fechaPago, BigDecimal valorPag, String obs){
 	  
 	PagoProveedor pp = new PagoProveedor();
 	pp.setId_compra(compra);
 	pp.setFecha_pago(fechaPago);
-	pp.setPendiente(pendiente);
 	pp.setValor_pagado(valorPag);
 	pp.setObservacion(obs);
 	

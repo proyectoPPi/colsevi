@@ -84,7 +84,11 @@ function CargarFormulario(Id){
 }
 
 function verCompra(Id){
-	window.location.href = contexto + "/Proveedor/Compra.html?Compra=" + BuscarRegistro(Id)['id_compra'];
+	HredireccionarVista(contexto + "/Proveedor/Compra.html?Compra=" + BuscarRegistro(Id)['id_compra']);
+}
+
+function Eliminar(){
+	HEliminar("Formulario", contexto + "/pago/Proveedor/Eliminar.html?");
 }
 
 jQuery("#valorP").keyup(function(){

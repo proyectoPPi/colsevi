@@ -151,7 +151,6 @@ CREATE TABLE compra_proveedor(
 CREATE TABLE pago_proveedor(
 	id_pago_proveedor INT AUTO_INCREMENT,
     id_compra INT NOT NULL,
-    pendiente DECIMAL(12,2),
     fecha_pago DATETIME,
     valor_pagado DECIMAL(12,2),
     observacion VARCHAR(150),

@@ -24,6 +24,7 @@ import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.pago.model.PagoProveedor;
 import com.colsevi.dao.pago.model.PagoProveedorExample;
 import com.colsevi.dao.proveedor.model.CompraProveedor;
+import com.colsevi.dao.proveedor.model.CompraProveedorExample;
 
 @Controller
 @RequestMapping("/pago/Proveedor")
@@ -72,7 +73,8 @@ public class PagoProveedorController extends BaseConfigController{
 				options.put("compra", "");
 				options.put("fecha_pago", UtilidadManager.FechaDateConHora_Vista(bean.getFecha_pago()));
 				options.put("observacion", bean.getObservacion());
-				options.put("pendiente", UtilidadManager.MonedaVista(bean.getPendiente()));
+				BigDecimal pendiente = ColseviDao.getInstance().getCompraProveedorMapper().selectByPrimaryKey(bean.getId_compra()).getPendiente();
+				options.put("pendiente", UtilidadManager.MonedaVista(pendiente));
 				options.put("valor_pagado", UtilidadManager.MonedaVista(bean.getValor_pagado()));
 				
 				result.add(options);
@@ -145,6 +147,11 @@ public class PagoProveedorController extends BaseConfigController{
 			error += "Ingresar una observación</br>";
 		
 		try{
+			pendiente = new BigDecimal(request.getParameter("ValPend"));
+		}catch(Exception e){
+		}
+		
+		try{
 			compra = Integer.parseInt(request.getParameter("compra"));
 		}catch(Exception e){
 			error += "Seleccionar una compra válida<br/>";
@@ -159,12 +166,6 @@ public class PagoProveedorController extends BaseConfigController{
 		}
 		
 		try{
-			pendiente = new BigDecimal(request.getParameter("ValPend"));
-		}catch(Exception e){
-			error += "Ingresar un valor a pagar<br/>";
-		}
-		try{
-			
 			if((pendiente.doubleValue() - valorP.doubleValue()) < 0)
 				error += "El valor pagado no puede superar el valor pendiente<br/>";
 			else
@@ -181,7 +182,7 @@ public class PagoProveedorController extends BaseConfigController{
 				compraProv.setPendiente(pendiente);
 				ColseviDao.getInstance().getCompraProveedorMapper().updateByPrimaryKeySelective(compraProv);
 				
-				ProveedorManager.InsertarPago(compra, new Date(), pendiente, valorP, obs);
+				ProveedorManager.InsertarPago(compra, new Date(), valorP, obs);
 				
 				resultVista.put("correcto", "Pago creado");
 			}catch(Exception e){
@@ -191,6 +192,47 @@ public class PagoProveedorController extends BaseConfigController{
 		}
 		ResponseJson(request, response, resultVista);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Eliminar")
+	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
+		Integer compra = null, id_pago_proveedor = null;
+		BigDecimal pendiente = new BigDecimal(0);
+		String error = "";
+		
+		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty())
+			compra = Integer.parseInt(request.getParameter("id_compra"));
+		
+		if(request.getParameter("id_pago_proveedor") != null && !request.getParameter("id_pago_proveedor").trim().isEmpty())
+			id_pago_proveedor = Integer.parseInt(request.getParameter("id_pago_proveedor"));
+		
+		if(!error.isEmpty())
+			resultVista.put("error", error);
+		else{
+			try{
+				
+				CompraProveedor compraBean = ColseviDao.getInstance().getCompraProveedorMapper().selectByPrimaryKey(compra);
+				PagoProveedor pagoProvBean = ColseviDao.getInstance().getPagoProveedorMapper().selectByPrimaryKey(id_pago_proveedor);
+				
+				compraBean.setPendiente(compraBean.getPendiente().add(pagoProvBean.getValor_pagado()));
+				CompraProveedor compraProv = new CompraProveedor();
+				compraProv.setId_compra_proveedor(compra);
+				compraProv.setPendiente(pendiente);
+				ColseviDao.getInstance().getCompraProveedorMapper().updateByPrimaryKeySelective(compraProv);
+				
+				ColseviDao.getInstance().getPagoProveedorMapper().deleteByPrimaryKey(id_pago_proveedor);
+				
+				
+				resultVista.put("correcto", "Pago creado");
+			}catch(Exception e){
+				logger.error(e.getMessage());
+				resultVista.put("error", "Contactar al administrador<br/>");
+			}
+		}
+		ResponseJson(request, response, resultVista);
+	}
+
 	
 	@RequestMapping("/autocompletar")
 	public void auto(HttpServletRequest request, HttpServletResponse response){
