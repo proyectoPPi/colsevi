@@ -26,7 +26,8 @@
 <div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content-wrap">
-			<form method="post" action="${pageContext.request.contextPath}/pago/Proveedor/guardar.html?" id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
+			<form method="post" action="${pageContext.request.contextPath}/pago/Proveedor/guardar.html?" 
+				id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -43,7 +44,7 @@
 							<div class="col-xs-12 col-md-12">
 								<label>*Compra</label>
 								<select class="form-control" id="compra" name="compra">
-									<option value="0">Seleccione</option>
+									<option value="">Seleccione</option>
 								</select>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6">
@@ -62,8 +63,8 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-warning" type="submit">Guardar</button>
-						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpliar();">Cerrar</button>
+						<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
+						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 					</div>
 				</div>
 			</form>

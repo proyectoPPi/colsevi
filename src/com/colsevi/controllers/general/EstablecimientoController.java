@@ -199,8 +199,6 @@ public class EstablecimientoController extends BaseConfigController {
 	
 		if(request.getParameter("descipEsta") != null && !request.getParameter("descipEsta").trim().isEmpty())
 			beanE.setDescripcion(request.getParameter("descipEsta"));
-		else
-			error += "Ingresar el descripcion del establecimiento<br/>";
 		
 		if(request.getParameter("hora_inicio") != null && !request.getParameter("hora_inicio").trim().isEmpty())
 			beanE.setHora_inicio(request.getParameter("hora_inicio"));

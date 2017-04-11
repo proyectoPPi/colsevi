@@ -2,7 +2,25 @@ var data;
 jQuery(document).ready(function(){
 	HiniciarAutocompletar(contexto + '/pago/Proveedor/autocompletar.html?', 'proveedorText');
 	Tabla();
-	Hformulario();
+	
+	$('#Formulario').validate({
+		rules: {
+			proveedorText: {
+				required : true
+			},
+			compra: {
+				required: true
+			},
+			valorP:{
+				required: true,
+				min: 1
+			},
+			observacion:{
+				required: true
+			}
+		}  
+     });
+	
 });
 
 jQuery('#proveedorText').autocomplete({
@@ -82,3 +100,8 @@ jQuery("#valorP").keyup(function(){
 		jQuery('#pendiente').val(jQuery('#valp').val());
 	}
 });
+
+function validarFormulario(){
+	if($('#Formulario').valid())
+		enviarFormulario();
+}

@@ -55,10 +55,7 @@ public class PagoProveedorController extends BaseConfigController{
 			logger.error(e.getMessage());
 		}
 		
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-		
-		result.writeJSONString(response.getWriter());
+		ResponseJson(request, response, result);
 	}
 	
 	@SuppressWarnings("unchecked")

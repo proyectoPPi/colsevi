@@ -215,8 +215,10 @@ public class CompraController extends BaseConfigController {
 				cie.createCriteria().andId_compraEqualTo(bean.getId_compra_proveedor());
 				ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.proveedor.map.CompraXIngredienteMapper.deleteByExample", cie);
 				
-				mpe.createCriteria().andLoteIn(loteList);
-				ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.deleteByExample", mpe);
+				if(loteList.size() > 0 ){
+					mpe.createCriteria().andLoteIn(loteList);
+					ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.deleteByExample", mpe);
+				}
 				
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.proveedor.map.CompraProveedorMapper.updateByPrimaryKey", bean);
 				resultVista.put("correcto", "Compra Actualizada");
