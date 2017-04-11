@@ -137,7 +137,7 @@ public class PagoProveedorController extends BaseConfigController{
 	@RequestMapping("/guardar")
 	public void Guardar(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject resultVista = new JSONObject();
-		Integer compra = 0;
+		Integer compra = null;
 		BigDecimal pendiente = new BigDecimal(0);
 		BigDecimal valorP = new BigDecimal(0);
 		String obs = request.getParameter("observacion") != null && !request.getParameter("observacion").trim().isEmpty() ? request.getParameter("observacion") : "";
@@ -180,8 +180,8 @@ public class PagoProveedorController extends BaseConfigController{
 				CompraProveedor compraProv = new CompraProveedor();
 				compraProv.setId_compra_proveedor(compra);
 				compraProv.setPendiente(pendiente);
-				ColseviDao.getInstance().getCompraProveedorMapper().updateByPrimaryKeySelective(compraProv);
 				
+				ColseviDao.getInstance().getCompraProveedorMapper().updateByPrimaryKeySelective(compraProv);
 				ProveedorManager.InsertarPago(compra, new Date(), valorP, obs);
 				
 				resultVista.put("correcto", "Pago creado");
@@ -215,14 +215,13 @@ public class PagoProveedorController extends BaseConfigController{
 				CompraProveedor compraBean = ColseviDao.getInstance().getCompraProveedorMapper().selectByPrimaryKey(compra);
 				PagoProveedor pagoProvBean = ColseviDao.getInstance().getPagoProveedorMapper().selectByPrimaryKey(id_pago_proveedor);
 				
-				compraBean.setPendiente(compraBean.getPendiente().add(pagoProvBean.getValor_pagado()));
+				pendiente = new BigDecimal(compraBean.getPendiente().doubleValue() + pagoProvBean.getValor_pagado().doubleValue());
 				CompraProveedor compraProv = new CompraProveedor();
-				compraProv.setId_compra_proveedor(compra);
 				compraProv.setPendiente(pendiente);
+				compraProv.setId_compra_proveedor(compra);
+
 				ColseviDao.getInstance().getCompraProveedorMapper().updateByPrimaryKeySelective(compraProv);
-				
 				ColseviDao.getInstance().getPagoProveedorMapper().deleteByPrimaryKey(id_pago_proveedor);
-				
 				
 				resultVista.put("correcto", "Pago creado");
 			}catch(Exception e){
@@ -232,7 +231,6 @@ public class PagoProveedorController extends BaseConfigController{
 		}
 		ResponseJson(request, response, resultVista);
 	}
-
 	
 	@RequestMapping("/autocompletar")
 	public void auto(HttpServletRequest request, HttpServletResponse response){
