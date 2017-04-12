@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.colsevi.application.CajaManager;
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
 import com.colsevi.application.GeneralManager;
@@ -257,26 +258,31 @@ public class CompraController extends BaseConfigController {
 		List<MateriaPrima> listaMP = new ArrayList<MateriaPrima>();
 		List<Integer> loteList = new ArrayList<Integer>();
 		Integer count = Integer.parseInt(request.getParameter("count"));
+
+		if(request.getParameter("fecha_compra").trim().isEmpty())
+			error += "Ingresar la fecha de la compra<br/>";
+		else{
+			beanC.setFecha_compra(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true));
+			if(request.getParameter("id_compra") == null || request.getParameter("id_compra").trim().isEmpty()){
+				if(CajaManager.ExistenciaCaja(beanC.getFecha_compra()))
+					error += "Para la fecha ya existe un cierre de caja<br/>";
+			}
+		}
 		
 		if(request.getParameter("id_compra") != null && !request.getParameter("id_compra").trim().isEmpty()){
 			beanC.setId_compra_proveedor(Integer.parseInt(request.getParameter("id_compra")));
 			error += validarNoInv(beanC.getId_compra_proveedor());
 		}
-		if(request.getParameter("proveedor").trim().isEmpty() || request.getParameter("proveedor").trim().equals("0"))
+		if(request.getParameter("proveedor").trim().isEmpty())
 			error += "Seleccionar el proveedor<br/>";
 		else
 			beanC.setId_proveedor(Integer.parseInt(request.getParameter("proveedor")));
 		
-		if(request.getParameter("establecimiento").trim().isEmpty() || request.getParameter("establecimiento").trim().equals("0"))
+		if(request.getParameter("establecimiento").trim().isEmpty())
 			error += "Seleccione un establecimiento <br/>";
 		else
 			beanC.setId_establecimiento(Integer.parseInt(request.getParameter("establecimiento")));
 		
-		if(request.getParameter("fecha_compra").trim().isEmpty())
-			error += "Ingresar la fecha de la compra<br/>";
-		else{
-			beanC.setFecha_compra(UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"), true));
-		}
 		if(request.getParameter("pagado") != null)
 			beanC.setPagado(request.getParameter("pagado").equals("SI") || request.getParameter("pagado").equals("on") ? true: false);
 		
@@ -437,6 +443,9 @@ public class CompraController extends BaseConfigController {
 		if(ColseviDao.getInstance().getCompraProveedorMapper().countCambiosDetalleCompra(mapa) > 0){
 			return "La compra ya tiene movimientos asociados<br/>";
 		}
+		
+		if(CajaManager.ExistenciaCaja(compraProv.getFecha_compra()))
+			return "Para la fecha ya existe un cierre de caja<br/>";
 		
 		return "";
 	}

@@ -27,6 +27,7 @@
 	<div id="tabla"></div>
 	<div id="paginacion" class="col-md-12"></div>
 </div>
+
 <div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content-wrap">

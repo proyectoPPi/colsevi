@@ -439,3 +439,15 @@ CREATE TABLE plato(
 );
 
 ALTER TABLE establecimiento add estado boolean default false;
+
+CREATE TABLE caja(
+	id_caja INT AUTO_INCREMENT,
+    id_establecimiento INT NOT NULL,
+    id_persona INT NOT NULL,
+    fecha_ejecucion DATETIME NOT NULL,
+    estado VARCHAR(1) NOT NULL,
+    valor_inicial DECIMAL(12,2) NOT NULL,
+    PRIMARY KEY(id_caja),
+    CONSTRAINT fk_caja_establecimiento FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento),
+    CONSTRAINT fk_caja_persona FOREIGN KEY (id_persona) REFERENCES persona(id_persona)
+);

@@ -169,12 +169,25 @@ function HTabla(opciones){
 	var titulos = opciones.titulos;
 	var Id = opciones.Id;
 	var id = null;
+	var MetodoCarga = null;
+	var modalCarga = null;
+	
 	dataMap['url'] = opciones.url;
 	dataMap['boton'] = opciones.boton;
 	dataMap['color'] = opciones.color;
 	dataMap['accion'] = opciones.accion;
 	dataMap['campo'] = opciones.campo;
 	dataMap['link'] = opciones.link;
+	
+	if(opciones.metodo == undefined)
+		MetodoCarga = 'CargarFormulario'; 
+	else
+		MetodoCarga = opciones.metodo;
+	
+	if(opciones.modal == undefined)
+		modalCarga = 'ModalFormulario'; 
+	else
+		modalCarga = opciones.modal;
 	
 	if(dataMap['boton'] == undefined) dataMap['boton'] = new Array();
 	if(dataMap['color'] == undefined) dataMap['color'] = new Array();
@@ -228,7 +241,7 @@ function HTabla(opciones){
 							 if(dataMap['link'] !== undefined)
 								 html += '<td><span>'+data["datos"][i][k]+'</span></td>';
 							 else
-								 html += '<td><span><a onclick="CargarFormulario('+id+');" data-toggle="modal" href="#ModalFormulario">'+data["datos"][i][k]+'</a></span></td>';
+								 html += '<td><span><a onclick="'+MetodoCarga+'('+id+');" data-toggle="modal" href="#'+modalCarga+'">'+data["datos"][i][k]+'</a></span></td>';
 							 sw = false;
 						 }else{
 							 if(dataMap['color'] != undefined && dataMap['color'][k] != undefined){
