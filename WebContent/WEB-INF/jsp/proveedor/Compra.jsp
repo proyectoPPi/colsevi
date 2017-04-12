@@ -147,7 +147,7 @@
 																<th>Cantidad</th>
 																<th>Tipo de Peso</th>
 																<th>Vence</th>
-																<th>V. Unitario</th>
+																<th>Sub Total</th>
 																<th></th>
 															</tr>
 														</thead>

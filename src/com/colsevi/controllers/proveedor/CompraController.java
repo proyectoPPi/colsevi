@@ -298,7 +298,7 @@ public class CompraController extends BaseConfigController {
 					
 					if(request.getParameter("vunitario" + (i +1)) != null && !request.getParameter("vunitario" + (i +1)).trim().isEmpty()){
 						cxi.setVunitario(new BigDecimal(request.getParameter("vunitario" + (i +1))));
-						beanC.setValor(beanC.getValor().add(cxi.getVunitario().multiply(new BigDecimal(cxi.getCantidad()))));
+						beanC.setValor(beanC.getValor().add(cxi.getVunitario()));
 					}else
 						error += "Ingresar el valor unitario</br/>";
 					mp.setCantidad(cxi.getCantidad());
