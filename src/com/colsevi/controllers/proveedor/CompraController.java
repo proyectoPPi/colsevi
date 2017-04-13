@@ -193,7 +193,6 @@ public class CompraController extends BaseConfigController {
 		CompraXIngredienteExample cie = new CompraXIngredienteExample();
 		List<MateriaPrima> listaMP = null;
 		List<Integer> loteList = null;
-		List<Integer> countDelete = null;
 		CompraProveedor bean = null;
 		MateriaPrimaExample mpe = new MateriaPrimaExample();
 		
@@ -221,9 +220,10 @@ public class CompraController extends BaseConfigController {
 					ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.inventario.map.MateriaPrimaMapper.deleteByExample", mpe);
 				}
 				
-				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.proveedor.map.CompraProveedorMapper.updateByPrimaryKey", bean);
+				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.proveedor.map.CompraProveedorMapper.updateByPrimaryKeySelective", bean);
 				resultVista.put("correcto", "Compra Actualizada");
 			}else{
+				bean.setPendiente(bean.getValor());
 				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.proveedor.map.CompraProveedorMapper.insertSelective", bean);
 				resultVista.put("correcto", "Compra insertada");
 			}

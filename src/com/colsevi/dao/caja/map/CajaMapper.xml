@@ -303,4 +303,23 @@
       valor_inicial = #{valor_inicial,jdbcType=DECIMAL}
     where id_caja = #{id_caja,jdbcType=INTEGER}
   </update>
+  
+	<insert id="CONSOLIDAR_PAGOS_PROVEEDOR" parameterType="java.util.Map">  
+		INSERT INTO pago_proveedor (id_compra, fecha_pago, valor_pagado, observacion)
+		SELECT id_compra_proveedor AS id_compra, NOW() AS fecha_pago, valor AS valor_pagado, 
+		'Pago por consolidación' AS observacion
+		FROM compra_proveedor CP
+		INNER JOIN caja C ON id_caja = #{cajaFiltro} AND CP.id_establecimiento = C.id_establecimiento
+		WHERE 1 = 1 AND (motivo IS null OR motivo = '') AND CP.fecha_compra like CONCAT(C.fecha_ejecucion,'%') 
+		AND pendiente != 0 AND pagado = true;
+	</insert>  
+	
+	<update id="CONSOLIDAR_COMPRAS_PROVEEDOR" parameterType="java.util.Map">
+		UPDATE compra_proveedor CP
+		JOIN caja C
+		ON C.id_caja = #{cajaFiltro} AND CP.id_establecimiento = C.id_establecimiento
+		SET CP.pendiente = 0
+		WHERE 1 = 1 AND (motivo IS null OR motivo = '') AND CP.fecha_compra like CONCAT(C.fecha_ejecucion,'%') 
+		AND pendiente != 0 AND pagado = true;
+    </update>
 </mapper>

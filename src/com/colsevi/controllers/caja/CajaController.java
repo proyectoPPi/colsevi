@@ -2,9 +2,10 @@ package com.colsevi.controllers.caja;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +16,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.GeneralManager;
@@ -95,7 +95,6 @@ public class CajaController extends BaseConfigController{
 	@RequestMapping("/Guardar")
 	public void Guardar(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject resultVista = new JSONObject();
-		String error = "";
 		Caja cajaBean = new Caja();
 
 		try{
@@ -104,7 +103,7 @@ public class CajaController extends BaseConfigController{
 			cajaBean.setEstado("1");
 			
 			if(request.getParameter("establecimiento").trim().isEmpty())
-				error += "Seleccionar el establecimiento<br/>";
+				resultVista.put("error", "Seleccionar el establecimiento<br/>");
 			else
 				cajaBean.setId_establecimiento(Integer.parseInt(request.getParameter("establecimiento")));
 
@@ -128,11 +127,19 @@ public class CajaController extends BaseConfigController{
 	public void Ejecutar(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject resultVista = new JSONObject();
 		Caja cajaBean = new Caja();
-
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		
 		try{
-			cajaBean.setId_caja(Integer.parseInt(request.getParameter("caja")));
-			cajaBean.setEstado("3");
-			ColseviDao.getInstance().getCajaMapper().updateByPrimaryKeySelective(cajaBean);
+			Integer caja = Integer.parseInt(request.getParameter("caja"));
+			
+			mapa.put("cajaFiltro", caja);
+			
+			ColseviDao.getInstance().getCajaMapper().CONSOLIDAR_PAGOS_PROVEEDOR(mapa);
+			ColseviDao.getInstance().getCajaMapper().CONSOLIDAR_COMPRAS_PROVEEDOR(mapa);
+			
+//			cajaBean.setId_caja(caja);
+//			cajaBean.setEstado("3");
+//			ColseviDao.getInstance().getCajaMapper().updateByPrimaryKeySelective(cajaBean);
 			resultVista.put("correcto", "Caja creada");
 		}catch(Exception e){
 			logger.error(e.getMessage());

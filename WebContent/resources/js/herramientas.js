@@ -62,8 +62,11 @@ function Hformulario(id){
 }
 
 function enviarFormulario(form){
-	form === undefined ? form = 'Formulario': '';
-	form = jQuery('#' + form);
+	if(form === undefined){
+		form = 'Formulario';
+		form = jQuery('#' + form);
+	}
+	
 	$.ajax({
         type: "POST",
         url: form.attr('action'),
@@ -83,13 +86,15 @@ function enviarFormulario(form){
   });
 }
 
-function MostrarMensaje(respFormulario, modal, tabla, resp){
+function MostrarMensaje(respFormulario, modal, tabla, resp, ocultarModal){
 	if(respFormulario["error"]  != undefined && respFormulario["error"] != ""){
    		HMensaje(respFormulario["error"], 'danger');
    	}else if(respFormulario["correcto"]  != undefined && respFormulario["correcto"] != ""){
-   		jQuery("#" + modal).modal('hide');
+   		if(ocultarModal === undefined)
+   			jQuery("#" + modal).modal('hide');	
    		HMensaje(respFormulario["correcto"], 'success');
-   		eval(tabla + '();');
+   		if(tabla !== undefined)
+   			eval(tabla + '();');
    	}else if(respFormulario["peligro"]  != undefined && respFormulario["peligro"] != ""){
    		HMensaje(respFormulario["peligro"], 'warning');
    	}else if(respFormulario["info"]  != undefined && respFormulario["info"] != ""){

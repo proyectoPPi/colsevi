@@ -3,6 +3,8 @@ package com.colsevi.dao.caja.map;
 import com.colsevi.dao.caja.model.Caja;
 import com.colsevi.dao.caja.model.CajaExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface CajaMapper {
@@ -72,4 +74,7 @@ public interface CajaMapper {
 	 * @mbggenerated  Tue Apr 11 22:38:27 COT 2017
 	 */
 	int updateByPrimaryKey(Caja record);
+	int CONSOLIDAR_PAGOS_PROVEEDOR(Map<String, Object> map);
+	int CONSOLIDAR_COMPRAS_PROVEEDOR(Map<String, Object> map);
+	
 }

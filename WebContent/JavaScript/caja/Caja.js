@@ -48,7 +48,7 @@ function ComenzarEjecucion(){
 }
 
 function ResultadoEjecucion(data){
-	MostrarMensaje(data, 'FlujoCaja', '','');
+	MostrarMensaje(data, 'FlujoCaja', undefined,'', 'F');
 }
 
 
