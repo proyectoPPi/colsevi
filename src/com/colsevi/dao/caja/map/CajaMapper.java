@@ -76,5 +76,7 @@ public interface CajaMapper {
 	int updateByPrimaryKey(Caja record);
 	int CONSOLIDAR_PAGOS_PROVEEDOR(Map<String, Object> map);
 	int CONSOLIDAR_COMPRAS_PROVEEDOR(Map<String, Object> map);
-	
+	List<Map<String, Object>> LISTA_COMPRAS_CAJA(Map<String, Object> map);
+	List<Map<String, Object>> LISTA_COMPRAS_ANTIGUAS_PAGOS_CAJA(Map<String, Object> map);
+	List<Map<String, Object>> MATERIA_PRIMA_POR_VENCER_CAJA(Map<String, Object> map);
 }

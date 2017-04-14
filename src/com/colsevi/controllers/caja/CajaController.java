@@ -131,16 +131,15 @@ public class CajaController extends BaseConfigController{
 		
 		try{
 			Integer caja = Integer.parseInt(request.getParameter("caja"));
-			
 			mapa.put("cajaFiltro", caja);
 			
 			ColseviDao.getInstance().getCajaMapper().CONSOLIDAR_PAGOS_PROVEEDOR(mapa);
 			ColseviDao.getInstance().getCajaMapper().CONSOLIDAR_COMPRAS_PROVEEDOR(mapa);
 			
-//			cajaBean.setId_caja(caja);
-//			cajaBean.setEstado("3");
-//			ColseviDao.getInstance().getCajaMapper().updateByPrimaryKeySelective(cajaBean);
-			resultVista.put("correcto", "Caja creada");
+			cajaBean.setId_caja(caja);
+			cajaBean.setEstado("3");
+			ColseviDao.getInstance().getCajaMapper().updateByPrimaryKeySelective(cajaBean);
+			resultVista.put("correcto", "Caja Ejecutada");
 		}catch(Exception e){
 			logger.error(e.getMessage());
 			resultVista.put("error", "Contactar al administrador");
@@ -148,5 +147,30 @@ public class CajaController extends BaseConfigController{
 		
 		ResponseJson(request, response, resultVista);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/DetalleEjecucion")
+	public void Detalle(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		List<Map<String, Object>> detalleCaja = null;
+		
+		try{
+			Integer caja = Integer.parseInt(request.getParameter("caja"));
+			mapa.put("cajaFiltro", caja);
 
+			detalleCaja = ColseviDao.getInstance().getCajaMapper().LISTA_COMPRAS_CAJA(mapa);
+			resultVista.put("Compras", detalleCaja);
+			
+			detalleCaja = ColseviDao.getInstance().getCajaMapper().MATERIA_PRIMA_POR_VENCER_CAJA(mapa);
+			if(detalleCaja.get(0) != null){
+				resultVista.put("materiaPrima", detalleCaja);
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			resultVista.put("error", "Contactar al administrador");
+		}
+		
+		ResponseJson(request, response, resultVista);
+	}
 }

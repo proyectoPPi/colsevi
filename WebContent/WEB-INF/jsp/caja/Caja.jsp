@@ -62,7 +62,7 @@
 </div>
 
 <div class="modal fade modal-dialog-center " id="FlujoCaja" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-jg">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content-wrap">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -72,7 +72,7 @@
 				<div class="modal-body">
 					<input type="hidden" id="id_caja" name="id_caja"/>
 					<div class="row">
-						<div class="col-xs-12">
+						<div class="col-xs-12" id="visorFLujo">
 						</div>
 					</div>
 				</div>

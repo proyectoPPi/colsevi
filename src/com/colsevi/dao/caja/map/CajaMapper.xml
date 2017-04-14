@@ -322,4 +322,51 @@
 		WHERE 1 = 1 AND (motivo IS null OR motivo = '') AND CP.fecha_compra like CONCAT(C.fecha_ejecucion,'%') 
 		AND pendiente != 0 AND pagado = true;
     </update>
+    
+    <select id="LISTA_COMPRAS_CAJA" parameterType="java.util.Map" resultType="java.util.HashMap">
+		-- compras 
+		SELECT COUNT(id_compra_proveedor) AS cantidad, SUM(valor) AS valor, CP.id_establecimiento AS establecimiento, 'Todas las Compras' AS Tipo 
+		FROM compra_proveedor CP
+		INNER JOIN caja C ON id_caja = #{cajaFiltro} AND CP.id_establecimiento = C.id_establecimiento
+		WHERE 1 = 1 AND (motivo IS null OR motivo = '') AND CP.fecha_compra like CONCAT(C.fecha_ejecucion,'%')
+		UNION
+		-- compras pendientes por pagar
+		SELECT count(id_compra_proveedor) as cantidad, SUM(pendiente) AS valor, C.id_establecimiento AS establecimiento, 'Compras por Pagar' AS Tipo
+		FROM compra_proveedor CP
+		INNER JOIN caja C ON id_caja = #{cajaFiltro} AND CP.id_establecimiento = C.id_establecimiento
+		WHERE 1 = 1 AND (motivo IS null OR motivo = '') AND CP.fecha_compra like CONCAT(C.fecha_ejecucion,'%') AND pendiente != 0
+		UNION
+		-- compras pagadas
+		SELECT count(id_compra_proveedor) as cantidad, SUM(valor) AS valor, C.id_establecimiento AS establecimiento, 'Compras Pagadas' AS Tipo
+		FROM compra_proveedor CP
+		INNER JOIN caja C ON id_caja = #{cajaFiltro} AND CP.id_establecimiento = C.id_establecimiento
+		WHERE 1 = 1 AND (motivo IS null OR motivo = '') AND CP.fecha_compra like CONCAT(C.fecha_ejecucion,'%') AND pendiente = 0
+		UNION
+        -- compras antiguas pendientes por pagar con pagos en este cierre de caja
+		SELECT COUNT(id_compra_proveedor) as cantidad, SUM(valor_pagado) AS valorPagado, C.id_establecimiento AS establecimiento,
+		'Compras con deudas que tienen pagos en este cierre de caja' AS Tipo 
+		FROM pago_proveedor PP
+		INNER JOIN caja C ON id_caja = #{cajaFiltro} AND PP.fecha_pago like CONCAT(C.fecha_ejecucion,'%')
+		INNER JOIN compra_proveedor CP ON CP.id_establecimiento = C.id_establecimiento AND (motivo IS null OR motivo = '')
+		WHERE PP.id_compra = CP.id_compra_proveedor AND DATE(CP.fecha_compra) != DATE(PP.fecha_pago);
+
+	</select>
+	
+	<select id="LISTA_COMPRAS_ANTIGUAS_PAGOS_CAJA" parameterType="java.util.Map" resultType="java.util.HashMap">
+		select count(id_compra_proveedor) as cantidad, SUM(valor_pagado) AS valorPagado, valor, pendiente, 
+		C.id_establecimiento AS establecimiento from pago_proveedor PP
+		inner join caja C ON id_caja = #{cajaFiltro} AND PP.fecha_pago like CONCAT(C.fecha_ejecucion,'%')
+		inner join compra_proveedor CP ON CP.id_establecimiento = C.id_establecimiento AND (motivo IS null OR motivo = '')
+		WHERE PP.id_compra = CP.id_compra_proveedor AND DATE(CP.fecha_compra) != DATE(PP.fecha_pago);
+	
+	</select>
+	
+	<select id="MATERIA_PRIMA_POR_VENCER_CAJA" parameterType="java.util.Map" resultType="java.util.HashMap">
+		SELECT datediff(MAX(fecha_vencimiento), MIN(NOW())) AS vence, lote, cantidad, I.nombre AS Ingrediente, UP.nombre AS medida
+		FROM materia_prima MP
+		INNER JOIN caja C ON C.id_caja = #{cajaFiltro} AND C.id_establecimiento = MP.id_establecimiento
+		INNER JOIN ingrediente I ON I.id_ingrediente = MP.id_ingrediente
+		INNER JOIN unidad_peso UP ON UP.id_unidad_peso = MP.id_unidad_peso
+		WHERE TIMESTAMPDIFF(DAY,NOW(),fecha_vencimiento) &lt; 5;
+	</select>
 </mapper>
