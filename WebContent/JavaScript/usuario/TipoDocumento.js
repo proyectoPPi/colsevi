@@ -21,7 +21,7 @@ function CargarFormulario(Id){
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/Usuario/TipoDocumento/EliminarTipoDocumento.html?");
+	HEliminar("Formulario", contexto + "/Usuario/TipoDocumento/EliminarTipoDocumento.html?");
 }
 
 function preprocesar(){

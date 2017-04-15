@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-			
 <h2>Proveedores 
 	<a data-toggle="modal" href="#ModalFormulario" onclick="Limpiar();"><i class="fa fa-plus-circle"></i></a>
 </h2>
@@ -33,7 +32,8 @@
 <div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content-wrap">
-			<form method="post" action="${pageContext.request.contextPath}/Proveedor/Prov/Guardar.html?" id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
+			<form method="post" action="${pageContext.request.contextPath}/Proveedor/Prov/Guardar.html?"
+				 id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -41,69 +41,70 @@
 					</div>
 					<div class="modal-body">
 						<div class="row">
-							<div class="alert alert-danger fade in" id="errorDivF" style="display: none;">
-								 <button data-dismiss="alert" class="close close-sm" type="button">
-								 	 <i class="fa fa-times"></i>
-								 </button>
-								 <strong>Error! </strong> <div id="mensajeEr"></div>
-						    </div>
 							<input type="hidden" id="id_proveedor" name="id_proveedor"/>
 							<input type="hidden" id="id_direccion" name="id_direccion"/>
 							<input type="hidden" id="id_telefono" name="id_telefono"/>
-							<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-								<label>*Nombre</label>
-								<input type="text" class="form-control" id="nombre" required="required" name="nombre" maxlength="30"/>
-							</div>
-							<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-								<label>*Descripci&#243;n</label>
-								<input type="text" class="form-control" id="descripcion" required="required" name="descripcion" maxlength="50"/>
-							</div>
-							<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-								<label>*Tipo proveedor</label>
-								<select class="form-control" id="tipoProv" required="required" name="tipoProv">
-									<option value="0">Seleccione</option>
-										<c:forEach items="${listaTipoProv}" var="tipoProv">
-											<option value="${tipoProv.id_tipo_proveedor}">${tipoProv.nombre}</option>
-										</c:forEach>
-								</select>
-							</div>
 							
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<h4><strong>Dirección</strong></h4>
+							<div class="row">
 								<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-									<label>*Direcci&#243;n</label>
-									<input type="text" class="form-control" id="direccion" required="required" name="direccion" maxlength="50"/>
+									<label>*Nombre</label>
+									<input type="text" class="form-control" id="nombre" name="nombre"/>
 								</div>
-								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-									<label>*Barrio</label>
-									<input type="text" class="form-control" id="barrio" required="required" name="barrio" maxlength="50"/>
+								<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+									<label>Descripci&#243;n</label>
+									<input type="text" class="form-control" id="descripcion" name="descripcion"/>
 								</div>
-								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-									<label>*Descipción</label>
-									<input type="text" class="form-control" id="descripDir" required="required" name="descripDir" maxlength="100"/>
+								<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+									<label>*Tipo proveedor</label>
+									<select class="form-control" id="tipoProv" name="tipoProv">
+										<option value="">Seleccione</option>
+											<c:forEach items="${listaTipoProv}" var="tipoProv">
+												<option value="${tipoProv.id_tipo_proveedor}">${tipoProv.nombre}</option>
+											</c:forEach>
+									</select>
 								</div>
 							</div>
 							
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<h4><strong>*Teléfono</strong></h4>
-								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-									<label>*Número</label>
-									<input type="text" class="form-control" id="telefono" onkeypress="ValidaSoloNumeros()" name="telefono" maxlength="10" required="required"/>
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<h4><strong>Dirección</strong></h4>
+									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+										<label>*Direcci&#243;n</label>
+										<input type="text" class="form-control" id="direccion" name="direccion"/>
+									</div>
+									<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+										<label>*Barrio</label>
+										<input type="text" class="form-control" id="barrio" name="barrio"/>
+									</div>
+									<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+										<label>Descipción</label>
+										<input type="text" class="form-control" id="descripDir" name="descripDir"/>
+									</div>
 								</div>
-								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-									<label>*Tipo teléfono</label>
-									<select class="form-control" id="telTipo" name="telTipo" required="required">
-										<option value="0">Seleccione</option>
-										<c:forEach items="${listaTipoTel}" var="tipoTel">
-											<option value="${tipoTel.id_tipo_telefono}">${tipoTel.nombre}</option>
-										</c:forEach>
-									</select>
+							</div>
+							
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<h4><strong>*Teléfono</strong></h4>
+									<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+										<label>*Número</label>
+										<input type="text" class="form-control" id="telefono" name="telefono"/>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+										<label>*Tipo teléfono</label>
+										<select class="form-control" id="telTipo" name="telTipo">
+											<option value="">Seleccione</option>
+											<c:forEach items="${listaTipoTel}" var="tipoTel">
+												<option value="${tipoTel.id_tipo_telefono}">${tipoTel.nombre}</option>
+											</c:forEach>
+										</select>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-warning" type="button" onclick="preprocesar();">Guardar</button>
+						<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
 						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 					</div>

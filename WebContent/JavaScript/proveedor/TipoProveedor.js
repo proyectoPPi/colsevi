@@ -17,7 +17,7 @@ function Limpiar(){
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/TipoProveedor/TipoProv/Eliminar.html?");
+	HEliminar("Formulario", contexto + "/TipoProveedor/TipoProv/Eliminar.html?");
 }
 
 function CargarFormulario(Id){

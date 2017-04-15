@@ -19,7 +19,10 @@ jQuery(document).ready(function(){
 				required: true
 			},
 			telefono:{
-				required: true
+				required: true,
+				maxlength: 10,
+				number: true,
+				digits: true
 			},
 			telTipo:{
 				required: true
@@ -28,10 +31,15 @@ jQuery(document).ready(function(){
 				required: true
 			},
 			hora_fin: {
-				required: true
+				required: true,
+				fin_val: true
 			}
 		}  
      });
+	
+	$.validator.addMethod("fin_val", function(value, element) {
+	   return $('#hora_inicio').val() != $('#hora_fin').val()
+	}, "La hora de inicio y fin deben ser distintas");
 	
 });
 
@@ -59,9 +67,4 @@ function CargarFormulario(Id){
 function validarFormulario(){
 	if($('#Formulario').valid())
 		enviarFormulario();
-}
-
-function soloNumeros(e){
-	var key = window.Event ? e.which : e.keyCode
-	return (key >= 48 && key <= 57)
 }

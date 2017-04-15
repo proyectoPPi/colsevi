@@ -30,7 +30,7 @@ function Limpiar(){
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/Receta/Nivel/Eliminar.html?");
+	HEliminar("Formulario", contexto + "/Receta/Nivel/Eliminar.html?");
 }
 
 function CargarFormulario(Id){

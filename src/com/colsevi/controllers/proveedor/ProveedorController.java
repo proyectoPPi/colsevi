@@ -166,24 +166,7 @@ public class ProveedorController extends BaseConfigController {
 		}
 		ResponseJson(request, response, resultVista);
 	}
-	
-	@SuppressWarnings("unchecked")
-	@RequestMapping("/preprocesador")
-	public void preprocesador(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		JSONObject result = new JSONObject();
-		try{
-			Object[] validacion = validarGuardado(new Proveedor(),request);
-			
-			if(!validacion[0].toString().isEmpty()){
-				result.put("error", validacion[0]);
-			}
-		}catch(Exception e){
-			result.put("error", "Contactar al administrador");
-		}
-		ResponseJson(request, response, result);
-	}
-	
-	
+
 	public Object[] validarGuardado(Proveedor bean, HttpServletRequest request){
 		Object[] result = new Object[4];
 		String error = "";
@@ -205,9 +188,7 @@ public class ProveedorController extends BaseConfigController {
 			bean.setNombre(request.getParameter("nombre"));
 		}
 		
-		if(request.getParameter("descripcion") == null || request.getParameter("descripcion").trim().isEmpty()){
-			error += "Agregar descripcion<br/>";
-		}else{
+		if(request.getParameter("descripcion") != null || !request.getParameter("descripcion").trim().isEmpty()){
 			bean.setDescripcion(request.getParameter("descripcion"));
 		}
 		

@@ -53,7 +53,7 @@
 		<mapper resource="com/colsevi/dao/usuario/map/RolMapper.xml" />	
 		<mapper resource="com/colsevi/dao/usuario/map/PaginaXRolMapper.xml" />	
 		<mapper resource="com/colsevi/dao/usuario/map/TipoDocumentoMapper.xml" />
-		<mapper resource="com/colsevi/dao/caja/map/CierreCajaMapper.xml"/>
+		<mapper resource="com/colsevi/dao/caja/map/CajaMapper.xml"/>
 						
 	</mappers>
 </configuration>

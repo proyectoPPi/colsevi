@@ -90,7 +90,7 @@
 								<h4><strong>TEL&Eacute;FONO</strong></h4>
 								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 									<label>*Tel&eacute;fono</label>
-									<input type="text" class="form-control" id="telefono" name="telefono" required="required" onKeyPress="return soloNumeros(event)" maxlength="10"/>
+									<input type="number" class="form-control" id="telefono" name="telefono"/>
 								</div>
 								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 									<label>*Tipo T&eacute;lefono</label>

@@ -26,7 +26,7 @@ function Limpiar(){
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/Catalogo/Cat/Eliminar.html?");
+	HEliminar("Formulario", contexto + "/Catalogo/Cat/Eliminar.html?");
 }
 
 function CargarFormulario(Id){

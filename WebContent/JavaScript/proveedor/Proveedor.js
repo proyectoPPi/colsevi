@@ -1,6 +1,38 @@
 jQuery(document).ready(function(){
 	Tabla();
-	Hformulario();
+	
+	$('#Formulario').validate({
+		rules: {
+			nombre: {
+				required : true
+			},
+			descripcion: {
+				required: false
+			},
+			tipoProv:{
+				required: true
+			},
+			direccion:{
+				required: true
+			},
+			barrio:{
+				required: true
+			},
+			descripDir: {
+				required: false
+			},
+			telefono: {
+				required: true,
+				maxlength: 10,
+				number: true,
+				digits: true
+			},
+			telTipo: {
+				required: true
+			}
+		}  
+     });
+	
 });
 
 function Tabla(pagina){
@@ -14,30 +46,14 @@ function Tabla(pagina){
 
 function Limpiar(){
 	HLimpiar();
-	jQuery('#tipoProv, #telTipo').val(0);
 	jQuery('#barrio, #descripDir').val('');
-
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/Proveedor/Prov/Eliminar.html?");
+	HEliminar("Formulario", contexto + "/Proveedor/Prov/Eliminar.html?");
 }
 
 function CargarFormulario(Id){
 	jQuery('#barrio, #descripDir').val('');
-	jQuery('#tipoProv, #telTipo').val(0);
 	HCargarFormulario(Id);
 }
-
-function preprocesar(){
-	HPreprocesar({
-		url: contexto + "/Proveedor/Prov/preprocesador.html?",
-		formulario: "formulario",
-	});
-}
-
-function ValidaSoloNumeros() {
-    if ((event.keyCode < 48) || (event.keyCode > 57))
-       event.returnValue = false;
-    
- }

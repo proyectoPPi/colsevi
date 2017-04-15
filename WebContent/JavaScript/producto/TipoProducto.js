@@ -36,7 +36,7 @@ function validarFormulario(){
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/Producto/Tipo/Eliminar.html?");
+	HEliminar("Formulario", contexto + "/Producto/Tipo/Eliminar.html?");
 }
 
 function CargarFormulario(Id){

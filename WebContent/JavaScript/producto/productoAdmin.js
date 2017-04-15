@@ -38,7 +38,7 @@ function Limpiar(){
 }
 
 function Eliminar(){
-	HEliminar("formulario", contexto + "/Producto/Admin/Eliminar.html?");
+	HEliminar("Formulario", contexto + "/Producto/Admin/Eliminar.html?");
 }
 
 jQuery('#adicion').click(function(){

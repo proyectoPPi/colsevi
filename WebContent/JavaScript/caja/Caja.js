@@ -39,6 +39,7 @@ function DeterminarFlujo(Id){
 }
 
 function ComenzarEjecucion(){
+	jQuery('#visorFLujo').html('');
 	HAjax({
 		url: contexto + "/Caja/Ejecutar.html?",
 		data: {caja: jQuery('#id_caja').val()},
@@ -48,6 +49,7 @@ function ComenzarEjecucion(){
 }
 
 function ResultadoEjecucion(data){
+	jQuery('#visorFLujo').html('');
 	MostrarMensaje(data, 'FlujoCaja', undefined,'', 'F');
 	
 	HAjax({
@@ -59,7 +61,6 @@ function ResultadoEjecucion(data){
 }
 
 function DetalleEjecucion(data){
-	console.log(data);
 	var compras = data['Compras'];
 	
 	var html = '<table class="table table-bordered"><thead>';
