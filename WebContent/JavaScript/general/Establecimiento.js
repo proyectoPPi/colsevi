@@ -60,3 +60,8 @@ function validarFormulario(){
 	if($('#Formulario').valid())
 		enviarFormulario();
 }
+
+function soloNumeros(e){
+	var key = window.Event ? e.which : e.keyCode
+	return (key >= 48 && key <= 57)
+}
