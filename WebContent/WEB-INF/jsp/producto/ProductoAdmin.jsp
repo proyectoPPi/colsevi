@@ -55,7 +55,8 @@
 <div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog  modal-lg">
 		<div class="modal-content-wrap">
-			<form method="post" action="${pageContext.request.contextPath}/Producto/Admin/Guardar.html?" id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
+			<form method="post" action="${pageContext.request.contextPath}/Producto/Admin/Guardar.html?"
+				 id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
@@ -151,14 +152,13 @@
 			                                  </div>
 			                                  
 			                              </div>
-			                          </div>
-                 							</section>
-                							</div>
-							
+			                    	</div>
+             					</section>
+                			</div>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-warning" type="submit" onclick="preprocesar();">Guardar</button>
+						<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
 						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 					</div>

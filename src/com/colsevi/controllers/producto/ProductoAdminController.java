@@ -34,6 +34,7 @@ import com.colsevi.dao.inventario.model.InventarioExample;
 import com.colsevi.dao.pedido.model.DetallePedidoExample;
 import com.colsevi.dao.producto.model.IngredienteXProducto;
 import com.colsevi.dao.producto.model.IngredienteXProductoExample;
+import com.colsevi.dao.producto.model.IngredienteXProductoKey;
 import com.colsevi.dao.producto.model.Producto;
 import com.colsevi.dao.producto.model.ProductoExample;
 import com.colsevi.dao.producto.model.RecetaExample;
@@ -251,28 +252,6 @@ public class ProductoAdminController extends BaseConfigController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/preprocesador")
-	public void preprocesador(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		JSONObject result = new JSONObject();
-		try{
-			Object[] validacion = validarGuardar(request);
-			
-			if(!validacion[0].toString().isEmpty()){
-				result.put("error", validacion[0]);
-			}
-			validacion = validarCatalogo(request);
-			if(!validacion[0].toString().isEmpty()){
-				result.put("error", validacion[0]);
-			}
-		}catch(Exception e){
-			logger.error(e.getMessage());
-			result.put("error", "Contactar al administrador");
-		}
-		
-		ResponseJson(request, response, result);
-	}
-	
-	@SuppressWarnings("unchecked")
 	@RequestMapping("/Guardar")
 	public void Guardar(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		JSONObject resultVista = new JSONObject();
@@ -345,14 +324,6 @@ public class ProductoAdminController extends BaseConfigController {
 		try{
 			Integer id_producto = Integer.parseInt(request.getParameter("id_producto"));
 			
-			IngredienteXProductoExample ixpE = new IngredienteXProductoExample();
-			ixpE.createCriteria().andId_productoEqualTo(id_producto);
-			if(ColseviDao.getInstance().getIngredienteXProductoMapper().countByExample(ixpE) > 0){
-				resultVista.put("error", "No se puede eliminar, ya que se encuentra asociada a un Ingrediente");
-				ResponseJson(request, response, resultVista);
-				return;
-			}
-			
 			DetallePedidoExample dpE = new DetallePedidoExample();
 			dpE.createCriteria().andId_productoEqualTo(id_producto);
 			if(ColseviDao.getInstance().getDetallePedidoMapper().countByExample(dpE) > 0){
@@ -385,9 +356,12 @@ public class ProductoAdminController extends BaseConfigController {
 				return;
 			}
 			
+			IngredienteXProductoExample IXPE = new IngredienteXProductoExample();
+			IXPE.createCriteria().andId_productoEqualTo(id_producto);
+			ColseviDao.getInstance().getIngredienteXProductoMapper().deleteByExample(IXPE);
+
 			ColseviDao.getInstance().getProductoMapper().deleteByPrimaryKey(id_producto);
 			resultVista.put("correcto", "Producto Eliminado");
-			
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
