@@ -161,16 +161,7 @@ jQuery("#localImage").click(function() {
 
 });
 
-function preprocesar(){
-	$("input[name=catalogo]").each(function(){
-	    if(this.checked){
-	    	jQuery('#catalogActive').val(jQuery('#catalogActive').val() + this.value + ',');
-	    }else{
-	    	jQuery('#catalogNoActive').val(jQuery('#catalogNoActive').val() + this.value + ',');
-	    }
-	});
-	HPreprocesar({
-		url: contexto + "/Producto/Admin/preprocesador.html?",
-		formulario: "formulario",
-	});
+function validarFormulario(){
+	if($('#Formulario').valid())
+		enviarFormulario();
 }

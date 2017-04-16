@@ -125,9 +125,7 @@ jQuery("#nombreProd").autocomplete({
 	}
 });
 
-function preprocesar(){
-	HPreprocesar({
-		url: contexto + "/Inventario/Inv/preprocesador.html?",
-		formulario: "formulario",
-	});
+function validarFormulario(){
+	if($('#Formulario').valid())
+		enviarFormulario();
 }
