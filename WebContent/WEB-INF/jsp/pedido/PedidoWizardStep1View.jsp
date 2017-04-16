@@ -39,7 +39,7 @@
 			</div>
 			
 			<div class="col-xs-12 text-center">
-				<a href="#" class="btn btn-warning">Buscar</a>
+				<a href="#" class="btn btn-warning" onclick="tablaVista();">Buscar</a>
 				</div>
 		</div>
 	</div>
@@ -61,8 +61,4 @@
 		</div>
 	</section>
 </div>		
-<c:import url="/WEB-INF/jsp/plantilla/javascript_genericos.jsp"></c:import>
 <script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/pedido/WizardPedido.js"></script>
-<script>
-	initPaso1();
-</script>

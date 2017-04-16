@@ -289,8 +289,8 @@
 		LEFT JOIN catalogo_x_producto cxp ON cxp.id_catalogo = cata.id_catalogo
 		LEFT JOIN producto prod ON prod.id_producto = cxp.id_producto
 		WHERE 1 = 1
-		<if test="tipo != null">
-			AND prod.id_tipo_producto = #{tipo} 
+		<if test="prod != null">
+			AND prod.id_producto = #{prod} 
 		</if>
 		AND cata.id_establecimiento = #{esta};
 	</select>

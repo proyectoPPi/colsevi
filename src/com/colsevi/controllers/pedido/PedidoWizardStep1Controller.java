@@ -77,6 +77,9 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 			JSONObject result = new JSONObject();
 			Map<String, Object> mapa = new HashMap<String, Object>();
 			
+			if(request.getParameter("prod") != null && !request.getParameter("prod").trim().isEmpty())
+				mapa.put("prod", request.getParameter("prod"));
+			
 			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("consecutivo")));
 			mapa.put("esta", ped.getId_establecimiento());
 			List<Map<String, Object>> map = ColseviDao.getInstance().getDetallePedidoMapper().SelectDataView(mapa);

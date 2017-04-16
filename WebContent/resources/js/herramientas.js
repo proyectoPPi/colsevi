@@ -132,23 +132,23 @@ function moveTopScroll(){
     	 window.scrollTo(0,0);
 }
 
-$(document).ajaxStart(function(){
+jQuery(document).ajaxStart(function(){
 	xhr = null;
 	jQuery("#ModalCargando").modal('show');
-	$(window).trigger('resize');
+	jQuery(window).trigger('resize');
 });
 
-$(document).ajaxStop(function(){
+jQuery(document).ajaxStop(function(){
 	xhr = null;
 	jQuery("#ModalCargando").modal('hide');
-	$(window).trigger('resize');
+	jQuery(window).trigger('resize');
 });
 
-$( document ).ajaxError(function( event, jqxhr, settings, thrownError ){
+jQuery(document).ajaxError(function( event, jqxhr, settings, thrownError ){
 	xhr = null;
 	jQuery("#ModalCargando").modal('hide');
 	HValidarErrorGeneralAjax(jqxhr, event, thrownError);
-	$(window).trigger('resize');
+	jQuery(window).trigger('resize');
 });
 
 function HAjax(opciones){
