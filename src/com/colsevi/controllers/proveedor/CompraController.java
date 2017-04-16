@@ -284,7 +284,9 @@ public class CompraController extends BaseConfigController {
 			beanC.setId_establecimiento(Integer.parseInt(request.getParameter("establecimiento")));
 		
 		if(request.getParameter("pagado") != null)
-			beanC.setPagado(request.getParameter("pagado").equals("SI") || request.getParameter("pagado").equals("on") ? true: false);
+			beanC.setPagado(request.getParameter("pagado").equals("pagado")? true: false);
+		else
+			beanC.setPagado(false);
 		
 		if(count != null && count > 0){
 			for(int i = 0; i < count; i++){
@@ -435,7 +437,7 @@ public class CompraController extends BaseConfigController {
 	public String validarNoInv(Integer id){
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		CompraProveedor compraProv = ColseviDao.getInstance().getCompraProveedorMapper().selectByPrimaryKey(id);
-		if(compraProv != null && compraProv.getPendiente() != null){
+		if(compraProv != null && compraProv.getPendiente().equals(0)){
 			return "La compra ya tiene asociado un pago y/o una deuda<br/>";
 		}
 		

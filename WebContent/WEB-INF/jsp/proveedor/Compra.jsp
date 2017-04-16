@@ -128,7 +128,7 @@
 												</div>
 												<div class="col-xs-6 col-sm-3 col-md-3">
 													<label>Pagado</label> <br/>
-													<input type="checkbox" id="pagado" name="pagado" data-toggle="switch"/>
+													<input type="checkbox" id="pagado" name="pagado" value="pagado"/>
 												</div>
 		                                  	</div>
 		                                  </div>

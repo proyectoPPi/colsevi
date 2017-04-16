@@ -140,6 +140,7 @@ function CargarFormulario(Id){
 	validarModificacion();
 	inicialTabla();
 	jQuery("#pagado").prop("checked", BuscarRegistro(Id)['pagado'] == "SI" ? true : false);
+	jQuery("#pagado").val("pagado");
 	jQuery('#count').val('0');
 	jQuery('#IngDynamic > section > table > tbody > tr').remove();
 	
