@@ -31,7 +31,7 @@
 			<select class="form-control" id="clasificarF" name="filtro">
 				<option value="0">Seleccione</option>
 				<c:forEach items="${listaTipo}" var="tipo">
-					<option value="${tipo.id_tipo_producto}" disabled>${tipo.nombre}</option>	
+					<option value="${tipo.id_tipo_producto}">${tipo.nombre}</option>	
 				</c:forEach>
 			</select>
 		</div>
