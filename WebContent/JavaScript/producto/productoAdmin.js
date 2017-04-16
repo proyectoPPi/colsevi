@@ -47,6 +47,7 @@ jQuery('#adicion').click(function(){
 });
 
 function CargarFormulario(Id){
+	jQuery('[href=#producto]').tab('show');
 	HCargarFormulario(Id);
 	jQuery('#IngDynamic > table > tbody > tr').remove();
 	jQuery('#count').val('0');
@@ -162,6 +163,14 @@ jQuery("#localImage").click(function() {
 });
 
 function validarFormulario(){
+	$("input[name=catalogo]").each(function(){
+	    if(this.checked){
+	    	jQuery('#catalogActive').val(jQuery('#catalogActive').val() + this.value + ',');
+	    }else{
+	    	jQuery('#catalogNoActive').val(jQuery('#catalogNoActive').val() + this.value + ',');
+	    }
+	});
 	if($('#Formulario').valid())
 		enviarFormulario();
 }
+
