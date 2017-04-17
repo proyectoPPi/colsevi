@@ -9,3 +9,19 @@ jQuery("#cliente").autocomplete({
 	}
 });
 
+function Finalizar(){
+	HAjax({
+		url: contexto + "/Pedido/PedidoWizardStep3/continuar.html?" + jQuery('#continuar').serialize(),
+		async: false,
+		method: 'mostrarMensaje'
+	});
+}
+
+function mostrarMensaje(data){
+	if(data.error == undefined)
+		HredireccionarVista(contexto + "/Pedido/Visualizar.html?correcto=" + data.correcto);
+	else
+		HMensaje(data.error, 'danger');
+	
+}
+

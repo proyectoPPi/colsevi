@@ -1,5 +1,4 @@
 function initPaso2(){
-	//alert(jQuery('#consecutivo').val());
 	HAjax({
 		url: contexto + "/Pedido/PedidoWizardStep2/listaProductos.html?",
 		data: {consecutivo: jQuery('#consecutivo').val()},
@@ -61,13 +60,14 @@ function actualizar(){
 }
 
 function mostrarMensaje(data){
-	if(data.error == undefined)
+	if(data.error == undefined){
 		HMensaje(data.correcto, 'success');
-	else
+		initPaso2();
+	}else
 		HMensaje(data.error, 'danger');
 	
 }
 
 function redireccionar(){
-	HredireccionarVista(contexto + "/Pedido/PedidoWizardStep3.html?" + jQuery('#formulario').serialize());
+	HredireccionarVista(contexto + "/Pedido/PedidoWizardStep3.html?" + jQuery('#continuar').serialize());
 }

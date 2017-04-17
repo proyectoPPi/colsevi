@@ -2,7 +2,7 @@
 <h1 class="page-title">Verificar</h1>
 <div class="separator-2"></div>
 
-<form action="${pageContext.request.contextPath}/Pedido/PedidoWizardStep3/continuar.html" method="post" id="continuar">
+<form action="#" method="post" id="continuar">
 	<input type="hidden" id="secuencia" name="secuencia" value="${secuencia}"/>
 	
 	<div class="col-xs-6">
@@ -12,7 +12,7 @@
 	</div>
 	
 	<div class="col-xs-12 text-right">
-		<button type="submit" class="btn btn-primary">Siguiente</button>
+		<button type="button" class="btn btn-primary" onclick="Finalizar();">Siguiente</button>
 	</div>
 	
 </form>

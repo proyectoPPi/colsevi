@@ -1,5 +1,7 @@
 package com.colsevi.controllers.pedido;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,7 +10,6 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.colsevi.application.ClienteManager;
 import com.colsevi.application.PedidoManager;
@@ -40,22 +41,23 @@ public class PedidoWizardStep3Controller extends BaseConfigController {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/continuar")
-	public String continuar(HttpServletRequest request, ModelMap model){
-
+	public void continuar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
 		try{
 			Integer persona = request.getParameter("persona") != null && !request.getParameter("persona").trim().isEmpty() ? 
 					Integer.parseInt(request.getParameter("persona")) : null;
 			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("secuencia")));
 			
 			PedidoManager.actualizarPedido(ped.getId_pedido(), persona, PedidoE.NUEVO.getPedidoE(), null, null);
-			model.addAttribute("correcto", ped.getId_pedido());
-			return new ModelAndView("redirect:/Pedido/Visualizar.html", model).toString();
+			result.put("correcto", ped.getId_pedido());
 		}catch(Exception e){
 			logger.error(e.getMessage());
-			model.addAttribute("error", "Contactar al administrador");
-			return Step3(request, model);
+			result.put("error", "Contactar al administrador");
 		}
+		
+		ResponseJson(request, response, result);
 	}
 	
 }

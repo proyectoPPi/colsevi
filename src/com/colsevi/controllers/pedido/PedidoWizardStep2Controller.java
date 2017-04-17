@@ -126,19 +126,6 @@ public class PedidoWizardStep2Controller extends BaseConfigController {
 		ResponseJson(request, response, result);
 	}
 	
-	@RequestMapping("/continuar")
-	public ModelAndView continuar(HttpServletRequest request, ModelMap model){
-		Pedido ped = new Pedido();
-		try{
-			ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("secuencia")));
-			PedidoManager.actualizarPedido(ped.getId_pedido(), null, PedidoE.BORRADOR.getPedidoE(), null, null);
-		}catch(Exception e){
-			logger.error(e.getMessage());
-			model.addAttribute("error", "Contactar al administrador");
-		}
-		return new ModelAndView("redirect:/Pedido/PedidoWizardStep3.html?secuencia=" + ped.getId_pedido(), model);
-	}
-	
 	@RequestMapping("/autocompletar")
 	public void auto(HttpServletRequest request, HttpServletResponse response){
 		try{
