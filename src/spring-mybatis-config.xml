@@ -188,4 +188,8 @@
 		<property value="com.colsevi.dao.caja.map.CajaMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	<bean id="configuracionMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.general.map.ConfiguracionMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 </beans>

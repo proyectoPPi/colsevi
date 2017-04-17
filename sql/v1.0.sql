@@ -452,9 +452,9 @@ CREATE TABLE caja(
     CONSTRAINT fk_caja_persona FOREIGN KEY (id_persona) REFERENCES persona(id_persona)
 );
 
-CREATE TABLE configuracion_inicial(
-	codigo_config INT NOT NULL,
-    valor_config VARCHAR(100) NOT NULL DEFAULT '',
-    descripcion_config VARCHAR(400),
-    PRIMARY KEY(codigo_config)
+CREATE TABLE configuracion(
+	codigo INT NOT NULL,
+    valor VARCHAR(100) NOT NULL DEFAULT '',
+    descripcion VARCHAR(400),
+    PRIMARY KEY(codigo)
 );
