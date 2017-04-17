@@ -11,7 +11,8 @@
 	<form action="${pageContext.request.contextPath}/Pedido/PedidoWizardStep2/continuar.html" method="post" id="continuar">
 		<input type="hidden" id="secuencia" name="secuencia" value="${consecutivo}"/>
 		<div class="form-group">
-			<button type="button" class="btn btn-primary" onclick="actualizar();">Siguiente</button>
+			<button type="button" class="btn btn-primary" onclick="actualizar();">Actualizar</button>
+			<button type="button" class="btn btn-primary" onclick="redireccionar();">Siguiente</button>
 		</div>
 	</form>
 </div>

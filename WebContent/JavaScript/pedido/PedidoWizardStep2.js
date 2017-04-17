@@ -1,5 +1,5 @@
 function initPaso2(){
-	alert(jQuery('#consecutivo').val());
+	//alert(jQuery('#consecutivo').val());
 	HAjax({
 		url: contexto + "/Pedido/PedidoWizardStep2/listaProductos.html?",
 		data: {consecutivo: jQuery('#consecutivo').val()},
@@ -9,7 +9,7 @@ function initPaso2(){
 };
 
 function construirVista(data){
-	alert(data);
+	//alert(data);
 	var suma = '';
 	jQuery('#vistaProducto').html('');
 	data = data['records'];
@@ -53,5 +53,21 @@ function construirVista(data){
 }
 
 function actualizar(){
-	HredireccionarVista(contexto + "/Pedido/PedidoWizardStep2/Actualizar.html?" + jQuery('#formulario').serialize());
+	HAjax({
+		url: contexto + "/Pedido/PedidoWizardStep2/Actualizar.html?" + jQuery('#formulario').serialize(),
+		async: false,
+		method: 'mostrarMensaje'
+	});
+}
+
+function mostrarMensaje(data){
+	if(data.error == undefined)
+		HMensaje(data.correcto, 'success');
+	else
+		HMensaje(data.error, 'danger');
+	
+}
+
+function redireccionar(){
+	HredireccionarVista(contexto + "/Pedido/PedidoWizardStep3.html?" + jQuery('#formulario').serialize());
 }
