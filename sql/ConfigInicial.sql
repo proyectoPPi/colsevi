@@ -9,7 +9,7 @@ INSERT INTO rol (id_rol, nombre_rol, codigo_rol) VALUES(2,"EMPLEADO","EMPLEADO")
 INSERT INTO rol (id_rol, nombre_rol, codigo_rol) VALUES(3,"CLIENTE","CLIENTE");
 INSERT INTO rol (id_rol, nombre_rol, codigo_rol) VALUES(4,"INVITADO","INVITADO");
 
-INSERT INTO tipo_documento(id_tipo_documento,nombre, descripcion) VALUES(1, 'C�dula', 'C�dula de ciudadan�a');
+INSERT INTO tipo_documento(id_tipo_documento,nombre, descripcion) VALUES(1, 'Cédula', 'Cédula de ciudadanía');
 
 INSERT INTO persona(id_persona, tipo_doc, documento, genero, nombre, apellido) VALUES(1, 1, 1234567890, 'M', 'ADMIN', 'SUPER');
 INSERT INTO usuario(id_usuario, id_persona, usuario, clave, estado, primer_login, id_rol) VALUES(1, 1, 'admincol', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'T', 'F', 1);
@@ -17,24 +17,14 @@ INSERT INTO usuario(id_usuario, id_persona, usuario, clave, estado, primer_login
 INSERT INTO unidad_medida (id_unidad_medida, nombre, codigo) VALUES (1, 'Masa', '');
 INSERT INTO unidad_medida (id_unidad_medida, nombre, codigo) VALUES (2, 'Volumen', 'Vol');
   
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(1,"Cereales","son las semillas de las plantas gramíneas: trigo, avena, cebada, arroz, maíz, etc.");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(2,"Ra�ces y Tub�rculos"," Son alimentos altos en carbohidratos, con un contenido aceptable de fibra dietética, vitamina C (yuca), provitamina A y potasio (yautía, apio).");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(3,"Frutas y Hortalizas","FRUTAS: fruto comestible, fruta carnoza, se come sin preparación. HORTALIZA: Parte comestible de una planta.");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(4,"Carnes","Parte del cuerpo de los animales preparada para el consumo humano.");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(5,"Huevos","Huevo que ponen las aves, especialmente la gallina, y que se toma como alimento.");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(6,"Leguminosas y Frutos Secos","Fruto comestible de algunos árboles o plantas que, está envuelto en una cáscara dura y tiene un bajo contenido en agua.");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(7,"Lacteos y Derivados","Se  encuentran  en  la  leche  de  vaca,  cabra,  yogurt, Queso,  kumis.");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(8,"Grasas y Aceites","Las grasas y aceites de origen vegetal o animal son triglicéridos o también llamados ésteres de la glicerina.");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(9,"azucares y dulces","azúcar, panela, miel, confites, bocadillo, arequipe, gaseosas, chocolatinas, etc.");
+INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(1,"Carnes, Huevos, Leguminosas","");
+INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(2,"Cereales, Raíces, Tubérculos y Plátanos","");
+INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(3,"Hortalizas y Verduras","");
+INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(4,"Frutas","");
+INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(5,"Lácteos","");
+INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(6,"Grasas","");
+INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(7,"Azucares y Dulces","");
 
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (1, 1, 1,"arro","trigo");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (2, 4, 1,"filete merluza","filete");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (3, 7, 2,"crema de leche","crema de leche");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (4, 3, 1,"cebolla de huevo","cebolla de huevo");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (5, 8, 1,"sal","sal");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (6, 2, 1,"pimienta","pimienta");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (7, 3, 1,"or�gano","or�gano");
-INSERT INTO ingrediente (id_ingrediente, id_clasificar_ingrediente, id_unidad_medida, nombre, descripcion) VALUES (8, 3, 1,"mostaza","mostaza");
 
 INSERT INTO tipo_telefono (id_tipo_telefono, nombre, descripcion) VALUES(1,"Celular","Celular");
 INSERT INTO tipo_telefono (id_tipo_telefono, nombre, descripcion) VALUES(2,"Fijo","Fijo");
