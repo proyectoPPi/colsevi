@@ -22,33 +22,33 @@ CREATE TABLE tipo_documento(
 );
 
 CREATE TABLE persona(
-	id_persona INT AUTO_INCREMENT,
+    id_persona INT AUTO_INCREMENT,
     tipo_doc INT NOT NULL,
     documento VARCHAR (30) NOT NULL,
     genero VARCHAR (1) NOT NULL,
     nombre VARCHAR(60),
     apellido VARCHAR(60),
     PRIMARY KEY(id_persona),
-	UNIQUE (documento),
+    UNIQUE (documento),
     CONSTRAINT fk_tdocPer FOREIGN KEY (tipo_doc) REFERENCES tipo_documento(id_tipo_documento)
 );
 
 CREATE TABLE rol(
-	id_rol INT AUTO_INCREMENT,
+    id_rol INT AUTO_INCREMENT,
     nombre_rol VARCHAR(40) NOT NULL,
     codigo_rol VARCHAR(80) NOT NULL,
-	PRIMARY KEY(id_rol)
+    PRIMARY KEY(id_rol)
 );
 
 CREATE TABLE usuario(
-	id_usuario INT AUTO_INCREMENT,
+    id_usuario INT AUTO_INCREMENT,
     id_persona INT NOT NULL,
-	usuario VARCHAR(40) NOT NULL,
+    usuario VARCHAR(40) NOT NULL,
     clave VARCHAR(80) NOT NULL,
     estado VARCHAR(1) NOT NULL,
     primer_login VARCHAR(1) NOT NULL,
     id_rol INT NOT NULL,
-	PRIMARY KEY(id_usuario),
+    PRIMARY KEY(id_usuario),
     UNIQUE (usuario),
     CONSTRAINT fk_Persona FOREIGN KEY (id_persona) REFERENCES persona(id_persona),
     CONSTRAINT fk_rolu FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
@@ -158,13 +158,6 @@ CREATE TABLE pago_proveedor(
 	CONSTRAINT fk_PagoProv FOREIGN KEY (id_compra) REFERENCES compra_proveedor(id_compra_proveedor)
 );
 
-CREATE TABLE clasificar_ingrediente(
-	id_clasificar_ingrediente INT AUTO_INCREMENT,
-    nombre VARCHAR(40),
-    descripcion VARCHAR(250),
-    PRIMARY KEY(id_clasificar_ingrediente)
-);
-
 CREATE TABLE unidad_medida(
     id_unidad_medida INT AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
@@ -175,19 +168,17 @@ CREATE TABLE unidad_medida(
 
 CREATE TABLE ingrediente(
     id_ingrediente INT AUTO_INCREMENT,
-    id_clasificar_ingrediente INT,
     id_unidad_medida INT,
-	nombre VARCHAR(50) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
     PRIMARY KEY(id_ingrediente),
-    CONSTRAINT fk_clasing FOREIGN KEY (id_clasificar_ingrediente) REFERENCES clasificar_ingrediente(id_clasificar_ingrediente),
     CONSTRAINT fk_medidaIng FOREIGN KEY (id_unidad_medida) REFERENCES unidad_medida(id_unidad_medida)
 );
 
 CREATE TABLE unidad_peso(
     id_unidad_peso INT AUTO_INCREMENT,
     id_unidad_medida INT NOT NULL,
-	nombre VARCHAR(50) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
     codigo VARCHAR(4) DEFAULT NULL,
     PRIMARY KEY(id_unidad_peso),
@@ -195,7 +186,7 @@ CREATE TABLE unidad_peso(
 );
 
 CREATE TABLE materia_prima(
-	lote INT AUTO_INCREMENT,
+    lote INT AUTO_INCREMENT,
     id_unidad_peso INT,
     id_ingrediente INT,
     id_establecimiento INT,
@@ -226,7 +217,7 @@ ALTER TABLE compra_x_ingrediente AUTO_INCREMENT = 1000;
 
 CREATE TABLE motivo(
     id_motivo INT AUTO_INCREMENT,
-	nombre VARCHAR(50) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
     PRIMARY KEY(id_motivo)
 );
 
@@ -453,7 +444,7 @@ CREATE TABLE caja(
 );
 
 CREATE TABLE configuracion(
-	codigo INT NOT NULL,
+    codigo INT NOT NULL,
     valor VARCHAR(100) NOT NULL DEFAULT '',
     descripcion VARCHAR(400),
     PRIMARY KEY(codigo)
