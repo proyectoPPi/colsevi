@@ -16,15 +16,6 @@ INSERT INTO usuario(id_usuario, id_persona, usuario, clave, estado, primer_login
 
 INSERT INTO unidad_medida (id_unidad_medida, nombre, codigo) VALUES (1, 'Masa', '');
 INSERT INTO unidad_medida (id_unidad_medida, nombre, codigo) VALUES (2, 'Volumen', 'Vol');
-  
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(1,"Carnes, Huevos, Leguminosas","");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(2,"Cereales, Raíces, Tubérculos y Plátanos","");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(3,"Hortalizas y Verduras","");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(4,"Frutas","");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(5,"Lácteos","");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(6,"Grasas","");
-INSERT INTO clasificar_ingrediente (id_clasificar_ingrediente, nombre, descripcion) VALUES(7,"Azucares y Dulces","");
-
 
 INSERT INTO tipo_telefono (id_tipo_telefono, nombre, descripcion) VALUES(1,"Celular","Celular");
 INSERT INTO tipo_telefono (id_tipo_telefono, nombre, descripcion) VALUES(2,"Fijo","Fijo");
