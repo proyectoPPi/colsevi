@@ -3,8 +3,6 @@ package com.colsevi.dao.general.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.colsevi.dao.producto.model.ClasificarIngredienteExample.Criteria;
-
 public class ConfiguracionExample {
 	
    
@@ -518,7 +516,6 @@ public class ConfiguracionExample {
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
-        
 
     }
 }

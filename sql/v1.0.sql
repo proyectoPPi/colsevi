@@ -158,13 +158,6 @@ CREATE TABLE pago_proveedor(
 	CONSTRAINT fk_PagoProv FOREIGN KEY (id_compra) REFERENCES compra_proveedor(id_compra_proveedor)
 );
 
-CREATE TABLE clasificar_ingrediente(
-	id_clasificar_ingrediente INT AUTO_INCREMENT,
-    nombre VARCHAR(40),
-    descripcion VARCHAR(250),
-    PRIMARY KEY(id_clasificar_ingrediente)
-);
-
 CREATE TABLE unidad_medida(
     id_unidad_medida INT AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
@@ -175,12 +168,10 @@ CREATE TABLE unidad_medida(
 
 CREATE TABLE ingrediente(
     id_ingrediente INT AUTO_INCREMENT,
-    id_clasificar_ingrediente INT,
     id_unidad_medida INT,
 	nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(80) DEFAULT NULL,
     PRIMARY KEY(id_ingrediente),
-    CONSTRAINT fk_clasing FOREIGN KEY (id_clasificar_ingrediente) REFERENCES clasificar_ingrediente(id_clasificar_ingrediente),
     CONSTRAINT fk_medidaIng FOREIGN KEY (id_unidad_medida) REFERENCES unidad_medida(id_unidad_medida)
 );
 

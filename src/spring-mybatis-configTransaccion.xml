@@ -38,7 +38,6 @@
 		<mapper resource="com/colsevi/dao/inventario/map/MovimientoMateriaMapper.xml" />
 		<mapper resource="com/colsevi/dao/inventario/map/InventarioXMateriaMapper.xml" />	
 		<mapper resource="com/colsevi/dao/inventario/map/MateriaPrimaMapper.xml" />
-		<mapper resource="com/colsevi/dao/producto/map/ClasificarIngredienteMapper.xml" />
 		<mapper resource="com/colsevi/dao/producto/map/IngredienteMapper.xml" />
 		<mapper resource="com/colsevi/dao/producto/map/TipoProductoMapper.xml" />
 		<mapper resource="com/colsevi/dao/producto/map/ProductoMapper.xml" />

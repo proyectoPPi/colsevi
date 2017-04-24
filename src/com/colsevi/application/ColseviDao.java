@@ -17,7 +17,6 @@ import com.colsevi.dao.general.map.TelefonoMapper;
 import com.colsevi.dao.general.map.TipoTelefonoMapper;
 import com.colsevi.dao.general.map.UnidadMedidaMapper;
 import com.colsevi.dao.general.map.UnidadPesoMapper;
-import com.colsevi.dao.producto.map.ClasificarIngredienteMapper;
 import com.colsevi.dao.producto.map.DificultadRecetaMapper;
 import com.colsevi.dao.inventario.map.InventarioMapper;
 import com.colsevi.dao.inventario.map.MovimientoInventarioMapper;
@@ -73,7 +72,6 @@ public class ColseviDao {
 	private MovimientoInventarioMapper movimientoInventarioMapper;
 	private MovimientoMateriaMapper movimientoMateriaMapper;
 	private MateriaPrimaMapper materiaPrimaMapper;
-	private ClasificarIngredienteMapper clasificarIngredienteMapper; 
 	private IngredienteMapper ingredienteMapper;
 	private TipoProductoMapper tipoProductoMapper;
 	private ProductoMapper productoMapper;
@@ -144,7 +142,6 @@ public class ColseviDao {
 		movimientoInventarioMapper = (MovimientoInventarioMapper) beanFactoryMyBatis.getBean("movimientoInventarioMapper");
 		movimientoMateriaMapper = (MovimientoMateriaMapper) beanFactoryMyBatis.getBean("movimientoMateriaMapper");
 		materiaPrimaMapper = (MateriaPrimaMapper) beanFactoryMyBatis.getBean("materiaPrimaMapper");
-		clasificarIngredienteMapper = (ClasificarIngredienteMapper) beanFactoryMyBatis.getBean("clasificarIngredienteMapper");
 		ingredienteMapper = (IngredienteMapper) beanFactoryMyBatis.getBean("ingredienteMapper");
 		tipoProductoMapper = (TipoProductoMapper) beanFactoryMyBatis.getBean("tipoProductoMapper");
 		productoMapper = (ProductoMapper) beanFactoryMyBatis.getBean("productoMapper");
@@ -340,14 +337,6 @@ public class ColseviDao {
 
 	public void setMovimientoMateriaMapper(MovimientoMateriaMapper movimientoMateriaMapper) {
 		this.movimientoMateriaMapper = movimientoMateriaMapper;
-	}
-
-	public ClasificarIngredienteMapper getClasificarIngredienteMapper() {
-		return clasificarIngredienteMapper;
-	}
-
-	public void setClasificarIngredienteMapper(ClasificarIngredienteMapper clasificarIngredienteMapper) {
-		this.clasificarIngredienteMapper = clasificarIngredienteMapper;
 	}
 
 	public IngredienteMapper getIngredienteMapper() {
