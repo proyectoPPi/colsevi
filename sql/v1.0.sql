@@ -120,8 +120,8 @@ CREATE TABLE tipo_proveedor(
 );
 
 CREATE TABLE proveedor (
-	id_proveedor INT AUTO_INCREMENT,
-	id_direccion INT,
+    id_proveedor INT AUTO_INCREMENT,
+    id_direccion INT,
     id_tipo_proveedor INT,
     id_telefono INT,
     nombre VARCHAR(50) NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE proveedor (
 );
 
 CREATE TABLE compra_proveedor(
-	id_compra_proveedor INT AUTO_INCREMENT,
+    id_compra_proveedor INT AUTO_INCREMENT,
     id_proveedor INT NOT NULL,
     id_establecimiento INT,
     valor DECIMAL(12,2) NOT NULL,
@@ -160,9 +160,7 @@ CREATE TABLE pago_proveedor(
 
 CREATE TABLE unidad_medida(
     id_unidad_medida INT AUTO_INCREMENT,
-	nombre VARCHAR(50) NOT NULL,
-    codigo VARCHAR(4) DEFAULT NULL,
-    UNIQUE (codigo),
+    nombre VARCHAR(50) NOT NULL,
     PRIMARY KEY(id_unidad_medida)
 );
 
