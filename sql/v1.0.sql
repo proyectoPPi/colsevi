@@ -17,38 +17,38 @@ CREATE TABLE establecimiento(
 CREATE TABLE tipo_documento(
 	id_tipo_documento INT AUTO_INCREMENT,
     nombre VARCHAR (30) NOT NULL,
-    descripcion VARCHAR (40) NOT NULL,
+    descripcion VARCHAR (40),
     PRIMARY KEY(id_tipo_documento)
 );
 
 CREATE TABLE persona(
-	id_persona INT AUTO_INCREMENT,
+    id_persona INT AUTO_INCREMENT,
     tipo_doc INT NOT NULL,
     documento VARCHAR (30) NOT NULL,
     genero VARCHAR (1) NOT NULL,
     nombre VARCHAR(60),
     apellido VARCHAR(60),
     PRIMARY KEY(id_persona),
-	UNIQUE (documento),
+    UNIQUE (documento),
     CONSTRAINT fk_tdocPer FOREIGN KEY (tipo_doc) REFERENCES tipo_documento(id_tipo_documento)
 );
 
 CREATE TABLE rol(
-	id_rol INT AUTO_INCREMENT,
+    id_rol INT AUTO_INCREMENT,
     nombre_rol VARCHAR(40) NOT NULL,
     codigo_rol VARCHAR(80) NOT NULL,
-	PRIMARY KEY(id_rol)
+    PRIMARY KEY(id_rol)
 );
 
 CREATE TABLE usuario(
-	id_usuario INT AUTO_INCREMENT,
+    id_usuario INT AUTO_INCREMENT,
     id_persona INT NOT NULL,
-	usuario VARCHAR(40) NOT NULL,
+    usuario VARCHAR(40) NOT NULL,
     clave VARCHAR(80) NOT NULL,
     estado VARCHAR(1) NOT NULL,
     primer_login VARCHAR(1) NOT NULL,
     id_rol INT NOT NULL,
-	PRIMARY KEY(id_usuario),
+    PRIMARY KEY(id_usuario),
     UNIQUE (usuario),
     CONSTRAINT fk_Persona FOREIGN KEY (id_persona) REFERENCES persona(id_persona),
     CONSTRAINT fk_rolu FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
@@ -76,7 +76,7 @@ CREATE TABLE pagina_x_rol(
 CREATE TABLE tipo_telefono(
 	id_tipo_telefono INT AUTO_INCREMENT,
     nombre VARCHAR (30) NOT NULL,
-	descripcion VARCHAR (60) NOT NULL,
+	descripcion VARCHAR (60),
     PRIMARY KEY(id_tipo_telefono)
 );
 
@@ -91,9 +91,9 @@ CREATE TABLE telefono(
 );
 
 CREATE TABLE direccion(
-	id_direccion INT AUTO_INCREMENT,
+    id_direccion INT AUTO_INCREMENT,
     id_persona INT DEFAULT NULL,
-	direccion VARCHAR (50) NOT NULL,
+    direccion VARCHAR (50) NOT NULL,
     barrio VARCHAR (60),
     descripcion VARCHAR (60),
     CONSTRAINT fk_dirp FOREIGN KEY (id_persona) REFERENCES persona(id_persona),
@@ -101,7 +101,7 @@ CREATE TABLE direccion(
 );
 
 CREATE TABLE correo(
-	id_correo INT AUTO_INCREMENT,
+    id_correo INT AUTO_INCREMENT,
     id_persona INT DEFAULT NULL,
 	correo VARCHAR (50) NOT NULL,
     PRIMARY KEY(id_correo),
@@ -115,17 +115,17 @@ ALTER TABLE establecimiento ADD CONSTRAINT fk_core FOREIGN KEY (id_correo) REFER
 CREATE TABLE tipo_proveedor(
     id_tipo_proveedor INT AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
-    descripcion VARCHAR(120) NOT NULL,
+    descripcion VARCHAR(120),
     PRIMARY KEY(id_tipo_proveedor)
 );
 
 CREATE TABLE proveedor (
-	id_proveedor INT AUTO_INCREMENT,
-	id_direccion INT,
+    id_proveedor INT AUTO_INCREMENT,
+    id_direccion INT,
     id_tipo_proveedor INT,
     id_telefono INT,
     nombre VARCHAR(50) NOT NULL,
-    descripcion VARCHAR(80) NOT NULL,
+    descripcion VARCHAR(80),
     PRIMARY KEY(id_proveedor),
     CONSTRAINT fk_dirprov FOREIGN KEY (id_direccion) REFERENCES direccion(id_direccion),
     CONSTRAINT fk_tipoprop FOREIGN KEY (id_tipo_proveedor) REFERENCES tipo_proveedor(id_tipo_proveedor),
@@ -133,7 +133,7 @@ CREATE TABLE proveedor (
 );
 
 CREATE TABLE compra_proveedor(
-	id_compra_proveedor INT AUTO_INCREMENT,
+    id_compra_proveedor INT AUTO_INCREMENT,
     id_proveedor INT NOT NULL,
     id_establecimiento INT,
     valor DECIMAL(12,2) NOT NULL,
@@ -160,17 +160,15 @@ CREATE TABLE pago_proveedor(
 
 CREATE TABLE unidad_medida(
     id_unidad_medida INT AUTO_INCREMENT,
-	nombre VARCHAR(50) NOT NULL,
-    codigo VARCHAR(4) DEFAULT NULL,
-    UNIQUE (codigo),
+    nombre VARCHAR(50) NOT NULL,
     PRIMARY KEY(id_unidad_medida)
 );
 
 CREATE TABLE ingrediente(
     id_ingrediente INT AUTO_INCREMENT,
     id_unidad_medida INT,
-	nombre VARCHAR(50) NOT NULL,
-    descripcion VARCHAR(80) DEFAULT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(80),
     PRIMARY KEY(id_ingrediente),
     CONSTRAINT fk_medidaIng FOREIGN KEY (id_unidad_medida) REFERENCES unidad_medida(id_unidad_medida)
 );
@@ -178,15 +176,14 @@ CREATE TABLE ingrediente(
 CREATE TABLE unidad_peso(
     id_unidad_peso INT AUTO_INCREMENT,
     id_unidad_medida INT NOT NULL,
-	nombre VARCHAR(50) NOT NULL,
-    descripcion VARCHAR(80) DEFAULT NULL,
-    codigo VARCHAR(4) DEFAULT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(80),
     PRIMARY KEY(id_unidad_peso),
     CONSTRAINT fk_unidadMedida FOREIGN KEY (id_unidad_medida) REFERENCES unidad_medida(id_unidad_medida)
 );
 
 CREATE TABLE materia_prima(
-	lote INT AUTO_INCREMENT,
+    lote INT AUTO_INCREMENT,
     id_unidad_peso INT,
     id_ingrediente INT,
     id_establecimiento INT,
@@ -217,7 +214,7 @@ ALTER TABLE compra_x_ingrediente AUTO_INCREMENT = 1000;
 
 CREATE TABLE motivo(
     id_motivo INT AUTO_INCREMENT,
-	nombre VARCHAR(50) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
     PRIMARY KEY(id_motivo)
 );
 
@@ -240,7 +237,7 @@ CREATE TABLE movimiento_materia(
 CREATE TABLE tipo_producto(
     id_tipo_producto INT AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
-    descripcion VARCHAR(80) DEFAULT NULL,
+    descripcion VARCHAR(80),
     PRIMARY KEY(id_tipo_producto)
 );
 
@@ -249,7 +246,7 @@ CREATE TABLE producto(
     id_tipo_producto INT,
     referencia VARCHAR(8) DEFAULT NULL,
 	nombre VARCHAR(40) NOT NULL,
-    descripcion VARCHAR(120) DEFAULT NULL,
+    descripcion VARCHAR(120),
     venta DECIMAL(12,2),
     imagen VARCHAR (50) DEFAULT 'imagenFotoProducto.jpg',
     cantidadMin INT NOT NULL,
@@ -340,7 +337,7 @@ CREATE TABLE movimiento_inventario(
 CREATE TABLE estado_pedido(
     id_estado_pedido INT AUTO_INCREMENT,
 	nombre VARCHAR(30) NOT NULL,
-    descripcion VARCHAR(70) DEFAULT NULL,
+    descripcion VARCHAR(70),
     PRIMARY KEY(id_estado_pedido)
 );
 
@@ -444,7 +441,7 @@ CREATE TABLE caja(
 );
 
 CREATE TABLE configuracion(
-	codigo INT NOT NULL,
+    codigo INT NOT NULL,
     valor VARCHAR(100) NOT NULL DEFAULT '',
     descripcion VARCHAR(400),
     PRIMARY KEY(codigo)
