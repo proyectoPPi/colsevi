@@ -6,7 +6,6 @@ CREATE TABLE establecimiento(
 	id_establecimiento INT AUTO_INCREMENT,
     id_direccion INT,
     id_telefono INT,
-    id_correo INT,
     nombre VARCHAR (40) NOT NULL,
     descripcion VARCHAR (120),
     hora_inicio VARCHAR(7),
@@ -110,7 +109,6 @@ CREATE TABLE correo(
 
 ALTER TABLE establecimiento ADD CONSTRAINT fk_dire FOREIGN KEY (id_direccion) REFERENCES direccion(id_direccion);
 ALTER TABLE establecimiento ADD CONSTRAINT fk_tele FOREIGN KEY (id_telefono) REFERENCES telefono(id_telefono);
-ALTER TABLE establecimiento ADD CONSTRAINT fk_core FOREIGN KEY (id_correo) REFERENCES correo(id_correo);
 
 CREATE TABLE tipo_proveedor(
     id_tipo_proveedor INT AUTO_INCREMENT,
