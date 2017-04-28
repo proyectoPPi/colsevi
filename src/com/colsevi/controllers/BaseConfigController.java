@@ -61,7 +61,7 @@ public class BaseConfigController implements Serializable {
 						List<Pagina> listaPadre = ColseviDao.getInstance().getPaginaMapper().selectByExample(PE);
 						menu += "<ul class=\"dropdown-menu\">";
 						for(Pagina Ppag: listaPadre){
-							menu += "<li>"+"<a onclick=\"HredireccionarVista('" + request.getContextPath()+Ppag.getUrl() + "')\" ><i class=\""+Ppag.getIcono()+"\"></i>"
+							menu += "<li>"+"<a onclick=\"HredireccionarVista('" + request.getContextPath()+Ppag.getUrl() + "')\" >"
 									+Ppag.getNombre()+"</a></li>";
 						}
 						menu += "</ul>";

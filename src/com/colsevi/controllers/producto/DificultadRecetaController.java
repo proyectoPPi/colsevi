@@ -125,7 +125,7 @@ public class DificultadRecetaController extends BaseConfigController {
 			
 			RecetaExample RExample = new RecetaExample();
 			RExample.createCriteria().andId_dificultad_recetaEqualTo(id);
-			Integer CReceta = ColseviDao.getInstance().getRecetaMapper().countByExample(RExample);
+			Long CReceta = ColseviDao.getInstance().getRecetaMapper().countByExample(RExample);
 
 			if(CReceta != null && CReceta > 0){
 				resultVista.put("error", "Dificultad No Eliminada, Asociada a receta");

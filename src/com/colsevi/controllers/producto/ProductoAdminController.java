@@ -55,7 +55,7 @@ public class ProductoAdminController extends BaseConfigController {
 				Producto prod = ColseviDao.getInstance().getProductoMapper().selectByPrimaryKey(Integer.parseInt(request.getParameter("producto")));
 				if(prod != null && prod.getId_producto() != null){
 					model.addAttribute("prod", prod.getId_producto());
-					model.addAttribute("label", prod.getNombre() + " - " + prod.getReferencia());
+					model.addAttribute("label", prod.getNombre());
 				}
 			}
 		}catch(Exception e){
@@ -117,7 +117,6 @@ public class ProductoAdminController extends BaseConfigController {
 					opciones.put("id_producto", bean.getId_producto());
 					opciones.put("nombre", bean.getNombre());
 					opciones.put("descripcion", bean.getDescripcion());
-					opciones.put("referencia", bean.getReferencia());
 					opciones.put("ventaf", UtilidadManager.MonedaVista(bean.getVenta()));
 					opciones.put("venta", bean.getVenta());
 					opciones.put("imagen", bean.getImagen());
@@ -164,11 +163,6 @@ public class ProductoAdminController extends BaseConfigController {
 				bean.setDescripcion(request.getParameter("descripcion"));
 			}else{
 				error += "Ingresar el descripcion<br/>";
-			}
-			if(request.getParameter("referencia") != null && !request.getParameter("referencia").trim().isEmpty()){
-				bean.setReferencia(request.getParameter("referencia"));
-			}else{
-				error += "Ingresar el referencia<br/>";
 			}
 			if(request.getParameter("tipoP") != null && !request.getParameter("tipoP").trim().isEmpty() && !request.getParameter("tipoP").equals("0")){
 				bean.setId_tipo_producto(Integer.parseInt(request.getParameter("tipoP")));

@@ -159,8 +159,6 @@ public class EstablecimientoController extends BaseConfigController {
 					ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.general.map.CorreoMapper.insertSelective", beanC);
 				}
 			} 
-			bean.setId_correo(beanC.getId_correo());
-			
 			if(bean.getId_establecimiento() != null){
 				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.general.map.EstablecimientoMapper.updateByPrimaryKeySelective", bean);
 				resultVista.put("correcto", "Establecimiento Actualizado");
@@ -264,7 +262,7 @@ public class EstablecimientoController extends BaseConfigController {
 			try {
 				CatalogoExample example = new CatalogoExample();
 				example.createCriteria().andId_establecimientoEqualTo(Integer.parseInt(id));
-				Integer contador = ColseviDao.getInstance().getCatalogoMapper().countByExample(example);
+				Long contador = ColseviDao.getInstance().getCatalogoMapper().countByExample(example);
 				
 				if(contador > 0){
 					result.put("error", "El establecimiento no se pudo eliminar porqué tiene un catálogo asociado");

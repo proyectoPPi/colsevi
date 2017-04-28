@@ -345,7 +345,7 @@ public class CompraController extends BaseConfigController {
 
 		if(loteList != null && loteList.size() > 0){
 			MME.createCriteria().andLoteIn(loteList);
-			Integer CountInvM = ColseviDao.getInstance().getMovimientoMateriaMapper().countByExample(MME);
+			Long CountInvM = ColseviDao.getInstance().getMovimientoMateriaMapper().countByExample(MME);
 			if(CountInvM != null && CountInvM > 0){
 				error += "No se pueden eliminar ingredientes de las compras ya que están asociados a inventario";
 			}

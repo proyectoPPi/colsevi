@@ -12,7 +12,7 @@ public class CajaManager {
 
 		try{
 			CE.createCriteria().andEstadoEqualTo("3").andFecha_ejecucionEqualTo(ejecucion);
-			Integer count = ColseviDao.getInstance().getCajaMapper().countByExample(CE);
+			Long count = ColseviDao.getInstance().getCajaMapper().countByExample(CE);
 			if(count > 0)
 				result = true;
 		}catch(Exception e){

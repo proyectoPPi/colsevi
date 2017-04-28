@@ -39,7 +39,7 @@ public class ConfiguracionController extends BaseConfigController{
 		
 		ConfiguracionExample configuracionExample = new ConfiguracionExample();
 		configuracionExample.setLimit(Inicio + ", " + Final);
-		configuracionExample.setOrderByClause("id_clasificar_ingrediente DESC");
+		configuracionExample.setOrderByClause("codigo DESC");
 		
 		ConfiguracionExample.Criteria criteria = (ConfiguracionExample.Criteria) configuracionExample.createCriteria();
 		
@@ -96,14 +96,8 @@ public class ConfiguracionController extends BaseConfigController{
 	
 	public String validarGuardado(Configuracion bean){
 		String error = "";
-		if(bean.getCodigo() == null || bean.getCodigo() == 0){
-			error = "Ingresar el Código<br/>";
-		}
 		if(bean.getValor() == null || bean.getValor().trim().isEmpty()){
 			error = "Ingresar el Valor<br/>";
-		}
-		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
-			error = "Ingresar la descripción<br/>";
 		}
 		return error;
 	}

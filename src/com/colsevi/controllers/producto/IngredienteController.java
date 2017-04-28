@@ -29,7 +29,6 @@ public class IngredienteController extends BaseConfigController {
 
 	@RequestMapping
 	public String Ingrediente(HttpServletRequest request,ModelMap model){
-		model.addAttribute("listaClasificar", ProductoManager.getClasificar());
 		model.addAttribute("listaMedida", ProductoManager.getMedida());
 		return "producto/Ingrediente";
 	}
@@ -37,7 +36,6 @@ public class IngredienteController extends BaseConfigController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		
 		JSONObject opciones = new JSONObject();
 
 		try{
@@ -45,7 +43,6 @@ public class IngredienteController extends BaseConfigController {
 			String Final = request.getParameter("Final");
 			String nombre = request.getParameter("nombreF");
 			String descripcion = request.getParameter("descripcionF");
-			String clasificarF = request.getParameter("clasificarF");
 			String medidaF = request.getParameter("medidaF");
 			
 			IngredienteExample IngExample = new IngredienteExample();
@@ -59,9 +56,6 @@ public class IngredienteController extends BaseConfigController {
 			if(!descripcion.trim().isEmpty()){
 				criteria.andDescripcionLike("%" + descripcion + "%");   
 			}
-			if(!clasificarF.trim().isEmpty() && !clasificarF.trim().equals("0")){
-				criteria.andId_clasificar_ingredienteEqualTo(Integer.parseInt(clasificarF));
-			}
 			if(!medidaF.trim().isEmpty() && !medidaF.trim().equals("0")){
 				criteria.andId_unidad_medidaEqualTo(Integer.parseInt(medidaF));
 			}
@@ -69,13 +63,10 @@ public class IngredienteController extends BaseConfigController {
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getIngredienteMapper().selectByExample(IngExample)));
 			opciones.put("total", ColseviDao.getInstance().getIngredienteMapper().countByExample(IngExample));
 
-			response.setContentType("text/html;charset=ISO-8859-1");
-			request.setCharacterEncoding("UTF8");
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		opciones.writeJSONString(response.getWriter());
+		ResponseJson(request, response, opciones);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -83,28 +74,16 @@ public class IngredienteController extends BaseConfigController {
 
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
-		JSONObject labels = new JSONObject();
 		JSONObject labels2 = new JSONObject();
 		
 		for (Ingrediente bean : listIng) {
 			try{
 				opciones = new JSONObject();
-				labels = new JSONObject();
 				labels2 = new JSONObject();
 				opciones.put("id_ingrediente", bean.getId_ingrediente());
 				opciones.put("nombre", bean.getNombre());
 				opciones.put("descripcion", bean.getDescripcion());
 	
-				if(bean.getId_clasificar_ingrediente() != null){
-					labels.put("label",ColseviDao.getInstance().getClasificarIngredienteMapper().selectByPrimaryKey(bean.getId_clasificar_ingrediente()).getNombre());
-					labels.put("value", bean.getId_clasificar_ingrediente());
-					opciones.put("clasificar", labels);
-				}else{
-					labels.put("label", "");
-					labels.put("value", "0");
-					opciones.put("clasificar", labels);
-				}
-				
 				if(bean.getId_unidad_medida() != null){
 					labels2.put("label",ColseviDao.getInstance().getUnidadMedidaMapper().selectByPrimaryKey(bean.getId_unidad_medida()).getNombre());
 					labels2.put("value", bean.getId_unidad_medida());
@@ -129,7 +108,6 @@ public class IngredienteController extends BaseConfigController {
 	public void Guardar(HttpServletRequest request, HttpServletResponse response, Ingrediente bean) throws IOException{
 		JSONObject resultVista = new JSONObject();
 		try{
-			bean.setId_clasificar_ingrediente(Integer.parseInt(request.getParameter("clasificar")));
 			bean.setId_unidad_medida(Integer.parseInt(request.getParameter("medida")));
 			
 			String error = validarGuardado(bean);
@@ -158,16 +136,10 @@ public class IngredienteController extends BaseConfigController {
 		if(bean.getNombre() == null || bean.getNombre().trim().isEmpty()){
 			error = "Ingresar el Nombre<br/>";
 		}
-		if(bean.getDescripcion() == null || bean.getDescripcion().trim().isEmpty()){
-			error += "Ingresar la descripción<br/>";
-		}
-		if(bean.getId_clasificar_ingrediente() == null || bean.getId_clasificar_ingrediente().equals(0)){
-			error += "Seleccionar una clasificación<br/>";
-		}
-		if(bean.getId_unidad_medida() == null || bean.getId_unidad_medida().equals(0)){
+		
+		if(bean.getId_unidad_medida() == null){
 			error += "Seleccionar unidad de Medida<br/>";
 		}
-		
 		return error;
 	}
 	
@@ -178,10 +150,10 @@ public class IngredienteController extends BaseConfigController {
 		try{
 			Integer id = Integer.parseInt(request.getParameter("id_ingrediente"));
 			if(id != null){
-				
+				//validar en compras y materia prima
 				IngredienteXProductoExample IngProd = new IngredienteXProductoExample();
 				IngProd.createCriteria().andId_ingredienteEqualTo(id);
-				Integer dataCruce = ColseviDao.getInstance().getIngredienteXProductoMapper().countByExample(IngProd);
+				Long dataCruce = ColseviDao.getInstance().getIngredienteXProductoMapper().countByExample(IngProd);
 				if(dataCruce != null && dataCruce > 0){
 					resultVista.put("error", "No se puede eliminar, ya que se encuentra asociada a un producto");
 				}else{

@@ -1,6 +1,20 @@
 jQuery(document).ready(function(){
 	Tabla();
-	Hformulario();
+	
+	$('#Formulario').validate({
+		rules: {
+			nombre: {
+				required : true
+			},
+			descripcion: {
+				required: false
+			},
+			medida:{
+				required: true
+			}
+		}  
+     });
+	
 });
 
 function Tabla(pagina){
@@ -14,7 +28,6 @@ function Tabla(pagina){
 
 function Limpiar(){
 	HLimpiar();
-	jQuery('#clasificar').val(0);
 }
 
 function Eliminar(){
@@ -24,3 +37,9 @@ function Eliminar(){
 function CargarFormulario(Id){
 	HCargarFormulario(Id);
 }
+
+function validarFormulario(){
+	if($('#Formulario').valid())
+		enviarFormulario();
+}
+

@@ -241,7 +241,7 @@ public class ProveedorController extends BaseConfigController {
 				
 				CompraProveedorExample compra = new CompraProveedorExample();
 				compra.createCriteria().andId_proveedorEqualTo(id);
-				Integer dataCruce = ColseviDao.getInstance().getCompraProveedorMapper().countByExample(compra);
+				Long dataCruce = ColseviDao.getInstance().getCompraProveedorMapper().countByExample(compra);
 				if(dataCruce != null && dataCruce > 0){
 					resultVista.put("error", "No se puede eliminar, ya que se encuentra asociado a una compra");
 				}else{

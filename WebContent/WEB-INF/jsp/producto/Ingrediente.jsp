@@ -14,15 +14,6 @@
 			<input type="text" class="form-control" id="descripcionF" name="filtro"/>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<label>Clasificar</label>
-			<select class="form-control" id="clasificarF" name="filtro">
-				<option value="0">Seleccione</option>
-				<c:forEach items="${listaClasificar}" var="clasificar">
-					<option value="${clasificar.id_clasificar_ingrediente}">${clasificar.nombre}</option>
-				</c:forEach>
-			</select>
-		</div>
-		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			<label>Medida</label>
 			<select class="form-control" id="medidaF" name="filtro">
 				<option value="0">Seleccione</option>
@@ -45,7 +36,8 @@
 <div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content-wrap">
-			<form method="post" action="${pageContext.request.contextPath}/Ingrediente/Ing/Guardar.html?" id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
+			<form method="post" action="${pageContext.request.contextPath}/Ingrediente/Ing/Guardar.html?"
+				id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
@@ -54,29 +46,20 @@
 					<div class="modal-body">
 						<div class="row">
 							<input type="hidden" id="id_ingrediente" name="id_ingrediente"/>
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-								<label>*Nombre</label>
-								<input type="text" class="form-control" id="nombre" name="nombre" data-bv-notempty="true" required="required"/>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+									<label>*Nombre</label>
+									<input type="text" class="form-control" id="nombre" name="nombre"/>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+									<label>Descripci&#243;n</label>
+									<input type="text" class="form-control" id="descripcion" name="descripcion"/>
+								</div>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-								<label>*Descripci&#243;n</label>
-								<input type="text" class="form-control" id="descripcion" name="descripcion" data-bv-notempty="true" required="required"/>
-							</div>
-						
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-								<label>Clasificar</label>
-								<select class="form-control" id="clasificar" name="clasificar" required="required">
-									<option value="0">Seleccione</option>
-									<c:forEach items="${listaClasificar}" var="clasificar">
-										<option value="${clasificar.id_clasificar_ingrediente}">${clasificar.nombre}</option>
-									</c:forEach>
-								</select>
-							</div>
-							
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-								<label>Medida</label>
-								<select class="form-control" id="medida" name="medida" required="required">
-									<option value="0">Seleccione</option>
+								<label>*Medida</label>
+								<select class="form-control" id="medida" name="medida">
+									<option value="">Seleccione</option>
 									<c:forEach items="${listaMedida}" var="medida">
 										<option value="${medida.id_unidad_medida}">${medida.nombre}</option>
 									</c:forEach>
@@ -85,7 +68,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-warning" type="submit">Guardar</button>
+						<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
 						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpliar();">Cerrar</button>
 						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 					</div>
@@ -99,7 +82,6 @@
 	titulos = new Array();
 	titulos["id_ingrediente"] = "ID";
 	titulos["nombre"] = "Nombre";
-	titulos["clasificar"] = "Clasificación";
 	titulos["medida"] = "Unidad Medida";
 	titulos["descripcion"] = "Descripción";
 </script>

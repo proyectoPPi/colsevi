@@ -130,7 +130,7 @@ public class TipoProductoController extends BaseConfigController {
 				
 				ProductoExample ProdExample = new ProductoExample();
 				ProdExample.createCriteria().andId_tipo_productoEqualTo(id);
-				Integer countProd = ColseviDao.getInstance().getProductoMapper().countByExample(ProdExample);
+				Long countProd = ColseviDao.getInstance().getProductoMapper().countByExample(ProdExample);
 	
 				if(countProd != null && countProd > 0){
 					resultVista.put("error", "El tipo de producto no puede ser eliminado ya que se encuentra asociado a " + countProd + " producto(s)");

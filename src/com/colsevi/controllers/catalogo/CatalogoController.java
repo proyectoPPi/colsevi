@@ -233,7 +233,7 @@ public class CatalogoController extends BaseConfigController{
 				
 				CatalogoXProductoExample CXPE = new CatalogoXProductoExample();
 				CXPE.createCriteria().andId_catalogoEqualTo(id);
-				Integer count = ColseviDao.getInstance().getCatalogoXProductoMapper().countByExample(CXPE);
+				Long count = ColseviDao.getInstance().getCatalogoXProductoMapper().countByExample(CXPE);
 				if(!count.equals(0)){
 					result.put("error", "No se puede eliminar, tiene productos asociados");	
 				}else{

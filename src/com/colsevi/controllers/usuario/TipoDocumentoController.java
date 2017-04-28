@@ -151,7 +151,7 @@ public class TipoDocumentoController extends BaseConfigController {
 				
 				PersonaExample perExample = new PersonaExample();
 				perExample.createCriteria().andTipo_docEqualTo(id);
-				Integer count = ColseviDao.getInstance().getPersonaMapper().countByExample(perExample);
+				Long count = ColseviDao.getInstance().getPersonaMapper().countByExample(perExample);
 				
 				if(count != null && count < 0){
 					ColseviDao.getInstance().getTipoDocumentoMapper().deleteByPrimaryKey(id);
