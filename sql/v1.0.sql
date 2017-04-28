@@ -55,7 +55,6 @@ CREATE TABLE usuario(
 
 CREATE TABLE pagina(
 	id_pagina INT AUTO_INCREMENT,
-    codigo VARCHAR (30) NOT NULL,
     url VARCHAR (50) NOT NULL,
     nombre VARCHAR (50) NOT NULL,
     icono VARCHAR (50),
@@ -242,7 +241,6 @@ CREATE TABLE tipo_producto(
 CREATE TABLE producto(
     id_producto INT AUTO_INCREMENT,
     id_tipo_producto INT,
-    referencia VARCHAR(8) DEFAULT NULL,
 	nombre VARCHAR(40) NOT NULL,
     descripcion VARCHAR(120),
     venta DECIMAL(12,2),
