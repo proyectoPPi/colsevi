@@ -57,7 +57,6 @@ CREATE TABLE pagina(
 	id_pagina INT AUTO_INCREMENT,
     url VARCHAR (50) NOT NULL,
     nombre VARCHAR (50) NOT NULL,
-    icono VARCHAR (50),
     padrePagina VARCHAR(60) DEFAULT NULL,
     menu BOOLEAN DEFAULT FALSE,
     PRIMARY KEY(id_pagina)
