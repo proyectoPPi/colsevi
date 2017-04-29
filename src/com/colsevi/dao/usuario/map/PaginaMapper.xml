@@ -315,4 +315,16 @@
       menu = #{menu,jdbcType=BIT}
     where id_pagina = #{id_pagina,jdbcType=INTEGER}
   </update>
+ 
+ 	<select id="ListaMenuPadre" parameterType="java.util.Map" resultMap="BaseResultMap"> 
+		  select pag.* from pagina pag
+		LEFT JOIN pagina_x_rol pxr ON pxr.id_pagina = pag.id_pagina
+		WHERE pxr.id_rol = #{rol} AND pag.padrePagina IS NOT NULL;
+	</select>
+	
+	<select id="ListaMenuHijos" parameterType="java.util.Map" resultMap="BaseResultMap"> 
+			select pag.* from pagina pag
+		LEFT JOIN pagina_x_rol pxr ON pxr.id_pagina = pag.id_pagina
+		WHERE pxr.id_rol = #{rol} AND pag.id_pagina in(#{hijos});
+	</select>
 </mapper>
