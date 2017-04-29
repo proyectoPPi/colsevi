@@ -26,7 +26,6 @@ public class BaseConfigController implements Serializable {
 	public Map<String, Object> getValoresGenericos(HttpServletRequest request){
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("menu", getMenu(request));
-		mapa.put("SubMenu", SubMenu(request));
 		mapa.put("sesion", getUsuario(request) != null ? 'T' : 'F');
 
 		return mapa;
@@ -34,10 +33,11 @@ public class BaseConfigController implements Serializable {
 	
 	public String getMenu(HttpServletRequest request){
 		String menu = "";
-
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		mapa.put("rol", getUsuario(request).getRol());
+		
 		if(getUsuario(request) != null){
-			NavegacionUsuario NU = new NavegacionUsuario();
-			List<Pagina> listaPag = NU.getPaginasRol(getUsuario(request).getRol());
+			List<Pagina> listaPag = ColseviDao.getInstance().getPaginaMapper().ListaMenuPadre(mapa);
 			
 			for(Pagina pag: listaPag){
 				if(pag.getMenu()){
@@ -47,8 +47,7 @@ public class BaseConfigController implements Serializable {
 					}else{
 						menu += "<li>";
 					}
-					menu += "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" onclick=\"HredireccionarVista('" + request.getContextPath()+pag.getUrl() + "')\" >"+
-							pag.getNombre()+"</a>";
+					menu += "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" onclick=\"HredireccionarVista('" + request.getContextPath()+pag.getUrl() + "')\" >"+pag.getNombre()+"</a>";
 					
 					if(pag.getPadrePagina() != null && !pag.getPadrePagina().trim().isEmpty()){
 						String[] Padre = pag.getPadrePagina().split(",");
@@ -58,11 +57,11 @@ public class BaseConfigController implements Serializable {
 						}
 						PaginaExample PE = new PaginaExample();
 						PE.createCriteria().andId_paginaIn(list);
-						List<Pagina> listaPadre = ColseviDao.getInstance().getPaginaMapper().selectByExample(PE);
+						List<Pagina> listaHijo = ColseviDao.getInstance().getPaginaMapper().selectByExample(PE);
+						
 						menu += "<ul class=\"dropdown-menu\">";
-						for(Pagina Ppag: listaPadre){
-							menu += "<li>"+"<a onclick=\"HredireccionarVista('" + request.getContextPath()+Ppag.getUrl() + "')\" >"
-									+Ppag.getNombre()+"</a></li>";
+						for(Pagina hijo: listaHijo){
+							menu += "<li>"+"<a onclick=\"HredireccionarVista('" + request.getContextPath()+hijo.getUrl() + "')\" >"+hijo.getNombre()+"</a></li>";
 						}
 						menu += "</ul>";
 					}
@@ -70,50 +69,6 @@ public class BaseConfigController implements Serializable {
 					menu += "</li>";
 				}
 			}
-		}
-		return menu;
-	}
-	
-	public String SubMenu(HttpServletRequest request){
-
-		String menu = "";
-		if(getUsuario(request) != null){
-			String uri = request.getRequestURI().substring(request.getContextPath().length());
-		
-			PaginaExample pE = new PaginaExample();
-			pE.createCriteria().andUrlLike(uri);
-			Pagina pagina = null;
-			try{
-				pagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE).get(0);
-			}catch(Exception e){
-				return menu;
-			}
-			
-			try{
-				if(pagina != null && pagina.getPadrePagina() != null && !pagina.getPadrePagina().trim().isEmpty()){
-					pE = new PaginaExample();
-					String[] padre = pagina.getPadrePagina().split(",");
-					List<Integer> ListaP = new ArrayList<Integer>();
-					for(int i=0; i<padre.length; i++){
-						ListaP.add(Integer.parseInt(padre[i]));
-					}
-					
-					pE.createCriteria().andId_paginaIn(ListaP);
-					List<Pagina> listaPagina = ColseviDao.getInstance().getPaginaMapper().selectByExample(pE);
-					
-					for(Pagina pag: listaPagina){
-						menu += "<li>";
-						menu += "<a onclick=\"HredireccionarVista('" + request.getContextPath()+pag.getUrl() + "')\" >";
-						menu += pag.getNombre();
-						menu += "</a>";
-						menu += "</li>";
-					}
-				}
-				
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-				
 		}
 		return menu;
 	}

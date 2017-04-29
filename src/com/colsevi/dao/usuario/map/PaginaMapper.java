@@ -3,6 +3,8 @@ package com.colsevi.dao.usuario.map;
 import com.colsevi.dao.usuario.model.Pagina;
 import com.colsevi.dao.usuario.model.PaginaExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface PaginaMapper {
@@ -72,4 +74,6 @@ public interface PaginaMapper {
 	 * @mbg.generated  Fri Apr 28 17:29:08 COT 2017
 	 */
 	int updateByPrimaryKey(Pagina record);
+	List<Pagina> ListaMenuPadre(Map<String, Object> map);
+	List<Pagina> ListaMenuHijos(Map<String, Object> map);
 }

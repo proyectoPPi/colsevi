@@ -62,7 +62,7 @@ function ResultadoEjecucion(data){
 
 function DetalleEjecucion(data){
 	var compras = data['Compras'];
-	
+	console.log(data);
 	var html = '<table class="table table-bordered"><thead>';
 	html += "<th>Cantidad</th>";
 	html += "<th>Total</th>";
@@ -111,10 +111,11 @@ function DetalleEjecucion(data){
 			}
 		}
 		html += '</tbody></table>';
+		jQuery('#visorFLujo').append(html);
 	}
 	
 	
-	jQuery('#visorFLujo').append(html);
+	
 	
 	
 }
