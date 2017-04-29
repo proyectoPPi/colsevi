@@ -108,17 +108,4 @@ public class ConfiguracionController extends BaseConfigController{
 		return error;
 	}
 	
-	
-	@SuppressWarnings("unchecked")
-	@RequestMapping("/Eliminar")
-	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		JSONObject result = new JSONObject();
-		Integer id = Integer.parseInt(request.getParameter("id_clasificar_ingrediente"));
-		if(id != null){
-			ColseviDao.getInstance().getClasificarIngredienteMapper().deleteByPrimaryKey(id);
-			result.put("correcto", "Clasificación Eliminada");
-		}
-		ResponseJson(request, response, result);
-	}
-
 }

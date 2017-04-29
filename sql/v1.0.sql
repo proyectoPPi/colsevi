@@ -6,7 +6,6 @@ CREATE TABLE establecimiento(
 	id_establecimiento INT AUTO_INCREMENT,
     id_direccion INT,
     id_telefono INT,
-    id_correo INT,
     nombre VARCHAR (40) NOT NULL,
     descripcion VARCHAR (120),
     hora_inicio VARCHAR(7),
@@ -56,10 +55,8 @@ CREATE TABLE usuario(
 
 CREATE TABLE pagina(
 	id_pagina INT AUTO_INCREMENT,
-    codigo VARCHAR (30) NOT NULL,
     url VARCHAR (50) NOT NULL,
     nombre VARCHAR (50) NOT NULL,
-    icono VARCHAR (50),
     padrePagina VARCHAR(60) DEFAULT NULL,
     menu BOOLEAN DEFAULT FALSE,
     PRIMARY KEY(id_pagina)
@@ -110,7 +107,6 @@ CREATE TABLE correo(
 
 ALTER TABLE establecimiento ADD CONSTRAINT fk_dire FOREIGN KEY (id_direccion) REFERENCES direccion(id_direccion);
 ALTER TABLE establecimiento ADD CONSTRAINT fk_tele FOREIGN KEY (id_telefono) REFERENCES telefono(id_telefono);
-ALTER TABLE establecimiento ADD CONSTRAINT fk_core FOREIGN KEY (id_correo) REFERENCES correo(id_correo);
 
 CREATE TABLE tipo_proveedor(
     id_tipo_proveedor INT AUTO_INCREMENT,
@@ -244,7 +240,6 @@ CREATE TABLE tipo_producto(
 CREATE TABLE producto(
     id_producto INT AUTO_INCREMENT,
     id_tipo_producto INT,
-    referencia VARCHAR(8) DEFAULT NULL,
 	nombre VARCHAR(40) NOT NULL,
     descripcion VARCHAR(120),
     venta DECIMAL(12,2),
