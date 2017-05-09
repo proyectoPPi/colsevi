@@ -25,22 +25,20 @@ import com.colsevi.dao.usuario.model.Usuario;
 import com.colsevi.dao.usuario.model.UsuarioExample;
 
 @Controller
-@RequestMapping("/Usuario/ClienteRegistro")
-public class ClienteRegistroController extends BaseConfigController{
+@RequestMapping("/Usuario/RegistroPersona")
+public class RegistroPersonaController extends BaseConfigController{
 
 	private static final long serialVersionUID = 5049120499336624560L;
 
 	@RequestMapping
 	public String Registro(HttpServletRequest request, ModelMap model){
 		model.addAttribute("tipoDoc", GeneralManager.listaTipoDocumento());
+		model.addAttribute("LRol", GeneralManager.listaRol());
 		String persona = request.getParameter("Persona");
 		if(persona != null){
 			model.addAttribute("bean", getBeanCliente(Integer.parseInt(persona)));
 		}
-		if(getUsuario(request) == null )
-			model.addAttribute("init", "T");
-		
-		return "usuario/RegistroCliente";
+		return "usuario/RegistroPersona";
 	}
 	
 	@RequestMapping("/Grabar")
@@ -109,7 +107,8 @@ public class ClienteRegistroController extends BaseConfigController{
 			}
 			
 			usuario.setClave(sha);
-			usuario.setId_rol(RolE.CLIENTE.getRolE());
+			//usuario.setId_rol();
+			
 			
 			direccion.setBarrio(bean.getBarrio());
 			direccion.setDescripcion(bean.getDescripcion());
