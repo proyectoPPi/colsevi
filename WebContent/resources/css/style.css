@@ -25,6 +25,75 @@ ul {
   list-style: square;
 }
 
+#content-wizard {
+	width: auto;
+	margin: 10px auto;
+	text-align: left;
+	position: relative;
+}
+
+/*progressbar*/
+#progressbar {
+	margin-bottom: 0px;
+	overflow: hidden;
+	/*CSS counters to number the steps*/
+	counter-reset: step;
+	padding-left: 0;
+	margin-left: -7px
+}
+
+#progressbar li {
+	list-style-type: none;
+	color: #BDCCD4;
+	font-size: 12px;
+	width: 80px;
+	float: left;
+	position: relative;
+	text-align: center;
+}
+
+#progressbar li:before {
+	content: counter(step);
+	counter-increment: step;
+	width: 36px;
+	line-height: 33px;
+	display: block;
+	font-size: 14px;
+	color: #ddd;
+	border: solid 1px #ddd;
+	background: #FFFFFF;
+	border-radius: 20px;
+	margin: 0 auto 5px auto;
+	font-weight: normal;
+}
+
+#progressbar li:after {
+	content: '';
+	width: 44px;
+	height: 2px;
+	background: #ddd;
+	position: absolute;
+	left: -42px;
+	top: 18px;
+	z-index: 0; /*put it behind the numbers*/
+	margin-left: 20px;
+}
+
+#progressbar li:first-child:after {
+	content: none;
+}
+
+#progressbar li.active:before, #progressbar li.active:after {
+	background: #18355F;
+	border: solid 1px #18355F;
+	color: white;
+}
+
+#progressbar li.active span {
+	color: #18355F;
+}
+
+
 .list-icons,
 .list {
   list-style: none;

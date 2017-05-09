@@ -29,6 +29,22 @@
 	</div>
 </div>
 
+<div id="content-wizard">
+	<ul id="progressbar">
+		<li class="active"><span>General</span></li>
+		<li><span>Ubicacion</span></li>
+		<li><span>Usuario</span></li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#rootwizard').bootstrapWizard({
+			'tabClass' : 'bwizard-steps'
+		});
+	});
+</script>
+
 <div id="detalleContenido">
 	<div class="light-gray-bg section" id="filtroPedidoWizard">
 		<div class="container">
