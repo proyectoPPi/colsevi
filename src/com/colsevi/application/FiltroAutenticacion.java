@@ -70,6 +70,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			path.startsWith("/Catalogo/Cat") ||
 			path.startsWith("/Dashboard/Admin") ||
 			path.startsWith("/principalBase") ||
+			path.startsWith("/Usuario/RegistroPersona") ||
 			path.startsWith("/Caja") ||
 			path.startsWith(INDEX)
 			){

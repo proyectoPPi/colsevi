@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-  <classPathEntry location="C:\Users\BRAYAN CARDONA\git\colsevi\WebContent\WEB-INF\lib\mysql-connector-java-5.1.18-bin.jar" />
+  <classPathEntry location="C:\Users\ASUS I5\git\colsevi\WebContent\WEB-INF\lib\mysql-connector-java-5.1.18-bin.jar" />
 
   <context id="MyIbatis" targetRuntime="MyBatis3">
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
@@ -13,9 +13,9 @@
         password="root">
     </jdbcConnection>
 
-    <javaModelGenerator targetPackage="com.colsevi.dao.general.model" targetProject="colsevi/src" />
-    <sqlMapGenerator targetPackage="com.colsevi.dao.general.map" targetProject="colsevi/src" />
-    <javaClientGenerator targetPackage="com.colsevi.dao.general.map" targetProject="colsevi/src" type="XMLMAPPER" />
-    <table schema="colsevi" tableName="configuracion"><property name="useActualColumnNames" value="true"/></table>
+    <javaModelGenerator targetPackage="com.colsevi.dao.usuario.model" targetProject="colsevi/src" />
+    <sqlMapGenerator targetPackage="com.colsevi.dao.usuario.map" targetProject="colsevi/src" />
+    <javaClientGenerator targetPackage="com.colsevi.dao.usuario.map" targetProject="colsevi/src" type="XMLMAPPER" />
+    <table schema="colsevi" tableName="pagina"><property name="useActualColumnNames" value="true"/></table>
   </context>
 </generatorConfiguration>

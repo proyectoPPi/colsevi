@@ -14,7 +14,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.colsevi.application.ColseviDao;
-import com.colsevi.application.NavegacionUsuario;
 import com.colsevi.application.SesionUsuario;
 import com.colsevi.dao.usuario.model.Pagina;
 import com.colsevi.dao.usuario.model.PaginaExample;
@@ -26,7 +25,7 @@ public class BaseConfigController implements Serializable {
 	public Map<String, Object> getValoresGenericos(HttpServletRequest request){
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("menu", getMenu(request));
-		mapa.put("sesion", getUsuario(request) != null ? 'T' : 'F');
+		mapa.put("sesion", getUsuario(request));
 
 		return mapa;
 	}
@@ -47,7 +46,7 @@ public class BaseConfigController implements Serializable {
 					}else{
 						menu += "<li>";
 					}
-					menu += "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" onclick=\"HredireccionarVista('" + request.getContextPath()+pag.getUrl() + "')\" >"+pag.getNombre()+"</a>";
+					menu += "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">"+pag.getNombre()+"</a>";
 					
 					if(pag.getPadrePagina() != null && !pag.getPadrePagina().trim().isEmpty()){
 						String[] Padre = pag.getPadrePagina().split(",");
