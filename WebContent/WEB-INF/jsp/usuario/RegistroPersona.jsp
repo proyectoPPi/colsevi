@@ -2,7 +2,8 @@
 <h2>Personas</h2>
 <div class="separator-2"></div>
 
-<form method="post" action="${pageContext.request.contextPath}/Usuario/ClienteRegistro/Grabar.html?" id="Formulario">
+<form method="post" action="${pageContext.request.contextPath}/Usuario/RegistroPersona/Grabar.html?" 
+	id="Formulario" data-modal="">
 		
 	<input type="hidden" id="id_persona" name="id_persona" value="${bean.id_persona}"/>
 	<input type="hidden" id="id_usuario" name="id_usuario" value="${bean.id_usuario}"/>
@@ -23,18 +24,6 @@
 	    </div>
     </div>
     
-    
-
-<div class="col-md-6" id="ROL">
-			<label>* Perfil</label> 
-			<select class="form-control" id="rol" name="rol">
-				<option value="">Seleccione</option>
-				<c:forEach items="${LRol}" var="r">
-					<option value="${r.id_rol}">${r.nombre_rol}</option>
-				</c:forEach>
-			</select>
-		</div>
-		
 	<div class="row">
 		<div class="col-md-6" id="TipoCliente">
 			<label>* Tipo Cliente</label> 
@@ -51,8 +40,18 @@
 			<input type="number" class="form-control" id="documento"name="documento" value="${bean.documento}"/>
 		</div>
 	</div>
+
+	<div class="row">	
+		<div class="col-md-6" id="ROL">
+			<label>* Perfil</label> 
+			<select class="form-control" id="rolPersona" name="rolPersona">
+				<option value="">Seleccione</option>
+				<c:forEach items="${LRol}" var="r">
+					<option value="${r.id_rol}">${r.nombre_rol}</option>
+				</c:forEach>
+			</select>
+		</div>
 	
-	<div class="row">
 		<div class="col-md-6">
 			<label>*Género</label> 
 			<select class="form-control" id="genero" name="genero">
@@ -60,64 +59,68 @@
 				<option value="2">Femenino</option>
 			</select>
 		</div>
-		
-		<div class="col-md-6">
-			<label>*Dirección</label> 
-			<input type="text" class="form-control" id="direccion" name="direccion" value="${bean.direccion}" />
-		</div>
 	</div>
 	
+	<div class="separator with-icon"><i class="fa fa-search bordered"></i></div>
+	
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-xs-12 col-md-4">
+			<label>Dirección</label> 
+			<input type="text" class="form-control" id="direccion" name="direccion" value="${bean.direccion}" />
+		</div>
+		<div class="col-xs-12 col-md-4">
 			<label>Barrio</label> 
 			<input type="text" class="form-control"	id="barrio" name="barrio" value="${bean.barrio}" />
 		</div>
 		
-		<div class="col-md-6">
+		<div class="col-xs-12 col-md-4">
 			<label>Descripción</label> 
 			<input type="text" class="form-control" id="descripcion" name="descripcion" value="${bean.descripcion}" />
 		</div>
 	</div>
 
+	<div class="separator with-icon"><i class="fa fa-phone bordered"></i></div>
+	
 	<div class="row">
-		<div class="col-md-6">
-			<label>Telefono Fijo</label> 
+		<div class="col-xs-12 col-md-4">
+			<label>Fijo</label> 
 			<input type="number" class="form-control" id="telFijo" name="telFijo" value="${bean.telFijo}"/>
 		</div>
 		
-		<div class="col-md-6">
-			<label>Telefono Celular</label> 
+		<div class="col-xs-12 col-md-4">
+			<label>Celular</label> 
 			<input type="number" class="form-control" id="telCel" name="telCel" value="${bean.telCel}"/>
 		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-md-6">
-			<label>Telefono Contacto</label> 
+		
+		<div class="col-xs-12 col-md-4">
+			<label>Contacto</label> 
 			<input type="number" class="form-control" id="telCon" name="telCon" value="${bean.telCon}"/>
 		</div>
-	
 	</div>
 	
-	<h4>Login</h4>
+	<div class="separator with-icon"><i class="fa fa-user bordered"></i></div>
 
-		<div class="col-md-12">
+	<div class="row">	
+		<div class="col-xs-12">
 			<label>* Usuario</label> 
 			<input type="text" class="form-control" id="usuario" name="usuario" value="${bean.usuario}" />
+		</div>	
+		
+		<div class="col-md-6">
+			<label>* Contraseña</label> 
+			<input type="password" class="form-control" id="clave" name="clave" value="${bean.clave}" />
 		</div>
-	
-	<div class="col-md-6">
-		<label>* Contraseña</label> 
-		<input type="password" class="form-control" id="clave" name="clave" value="${bean.clave}" />
-	</div>
-	
-	<div class="col-md-6">
-		<label>* Confirmar contraseña</label> 
-		<input type="password" class="form-control" id="repetir" name="repetir" />
-	</div>
-	
-	<div class="col-xs-12">
-		<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
+		
+		<div class="col-md-6">
+			<label>* Confirmar contraseña</label> 
+			<input type="password" class="form-control" id="repetir" name="repetir" />
+		</div>
+	</div>	
+		
+	<div class="text-right">
+		<div class="col-xs-12">
+			<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
+		</div>
 	</div>
 	
 </form>

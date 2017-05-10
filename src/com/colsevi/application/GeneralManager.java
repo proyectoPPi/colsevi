@@ -8,6 +8,8 @@ import com.colsevi.dao.general.model.Establecimiento;
 import com.colsevi.dao.general.model.EstablecimientoExample;
 import com.colsevi.dao.general.model.TipoTelefono;
 import com.colsevi.dao.general.model.TipoTelefonoExample;
+import com.colsevi.dao.usuario.model.Rol;
+import com.colsevi.dao.usuario.model.RolExample;
 import com.colsevi.dao.usuario.model.TipoDocumento;
 import com.colsevi.dao.usuario.model.TipoDocumentoExample;
 
@@ -23,6 +25,10 @@ public class GeneralManager {
 	
 	public static List<TipoDocumento> listaTipoDocumento(){
 		return ColseviDao.getInstance().getTipoDocumentoMapper().selectByExample(new TipoDocumentoExample());
+	}
+	
+	public static List<Rol> listaRol(){
+		return ColseviDao.getInstance().getRolMapper().selectByExample(new RolExample());
 	}
 	
 	public static String byteToHex(String clave){

@@ -1,10 +1,13 @@
 package com.colsevi.controllers.usuario;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,9 +44,11 @@ public class RegistroPersonaController extends BaseConfigController{
 		return "usuario/RegistroPersona";
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/Grabar")
-	public String Guardar(HttpServletRequest request, ModelMap model, ClienteBean bean){
+	public void Guardar(HttpServletRequest request, HttpServletResponse response, ClienteBean bean) throws IOException{
 		
+		JSONObject resultVista = new JSONObject();
 		SqlSession sesion = null;
 		String error = "";
 		Persona persona = new Persona();
@@ -76,16 +81,18 @@ public class RegistroPersonaController extends BaseConfigController{
 				UsuarioExample UE = new UsuarioExample();
 				UE.createCriteria().andUsuarioEqualTo(bean.getUsuario());
 				if(ColseviDao.getInstance().getUsuarioMapper().selectByExample(UE).size() > 0){
-					model.addAttribute("error", "Ya existe un usuario registrado en el sistema");
-					return Registro(request, model);
+					resultVista.put("error", "Ya existe un usuario registrado en el sistema");
+					ResponseJson(request, response, resultVista);
+					return;
 				}
 			}
 			
 			PersonaExample PE = new PersonaExample();
 			PE.createCriteria().andDocumentoEqualTo(bean.getDocumento());
 			if(ColseviDao.getInstance().getPersonaMapper().selectByExample(PE).size() > 0){
-				model.addAttribute("error", "Ya existe el documento " + bean.getDocumento() + " registrado en el sistema");
-				return Registro(request, model);
+				resultVista.put("error", "Ya existe el documento " + bean.getDocumento() + " registrado en el sistema");
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			
 			if(null != bean.getTipo_doc() && !bean.getTipo_doc().trim().isEmpty())
@@ -96,38 +103,57 @@ public class RegistroPersonaController extends BaseConfigController{
 			if(bean.getClave() != null && !bean.getClave().trim().isEmpty()){
 				sha = GeneralManager.byteToHex(bean.getClave());
 				if(sha == null){
-					model.addAttribute("error", "Contactar al administrador");
-					return Registro(request, model);
+					resultVista.put("error", "Contactar al administrador");
+					ResponseJson(request, response, resultVista);
+					return;
 				}
 			}
 			
 			if(sha == null && persona != null){
-				model.addAttribute("error","Ingresar la clave");
-				return Registro(request, model);
+				resultVista.put("error","Ingresar la clave");
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 			
 			usuario.setClave(sha);
-			//usuario.setId_rol();
+			if(!request.getParameter("rolPersona").trim().isEmpty())
+				usuario.setId_rol(Integer.parseInt(request.getParameter("rolPersona")));
+			else{
+				resultVista.put("error","Seleccionar el rol");
+				ResponseJson(request, response, resultVista);
+				return;
+			}
+				
+			if(!bean.getBarrio().trim().isEmpty())
+				direccion.setBarrio(bean.getBarrio());
 			
+			if(!bean.getDescripcion().trim().isEmpty())
+				direccion.setDescripcion(bean.getDescripcion());
 			
-			direccion.setBarrio(bean.getBarrio());
-			direccion.setDescripcion(bean.getDescripcion());
-			direccion.setDireccion(bean.getDireccion());
+			if(!bean.getDireccion().trim().isEmpty())
+				direccion.setDireccion(bean.getDireccion());
 			
-			telFijo.setTelefono(bean.getTelFijo());
+			if(!bean.getTelFijo().trim().isEmpty())
+				telFijo.setTelefono(bean.getTelFijo());
 			telFijo.setId_tipo_telefono(TipoTelefonoE.FIJO.getTipoTelefonoE());
-			telCel.setTelefono(bean.getTelCel());
+			
+			if(!bean.getTelCel().trim().isEmpty())
+				telCel.setTelefono(bean.getTelCel());
 			telCel.setId_tipo_telefono(TipoTelefonoE.CELULAR.getTipoTelefonoE());
-			telCon.setTelefono(bean.getTelCon());
+			
+			if(!bean.getTelCon().trim().isEmpty())
+				telCon.setTelefono(bean.getTelCon());
 			telCon.setId_tipo_telefono(TipoTelefonoE.CONTACTO.getTipoTelefonoE());
 			
 			if(!error.isEmpty()){
-				model.addAttribute("error", error);
-				return Registro(request, model);
+				resultVista.put("error", error);
+				ResponseJson(request, response, resultVista);
+				return;
 			}
 		}catch(Exception e){
-			model.addAttribute("error", "Ocurrió un error, contactar al administrador");
-			return Registro(request, model);
+			resultVista.put("error", "Ocurrió un error, contactar al administrador");
+			ResponseJson(request, response, resultVista);
+			return;
 		}
 		
 		try{
@@ -187,15 +213,15 @@ public class RegistroPersonaController extends BaseConfigController{
 			}
 			
 			ColseviDaoTransaccion.RealizarCommit(sesion);
-			model.addAttribute("correcto", "Cliente guardado Correctamente");
+			resultVista.put("correcto", "Cliente guardado Correctamente");
 		}catch(Exception e){
-			model.addAttribute("error", "Ocurrió un error, contactar al administrador");
+			resultVista.put("error", "Ocurrió un error, contactar al administrador");
 			ColseviDaoTransaccion.ErrorRollback(sesion);
 		}
 		ColseviDaoTransaccion.CerrarSesion(sesion);
-		model.addAttribute("bean", bean);
+//		resultVista.put("bean", bean);
 		
-		return Registro(request, model);
+		ResponseJson(request, response, resultVista);
 	}
 	
 	public ClienteBean getBeanCliente(Integer persona){

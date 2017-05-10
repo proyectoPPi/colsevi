@@ -34,7 +34,7 @@
 						<input type="hidden" id="id_clasificar_ingrediente" name="id_clasificar_ingrediente"/>
 						<div class="form-group">
 							<label>*C&#243;digo</label>
-							<input type="text" class="form-control" id="codigo" name="codigo" data-bv-notempty="true" required="required"/>
+							<input type="text" readonly class="form-control" id="codigo" name="codigo" data-bv-notempty="true" required="required"/>
 						</div>
 						<div class="form-group">
 							<label>*Valor</label>
@@ -62,4 +62,4 @@
 	titulos["nombre"] = "Nombre";
 	titulos["descripcion"] = "Descripci&#243;n";
 </script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/producto/Clasificar.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/general/Configuracion.js"></script>

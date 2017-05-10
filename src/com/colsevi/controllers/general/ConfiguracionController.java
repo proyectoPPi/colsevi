@@ -84,9 +84,6 @@ public class ConfiguracionController extends BaseConfigController{
 				if(bean.getCodigo() != null){
 					ColseviDao.getInstance().getConfiguracionMapper().updateByPrimaryKey(bean);
 					result.put("correcto", "Clasificación Actualizada");
-				}else{
-					ColseviDao.getInstance().getConfiguracionMapper().insert(bean);
-					result.put("correcto", "Clasificación insertada");
 				}
 			}catch (Exception e) {
 				result.put("error", "Contactar al administrador");
