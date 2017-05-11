@@ -15,7 +15,10 @@ jQuery(document).ready(function(){
 				required: true
 			},
 			documento:{
-				required: true
+				required: true,
+				maxlength: 10,
+				number: true,
+				digits: true
 			},
 			usuario:{
 				required: true
@@ -26,6 +29,16 @@ jQuery(document).ready(function(){
 			repetir:{
 				required: true,
 				equalTo: "#clave"
+			},
+			telFijo:{
+				maxlength: 10,
+				number: true,
+				digits: true
+			},
+			telCel:{
+				maxlength: 10,
+				number: true,
+				digits: true
 			}
 		}  
      });
