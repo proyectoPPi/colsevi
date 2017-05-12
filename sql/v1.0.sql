@@ -173,6 +173,7 @@ CREATE TABLE unidad_peso(
     id_unidad_peso INT AUTO_INCREMENT,
     id_unidad_medida INT NOT NULL,
     nombre VARCHAR(50) NOT NULL,
+    codigo VARCHAR(20) DEFAULT '',
     descripcion VARCHAR(80) DEFAULT '',
     PRIMARY KEY(id_unidad_peso),
     CONSTRAINT fk_unidadMedida FOREIGN KEY (id_unidad_medida) REFERENCES unidad_medida(id_unidad_medida)
