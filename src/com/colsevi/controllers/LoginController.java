@@ -51,7 +51,7 @@ public class LoginController extends BaseConfigController {
 			return new ModelAndView("front/index");
 		}
 		//principalBase
-		return new ModelAndView("inicialApp","col",getValoresGenericos(request));
+		return new ModelAndView("redireccionInicial","col",getValoresGenericos(request));
 	}
 	
 	@RequestMapping("/Cerrar")
@@ -63,10 +63,10 @@ public class LoginController extends BaseConfigController {
 			    session.invalidate();
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
-		return login(request, model);
+		return new ModelAndView("front/index");
 	}
 	
 	public String validar(String usuario, String clave){

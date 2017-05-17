@@ -72,4 +72,6 @@ public interface RolMapper {
 	 * @mbg.generated  Fri Apr 28 17:27:38 COT 2017
 	 */
 	int updateByPrimaryKey(Rol record);
+	
+	List<Rol> ListaPorSesionRol(@Param("filtro") Integer filtro);
 }

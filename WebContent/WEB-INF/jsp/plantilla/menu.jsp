@@ -1,32 +1,11 @@
-
 <div class="header-container">
-	<div class="header-top dark" id="menuHeader">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-9 col-sm-6 col-md-3">
-					<div id="header-top-second" class="clearfix">
-						<div class="header-top-dropdown text-right">
-							<div class="btn-group">
-								<a href="${pageContext.request.contextPath}/Usuario/ClienteRegistro.html" class="btn btn-default btn-sm"><i class="fa fa-user pr-10"></i> Registro</a>
-								<a data-toggle="modal" href="#ModalLogin" class="btn btn-default btn-sm"><i class="fa fa-lock pr-10"></i> Login</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	
 	<header class="header fixed clearfix">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-3 ">
 					<div class="header-left clearfix">
 						<div id="logo" class="logo">
-							<a href="${pageContext.request.contextPath}//front/index.html"><img id="logo_img" src="images/logo_light_blue.png" alt="The Project"></a>
-						</div>
-						<div class="site-slogan">
-							Colsevi PPI
+							<a href="${pageContext.request.contextPath}"><img id="logo_img" src="/colsevi/resources/menu.PNG" alt="colsevi"></a>
 						</div>
 					</div>
 				</div>
@@ -50,7 +29,16 @@
 									</ul>
 								</div>
 								
-								<div class="header-dropdown-buttons hidden-xs ">
+								<div class="header-dropdown-buttons" id="Login">
+									<a data-toggle="modal" href="#ModalLogin" >Login</a>
+<%-- 									<a href="${pageContext.request.contextPath}/Usuario/ClienteRegistro.html" class="btn btn-default btn-sm"><i class="fa fa-user pr-10"></i> Registro</a> --%>
+								</div>
+								
+								<div class="header-dropdown-buttons" id="CerrarSesion">
+									<a data-toggle="modal" href="${pageContext.request.contextPath}/login/Cerrar.html">Salir</a>
+								</div>
+								
+								<div class="header-dropdown-buttons hidden ">
 									<div class="btn-group dropdown">
 										<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 											<i class="fa fa-shopping-cart"></i><span class="cart-count default-bg">0</span>
@@ -103,14 +91,4 @@
 			</div>
 		</div>
 	</header>
-	
-	<div id="menuSecundario">
-		<div class="breadcrumb-container">
-			<div class="container">
-				<ol class="breadcrumb">
-					${col.SubMenu}
-				</ol>
-			</div>
-		</div>
-	</div>
 </div>

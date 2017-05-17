@@ -302,14 +302,15 @@ public class CompraController extends BaseConfigController {
 						cxi.setVunitario(new BigDecimal(request.getParameter("vunitario" + (i +1))));
 						beanC.setValor(beanC.getValor().add(cxi.getVunitario()));
 					}else
-						error += "Ingresar el valor unitario</br/>";
+						error += "Ingresar el sub Total</br/>";
 					mp.setCantidad(cxi.getCantidad());
 					mp.setId_unidad_peso(cxi.getId_unidad_peso());
 					mp.setId_ingrediente(cxi.getId_ingrediente());
 					
 					if(request.getParameter("fecha" + (i +1)) != null && !request.getParameter("fecha" + (i +1)).trim().isEmpty()){
-						Date dat = UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha" + (i +1)), true);
-						if(dat.getTime() > beanC.getFecha_compra().getTime()){
+						Date dat = UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha" + (i +1)));
+						Date compare = UtilidadManager.FechaStringConHora_BD(request.getParameter("fecha_compra"));
+						if(dat.getTime() >= compare.getTime()){
 							Calendar calendar = Calendar.getInstance();
 							calendar.setTime(dat);
 							int year = calendar.get(Calendar.YEAR);

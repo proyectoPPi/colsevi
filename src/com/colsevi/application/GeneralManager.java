@@ -1,9 +1,11 @@
 package com.colsevi.application;
 
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
+import com.colsevi.controllers.usuario.RolE;
 import com.colsevi.dao.general.model.Establecimiento;
 import com.colsevi.dao.general.model.EstablecimientoExample;
 import com.colsevi.dao.general.model.TipoTelefono;
@@ -27,8 +29,8 @@ public class GeneralManager {
 		return ColseviDao.getInstance().getTipoDocumentoMapper().selectByExample(new TipoDocumentoExample());
 	}
 	
-	public static List<Rol> listaRol(){
-		return ColseviDao.getInstance().getRolMapper().selectByExample(new RolExample());
+	public static List<Rol> listaRolPorSesion(Integer rol){
+		return ColseviDao.getInstance().getRolMapper().ListaPorSesionRol(rol);
 	}
 	
 	public static String byteToHex(String clave){

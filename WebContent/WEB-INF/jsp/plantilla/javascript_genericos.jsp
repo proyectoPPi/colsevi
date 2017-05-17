@@ -27,8 +27,11 @@
    	sesion['persona'] = '${col.sesion.persona}';
    	sesion['usuario'] = '${col.sesion.usuario}';
    	
-   
-   	if(sesion === 'T'){
-   		jQuery('#menuHeader').hide();
+   	if(sesion['rol'] != ''){
+   		jQuery('#Login').hide();
+   		jQuery('#CerrarSesion').show();
+   	}else{
+   		jQuery('#Login').show();
+   		jQuery('#CerrarSesion').hide();
    	}
 </script>

@@ -35,11 +35,15 @@ public class RegistroPersonaController extends BaseConfigController{
 
 	@RequestMapping
 	public String Registro(HttpServletRequest request, ModelMap model){
-		model.addAttribute("tipoDoc", GeneralManager.listaTipoDocumento());
-		model.addAttribute("LRol", GeneralManager.listaRol());
-		String persona = request.getParameter("Persona");
-		if(persona != null){
-			model.addAttribute("bean", getBeanCliente(Integer.parseInt(persona)));
+		try{
+			model.addAttribute("LRol", GeneralManager.listaRolPorSesion(getUsuario(request).getRol()));
+			model.addAttribute("tipoDoc", GeneralManager.listaTipoDocumento());
+			String persona = request.getParameter("editar");
+			if(persona != null){
+				model.addAttribute("bean", getBeanCliente(Integer.parseInt(persona)));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		return "usuario/RegistroPersona";
 	}
@@ -59,6 +63,7 @@ public class RegistroPersonaController extends BaseConfigController{
 		Telefono telCon = new Telefono();
 		
 		try{
+			String editar = request.getParameter("editar");
 			persona.setNombre(bean.getNombre());
 			persona.setApellido(bean.getApellido());
 			persona.setDocumento(bean.getDocumento());
@@ -76,23 +81,27 @@ public class RegistroPersonaController extends BaseConfigController{
 				if(!bean.getId_telCon().trim().isEmpty())
 					telCon.setId_telefono(Integer.parseInt(bean.getId_telCon()));
 			}else{
-				usuario.setUsuario(bean.getUsuario());
 				
-				UsuarioExample UE = new UsuarioExample();
-				UE.createCriteria().andUsuarioEqualTo(bean.getUsuario());
-				if(ColseviDao.getInstance().getUsuarioMapper().selectByExample(UE).size() > 0){
-					resultVista.put("error", "Ya existe un usuario registrado en el sistema");
-					ResponseJson(request, response, resultVista);
-					return;
+				if(!editar.equals("T")){
+					usuario.setUsuario(bean.getUsuario());
+					UsuarioExample UE = new UsuarioExample();
+					UE.createCriteria().andUsuarioEqualTo(bean.getUsuario());
+					if(ColseviDao.getInstance().getUsuarioMapper().selectByExample(UE).size() > 0){
+						resultVista.put("error", "Ya existe un usuario registrado en el sistema");
+						ResponseJson(request, response, resultVista);
+						return;
+					}
 				}
 			}
 			
-			PersonaExample PE = new PersonaExample();
-			PE.createCriteria().andDocumentoEqualTo(bean.getDocumento());
-			if(ColseviDao.getInstance().getPersonaMapper().selectByExample(PE).size() > 0){
-				resultVista.put("error", "Ya existe el documento " + bean.getDocumento() + " registrado en el sistema");
-				ResponseJson(request, response, resultVista);
-				return;
+			if(!editar.equals("T")){
+				PersonaExample PE = new PersonaExample();
+				PE.createCriteria().andDocumentoEqualTo(bean.getDocumento());
+				if(ColseviDao.getInstance().getPersonaMapper().selectByExample(PE).size() > 0){
+					resultVista.put("error", "Ya existe el documento " + bean.getDocumento() + " registrado en el sistema");
+					ResponseJson(request, response, resultVista);
+					return;
+				}
 			}
 			
 			if(null != bean.getTipo_doc() && !bean.getTipo_doc().trim().isEmpty())
@@ -116,14 +125,15 @@ public class RegistroPersonaController extends BaseConfigController{
 			}
 			
 			usuario.setClave(sha);
-			if(!request.getParameter("rolPersona").trim().isEmpty())
-				usuario.setId_rol(Integer.parseInt(request.getParameter("rolPersona")));
-			else{
-				resultVista.put("error","Seleccionar el rol");
-				ResponseJson(request, response, resultVista);
-				return;
-			}
-				
+				if(!request.getParameter("rolPersona").trim().isEmpty())
+					usuario.setId_rol(Integer.parseInt(request.getParameter("rolPersona")));
+				else{
+					if(!editar.equals("T")){
+						resultVista.put("error","Seleccionar el rol");
+						ResponseJson(request, response, resultVista);
+						return;
+					}
+				}
 			if(!bean.getBarrio().trim().isEmpty())
 				direccion.setBarrio(bean.getBarrio());
 			
@@ -252,9 +262,10 @@ public class RegistroPersonaController extends BaseConfigController{
 		
 		DireccionExample DE = new DireccionExample();
 		DE.createCriteria().andId_personaEqualTo(persona);
-		dir = ColseviDao.getInstance().getDireccionMapper().selectByExample(DE).get(0);
+		List<Direccion> LD = ColseviDao.getInstance().getDireccionMapper().selectByExample(DE);
 		
-		if(dir != null && dir.getId_direccion() != null){
+		if(LD.size() > 0){
+			dir = LD.get(0);
 			bean.setId_direccion(dir.getId_direccion().toString());
 			bean.setDireccion(dir.getDireccion());
 			bean.setBarrio(dir.getBarrio());

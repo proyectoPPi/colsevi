@@ -253,4 +253,18 @@
       codigo_rol = #{codigo_rol,jdbcType=VARCHAR}
     where id_rol = #{id_rol,jdbcType=INTEGER}
   </update>
+  
+  <select id="ListaPorSesionRol" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM rol 
+		WHERE 1 = 1 AND 
+		<if test="filtro == 1">
+	      id_rol in(1,2,3)
+	    </if>
+	    <if test="filtro == 2">
+	      id_rol in(3)
+	    </if>
+	</select>
+  
 </mapper>

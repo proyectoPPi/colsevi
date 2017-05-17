@@ -58,8 +58,8 @@ public class FiltroAutenticacion implements Filter, Serializable{
 
 	private boolean isExcluirVerficacion(String path) {
 
-		if (path.endsWith("jpg")  || path.endsWith("png")  || path.endsWith("gif") ||
-			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") || 
+		if (path.endsWith("jpg")  || path.endsWith("png")  || path.endsWith("gif") || path.endsWith("woff")  ||
+			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") || path.endsWith("PNG")  || 
 			path.startsWith("/login") ||
 			path.startsWith("/Usuario/ClienteRegistro") ||
 			path.startsWith("/Pedido/PedidoWizardStep1") ||
@@ -72,6 +72,7 @@ public class FiltroAutenticacion implements Filter, Serializable{
 			path.startsWith("/principalBase") ||
 			path.startsWith("/Usuario/RegistroPersona") ||
 			path.startsWith("/Caja") ||
+			path.startsWith("/Usuario/Persona") ||
 			path.startsWith(INDEX)
 			){
 			return true;

@@ -49,6 +49,16 @@
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.png</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.PNG</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.woff</url-pattern>
+	</servlet-mapping>
+	
 	
 	<session-config>
   		<session-timeout>60</session-timeout>

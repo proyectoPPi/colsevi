@@ -303,4 +303,11 @@
       apellido = #{apellido,jdbcType=VARCHAR}
     where id_persona = #{id_persona,jdbcType=INTEGER}
   </update>
+  
+  <select id="ListaPersona" parameterType="java.util.Map" resultType="java.util.HashMap">
+  	SELECT P.id_persona, documento, nombre, apellido, usuario 
+	FROM persona P
+	RIGHT JOIN usuario U ON U.id_persona = P.id_persona;
+  </select>  	
+  
 </mapper>

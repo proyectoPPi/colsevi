@@ -69,7 +69,7 @@ function construirTbl(data){
 	}
 	
 	HiniciarAutocompletar(contexto + '/Proveedor/Compra/autocompletar.html?', 'ingredienteText');
-	HDatetimePicker('fecha','YYYY/MM/DD hh:mm');
+	HDatetimePicker('fecha','YYYY-MM-DD');
 	
 	jQuery( "input[id=ingredienteText]" ).autocomplete({
 		  select: function(e, ui) {

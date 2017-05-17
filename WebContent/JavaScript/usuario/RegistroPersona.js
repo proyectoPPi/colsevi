@@ -8,7 +8,7 @@ jQuery(document).ready(function(){
 			apellido: {
 				required: true
 			},
-			rol:{
+			rolPersona:{
 				required: true
 			},
 			tipo_doc:{

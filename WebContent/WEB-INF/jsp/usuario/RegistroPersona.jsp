@@ -11,6 +11,7 @@
 	<input type="hidden" id="id_telFijo" name="id_telFijo" value="${bean.id_telFijo}"/>
    	<input type="hidden" id="id_telCel" name="id_telCel" value="${bean.id_telCel}"/>
     <input type="hidden" id="id_telCon" name="id_telCon" value="${bean.id_telCon}"/>
+    <input type="hidden" id="editar" name="editar"/>
 
 	<div class="row">
 		<div class="col-md-6">
@@ -42,16 +43,17 @@
 	</div>
 
 	<div class="row">	
-		<div class="col-md-6" id="ROL">
-			<label>* Perfil</label> 
-			<select class="form-control" id="rolPersona" name="rolPersona">
-				<option value="">Seleccione</option>
-				<c:forEach items="${LRol}" var="r">
-					<option value="${r.id_rol}">${r.nombre_rol}</option>
-				</c:forEach>
-			</select>
-		</div>
-	
+		<c:if test = "${sesion['rol'] == 1}">
+			<div class="col-md-6" id="ROL">
+				<label>* Perfil</label> 
+				<select class="form-control" id="rolPersona" name="rolPersona">
+					<option value="">Seleccione</option>
+					<c:forEach items="${LRol}" var="r">
+						<option value="${r.id_rol}">${r.nombre_rol}</option>
+					</c:forEach>
+				</select>
+			</div>
+		</c:if>
 		<div class="col-md-6">
 			<label>*Género</label> 
 			<select class="form-control" id="genero" name="genero">
@@ -137,6 +139,8 @@
 			if (TD != '')
 				jQuery('#genero').val(GEN);
 			var U = '${bean.usuario}';
-			if (U != '')
+			if (U != ''){
 				jQuery('#usuario').prop('disabled', true);
+				jQuery('#editar').val('T');
+			}
 		</script>
