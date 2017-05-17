@@ -144,7 +144,7 @@ public class LoginController extends BaseConfigController {
 					mensaje.append("Hemos recibido un pedido para restablecer tu contraseña. <br/>");
 					mensaje.append("Si no has iniciado este pedido, puedes simplemente ignorar este mensaje y ninguna acción será tomada. <br/>");
 					mensaje.append("Para restablecer tu contraseña, haz click en el link abajo: <br/> <br/>");
-					EnviarCorreo.enviar("Resetear tu contraseña", mensaje.toString(), cor.getCorreo());
+					EnviarCorreo.RecuperarContraseña(cor.getCorreo());
 				}
 			}catch(Exception e){
 				cor = null;

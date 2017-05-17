@@ -70,4 +70,11 @@ public class EnviarCorreo {
 	            throw new RuntimeException(e);
 	      }
 	   }
+	 
+	 public static void RecuperarContraseña(String to) {
+		 String asunto = "";
+		 String mensaje = "";
+		 
+		 enviar(asunto,mensaje,to);
+	 }
 }

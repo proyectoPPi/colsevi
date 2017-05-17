@@ -5,7 +5,7 @@
 				<div class="col-md-3 ">
 					<div class="header-left clearfix">
 						<div id="logo" class="logo">
-							<a href="${pageContext.request.contextPath}"><img id="logo_img" src="/colsevi/resources/menu.PNG" alt="colsevi"></a>
+							<a href="${pageContext.request.contextPath}"><img id="logo_img" src="https://raw.githubusercontent.com/proyectoPPi/colsevi/demo1.0/WebContent/resources/menu.PNG" alt="colsevi"></a>
 						</div>
 					</div>
 				</div>

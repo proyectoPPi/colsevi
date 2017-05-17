@@ -16,6 +16,8 @@ public class IniciarDatos extends HttpServlet {
 	    	super.init();
 	    	NavegacionUsuario usuario = new NavegacionUsuario();
 	    	usuario.cargarPermisos();
+	    	ConfiguracionGeneral config = new ConfiguracionGeneral();
+	    	config.cargarData();
 	    	
     	}catch(Exception e){
     	}

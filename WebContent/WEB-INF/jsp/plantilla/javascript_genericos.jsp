@@ -34,4 +34,15 @@
    		jQuery('#Login').show();
    		jQuery('#CerrarSesion').hide();
    	}
+   	
+   	var configuracion = new Array();
+   	configuracion['CANT_REGISTROS_PAGINA'] = '${col.configuracion.CANT_REGISTROS_PAGINA}';
+   	configuracion['DIA_VENCER_INGREDIENTE'] = '${col.configuracion.DIA_VENCER_INGREDIENTE}';
+   	configuracion['CORREO'] = '${col.configuracion.CORREO}';
+   	
+   	// front
+   	configuracion['VER_CONTACTENOS'] = '${col.configuracion.VER_CONTACTENOS}';
+   	configuracion['MISION'] = '${col.configuracion.MISION}';
+   	configuracion['VISION'] = '${col.configuracion.VISION}';
+   	
 </script>

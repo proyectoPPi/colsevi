@@ -14,6 +14,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.colsevi.application.ColseviDao;
+import com.colsevi.application.ConfiguracionGeneral;
 import com.colsevi.application.SesionUsuario;
 import com.colsevi.dao.usuario.model.Pagina;
 import com.colsevi.dao.usuario.model.PaginaExample;
@@ -26,6 +27,7 @@ public class BaseConfigController implements Serializable {
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("menu", getMenu(request));
 		mapa.put("sesion", getUsuario(request));
+		mapa.put("configuracion", ConfiguracionGeneral.getInstance());
 
 		return mapa;
 	}
