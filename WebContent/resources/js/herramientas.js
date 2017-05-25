@@ -64,8 +64,8 @@ function Hformulario(id){
 function enviarFormulario(form){
 	if(form === undefined){
 		form = 'Formulario';
-		form = jQuery('#' + form);
 	}
+	form = jQuery('#' + form);
 	
 	$.ajax({
         type: "POST",

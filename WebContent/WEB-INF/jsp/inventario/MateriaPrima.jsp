@@ -127,7 +127,7 @@
 					</div>
 					<div class="modal-footer">
 						<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
-						<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpliar();">Cerrar</button>
+						<button data-dismiss="modal" class="btn btn-default" type="button" onclick="Limpiar();">Cerrar</button>
 					</div>
 				</div>
 			</form>
@@ -135,19 +135,28 @@
 	</div>
 </div>
 
-
 <div class="modal fade modal-dialog-center " id="CrearMateria" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content-wrap">
-			<form method="post" action="${pageContext.request.contextPath}/Ingrediente/Clasificar/Guardar.html?" id="Formulario" data-modal="CrearMateria" data-tabla="Tabla">
+			<form method="post" action="${pageContext.request.contextPath}/Inventario/MateriaPrima/CrearMateria.html?" 
+				id="FormularioCrearMateria" data-modal="CrearMateria" data-tabla="Tabla">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
-						<h4 class="modal-title">Clasificar...</h4>
+						<h4 class="modal-title">Crear Materia Prima...</h4>
 					</div>
 					<div class="modal-body">
 						<div class="row">
-							<input type="hidden" id="id_clasificar_ingrediente" name="id_clasificar_ingrediente"/>
+							<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+								<label>Establecimiento</label>
+								<select class="form-control" id="establecimientocmp" name="establecimientocmp">
+									<option value="0">Seleccione</option>
+									<c:forEach items="${ListaE}" var="esta">
+										<option value="${esta.id_establecimiento}">${esta.nombre}</option>
+									</c:forEach>
+								</select>
+							</div>
+						
 							<input type="hidden" value="0" id="count" name="count"/>
 							<div class="col-lg-12" style="text-align: right;">
 								<button type="button" class="btn btn-primary" id="adicion">Adicionar</button>
@@ -172,7 +181,48 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-warning" type="submit">Guardar</button>
+						<button class="btn btn-warning" type="button" onclick="validarMateria();">Guardar</button>
+						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade modal-dialog-center " id="EditarMateria" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content-wrap">
+			<form method="post" action="${pageContext.request.contextPath}/Ingrediente/Clasificar/Guardar.html?" 
+				id="FormularioCrearMateria" data-modal="CrearMateria" data-tabla="Tabla">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
+						<h4 class="modal-title">Editar Materia Prima...</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" id="id_lote" name="id_lote" />
+						<div class="row">
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+									<label>*cantidad</label>
+									<input type="text" class="form-control" id="cantidadmp" name="cantidadmp"/>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+									<label>Unidad de Medida</label>
+									<input type="text" class="form-control" id="ummp" name="ummp"/>
+								</div>
+							</div>
+							
+							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+								<label>Establecimiento</label>
+								
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-warning" type="button" onclick="validarMateria();">Guardar</button>
 						<button data-dismiss="modal" class="btn btn-gray-transparent" type="button" onclick="Limpiar();">Cerrar</button>
 						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="Eliminar();">Eliminar</button>
 					</div>
@@ -194,5 +244,18 @@
 	titulos["cantidad"] = "Cantidad";
 	titulos["nombreUp"] = "Unidad de Medida";
 	titulos["fecha_vencimiento"] = "Fecha Vencimiento";
+	titulos["accion"] = "";
+	
+	var accion = new Array();
+	accion['accion'] = [
+  		{
+       		metodo: "EditarMateria",
+       		label: 'Editar'
+   		},
+   		{
+       		metodo: "CargarFormulario",
+       		label: 'Hacer movimiento'
+   		}
+   	];
 </script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/inventario/MateriaPrima.js"></script>

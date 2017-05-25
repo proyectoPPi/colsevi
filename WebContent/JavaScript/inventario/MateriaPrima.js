@@ -22,12 +22,15 @@ function Tabla(pagina){
 		url: contexto + "/Inventario/MateriaPrima/tabla.html?",
 		Id: "#tabla",
 		titulos: titulos,
-		pagina:pagina
+		pagina:pagina,
+		link: true,
+		accion: accion
 	});
 }
 
 function CargarFormulario(Id){
 	HCargarFormulario(Id);
+	jQuery("#ModalFormulario").modal('show');
 }
 
 function validarFormulario(){
@@ -50,18 +53,18 @@ function construirTbl(data){
 	var count = jQuery('#count').val();
 	var html ='<tr>';
 	html += '<td>';
-		html += '<input type="text" class="form-control" id="ingredienteText" sec="idIng' + count + '"/>';
-		html += '<input type="hidden" name="idIng' + count + '" id="idIng' + count + '" />';
+		html += '<input type="text" class="form-control" id="ingredienteTextcmp" sec="idIngcmp' + count + '"/>';
+		html += '<input type="hidden" name="idIngcmp' + count + '" id="idIngcmp' + count + '" />';
 	html += '</td>';
 	html += '<td>';
-		html += '<input type="text" class="form-control" name="cant' + count + '" />';
-		html += '<input type="hidden" name="lote' + count + '" id="lote' + count + '" value="' + lote + '" />';
+		html += '<input type="text" class="form-control" name="cantcmp' + count + '" />';
+		html += '<input type="hidden" name="lotecmp' + count + '" id="lotecmp' + count + '" value="' + lote + '" />';
 	html += '</td>';
 	html += '<td>';
-		html += '<select name="tipo' + count + '" class="form-control">' + medida + '</select>';
+		html += '<select name="tipocmp' + count + '" class="form-control">' + medida + '</select>';
 	html += '</td>';
 	html += '<td>';
-		html += '<input type="text" id="fecha" name="fecha' + count + '" class="form-control"/>';
+		html += '<input type="text" id="fechacmp" name="fechacmp' + count + '" class="form-control"/>';
 	html += '</td>';
 	html += '<td>';
 		html += '<a href="#" onclick="EliminarDet(this);"><i class="fa fa-times-circle fa-2x"></i></a>';
@@ -72,19 +75,18 @@ function construirTbl(data){
 	
 	if(data !== undefined){
 		data['nombreIng'];
-		jQuery( "input[sec*='idIng" + count+ "']" ).val(data['nombreIng']);
-		jQuery( "input[name*='idIng" + count+ "']" ).val(data['id_ingrediente']);
-		jQuery( "input[name*='cant" + count+ "']" ).val(data['cantidad']);
-		jQuery( "input[name*='lote" + count+ "']" ).val(data['lote']);
-		jQuery( "select[name*='tipo" + count+ "']" ).val(data['id_tipo_peso']);
-		jQuery( "input[name*='fecha" + count+ "']" ).val(data['fecha_vencimiento']);
-		jQuery( "input[name*='vunitario" + count+ "']" ).val(data['vunitario']);
+		jQuery( "input[sec*='idIngcmp" + count+ "']" ).val(data['nombreIng']);
+		jQuery( "input[name*='idIngcmp" + count+ "']" ).val(data['id_ingrediente']);
+		jQuery( "input[name*='cantcmp" + count+ "']" ).val(data['cantidad']);
+		jQuery( "input[name*='lotecmp" + count+ "']" ).val(data['lote']);
+		jQuery( "select[name*='tipocmp" + count+ "']" ).val(data['id_tipo_peso']);
+		jQuery( "input[name*='fechacmp" + count+ "']" ).val(data['fecha_vencimiento']);
 	}
 	
-	HiniciarAutocompletar(contexto + '/Proveedor/Compra/autocompletar.html?', 'ingredienteText');
-	HDatetimePicker('fecha','YYYY-MM-DD');
+	HiniciarAutocompletar(contexto + '/Proveedor/Compra/autocompletar.html?', 'ingredienteTextcmp');
+	HDatetimePicker('fechacmp','YYYY-MM-DD');
 	
-	jQuery( "input[id=ingredienteText]" ).autocomplete({
+	jQuery( "input[id=ingredienteTextcmp]" ).autocomplete({
 		  select: function(e, ui) {
 		  this.value = ui.item.value;
 		  jQuery('#' + this.getAttribute('sec')).val(ui.item.id_ingrediente);
@@ -114,3 +116,16 @@ function EliminarDet(option){
 	option.parentNode.parentNode.remove();
 }
 
+function validarMateria(){
+	enviarFormulario('FormularioCrearMateria');
+}
+
+
+function EditarMateria(){
+	var EM = BuscarRegistro(value);
+	
+}
+
+function MovimientoMateria(id){
+	var EM = BuscarRegistro(id);
+}

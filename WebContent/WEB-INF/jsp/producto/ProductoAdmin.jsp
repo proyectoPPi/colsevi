@@ -84,14 +84,10 @@
 			                          <div class="panel-body">
 			                              <div class="tab-content">
 			                                  <div id="producto" class="tab-pane active">
-			                                  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>* Referencia</label>
-													<input type="text" class="form-control" required="required" id="referencia" name="referencia" data-bv-notempty="true"/>
-												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-													<label>* Clasificar</label>
-													<select class="form-control" id="tipoP" required="required" name="tipoP">
-														<option value="0">Tipo Producto</option>
+													<label>* Tipo Producto</label>
+													<select class="form-control" id="tipoP" name="tipoP">
+														<option value="">Seleccione</option>
 														<c:forEach items="${listaTipo}" var="tipo">
 															<option value="${tipo.id_tipo_producto}">${tipo.nombre}</option>	
 														</c:forEach>
@@ -100,15 +96,15 @@
 												
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>* Nombre</label>
-													<input type="text" class="form-control" id="nombre" required="required" name="nombre" data-bv-notempty="true"/>
+													<input type="text" class="form-control" id="nombre" name="nombre"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>* Descripci&#243;n</label>
-													<input type="text" class="form-control" id="descripcion" required="required" name="descripcion" data-bv-notempty="true"/>
+													<input type="text" class="form-control" id="descripcion" name="descripcion"/>
 												</div>
 												<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 													<label>* Precio de venta</label>
-													<input type="number" class="form-control" id="venta" name="venta" required="required" data-bv-notempty="true"/>
+													<input type="number" class="form-control" id="venta" name="venta"/>
 												</div>
 			                                  
 			                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -124,7 +120,7 @@
 			                                  	  
 			                                  	  <div class="col-lg-12">
 			                                  	  		<label>* Cantidad Minima</label>
-			                                  	  		<input type="number" id="cantidadMin" name="cantidadMin" required="required" class="form-control"/>
+			                                  	  		<input type="number" id="cantidadMin" name="cantidadMin" class="form-control"/>
 			                                  	  </div>
 				                                  <div class="col-lg-12" style="text-align: right;">
 													<button type="button" class="btn btn-primary" id="adicion"> Adicionar</button>
@@ -171,7 +167,6 @@
 <script type="text/javascript">
 	titulos = new Array();
 	titulos["id_producto"] = "ID";
-	titulos["referencia"] = "Referencia";
 	titulos["nombre"] = "Nombre";
 	titulos["tipoP"] = "Tipo";
 	titulos["ventaf"] = "Venta";

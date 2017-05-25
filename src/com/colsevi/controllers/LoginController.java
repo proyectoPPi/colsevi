@@ -47,6 +47,10 @@ public class LoginController extends BaseConfigController {
 		if(U != null){
 			HttpSession sesion = request.getSession(true);
 			sesion.setAttribute("sesion", U);
+			Usuario bean = new Usuario();
+			bean.setUsuario(U.getUsuario());
+			bean.setPrimer_login("T");
+			ColseviDao.getInstance().getUsuarioMapper().updateByPrimaryKeySelective(bean);
 		}else{
 			return new ModelAndView("front/index");
 		}

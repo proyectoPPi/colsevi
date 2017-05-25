@@ -1,6 +1,8 @@
 package com.colsevi.controllers.inventario;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -105,6 +107,7 @@ public class MateriaPrimaController extends BaseConfigController{
 				options.put("id_unidad_peso", map.get("id_unidad_peso"));
 				options.put("id_establecimiento", map.get("id_establecimiento"));
 				options.put("id_compra", map.get("id_compra"));
+				options.put("accion", "");
 				
 				result.add(options);
 			}catch(Exception e){
@@ -239,6 +242,91 @@ public class MateriaPrimaController extends BaseConfigController{
 		
 		obj[0] = error;
 		obj[1] = MP;
+		
+		return obj;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/CrearMateria")
+	public void CrearMateria(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		List<MateriaPrima> listaMP = null;
+		JSONObject resultVista = new JSONObject();
+		
+		try{
+			Object[] result = ValidarMateria(request);
+			
+			if(result[0] != null && !result[0].toString().isEmpty()){
+				resultVista.put("error", result[0]);
+				ResponseJson(request, response, resultVista);
+				return;
+			}
+	
+			listaMP = (List<MateriaPrima>) result[2];
+			for(MateriaPrima bean: listaMP){
+				ColseviDao.getInstance().getMateriaPrimaMapper().insertSelective(bean);
+			}
+			resultVista.put("correcto", "Materia Creada");			
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			resultVista.put("correcto", "Contactar al administrador");
+		}
+		
+		ResponseJson(request, response, resultVista);
+	}
+	
+	public Object[] ValidarMateria(HttpServletRequest request){
+		Object[] obj = new Object[3];
+		String error = "";
+		List<MateriaPrima> LMP = new ArrayList<MateriaPrima>();
+		List<Integer> loteList = new ArrayList<Integer>();
+		Integer count = Integer.parseInt(request.getParameter("count"));
+		
+		try{
+			if(count != null && count > 0){
+				for(int i = 0; i < count; i++){
+					if(request.getParameter("idIngcmp" + (i +1)) != null && !request.getParameter("idIngcmp" + (i +1)).trim().isEmpty()){
+						MateriaPrima mp = new MateriaPrima();
+						
+						mp.setCantidad(Double.valueOf(request.getParameter("cantcmp" + (i +1))));
+						mp.setId_unidad_peso(Integer.parseInt(request.getParameter("tipocmp" + (i +1))));
+						mp.setId_ingrediente(Integer.parseInt(request.getParameter("idIngcmp" + (i +1))));
+						
+						if(request.getParameter("fechacmp" + (i +1)) != null && !request.getParameter("fechacmp" + (i +1)).trim().isEmpty()){
+							Date dat = UtilidadManager.FechaStringConHora_BD(request.getParameter("fechacmp" + (i +1)));
+							if(dat.getTime() >= new Date().getTime()){
+								Calendar calendar = Calendar.getInstance();
+								calendar.setTime(dat);
+								int year = calendar.get(Calendar.YEAR);
+								int month = calendar.get(Calendar.MONTH);
+								int day = calendar.get(Calendar.DATE);
+								calendar.set(year, month, day, 23, 59, 59);
+								
+								mp.setFecha_vencimiento(calendar.getTime());
+							}else{
+								error += "La fecha de vencimiento debe ser mayor a la fecha actual<br/>";
+							}
+						}
+						if(request.getParameter("lotecmp" + (i +1)) != null && !request.getParameter("lotecmp" + (i +1)).trim().isEmpty()){
+							mp.setLote(Integer.parseInt(request.getParameter("lotecmp" + (i +1))));
+							loteList.add(mp.getLote());
+						}
+						if(request.getParameter("establecimientocmp") != null && !request.getParameter("establecimientocmp").trim().isEmpty())
+							mp.setId_establecimiento(Integer.parseInt(request.getParameter("establecimientocmp")));
+						else
+							error += "Seleccione un establecimiento<br/>";
+						LMP.add(mp);
+					}
+				}
+			}else{
+				error += "No hay detalle seleccionado";
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+
+		obj[0] = error;
+		obj[1] = loteList;
+		obj[2] = LMP;
 		
 		return obj;
 	}

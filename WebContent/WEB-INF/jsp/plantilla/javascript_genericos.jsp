@@ -1,3 +1,17 @@
+<script type="text/javascript">
+	var configuracion = new Array();
+	configuracion['CANT_REGISTROS_PAGINA'] = '${col.configuracion.CANT_REGISTROS_PAGINA}';
+	configuracion['DIA_VENCER_INGREDIENTE'] = '${col.configuracion.DIA_VENCER_INGREDIENTE}';
+	configuracion['CORREO'] = '${col.configuracion.CORREO}';
+	configuracion['IMAGEN'] = '${col.configuracion.IMAGEN}';
+	
+	// front
+	configuracion['VER_CONTACTENOS'] = '${col.configuracion.VER_CONTACTENOS}';
+	configuracion['MISION'] = '${col.configuracion.MISION}';
+	configuracion['VISION'] = '${col.configuracion.VISION}';
+</script>
+
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.1.custom.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxQueue.js"></script>
@@ -34,15 +48,4 @@
    		jQuery('#Login').show();
    		jQuery('#CerrarSesion').hide();
    	}
-   	
-   	var configuracion = new Array();
-   	configuracion['CANT_REGISTROS_PAGINA'] = '${col.configuracion.CANT_REGISTROS_PAGINA}';
-   	configuracion['DIA_VENCER_INGREDIENTE'] = '${col.configuracion.DIA_VENCER_INGREDIENTE}';
-   	configuracion['CORREO'] = '${col.configuracion.CORREO}';
-   	
-   	// front
-   	configuracion['VER_CONTACTENOS'] = '${col.configuracion.VER_CONTACTENOS}';
-   	configuracion['MISION'] = '${col.configuracion.MISION}';
-   	configuracion['VISION'] = '${col.configuracion.VISION}';
-   	
 </script>

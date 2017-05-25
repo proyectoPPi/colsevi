@@ -65,9 +65,8 @@ public class ProductoManager {
 		
 		for(Map<String, Object> map: listaCliente){
 			opciones = new JSONObject();
-			opciones.put("label", map.get("nombre") + " " + map.get("referencia").toString());
+			opciones.put("label", map.get("nombre"));
 			opciones.put("value", map.get("nombre"));
-			opciones.put("nombreC",map.get("referencia"));
 			opciones.put("id_producto", map.get("id_producto"));
 			opciones.put("descripcion", map.get("descripcion"));
 			

@@ -31,7 +31,6 @@
 						<h4 class="modal-title">Configurar...</h4>
 					</div>
 					<div class="modal-body">
-						<input type="hidden" id="id_clasificar_ingrediente" name="id_clasificar_ingrediente"/>
 						<div class="form-group">
 							<label>*C&#243;digo</label>
 							<input type="text" readonly class="form-control" id="codigo" name="codigo" data-bv-notempty="true" required="required"/>
@@ -58,8 +57,9 @@
 		
 <script type="text/javascript">
 	titulos = new Array();
-	titulos["id_clasificar_ingrediente"] = "ID";
-	titulos["nombre"] = "Nombre";
+	titulos["codigo"] = "ID";
+	titulos["codigo"] = "Nombre";
+	titulos["valor"] = "Valor";
 	titulos["descripcion"] = "Descripci&#243;n";
 </script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/general/Configuracion.js"></script>
