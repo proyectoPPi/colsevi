@@ -8,4 +8,4 @@ Este proyecto esta enfocado a la parte de toma de pedidos, como contable.
 
 
 
-V1.9.100 Version inicial
+V1.9.102 Version inicial
