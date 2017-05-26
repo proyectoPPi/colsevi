@@ -117,6 +117,13 @@
 			<label>* Confirmar contraseña</label> 
 			<input type="password" class="form-control" id="repetir" name="repetir" />
 		</div>
+		<div class="col-md-6">
+			<label>* Estado</label> 
+			<select class="form-control" id="estado" name="estado" required="required">
+				<option value="1">Activo</option>
+				<option value="2">Inactivo</option>
+			</select>
+		</div>
 	</div>	
 		
 	<div class="text-right">

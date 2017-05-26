@@ -68,6 +68,7 @@ public class RegistroPersonaController extends BaseConfigController{
 			persona.setApellido(bean.getApellido());
 			persona.setDocumento(bean.getDocumento());
 			persona.setGenero(bean.getGenero());
+			usuario.setEstado(bean.getEstado());
 			if(null != bean.getId_persona() && !bean.getId_persona().trim().isEmpty()){
 				persona.setId_persona(Integer.parseInt(bean.getId_persona()));
 				usuario.setId_usuario(Integer.parseInt(bean.getId_usuario()));

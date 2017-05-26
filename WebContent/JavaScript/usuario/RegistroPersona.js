@@ -39,6 +39,9 @@ jQuery(document).ready(function(){
 				maxlength: 10,
 				number: true,
 				digits: true
+			},
+			estado:{
+				required: true,
 			}
 		}  
      });
