@@ -442,3 +442,15 @@ CREATE TABLE plato(
     PRIMARY KEY(id_plato),
     CONSTRAINT fk_estabPlato FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento)
 );
+
+
+ALTER TABLE plato add valor DECIMAL(12,2);
+
+CREATE TABLE plato_x_tipo_producto(
+	id_plato INT NOT NULL,
+    id_tipo_producto INT NOT NULL,
+   	cantidad INT NOT NULL,
+   
+    CONSTRAINT fk_plat_x_tip_prod FOREIGN KEY (id_plato) REFERENCES plato(id_plato),
+    CONSTRAINT fk_tip_prod FOREIGN KEY (id_tipo_producto) REFERENCES tipo_producto(id_tipo_producto)
+);
