@@ -128,10 +128,11 @@ public class CompraController extends BaseConfigController {
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject(), labels = new JSONObject();
 		
-		if(listaCompra != null && listaCompra.size() >0){
-			for (Map<String,Object> bean : listaCompra) {
-				opciones = new JSONObject();
-				labels = new JSONObject();
+		for (Map<String,Object> bean : listaCompra) {
+			opciones = new JSONObject();
+			labels = new JSONObject();
+
+			try{
 				opciones.put("id_compra", bean.get("id_compra"));
 				opciones.put("compra", bean.get("id_compra"));
 				opciones.put("valor", bean.get("valor"));
@@ -140,7 +141,7 @@ public class CompraController extends BaseConfigController {
 				opciones.put("pagado", bean.get("pagado"));
 				opciones.put("motivo", bean.get("motivo"));
 				opciones.put("Estado", bean.get("estado"));
-
+	
 				labels = new JSONObject();
 				labels.put("label", bean.get("nombreProv"));
 				labels.put("value", bean.get("id_proveedor"));
@@ -153,9 +154,10 @@ public class CompraController extends BaseConfigController {
 				
 				mapa.put("compra", bean.get("id_compra"));
 				opciones.put("detalle", subIng(ColseviDao.getInstance().getCompraXIngredienteMapper().SelectDataView(mapa)));
-				
-				resultado.add(opciones);
+			}catch(Exception e){
+				continue;
 			}
+			resultado.add(opciones);
 		}
 		return resultado;
 	}

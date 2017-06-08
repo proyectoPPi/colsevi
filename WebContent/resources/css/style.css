@@ -7603,6 +7603,10 @@ h6.media-heading {
   .full-text-container.left {
     text-align: right;
   }
+  
+  .text-right {
+    text-align: right;
+  }
 
   .full-text-container.left * {
     margin-left: auto;

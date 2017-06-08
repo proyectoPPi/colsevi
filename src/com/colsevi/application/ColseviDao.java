@@ -32,6 +32,8 @@ import com.colsevi.dao.pedido.map.EstadoPedidoMapper;
 import com.colsevi.dao.pedido.map.PedidoMapper;
 import com.colsevi.dao.producto.map.IngredienteMapper;
 import com.colsevi.dao.producto.map.IngredienteXProductoMapper;
+import com.colsevi.dao.producto.map.PlatoMapper;
+import com.colsevi.dao.producto.map.PlatoXTipoProductoMapper;
 import com.colsevi.dao.producto.map.PreparacionRecetaMapper;
 import com.colsevi.dao.producto.map.ProductoMapper;
 import com.colsevi.dao.producto.map.RecetaMapper;
@@ -91,6 +93,8 @@ public class ColseviDao {
 	private CajaMapper CajaMapper;
 	private UnidadMedidaMapper unidadMedidaMapper;
 	private ConfiguracionMapper configuracionMapper;
+	private PlatoMapper platoMapper;
+	private PlatoXTipoProductoMapper platoXTipoProductoMapper;
 
 	
 	private static ColseviDao current = null;
@@ -161,6 +165,8 @@ public class ColseviDao {
 		CajaMapper = (CajaMapper) beanFactoryMyBatis.getBean("CajaMapper");
 		unidadMedidaMapper = (UnidadMedidaMapper) beanFactoryMyBatis.getBean("unidadMedidaMapper");
 		configuracionMapper = (ConfiguracionMapper) beanFactoryMyBatis.getBean("configuracionMapper");
+		platoMapper = (PlatoMapper) beanFactoryMyBatis.getBean("platoMapper");
+		platoXTipoProductoMapper = (PlatoXTipoProductoMapper) beanFactoryMyBatis.getBean("platoXTipoProductoMapper");
 	}
 
 	public CajaMapper getCajaMapper() {
@@ -497,6 +503,22 @@ public class ColseviDao {
 
 	public void setConfiguracionMapper(ConfiguracionMapper configuracionMapper) {
 		this.configuracionMapper = configuracionMapper;
+	}
+
+	public PlatoMapper getPlatoMapper() {
+		return platoMapper;
+	}
+
+	public void setPlatoMapper(PlatoMapper platoMapper) {
+		this.platoMapper = platoMapper;
+	}
+
+	public PlatoXTipoProductoMapper getPlatoXTipoProductoMapper() {
+		return platoXTipoProductoMapper;
+	}
+
+	public void setPlatoXTipoProductoMapper(PlatoXTipoProductoMapper platoXTipoProductoMapper) {
+		this.platoXTipoProductoMapper = platoXTipoProductoMapper;
 	}
 	
 }

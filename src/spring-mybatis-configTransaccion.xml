@@ -53,6 +53,9 @@
 		<mapper resource="com/colsevi/dao/usuario/map/PaginaXRolMapper.xml" />	
 		<mapper resource="com/colsevi/dao/usuario/map/TipoDocumentoMapper.xml" />
 		<mapper resource="com/colsevi/dao/caja/map/CajaMapper.xml"/>
+		<mapper resource="com/colsevi/dao/general/map/ConfiguracionMapper.xml"/>
+		<mapper resource="com/colsevi/dao/producto/map/PlatoMapper.xml"/>
+		<mapper resource="com/colsevi/dao/producto/map/PlatoXTipoProductoMapper.xml"/>
 						
 	</mappers>
 </configuration>
