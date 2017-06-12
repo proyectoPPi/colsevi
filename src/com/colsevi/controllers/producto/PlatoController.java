@@ -87,6 +87,7 @@ public class PlatoController extends BaseConfigController{
 		return resultado;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public JSONArray cargarDetalle(Integer id_plato){
 		JSONArray resultado = new JSONArray();
 		JSONObject opciones = new JSONObject();
@@ -125,7 +126,11 @@ public class PlatoController extends BaseConfigController{
 			}
 			
 			if(bean != null && bean.getId_plato() != null){
-				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.producto.map.PlatoMapper.updateSelective", bean);
+				PlatoXTipoProductoExample ptpe = new PlatoXTipoProductoExample();
+				ptpe.createCriteria().andId_platoEqualTo(bean.getId_plato());
+				ColseviDaoTransaccion.Eliminar(sesion, "com.colsevi.dao.producto.map.PlatoXTipoProductoMapper.deleteByExample", ptpe);
+				
+				ColseviDaoTransaccion.Actualizar(sesion, "com.colsevi.dao.producto.map.PlatoMapper.updateByPrimaryKeySelective", bean);
 				resultVista.put("correcto", "Plato insertado");
 			}else{
 				ColseviDaoTransaccion.Insertar(sesion, "com.colsevi.dao.producto.map.PlatoMapper.insertSelective", bean);
@@ -138,7 +143,6 @@ public class PlatoController extends BaseConfigController{
 			}
 			
 			ColseviDaoTransaccion.RealizarCommit(sesion);
-			
 		}catch (Exception e) {
 			logger.error(e.getMessage());
 			resultVista.put("error", "Contactar al administrador");
@@ -147,5 +151,29 @@ public class PlatoController extends BaseConfigController{
 		
 		ColseviDaoTransaccion.CerrarSesion(sesion);
 		ResponseJson(request, response, resultVista);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/Eliminar")
+	public void Eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject result = new JSONObject();
+		String id = request.getParameter("id_plato");
+		if(id != null){
+			try {
+
+				PlatoXTipoProductoExample ptpe = new PlatoXTipoProductoExample();
+				ptpe.createCriteria().andId_platoEqualTo(Integer.parseInt(id));
+				ColseviDao.getInstance().getPlatoXTipoProductoMapper().deleteByExample(ptpe);
+				
+				ColseviDao.getInstance().getPlatoMapper().deleteByPrimaryKey(Integer.parseInt(id));
+				
+				result.put("correcto", "Establecimiento Eliminado");
+			}catch(Exception e){
+				logger.error(e.getMessage());
+				result.put("error", "Contacte al Administrador");
+			}
+		}
+		
+		ResponseJson(request, response, result);
 	}
 }

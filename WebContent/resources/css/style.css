@@ -244,8 +244,7 @@ td > span > a{
 }
 
 .header {
-  border-top: 1px solid #ffffff;
-  border-bottom: 2px solid #f1f1f1;
+  border-bottom: 1px solid #f1f1f1;
   background-color: #fcfcfc;
 }
 
@@ -5621,7 +5620,6 @@ fieldset[disabled] .form-control {
   padding: 10px 20px;
   font-size: 14px;
   color: #333333;
-  border-bottom: 1px solid #f7f7f7;
   -webkit-transition: none;
   -o-transition: none;
   transition: none;
@@ -5772,17 +5770,6 @@ header .dropdown-menu > li.active > a i.fa-circle-o:before {
 
 /* Arrow for parent menu item
 ------------------------------ */
-.dropdown > a:before {
-  font-family: 'FontAwesome';
-  content: "\f107";
-  position: absolute;
-  left: auto;
-  top: 31px;
-  right: 6px;
-  line-height: 1;
-  color: #d1d1d1;
-  font-size: 14px;
-}
 
 .header.centered .dropdown > a:before {
   top: 18px;
@@ -5802,21 +5789,6 @@ header .dropdown-menu > li.active > a i.fa-circle-o:before {
 }
 
 .transparent-header .header:not(.dark) .navbar-default .navbar-nav > .dropdown.open > a:before {
-  color: #09afdf;
-}
-
-.dropdown .dropdown > a:before,
-.header.centered .dropdown .dropdown > a:before {
-  content: "\f105";
-  right: 10px;
-  top: 13px;
-  margin-left: 0;
-  visibility: visible;
-  color: #666;
-}
-
-.dropdown .dropdown.open > a:before,
-.header.centered:not(.dark) .dropdown .dropdown.open > a:before {
   color: #09afdf;
 }
 
@@ -9124,15 +9096,6 @@ h6.media-heading {
   border: 1px solid #f1f1f1;
   z-index: 101;
 }
-/* second level menu item */
-.dropdown-menu > li > a {
-  padding: 10px 20px;
-  font-size: 14px;
-  color: $gray-dark;
-  border-bottom: 1px solid #f7f7f7;
-  @include transition (none);
-  position: relative;
-}
 /* second level menu item on focus/hover and when opened */
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus,
@@ -9267,18 +9230,6 @@ header .dropdown-menu > li.active > a i.fa-circle-o:before {
 }
 /* Arrow for parent menu item
 ------------------------------ */
-.dropdown > a:before {
-  font-family: 'FontAwesome';
-  content: "\f107";
-  position: absolute;
-  left: auto;
-  top: 31px;
-  right: 6px;
-  line-height: 1;
-  color: #d1d1d1;
-  font-size: 14px;
-}
-
 .header.centered .dropdown > a:before {
   top: 18px;
 }

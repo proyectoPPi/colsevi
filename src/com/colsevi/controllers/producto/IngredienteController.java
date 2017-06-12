@@ -162,6 +162,7 @@ public class IngredienteController extends BaseConfigController {
 				}
 			}
 		}catch(Exception e){
+			logger.error(e.getMessage());
 			resultVista.put("error", "Contacte al Administrador");
 		}
 		ResponseJson(request, response, resultVista);
