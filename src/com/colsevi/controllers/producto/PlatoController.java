@@ -50,7 +50,7 @@ public class PlatoController extends BaseConfigController{
 			opciones.put("datos", ConstruirJson(ColseviDao.getInstance().getPlatoMapper().selectByExample(new PlatoExample())));
 			opciones.put("total", ColseviDao.getInstance().getPlatoMapper().countByExample(new PlatoExample()));
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		ResponseJson(request, response, opciones);
@@ -78,6 +78,7 @@ public class PlatoController extends BaseConfigController{
 				opciones.put("detalle", cargarDetalle(bean.getId_plato()));
 				
 			}catch(Exception e){
+				logger.error(e.getMessage());
 				continue;
 			}
 			

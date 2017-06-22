@@ -26,7 +26,7 @@
 
 <div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1"	 
 	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-sm">
 		<div class="modal-content-wrap">
 			<form method="post" action="${pageContext.request.contextPath}/Plato/Guardar.html?" 
 				id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">
@@ -38,15 +38,15 @@
 					<div class="modal-body">
 						<input type="hidden" id="id_plato" name="id_plato"/>
 						<div class="row">
-							<div class="col-xs-12 col-md-6">
+							<div class="col-xs-12">
 								<label>*Nombre</label>
 								<input type="text" class="form-control" id="nombre" name="nombre"/>
 							</div>
-							<div class="col-xs-12 col-md-6">
+							<div class="col-xs-12">
 								<label>*Valor</label>
 								<input type="text" class="form-control" id="valor" name="valor"/>
 							</div>
-							<div class="col-xs-12 col-sm-6">
+							<div class="col-xs-12">
 								<label>*Establecimiento</label>
 								<select class="form-control" id="id_establecimiento" name="id_establecimiento">
 									<option value="">Seleccione</option>
@@ -56,6 +56,7 @@
 								</select>
 							</div>
 						</div>
+						<br/>
 						<div class="row">
 							<div class="col-xs-12 text-right">
 								<a onclick="iniciarTipoProducto();"><i class="fa fa-plus-circle fa-2x"></i></a>

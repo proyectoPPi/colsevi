@@ -141,8 +141,8 @@ ul {
 }
 
 .table-colored > thead > tr > th {
-  border-color: #331d08;
-  background-color: #331d08;
+  border-color: #ffb347 !important;
+  background-color: #ffb347;
   color: #ffffff;
 }
 

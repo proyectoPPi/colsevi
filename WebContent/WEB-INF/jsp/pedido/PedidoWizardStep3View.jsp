@@ -2,6 +2,15 @@
 <h1 class="page-title">Verificar</h1>
 <div class="separator-2"></div>
 
+<div id="content-wizard">
+	<ul id="progressbar">
+		<li class="active"><span>General</span></li>
+		<li class="active"><span>Verificar</span></li>
+		<li class="active"><span>Usuario</span></li>
+	</ul>
+</div>
+
+
 <form action="#" method="post" id="continuar">
 	<input type="hidden" id="secuencia" name="secuencia" value="${secuencia}"/>
 	

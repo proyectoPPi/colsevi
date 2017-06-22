@@ -1,8 +1,20 @@
 jQuery(document).ready(function(){
-	Hformulario('formularioMotivo');
 	jQuery('#detalleContenido').hide();
 	jQuery("#ModalUbicacion").modal('show');
+	
+	$('#formularioMotivo').validate({
+		rules: {
+			establecimiento: {
+				required : true
+			}
+		}  
+     });
 });
+
+function validarFormulario(){
+	if($('#formularioMotivo').valid())
+		enviarFormulario('formularioMotivo');
+}
 
 function detalle(secuencia){
 	jQuery("#consecutivo, #sec").val(secuencia);

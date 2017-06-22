@@ -13,7 +13,7 @@
 					<div class="modal-body">
 						<div class="form-group">
 		                     <select class="form-control" id="establecimiento" name="establecimiento">
-								<option value="0">Por favor seleccione un establecimiento</option>
+								<option value="">Por favor seleccione un establecimiento</option>
 								<c:forEach items="${establecimiento}" var="est">
 									<option value="${est.id_establecimiento}">${est.nombre}</option>
 								</c:forEach>
@@ -21,7 +21,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-warning" type="submit">Guardar</button>
+						<button class="btn btn-warning" type="button" onclick="validarFormulario();">Guardar</button>
 					</div>
 				</div>
 			</form>

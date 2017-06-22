@@ -1,15 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
 <div id="content-wizard">
 	<ul id="progressbar">
-		<li><span>General</span></li>
+		<li class="active"><span>General</span></li>
 		<li class="active"><span>Verificar</span></li>
 		<li><span>Usuario</span></li>
 	</ul>
 </div>
-
-
 
 <h1 class="page-title">Verificar</h1>
 <div class="separator-2"></div>

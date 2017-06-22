@@ -213,7 +213,7 @@ function HTabla(opciones){
 		}
 		var html = ""; 
 		html = '<section id="flip-scroll">';
-		html += '<table class="table table-bordered table-striped cf"><thead class="cf"><tr>';
+		html += '<table class="table table-bordered table-colored cf"><thead class="cf"><tr>';
 		var count = 0;
 		for(k in titulos){
 			count ++;
