@@ -196,4 +196,8 @@
 		<property value="com.colsevi.dao.producto.map.PlatoXTipoProductoMapper" name="mapperInterface" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	<bean id="mensajeriaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property value="com.colsevi.dao.general.map.MensajeriaMapper" name="mapperInterface" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 </beans>

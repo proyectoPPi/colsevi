@@ -31,6 +31,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.validate-1.11.1.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/Chart.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxfileupload.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
    
 <script type="text/javascript">

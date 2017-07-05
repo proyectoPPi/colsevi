@@ -1,5 +1,8 @@
 package com.colsevi.controllers.producto;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,12 +20,17 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.colsevi.application.ColseviDao;
 import com.colsevi.application.ColseviDaoTransaccion;
+import com.colsevi.application.FTPManager;
 import com.colsevi.application.ProductoManager;
 import com.colsevi.application.UtilidadManager;
 import com.colsevi.application.ingredienteManager;
+import com.colsevi.application.validadorGeneral;
 import com.colsevi.controllers.BaseConfigController;
 import com.colsevi.dao.catalogo.model.Catalogo;
 import com.colsevi.dao.catalogo.model.CatalogoExample;
@@ -178,6 +186,10 @@ public class ProductoAdminController extends BaseConfigController {
 				bean.setCantidadMin(Integer.parseInt(request.getParameter("cantidadMin")));
 			else
 				error += "Ingresar la cantidad";
+			
+			if(request.getParameter("archivoCargado") != null) {
+				bean.setImagen(request.getParameter("archivoCargado"));
+			}
 			
 			String[] ingrediente = request.getParameterValues("idIng");
 			String[] cantidad = request.getParameterValues("cant");
@@ -499,5 +511,42 @@ public class ProductoAdminController extends BaseConfigController {
 		
 		ResponseArray(request, response, catalogo);
 	}
+	
+	@RequestMapping("/subirArchivos")
+	public @ResponseBody String  cargarArchivo(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+//		boolean esXSSAttack = !checkXSSAttack(file.getName(), request);
+//		if(!esXSSAttack) {
+//			return "";
+//		}
+		
+		if(!file.isEmpty() && file.getSize() > 3) {
+			try {
+				if(file.getSize() <= 7000000) {
+				    return FTPManager.cargarArchivos(file.getInputStream(), ".png", "I");
+				}else {
+					logger.error("Error en la carga del arhivo -- Supera el limite esperado");
+					return "";
+				}
+			}catch (Exception e) {
+				// TODO: handle exception
+				return "";
+			}
+		}else {
+			return "";
+		}
+	}
+	
+	private boolean checkXSSAttack(String fileName, HttpServletRequest request) {
+		Boolean result = true;
+		
+		result = validadorGeneral.validateXSS(fileName);
+		if(!result) {
+			
+		}
+		
+		return result;
+		
+	}
+
 	
 }

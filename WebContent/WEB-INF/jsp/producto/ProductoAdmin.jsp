@@ -65,6 +65,7 @@
 					<div class="modal-body">
 						<div class="row">
 							<input type="hidden" id="id_producto" name="id_producto"/>
+							<input type="hidden" id="archivoCargado" name="archivoCargado"/>
 							
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								<section class="panel">
@@ -106,15 +107,34 @@
 													<label>* Precio de venta</label>
 													<input type="number" class="form-control" id="venta" name="venta"/>
 												</div>
-			                                  
-			                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-													<label>Imagen</label>
-													<input type="file" id="fileview" name="fileview" class="invisibleUpload"/> 
-													<div id="image">
-														<span class="badge bg-warning" id="localImage">local</span>
+												<div class="row">
+													<div id="uploadFileDiv" class="col-xs-6">
+														<label for="uploadFile">subir*</label> 
+														<div data-provides="fileinput" class="fileinput fileinput-new input-group" id="fileDivComplete">
+															<div id='divFileName' class="form-control" readonly>
+																<i class="fa fa-file"></i> <span class="fileinput-filename" id='idFileName'></span>
+															</div>
+															<span class="input-group-addon btn btn-default btn-file">
+																<span class="fileinput-new">Cargar archivo</span> 
+																<span class="fileinput-exists">33333</span> 
+																<input type="file" id="file" name="file" />
+															</span> 
+															<a onclick="removeFile()" class="input-group-addon btn btn-default fileinput-exists" href="#"> 444444</a>
+														</div>
+														<div id="uploadFileError" class="error-message">
+															555
+														</div>
+														<div id="wrongFileType" class="error-message">
+															66666
+														</div>
+														<div id="sizeFileType" class="error-message">
+															77777
+														</div>
 													</div>
 												</div>
-			                                  </div>
+
+
+											</div>
 			                                  <div id="ingview" class="tab-pane">
 			                                  	  <input type="hidden" value="0" id="count" name="count"/>
 			                                  	  

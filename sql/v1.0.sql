@@ -244,7 +244,7 @@ CREATE TABLE producto(
 	nombre VARCHAR(40) NOT NULL,
     descripcion VARCHAR(120) DEFAULT '',
     venta DECIMAL(12,2),
-    imagen VARCHAR (50) DEFAULT 'imagenFotoProducto.jpg',
+    imagen VARCHAR (50) DEFAULT 'producto.jpg',
     cantidadMin INT NOT NULL,
     PRIMARY KEY(id_producto),
     CONSTRAINT fk_tipo_producto_Producto FOREIGN KEY (id_tipo_producto) REFERENCES tipo_producto(id_tipo_producto)
@@ -443,14 +443,19 @@ CREATE TABLE plato(
     CONSTRAINT fk_estabPlato FOREIGN KEY (id_establecimiento) REFERENCES establecimiento(id_establecimiento)
 );
 
-
 ALTER TABLE plato add valor DECIMAL(12,2);
 
 CREATE TABLE plato_x_tipo_producto(
 	id_plato INT NOT NULL,
     id_tipo_producto INT NOT NULL,
    	cantidad INT NOT NULL,
-   
     CONSTRAINT fk_plat_x_tip_prod FOREIGN KEY (id_plato) REFERENCES plato(id_plato),
     CONSTRAINT fk_tip_prod FOREIGN KEY (id_tipo_producto) REFERENCES tipo_producto(id_tipo_producto)
+);
+
+CREATE TABLE mensajeria(
+    codigo VARCHAR(100) NOT NULL,
+    asunto VARCHAR(100) NOT NULL DEFAULT '',
+    mensaje VARCHAR(10000) DEFAULT '',
+    PRIMARY KEY(codigo)
 );

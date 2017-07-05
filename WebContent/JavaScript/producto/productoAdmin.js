@@ -3,6 +3,7 @@ jQuery(document).ready(function(){
 	Hformulario();
 	HiniciarAutocompletar(contexto + '/Producto/Admin/autocompletar.html?', 'prodF');
 	jQuery('#dynamic').hide();
+	cargarArchivo();
 });
 
 function Tabla(pagina){
@@ -25,7 +26,7 @@ function Tabla(pagina){
 
 function Limpiar(){
 	HLimpiar();
-	jQuery('#clasificar, #tipoP, #count').val(0);
+	jQuery('#clasificar, #tipoP, #count').val('');
 	jQuery('#IngDynamic > section > table > tbody > tr').remove();
 	jQuery('#count').val(1);
 	construirTabla();
@@ -174,3 +175,22 @@ function validarFormulario(){
 		enviarFormulario();
 }
 
+
+function cargarArchivo(){
+	$('input[type="file"]').ajaxfileupload({
+		'action' : contexto + '/subirArchivos',
+		onSubmit : function(filename) {
+			return true;
+		},
+		onComplete : function(filename,	response) {
+			
+			alert(filename);
+			if(filename != "-1"){
+				jQuery('#archivoCargado').val(filename);
+			}else{
+				//Error
+			}
+		}
+	});
+
+}

@@ -16,6 +16,7 @@ import com.colsevi.application.GeneralManager;
 import com.colsevi.application.SesionUsuario;
 import com.colsevi.dao.general.model.Correo;
 import com.colsevi.dao.general.model.CorreoExample;
+import com.colsevi.dao.general.model.Mensajeria;
 import com.colsevi.dao.usuario.model.Persona;
 import com.colsevi.dao.usuario.model.Usuario;
 import com.colsevi.dao.usuario.model.UsuarioExample;
@@ -144,10 +145,6 @@ public class LoginController extends BaseConfigController {
 			
 			try{
 				if(cor != null){
-					StringBuffer mensaje = new StringBuffer("Hola " + per.getNombre() + "<br/>");
-					mensaje.append("Hemos recibido un pedido para restablecer tu contraseña. <br/>");
-					mensaje.append("Si no has iniciado este pedido, puedes simplemente ignorar este mensaje y ninguna acción será tomada. <br/>");
-					mensaje.append("Para restablecer tu contraseña, haz click en el link abajo: <br/> <br/>");
 					EnviarCorreo.RecuperarContraseña(cor.getCorreo());
 				}
 			}catch(Exception e){

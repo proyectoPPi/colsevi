@@ -49,7 +49,7 @@ function construirVista(data){
 			html +='<div class="col-md-3 col-sm-6 masonry-grid-item">';
 			html +='<div class="listing-item white-bg bordered mb-20">';
 			html +='<div class="overlay-container">';
-			html +='<img src="http://cdn2.salud180.com/sites/www.salud180.com/files/cheescake.jpg" alt="">';
+			html +='<img src="http://localhost:9080/viewJSP/img/'+data[i]['imagen']+'" alt="">';
 			html +='<a class="overlay-link popup-img-single" href="images/product-1.jpg"><i class="fa fa-search-plus"></i></a>';
 			html +='<div class="overlay-to-top links">';
 			html +='<span class="small">';

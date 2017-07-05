@@ -61,18 +61,11 @@ public class FiltroAutenticacion implements Filter, Serializable{
 		if (path.endsWith("jpg")  || path.endsWith("png")  || path.endsWith("gif") || path.endsWith("woff")  ||
 			path.endsWith("css") || path.endsWith("js")   ||  path.endsWith("pdf") || path.endsWith("PNG")  || 
 			path.startsWith("/login") ||
-			path.startsWith("/Usuario/ClienteRegistro") ||
 			path.startsWith("/Pedido/PedidoWizardStep1") ||
 			path.startsWith("/Pedido/PedidoWizardStep2") ||
 			path.startsWith("/Pedido/PedidoWizardStep3") ||
-			path.startsWith("/Pedido/Visualizar") ||
-			path.startsWith("/Ingrediente/Clasificar") ||
-			path.startsWith("/Catalogo/Cat") ||
-			path.startsWith("/Dashboard/Admin") ||
+			path.startsWith("/subirArchivos") ||
 			path.startsWith("/principalBase") ||
-			path.startsWith("/Usuario/RegistroPersona") ||
-			path.startsWith("/Caja") ||
-			path.startsWith("/Usuario/Persona") ||
 			path.startsWith(INDEX)
 			){
 			return true;

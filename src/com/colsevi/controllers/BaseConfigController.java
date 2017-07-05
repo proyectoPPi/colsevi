@@ -27,7 +27,7 @@ public class BaseConfigController implements Serializable {
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("menu", getMenu(request));
 		mapa.put("sesion", getUsuario(request));
-		mapa.put("configuracion", ConfiguracionGeneral.getInstance());
+		mapa.put("configuracion", VariablesConfiguracion());
 
 		return mapa;
 	}
@@ -72,6 +72,10 @@ public class BaseConfigController implements Serializable {
 			}
 		}
 		return menu;
+	}
+	
+	public static Map<String, Object> VariablesConfiguracion() {
+		return ConfiguracionGeneral.getInstance();
 	}
 	
 	public SesionUsuario getUsuario(HttpServletRequest request){

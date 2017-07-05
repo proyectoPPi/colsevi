@@ -10,24 +10,33 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.simplejavamail.mailer.config.TransportStrategy;
+
+import com.colsevi.dao.general.model.Mensajeria;
+
 public class EnviarCorreo {
 
 	 public static void enviar(String subject, String mensaje, String to) {
 
 	      // Sender's email ID needs to be mentioned
 	      String from = "brayan_cardona23141@elpoli.edu.co";//change accordingly
-	      final String username = "brayan_cardona23141@elpoli.edu.co";//change accordingly
-	      final String password = "yuranyta";//change accordingly
+	      final String username = "colsevirestaurantes@gmail.com";//change accordingly
+	      final String password = "restaurantes123*";//change accordingly
 
 	      // Assuming you are sending email through relay.jangosmtp.net
 	      String host = "smtp.gmail.com";
 
 	      Properties props = new Properties();
-	      props.put("mail.smtp.auth", "true");
-	      props.put("mail.smtp.starttls.enable", "true");
-	      props.put("mail.smtp.host", host);
-	      props.put("mail.smtp.port", "25");
-
+	      props.put("mail.smtp.auth", false);
+	      props.put("mail.smtp.ssl.enable", false);
+	      props.put("mail.smtp.starttls.enable", true);
+	      props.put("mail.smtp.port", "587");
+	      props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+	      props.put("mail.smtp.host", "smtp.gmail.com");
+	      props.put("mail.smtp.socketFactory.port", "587");
+	      props.put("mail.smtp.socketFactory.fallback", false);
+	      props.put("mail.smtp.ssl.socketFactory", false);
+	      
 	      // Get the Session object.
 	      Session session = Session.getInstance(props,
 	      new javax.mail.Authenticator() {
@@ -44,37 +53,22 @@ public class EnviarCorreo {
 	         message.setFrom(new InternetAddress(from));
 
 	         // Set To: header field of the header.
-	         message.setRecipients(Message.RecipientType.TO,
-	         InternetAddress.parse(to));
+	         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(from));
 
-	         // Set Subject: header field
 	         message.setSubject(subject);
-
-//	         message.setText(mensaje);
-	         
-	         
-//	         MimeMultipart alternative = new MimeMultipart("alternative");
-//	         MimeBodyPart text = new MimeBodyPart();
-//	         MimeBodyPart html = new MimeBodyPart();
-//	         text.setText(mensaje);
-//	         html.setContent("html content", "text/html");
-//	         alternative.addBodyPart(text);
-//	         alternative.addBodyPart(html);
-//	         Message msg = new MimeMessage(session);
 	         message.setContent(mensaje, "text/html; charset=utf-8");
 
 	         // Send message
 	         Transport.send(message);
-
+	         
 	      } catch (MessagingException e) {
 	            throw new RuntimeException(e);
 	      }
 	   }
 	 
-	 public static void RecuperarContraseña(String to) {
-		 String asunto = "";
-		 String mensaje = "";
+	 public static void RecuperarContraseña(String para) {
+		 Mensajeria mensaje = ColseviDao.getInstance().getMensajeriaMapper().selectByPrimaryKey("RECUPERAR_CONTRASEÑA");
 		 
-		 enviar(asunto,mensaje,to);
+		 enviar(mensaje.getAsunto(),mensaje.getMensaje(),para);
 	 }
 }

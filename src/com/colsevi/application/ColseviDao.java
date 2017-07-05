@@ -12,6 +12,7 @@ import com.colsevi.dao.general.map.ConfiguracionMapper;
 import com.colsevi.dao.general.map.CorreoMapper;
 import com.colsevi.dao.general.map.DireccionMapper;
 import com.colsevi.dao.general.map.EstablecimientoMapper;
+import com.colsevi.dao.general.map.MensajeriaMapper;
 import com.colsevi.dao.general.map.MotivoMapper;
 import com.colsevi.dao.general.map.TelefonoMapper;
 import com.colsevi.dao.general.map.TipoTelefonoMapper;
@@ -95,7 +96,7 @@ public class ColseviDao {
 	private ConfiguracionMapper configuracionMapper;
 	private PlatoMapper platoMapper;
 	private PlatoXTipoProductoMapper platoXTipoProductoMapper;
-
+	private MensajeriaMapper mensajeriaMapper;
 	
 	private static ColseviDao current = null;
 
@@ -167,6 +168,7 @@ public class ColseviDao {
 		configuracionMapper = (ConfiguracionMapper) beanFactoryMyBatis.getBean("configuracionMapper");
 		platoMapper = (PlatoMapper) beanFactoryMyBatis.getBean("platoMapper");
 		platoXTipoProductoMapper = (PlatoXTipoProductoMapper) beanFactoryMyBatis.getBean("platoXTipoProductoMapper");
+		mensajeriaMapper = (MensajeriaMapper) beanFactoryMyBatis.getBean("mensajeriaMapper");
 	}
 
 	public CajaMapper getCajaMapper() {
@@ -519,6 +521,14 @@ public class ColseviDao {
 
 	public void setPlatoXTipoProductoMapper(PlatoXTipoProductoMapper platoXTipoProductoMapper) {
 		this.platoXTipoProductoMapper = platoXTipoProductoMapper;
+	}
+
+	public MensajeriaMapper getMensajeriaMapper() {
+		return mensajeriaMapper;
+	}
+
+	public void setMensajeriaMapper(MensajeriaMapper mensajeriaMapper) {
+		this.mensajeriaMapper = mensajeriaMapper;
 	}
 	
 }
