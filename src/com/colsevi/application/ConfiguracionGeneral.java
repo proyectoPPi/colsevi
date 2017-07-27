@@ -20,6 +20,11 @@ public class ConfiguracionGeneral implements java.io.Serializable {
 		}
 	}
 	
+	public static void Regenerar() {
+		paramsConfig = null;
+		getInstance();
+	}
+	
 	public static Map<String, Object> getInstance() {
 		if (paramsConfig == null)
 			createInstance();

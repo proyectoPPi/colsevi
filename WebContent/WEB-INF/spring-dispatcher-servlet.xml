@@ -10,6 +10,8 @@
 	xmlns="http://www.springframework.org/schema/beans">
 
 	<context:component-scan base-package="com.colsevi.controllers" />
+	
+<!-- 	<import resource="classpath:net/bull/javamelody/monitoring-spring.xml" /> -->
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="2000000" />

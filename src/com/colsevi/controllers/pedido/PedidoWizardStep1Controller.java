@@ -1,6 +1,7 @@
 package com.colsevi.controllers.pedido;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +20,11 @@ import com.colsevi.application.ColseviDao;
 import com.colsevi.application.GeneralManager;
 import com.colsevi.application.PedidoManager;
 import com.colsevi.application.ProductoManager;
+import com.colsevi.application.UtilidadManager;
 import com.colsevi.controllers.BaseConfigController;
+import com.colsevi.dao.pedido.model.DetallePedidoExample;
 import com.colsevi.dao.pedido.model.Pedido;
+import com.colsevi.dao.producto.model.Producto;
 
 @Controller
 @RequestMapping("/Pedido/PedidoWizardStep1")
@@ -101,10 +105,9 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 			try{
 				opciones = new JSONObject();
 				opciones.put("id_producto", map.get("id_producto"));
-				opciones.put("referencia", map.get("referencia"));
 				opciones.put("nombre", map.get("nombre"));
 				opciones.put("descripcion", map.get("descripcion"));
-				opciones.put("venta", map.get("venta"));
+				opciones.put("venta", UtilidadManager.MonedaVista(new BigDecimal(map.get("venta").toString())));
 				opciones.put("imagen", map.get("imagen"));
 				
 				resultado.add(opciones);
@@ -124,6 +127,16 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("consecutivo")));		
 			PedidoManager.crearDetalle(ped.getId_pedido(), Integer.parseInt(request.getParameter("prod")), 
 					Integer.parseInt(request.getParameter("cantidad")));
+			
+			Producto prod = ColseviDao.getInstance().getProductoMapper().selectByPrimaryKey(Integer.parseInt(request.getParameter("prod")));
+			BigDecimal venta =  prod.getVenta().multiply(new BigDecimal(request.getParameter("cantidad").toString()));
+			
+			resultVista.put("idP", prod.getId_producto());
+			resultVista.put("nombreP", prod.getNombre());
+			resultVista.put("ventavistaP", UtilidadManager.MonedaVista(venta));
+			resultVista.put("ventaP", venta);
+			resultVista.put("imagenP", prod.getImagen());
+			resultVista.put("cantidadP", request.getParameter("cantidad"));
 			resultVista.put("correcto", "Producto adicionado");
 		}catch(Exception e){
 			logger.error(e.getMessage());
@@ -132,6 +145,24 @@ public class PedidoWizardStep1Controller extends BaseConfigController {
 		ResponseJson(request, response, resultVista);
 	}
 
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/eliminarDetalle")
+	public void eliminarDetalle(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		JSONObject resultVista = new JSONObject();
+		try{
+			Pedido ped = PedidoManager.obtenerPedido(Integer.parseInt(request.getParameter("consecutivo")));		
+
+			DetallePedidoExample DPE = new DetallePedidoExample();
+			DPE.createCriteria().andId_productoEqualTo(Integer.parseInt(request.getParameter("prod"))).andId_pedidoEqualTo(ped.getId_pedido());
+			ColseviDao.getInstance().getDetallePedidoMapper().deleteByExample(DPE);
+			
+			resultVista.put("correcto", "Producto eliminado del pedido");
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			resultVista.put("error", "Contactar al administrador");
+		}
+		ResponseJson(request, response, resultVista);
+	}
 
 	
 //	

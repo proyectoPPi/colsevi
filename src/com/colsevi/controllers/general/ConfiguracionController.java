@@ -62,6 +62,7 @@ public class ConfiguracionController extends BaseConfigController{
 		if(listaConfiguracion != null && listaConfiguracion.size() >0){
 			for (Configuracion bean : listaConfiguracion) {
 				opciones = new JSONObject();
+				opciones.put("id", bean.getCodigo());
 				opciones.put("codigo", bean.getCodigo());
 				opciones.put("valor", bean.getValor());
 				opciones.put("descripcion", bean.getDescripcion());								
@@ -77,14 +78,13 @@ public class ConfiguracionController extends BaseConfigController{
 	public void Guardar(HttpServletRequest request, HttpServletResponse response, Configuracion bean) throws IOException{
 		JSONObject result = new JSONObject();
 		String error = validarGuardado(bean);
+		
 		if(!error.isEmpty()){
 			result.put("error", error);
 		}else
 			try{
-				if(bean.getCodigo() != null){
-					ColseviDao.getInstance().getConfiguracionMapper().updateByPrimaryKey(bean);
-					result.put("correcto", "Clasificación Actualizada");
-				}
+				ColseviDao.getInstance().getConfiguracionMapper().updateByPrimaryKey(bean);
+				result.put("correcto", "Clasificación Actualizada");
 			}catch (Exception e) {
 				result.put("error", "Contactar al administrador");
 			}

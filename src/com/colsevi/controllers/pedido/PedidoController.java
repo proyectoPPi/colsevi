@@ -77,10 +77,12 @@ public class PedidoController extends BaseConfigController {
 			for (Map<String, Object> map : listPedido) {
 				opciones = new JSONObject();
 				try{
+					opciones.put("id", map.get("id_pedido").toString());
 					opciones.put("id_pedido", map.get("id_pedido").toString());
 					opciones.put("documento", map.get("documento"));
 					opciones.put("nombreCompleto", map.get("nombre").toString() + " " + map.get("apellido"));
 					opciones.put("estado", map.get("estado"));
+					opciones.put("idEstado", map.get("id_estado_pedido"));
 					opciones.put("fecha_pedido", UtilidadManager.FechaDateConHora_Vista((Date)map.get("fecha_pedido")));
 					opciones.put("total", UtilidadManager.MonedaVista((BigDecimal) map.get("total")));
 					opciones.put("pagado", Boolean.parseBoolean(map.get("pagado").toString()) ? "SI" : "NO");
@@ -94,6 +96,46 @@ public class PedidoController extends BaseConfigController {
 		}
 		return resultado;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/cargarDetalle")
+	public void cargarDetalle(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		
+		JSONObject opciones = new JSONObject();
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		try{
+			String id_pedido = request.getParameter("id_pedido");
+			mapa.put("id", id_pedido);
+			opciones.put("datos", ConstruirDetalle(ColseviDao.getInstance().getPedidoMapper().CargarDetalle(mapa)));
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		ResponseJson(request, response, opciones);
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONArray ConstruirDetalle(List<Map<String, Object>> listPedido){
+
+		JSONArray resultado = new JSONArray();
+		JSONObject opciones = new JSONObject();
+		
+		if(listPedido != null && listPedido.size() >0){
+			for (Map<String, Object> map : listPedido) {
+				opciones = new JSONObject();
+				try{
+					opciones.put("nombreP", map.get("nombreP").toString());
+					opciones.put("venta", map.get("venta").toString());
+					
+					resultado.add(opciones);
+				}catch(Exception e){
+					logger.error(e.getMessage());
+					continue;
+				}
+			}
+		}
+		return resultado;
+	}
+
 	
 	@RequestMapping("/autocompletar")
 	public void auto(HttpServletRequest request, HttpServletResponse response){

@@ -350,7 +350,7 @@
   </update>
 
 	<select id="SelectDataView" parameterType="java.util.Map" resultType="java.util.HashMap">
-		SELECT ped.id_pedido,per.documento,per.nombre, per.apellido,estado.nombre as estado,fecha_pedido,pagado, ped.total
+		SELECT ped.id_pedido,per.documento,per.nombre, per.apellido,estado.nombre as estado, ped.id_estado_pedido, fecha_pedido,pagado, ped.total
 		
 		FROM pedido ped
 		LEFT JOIN persona per ON per.id_persona = ped.id_persona
@@ -381,10 +381,16 @@
 		 <if test="cliente != null">
 			OR (per.nombre LIKE #{cliente} AND per.apellido LIKE #{cliente})
 		 </if>
-		ORDER BY fecha_pedido DESC;
 	</select>
 	
 	<select id="UltimoPedidoCreado" resultType="java.lang.Integer">
 		select id_pedido from pedido order by id_pedido desc limit 1;
+	</select>
+	
+	<select id="CargarDetalle" parameterType="java.util.Map" resultType="java.util.HashMap">
+		SELECT p.nombre as nombreP, p.venta FROM pedido ped
+        INNER JOIN detalle_pedido dp ON ped.id_pedido = dp.id_pedido
+        INNER JOIN producto p ON p.id_producto = dp.id_producto
+        WHERE ped.id_pedido = #{id};
 	</select>
 </mapper>

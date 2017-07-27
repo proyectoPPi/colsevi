@@ -1,6 +1,21 @@
 jQuery(document).ready(function(){
 	Tabla();
-	Hformulario();
+	
+	$('#Formulario').validate({
+		rules: {
+			descripcion: {
+				required: false,
+				minlength: 5,
+				maxlength: 120
+			},
+			valor:{
+				required: true,
+				maxlength: 100,
+				minlength: 1
+			},
+		}  
+     });
+	
 });
 
 function Tabla(pagina){
@@ -16,10 +31,28 @@ function Limpiar(){
 	HLimpiar();
 }
 
-function Eliminar(){
-	HEliminar("Formulario", contexto + "/general/Configuracion/Eliminar.html?");
-}
-
 function CargarFormulario(Id){
 	HCargarFormulario(Id);
 }
+
+function validarFormulario(){
+	if($('#Formulario').valid())
+		enviarFormulario();
+}
+
+jQuery("#configuracionRegenerar").click(function(){
+	jQuery.ajaxQueue({
+		url: contexto + '/reconstruirConfiguracion',
+	}).done(function(result) {
+ 		try{ 
+ 			data = jQuery.parseJSON(result);
+ 			if(data["error"] !== undefined){
+ 				HMensaje(data["error"], 'danger');
+ 			}else{
+ 				HMensaje(data["correcto"], 'success');
+ 			}
+ 		} catch(err){ 
+ 			console.log("Error ejecutando HGrafico" + err); 
+ 		} 
+	});
+});

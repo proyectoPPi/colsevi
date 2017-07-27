@@ -1,6 +1,5 @@
 jQuery(document).ready(function(){
 	Tabla();
-	Hformulario();
 	HiniciarAutocompletar(contexto + '/Recetario/buscarProd.html?', 'prod');
 	HiniciarAutocompletar(contexto + '/Recetario/buscarProd.html?', 'prodF');
 });
@@ -29,53 +28,11 @@ function Tabla(pagina){
 		jQuery('#mayorF').val('false');
 	}
 	
-	jQuery.ajaxQueue({
-		url: contexto + "/Recetario/tabla.html?" + Filtro() + Limite(pagina),
-	}).done(function(result) {
-		var data; 
- 		try{ 
- 			data = jQuery.parseJSON(result); 
- 		} catch(err){ 
- 			console.log("Error" + err); 
- 			jQuery('#tabla').html("<br/>No hay datos");
-         	return; 
- 		} 
- 		if(pagina == undefined){
-			 pagina = 1;
-		 }
- 		Paginacion(pagina,data['total']);
- 		
- 		data = data['datos'];
- 		if(data.length == 0){
- 			jQuery('#tabla').html("<br/>No hay datos");
-         	return;
- 		}
- 		for(i in data){
- 			var html = '';
-			html +='<div class="col-xs-12 col-lg-3">';
-			html +='<section class="panel">';
-			html +='<div class="pro-img-box">';
-			html +='<div class="btn-group" style="position:absolute;top: 10px;left: 85%;">';
-			html +='<button data-toggle="dropdown" class="btn btn-white" aria-pressed="false"><i class="fa fa-ellipsis-v"></i></button>';
-			html +='<ul role="menu" class="dropdown-menu">';
-			html +='<li><a data-toggle="modal" href="#ModalFormulario" onclick="CargarFormulario('+data[i]['id_receta']+');" href="#">Receta</a></li>';
-			html +='<li><a href="'+contexto+'/Producto/Admin.html?producto='+data[i]['id_producto']+'">Producto</a></li>';
-			html +='</ul>';
-			html +='</div>';
-			html +='<img src="http://thevectorlab.net/flatlab/img/product-list/pro-1.jpg">';
-			html +='</div>';
-			html +='<div class="panel-body">';
-			html +='<div class="row">';
-			html +='<h4><strong>'+data[i]['nombreProd']+'</strong></h4>';
-			html +='<hr/>';
-			html +='<label class="col-md-5"><span class="recetaD" style="background: '+data[i]['icono']+';"></span>'+data[i]['nombreDif']+'</label>';
-			html +='<label class="col-md-6"><i class="fa fa-clock-o"></i>'+data[i]['tiempo']+' minutos</label>';
-			html +='</div>';
-			html +='</div>';
-			html +='</section>';
-			html +='</div>';
- 		}
- 		jQuery('#tabla').html(html);
+	HTabla({
+		url: contexto + "/Recetario/tabla.html?",
+		Id: "#tabla",
+		titulos: titulos,
+		pagina:pagina
 	});
 }
 

@@ -2,14 +2,14 @@
 	<header class="header fixed clearfix">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-2">
+				<div class="col-xs-6 col-md-2">
 					<div class="header-left clearfix">
 						<div id="logo" class="logo">
 							<a href="${pageContext.request.contextPath}"><img id="logo_img" src="https://raw.githubusercontent.com/proyectoPPi/colsevi/demo1.0/WebContent/resources/menu.PNG" alt="colsevi"></a>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-10">
+				<div class="col-xs-6 col-md-10">
 					<div class="header-right clearfix">
 					<div class="main-navigation animated with-dropdown-buttons">
 		

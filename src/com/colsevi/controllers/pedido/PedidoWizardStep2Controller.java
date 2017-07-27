@@ -70,9 +70,9 @@ public class PedidoWizardStep2Controller extends BaseConfigController {
 
 				options.put("prod", map.get("id_producto"));
 				options.put("prodId", map.get("id_producto"));
-				options.put("ref", map.get("referencia"));
-				options.put("nombre", map.get("referencia") + " " + map.get("nombre"));
+				options.put("nombre", map.get("nombre"));
 				options.put("cantidad", map.get("cantidad"));
+				options.put("descripcion", "");
 				options.put("sub_total",UtilidadManager.MonedaVista((BigDecimal) map.get("sub_total")));
 				options.put("venta",UtilidadManager.MonedaVista((BigDecimal) map.get("venta")));
 				options.put("suma", new BigDecimal(map.get("sub_total").toString()).toBigInteger());

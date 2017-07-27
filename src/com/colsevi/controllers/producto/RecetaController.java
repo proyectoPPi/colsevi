@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ import com.colsevi.dao.producto.model.PreparacionRecetaExample;
 public class RecetaController extends BaseConfigController {
 
 	private static final long serialVersionUID = -5237605245293196719L;
+	private static Logger logger = Logger.getLogger(RecetaController.class);
 
 	@RequestMapping
 	public String Recetario(HttpServletRequest request, ModelMap model) {
@@ -37,7 +39,7 @@ public class RecetaController extends BaseConfigController {
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/Recetario/tabla")
+	@RequestMapping("/tabla")
 	public void tabla(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		JSONObject result = new JSONObject();
@@ -64,10 +66,7 @@ public class RecetaController extends BaseConfigController {
 		result.put("datos", ConstruirJson(ColseviDao.getInstance().getRecetaMapper().SelectDataView(mapa)));
 		result.put("total", ColseviDao.getInstance().getRecetaMapper().CountDataView(mapa));
 
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-
-		result.writeJSONString(response.getWriter());
+		ResponseJson(request, response, result);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -90,6 +89,7 @@ public class RecetaController extends BaseConfigController {
 
 					resultado.add(opciones);
 				} catch (Exception e) {
+					logger.error(e.getMessage());
 					continue;
 				}
 			}
@@ -108,10 +108,7 @@ public class RecetaController extends BaseConfigController {
 		result.put("producto", Producto(id));
 		result.put("receta", receta(id));
 
-		response.setContentType("text/html;charset=ISO-8859-1");
-		request.setCharacterEncoding("UTF8");
-
-		result.writeJSONString(response.getWriter());
+		ResponseJson(request, response, result);
 	}
 
 	@SuppressWarnings("unchecked")

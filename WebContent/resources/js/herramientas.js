@@ -11,21 +11,27 @@ function HvalidateXHR() {
 	}
 }
 
-function HredireccionarVista(accion, data) {
+function HredireccionarVista(accion, data, html) {
 	HvalidateXHR();
 	
 	xhr = $.ajax({
 		url : accion,
 		type : 'POST',
 		data : data,
-		success : HMostrarDiv,
+		success : function HMostrarDiv(response) {
+			dataMap = {};
+			
+			if(html !== undefined){
+				$("#contenidoHTML").html('');
+				$("#seccionApp").html(response);
+			}else{
+				$("#seccionApp").html('');
+				$("#contenidoHTML").html(response);
+			}
+			
+		},
 		error : HValidarErrorGeneralAjax
 	});
-}
-
-function HMostrarDiv(response) {
-	dataMap = {};
-	$("#contenidoHTML").html(response);
 }
 
 function HValidarErrorGeneralAjax(jqXHR, textStatus, errorThrown) {
@@ -166,6 +172,67 @@ function HAjax(opciones){
 	});
 }
 
+function HTablaSimple(opciones){
+	var titulos = opciones.titulos;
+	var Id = opciones.Id;
+	var id = null;
+	
+	if(opciones.metodo == undefined)
+		MetodoCarga = 'CargarFormulario'; 
+	else
+		MetodoCarga = opciones.metodo;
+	
+	if(opciones.modal == undefined)
+		modalCarga = 'ModalFormulario'; 
+	else
+		modalCarga = opciones.modal;
+	
+	jQuery.ajaxQueue({
+	  url: opciones.url,
+	}).done(function(result) {
+		try{
+			data = jQuery.parseJSON(result);
+		} catch(err){
+			console.log("Error ejecutando tabla" + err);
+        	return;
+		}
+		var html = ""; 
+		html = '<section id="flip-scroll">';
+		html += '<table class="table table-bordered table-colored cf"><thead class="cf"><tr>';
+		var count = 0;
+		for(k in titulos){
+			count ++;
+			var className = '';
+				html += "<th>"+opciones.titulos[k]+"</th>";
+		 }
+		html += "</tr></thead><tbody>";
+		
+		if(data == "" || data['datos'] === undefined || data['datos'][0] == undefined ){
+			html += '<tr>';
+			html += '<td colspan="'+count+'" style="text-align:center;font-weight: bold;">NO HAY DATOS</td>';
+			html += '</tr>';
+		 }else{
+			 for(i in data["datos"]){
+				 html += "<tr>";
+				 var sw = true;
+				 for(k in titulos){
+					 if(sw){
+							 html += '<td><span>'+data["datos"][i][k]+'</span></td>';
+						 sw = false;
+					 }else{
+						 html += "<td>";
+						 html += data["datos"][i][k];
+						 html += " </td>";
+					 }
+				 }
+				 html += "</tr>";
+			 }
+			
+		 }
+		 html += "</tbody></table></section>";
+		 jQuery(Id).html(html);
+	});
+}
 
 /*
  * Método para pintar la tabla
@@ -231,6 +298,7 @@ function HTabla(opciones){
 			html += '<tr>';
 			html += '<td colspan="'+count+'" style="text-align:center;font-weight: bold;">NO HAY DATOS</td>';
 			html += '</tr>';
+			dataMap["total"] = 0;
 		 }else{
 			dataMap["datos"] = data["datos"];
 			dataMap["titulos"] = titulos;
@@ -246,7 +314,7 @@ function HTabla(opciones){
 							 if(dataMap['link'] !== undefined)
 								 html += '<td><span>'+data["datos"][i][k]+'</span></td>';
 							 else
-								 html += '<td><span><a onclick="'+MetodoCarga+'('+id+');" data-toggle="modal" href="#'+modalCarga+'">'+data["datos"][i][k]+'</a></span></td>';
+								 html += '<td><span><a onclick="'+MetodoCarga+'(\''+id+'\');" data-toggle="modal" href="#'+modalCarga+'">'+data["datos"][i][k]+'</a></span></td>';
 							 sw = false;
 						 }else{
 							 if(dataMap['color'] != undefined && dataMap['color'][k] != undefined){
@@ -290,7 +358,7 @@ function HTabla(opciones){
 									}
 								 }
 							 }
-							 html += "</td>";
+							 html += " </td>";
 						 }
 					 }
 				 }
@@ -305,12 +373,13 @@ function HTabla(opciones){
 				}
 			}
 		 }
-		 html += "<tbody></table></section>";
+		 html += "</tbody></table></section>";
 		 
 		 jQuery(Id).html(html);
 		 
-		 if(opciones.pagina == undefined)
+		 if(opciones.pagina == undefined){
 			 opciones.pagina = 1;
+		 }
 
 		 organizarPaginacion(opciones.pagina);
 	});
@@ -519,7 +588,7 @@ function HDatetimePicker(Id, format){
 }
 
 function HColorPicker(Id){
-	jQuery('#' + Id).colorpickerplus();
+//	jQuery('#' + Id).colorpickerplus();
 }
 
 function HTipoPeso(value, opt){
@@ -593,3 +662,26 @@ function HGrafico(opciones){
  		} 
 	});
 }
+
+function HstartTimer(duration, display) {
+    var timer = 60 * 5, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10)
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.text(minutes + ":" + seconds);
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+}
+//
+//jQuery(function ($) {
+//    var fiveMinutes = 60 * 5,
+//        display = $('#time');
+//    startTimer(fiveMinutes, display);
+//});

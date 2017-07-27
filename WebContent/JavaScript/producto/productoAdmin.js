@@ -26,7 +26,7 @@ function Tabla(pagina){
 
 function Limpiar(){
 	HLimpiar();
-	jQuery('#clasificar, #tipoP, #count').val('');
+	jQuery('#clasificar, #tipoP, #count, #catalogActive, #catalogNoActive').val('');
 	jQuery('#IngDynamic > section > table > tbody > tr').remove();
 	jQuery('#count').val(1);
 	construirTabla();

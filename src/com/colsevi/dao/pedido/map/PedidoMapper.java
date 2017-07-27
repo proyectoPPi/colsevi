@@ -67,4 +67,5 @@ public interface PedidoMapper {
 	List<Map<String, Object>> SelectDataView(Map<String, Object> map);
 	int CountDataView(Map<String, Object> mapa);
 	int UltimoPedidoCreado();
+	List<Map<String, Object>> CargarDetalle(Map<String, Object> map);
 }

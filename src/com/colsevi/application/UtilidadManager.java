@@ -94,9 +94,10 @@ public class UtilidadManager {
 	}
 
 	public static String MonedaVista(BigDecimal valor){
+		DecimalFormat formateador = new DecimalFormat("###,###.##");
 		Locale locale = new Locale("es","CO");
 		NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
-		return nf.format(valor);
+		return formateador.format(valor);
 	}
 	
 	public static BigDecimal MonedaBD(String valor){

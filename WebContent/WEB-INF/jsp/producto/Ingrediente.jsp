@@ -47,16 +47,16 @@
 						<div class="row">
 							<input type="hidden" id="id_ingrediente" name="id_ingrediente"/>
 							<div class="row">
-								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+								<div class="col-xs-12">
 									<label>*Nombre</label>
 									<input type="text" class="form-control" id="nombre" name="nombre"/>
 								</div>
-								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+								<div class="col-xs-12">
 									<label>Descripci&#243;n</label>
 									<input type="text" class="form-control" id="descripcion" name="descripcion"/>
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+							<div class="col-xs-12">
 								<label>*Medida</label>
 								<select class="form-control" id="medida" name="medida">
 									<option value="">Seleccione</option>

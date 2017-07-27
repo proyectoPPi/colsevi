@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+<web-app id="WebApp_ID" version="3.0"
+	     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xmlns="http://java.sun.com/xml/ns/javaee" 
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
  <display-name>colsevi</display-name>
 	<servlet>
 		<servlet-name>spring-dispatcher</servlet-name>
@@ -18,13 +21,30 @@
 		<display-name>IniciarDatos</display-name>
 		<servlet-name>IniciarDatos</servlet-name>
 		<servlet-class>com.colsevi.application.IniciarDatos</servlet-class>
-		<load-on-startup>2</load-on-startup>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>IniciarDatos</servlet-name>
 		<url-pattern>/IniciarDatos</url-pattern>
 	</servlet-mapping>
+	
+	<!-- Java Melody -->
+<!-- 	<filter> -->
+<!-- 		<filter-name>monitoring</filter-name> -->
+<!-- 		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class> -->
+<!-- 		<init-param> -->
+<!--         	<param-name>system-actions-enabled</param-name> -->
+<!--             <param-value>true</param-value> -->
+<!-- 		</init-param> -->
+<!-- 	</filter> -->
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>monitoring</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 	</filter-mapping> -->
+<!--     <listener> -->
+<!-- 		<listener-class>net.bull.javamelody.SessionListener</listener-class> -->
+<!-- 	</listener> -->
 	
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
@@ -59,6 +79,10 @@
 		<url-pattern>*.woff</url-pattern>
 	</servlet-mapping>
 	
+	<servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
 	
 	<session-config>
   		<session-timeout>60</session-timeout>

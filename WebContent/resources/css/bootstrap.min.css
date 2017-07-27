@@ -3034,13 +3034,12 @@ select[multiple].form-group-lg .form-control, textarea.form-group-lg .form-contr
 }
 
 .has-feedback .form-control {
-	padding-right: 42.5px
+	padding-left: 30px;
 }
 
 .form-control-feedback {
 	position: absolute;
 	top: 0;
-	right: 0;
 	z-index: 2;
 	display: block;
 	width: 34px;
@@ -3234,10 +3233,6 @@ select[multiple].form-group-lg .form-control, textarea.form-group-lg .form-contr
 		margin-bottom: 0;
 		text-align: right
 	}
-}
-
-.form-horizontal .has-feedback .form-control-feedback {
-	right: 15px
 }
 
 @media ( min-width :768px) {
@@ -5770,11 +5765,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:focus,
 }
 
 .panel-body {
-	padding: 15px
-}
-
-.panel-heading {
-	padding: 10px 15px;
+	padding: 15px 0px;
 }
 
 .panel-heading>.dropdown .dropdown-toggle {

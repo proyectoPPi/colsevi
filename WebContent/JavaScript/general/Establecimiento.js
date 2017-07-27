@@ -1,6 +1,9 @@
 jQuery(document).ready(function(){
 	HDatetimePicker('hora_inicio','LT');
 	HDatetimePicker('hora_fin','LT');
+	var fiveMinutes = 60 * 5,
+  display = $('#time');
+HstartTimer(fiveMinutes, display);
 	Tabla();
 	
 	$('#Formulario').validate({

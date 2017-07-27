@@ -19,7 +19,6 @@
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.bootstrap.wizard.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.bootstrap.wizard.min.js"></script>
-   
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/modernizr.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/SmoothScroll.js"></script>
@@ -32,6 +31,9 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.validate-1.11.1.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/Chart.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.ajaxfileupload.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.countdown.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.countdown.min.js"></script>
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/herramientas.js"></script>
    
 <script type="text/javascript">

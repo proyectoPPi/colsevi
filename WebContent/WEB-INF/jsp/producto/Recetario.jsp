@@ -84,5 +84,10 @@
 		</div>
 	</div>
 </div>
-
+<script type="text/javascript">
+	titulos = new Array();
+	titulos["id_receta"] = "ID";
+	titulos["nombreProd"] = "Nombre";
+	titulos["tiempo"] = "Tiempo";
+</script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/producto/Recetario.js"></script>

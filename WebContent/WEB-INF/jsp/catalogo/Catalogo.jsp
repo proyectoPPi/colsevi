@@ -116,7 +116,7 @@
 	titulos = new Array();
 	titulos["id_catalogo"] = "ID";
 	titulos["nombre"] = "Nombre";
-	titulos["descripcion"] = "Descripción";
 	titulos["est"] = "Establecimiento";
+	titulos["descripcion"] = "Descripción";
 </script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/JavaScript/catalogo/Catalogo.js"></script>

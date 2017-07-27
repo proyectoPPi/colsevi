@@ -5,7 +5,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns="http://www.springframework.org/schema/beans">
 		
-	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+<!-- 	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource"> -->
+<!-- 		<property value="com.mysql.jdbc.Driver" name="driverClassName" /> -->
+<!-- 		<property name="url" value="jdbc:mysql://mysql23861-colsevi-test.j.facilcloud.com:3306/COLSEVI" /> -->
+<!-- 				<property name="username" value="root" /> -->
+<!-- 				<property name="password" value="HXXici64814" /> -->
+<!-- 	</bean> -->
+
+<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
 		<property value="com.mysql.jdbc.Driver" name="driverClassName" />
 		<property value="jdbc:mysql://127.0.0.1:3306/COLSEVI" name="url" />
 		<property value="root" name="username" />

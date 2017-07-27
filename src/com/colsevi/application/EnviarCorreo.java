@@ -10,11 +10,13 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.simplejavamail.mailer.config.TransportStrategy;
+import org.apache.log4j.Logger;
 
 import com.colsevi.dao.general.model.Mensajeria;
 
 public class EnviarCorreo {
+
+	private static Logger logger = Logger.getLogger(EnviarCorreo.class);
 
 	 public static void enviar(String subject, String mensaje, String to) {
 
@@ -23,19 +25,13 @@ public class EnviarCorreo {
 	      final String username = "colsevirestaurantes@gmail.com";//change accordingly
 	      final String password = "restaurantes123*";//change accordingly
 
-	      // Assuming you are sending email through relay.jangosmtp.net
-	      String host = "smtp.gmail.com";
-
 	      Properties props = new Properties();
-	      props.put("mail.smtp.auth", false);
-	      props.put("mail.smtp.ssl.enable", false);
+	      props.put("mail.smtp.auth", true);
 	      props.put("mail.smtp.starttls.enable", true);
 	      props.put("mail.smtp.port", "587");
-	      props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 	      props.put("mail.smtp.host", "smtp.gmail.com");
-	      props.put("mail.smtp.socketFactory.port", "587");
-	      props.put("mail.smtp.socketFactory.fallback", false);
-	      props.put("mail.smtp.ssl.socketFactory", false);
+	      props.put("mail.debug", "true");
+	      
 	      
 	      // Get the Session object.
 	      Session session = Session.getInstance(props,
@@ -62,13 +58,13 @@ public class EnviarCorreo {
 	         Transport.send(message);
 	         
 	      } catch (MessagingException e) {
+	    	  logger.error(e.getMessage());
 	            throw new RuntimeException(e);
 	      }
 	   }
 	 
 	 public static void RecuperarContraseña(String para) {
 		 Mensajeria mensaje = ColseviDao.getInstance().getMensajeriaMapper().selectByPrimaryKey("RECUPERAR_CONTRASEÑA");
-		 
-		 enviar(mensaje.getAsunto(),mensaje.getMensaje(),para);
+		 enviar("12","12",para);
 	 }
 }

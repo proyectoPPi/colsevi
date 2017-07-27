@@ -30,7 +30,7 @@
     #flip-scroll thead tr { display: block; }
     #flip-scroll th { display: block; text-align: right; }
     #flip-scroll tbody tr { display: inline-block; vertical-align: top; }
-    #flip-scroll td { display: block; min-height: 1.25em; text-align: left; }
+    #flip-scroll td { display: block; min-height: 2.71em; text-align: left; }
 
 
     /* sort out borders */
@@ -38,8 +38,6 @@
     #flip-scroll th { border-bottom: 0; border-left: 0; }
     #flip-scroll td { border-left: 0; border-right: 0; border-bottom: 0; }
     #flip-scroll tbody tr { border-left: 1px solid #babcbf; }
-    #flip-scroll th:last-child,
-    #flip-scroll td:last-child { border-bottom: 1px solid #babcbf; }
 }
 
 /*no more table*/

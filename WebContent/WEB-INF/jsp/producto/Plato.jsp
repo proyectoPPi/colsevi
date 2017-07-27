@@ -26,7 +26,7 @@
 
 <div class="modal fade modal-dialog-center " id="ModalFormulario" tabindex="-1"	 
 	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-sm">
+	<div class="modal-dialog">
 		<div class="modal-content-wrap">
 			<form method="post" action="${pageContext.request.contextPath}/Plato/Guardar.html?" 
 				id="Formulario" data-modal="ModalFormulario" data-tabla="Tabla">

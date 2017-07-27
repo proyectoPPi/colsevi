@@ -36,7 +36,7 @@
 					</div>
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+							<div class="col-xs-12">
 								<label>Establecimiento</label>
 								<select class="form-control" id="establecimiento" name="establecimiento">
 									<option value="">Seleccione</option>
@@ -45,9 +45,13 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+							<div class="col-xs-12">
 								<label>*valor</label>
 								<input type="number" class="form-control" id="valor_inicial" name="valor_inicial" />
+							</div>
+							<div class="col-xs-12">
+								<label>*Fecha</label>
+								<input type="text" class="form-control" id="fecha" name="fecha" />
 							</div>
 						</div>
 					</div>

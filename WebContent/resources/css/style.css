@@ -136,10 +136,6 @@ ul {
   color: #333333;
 }
 
-.table.table-colored {
-  border-bottom-color: #331d08;
-}
-
 .table-colored > thead > tr > th {
   border-color: #ffb347 !important;
   background-color: #ffb347;
@@ -316,7 +312,7 @@ td > span > a{
 }
 
 .header-left {
-  padding: 12px 0 0 0;
+  padding: 10px 0px;
 }
 
 .header-right {
@@ -797,6 +793,10 @@ td > span > a{
 
 .dark-translucent-bg.hovered:hover:after {
   background-color: rgba(0, 0, 0, 0.6);
+}
+
+.index-content-bg{
+	background-color: #f0ad4e;
 }
 
 .dark-translucent-bg,
@@ -4625,10 +4625,6 @@ fieldset[disabled] .form-control {
   border-radius: 2px;
 }
 
-.listing-item .body {
-  padding: 15px;
-}
-
 .listing-item .body h3 {
   margin-top: 0;
   font-size: 18px;
@@ -4640,9 +4636,10 @@ fieldset[disabled] .form-control {
 }
 
 .listing-item .price {
-  font-size: 23px;
+  font-size: 19px;
   display: inline-block;
   font-weight: bold;
+  float: right;
 }
 
 .listing-item .price del {
@@ -4800,7 +4797,7 @@ fieldset[disabled] .form-control {
   bottom: 0px;
   left: 0;
   right: 0px;
-  background-color: rgba(30, 30, 30, 0.5);
+  background-color: rgba(30, 30, 30, 0.3);
   overflow: hidden;
   opacity: 0;
   filter: alpha(opacity=0);

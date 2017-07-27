@@ -16,6 +16,9 @@
 				<div id="contenidoHTML"></div>
 			</div>
 		</section>
+		<section style="text-align: center;">
+				<div class="row" id="seccionApp"></div>
+		</section>
 		<c:import url="/WEB-INF/jsp/plantilla/pie_pagina.jsp"></c:import>
 	</section>
 	<c:import url="/WEB-INF/jsp/plantilla/javascript_genericos.jsp"></c:import>
